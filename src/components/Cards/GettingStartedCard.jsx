@@ -1,9 +1,10 @@
 import React from "react";
-import { Button } from "antd";
+import { Button, Card } from "antd";
 const GettingStartedCard = ({ icon, title, subTitle, btnText }) => {
   return (
-    <div className="card flex flex-col gap-2 h-full">
-      <div className="flex gap-5">
+    <Card>
+     <div  className=" flex flex-col gap-4 ">
+     <div className="flex gap-5">
         <div className=" bg-gray-300 p-2 rounded-md h-fit text-purple-500">
           {icon}
         </div>
@@ -13,8 +14,9 @@ const GettingStartedCard = ({ icon, title, subTitle, btnText }) => {
         </div>
       </div>
 
-      <Button type="primary">{btnText}</Button>
-    </div>
+      <Button className="w-fit ml-[72px]" type="primary">{btnText}</Button>
+     </div>
+    </Card>
   );
 };
 

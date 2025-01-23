@@ -37,7 +37,7 @@ const quickActionsData = [
 ];
 const Navbar = () => {
   return (
-    <nav className="bg-white text-indigo-600 p-4 shadow-md">
+    <nav className="bg-white text-indigo-600 p-4 shadow-md border-b">
       <div className="container mx-auto flex justify-between items-center ">
         <div className="flex divide-x-2 items-center space-x-4 ml-auto">
           <div className="px-3 relative group ">

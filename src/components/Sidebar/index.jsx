@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import {
-  AiFillAppstore,
   AiTwotoneContainer,
   AiOutlineDesktop,
   AiOutlinePieChart,
@@ -146,7 +145,7 @@ const Index = () => {
 
   return (
     <div
-      className={`bg-gray-900 text-white h-screen p-5 pt-8 absolute ${collapsed ? "w-20 " : "w-80 "} z-50  overflow-y-auto-auto duration-300`}
+      className={`bg-gray-900 text-white h-screen p-5 pt-8 absolute ${collapsed ? "w-20 " : "w-72 "} z-50  overflow-y-auto-auto duration-300`}
       onMouseEnter={() => setCollapsed(false)}
       onMouseLeave={() => setCollapsed(true)}
     >

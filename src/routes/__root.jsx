@@ -4,9 +4,13 @@ import Sidebar from "../components/Sidebar/index";
 import Navbar from "../components/Navbar";
 import { ConfigProvider } from "antd";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
+import NotFound from "@/components/NotFoundPage/NotFoundPage";
+import ErrorPage from "@/components/ErrorPage/ErrorPage";
 
 export const Route = createRootRoute({
   component: RootComponent,
+  notFoundComponent: () => <NotFound />,
+  errorComponent: () => <ErrorPage />,
 });
 
 function RootComponent() {
