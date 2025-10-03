@@ -1,5 +1,5 @@
+import PageLayout from "@/components/layout/PageLayout";
 import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
-import PageLayout from "../../components/PageLayout";
 // Components
 export const Route = createFileRoute("/settings")({
   component: RouteComponent,

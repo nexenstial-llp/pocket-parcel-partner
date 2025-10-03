@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import PageLayout from "@/components/PageLayout";
 import SideRouting from "@/components/pages/tools/activityLogs/SideRouting";
 import OrderTable from "@/components/pages/tools/activityLogs/OrderTable";
+import PageLayout from "@/components/layout/PageLayout";
 
 export const Route = createFileRoute("/tools/activity-logs/")({
   component: RouteComponent,

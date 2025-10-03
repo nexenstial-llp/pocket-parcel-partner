@@ -1,5 +1,5 @@
+import PageLayout from "@/components/layout/PageLayout";
 import { createFileRoute, Outlet } from "@tanstack/react-router";
-import PageLayout from "@/components/PageLayout";
 import { Link } from "@tanstack/react-router";
 
 const tabLinks = [

@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { RiBankFill } from "react-icons/ri";
-import PageLayout from "../../../components/PageLayout";
 import BankDetailsModal from "../../../components/pages/settings/bankDetails/modals/BankDetailsModal";
+import PageLayout from "@/components/layout/PageLayout";
 
 export const Route = createFileRoute("/settings/bank-details/")({
   component: RouteComponent,

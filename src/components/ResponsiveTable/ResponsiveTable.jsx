@@ -1,6 +1,7 @@
-import { cn } from "@/lib/utils";
+/* eslint-disable react/prop-types */
+
 import { Table } from "antd";
-import React from "react";
+import { cn } from "../utils/classname.util";
 
 const ResponsiveTable = ({ columns, dataSource, className, ...rest }) => {
   const responsiveClassName = cn("w-full min-w-[600px] ", className);

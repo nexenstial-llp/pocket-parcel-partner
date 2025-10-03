@@ -1,8 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
-import PageLayout from "../../../components/PageLayout";
 import { MdStorefront } from "react-icons/md";
 import { FaRegEnvelope, FaRegUser } from "react-icons/fa6";
 import { CiPhone } from "react-icons/ci";
+import PageLayout from "@/components/layout/PageLayout";
 export const Route = createFileRoute("/settings/company-details/")({
   component: RouteComponent,
 });

@@ -1,11 +1,11 @@
 import * as React from "react";
 import { Outlet, createRootRoute } from "@tanstack/react-router";
-import Sidebar from "../components/Sidebar/index";
-import Navbar from "../components/Navbar";
 import { ConfigProvider } from "antd";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
-import NotFound from "@/components/NotFoundPage/NotFoundPage";
-import ErrorPage from "@/components/ErrorPage/ErrorPage";
+import NotFound from "@/components/layout/NotFoundPage";
+import ErrorPage from "@/components/layout/ErrorPage";
+import Sidebar from "@/components/layout/Sidebar";
+import Navbar from "@/components/layout/Navbar";
 
 export const Route = createRootRoute({
   component: RootComponent,
@@ -14,6 +14,7 @@ export const Route = createRootRoute({
 });
 
 function RootComponent() {
+  const [collapsed, setCollapsed] = React.useState(true);
   return (
     <React.Fragment>
       <ConfigProvider
@@ -25,12 +26,12 @@ function RootComponent() {
         }}
       >
         <div className="flex">
-          <Sidebar />
+          <Sidebar collapsed={collapsed} setCollapsed={setCollapsed} />
           <div
             style={{ scrollbarWidth: "thin" }}
             className="bg-gray-100 w-full min-h-screen max-h-screen overflow-auto scroll-smooth"
           >
-            <Navbar />
+            <Navbar collapsed={collapsed} setCollapsed={setCollapsed} />
             <div className="pp-container">
               <Outlet />
             </div>

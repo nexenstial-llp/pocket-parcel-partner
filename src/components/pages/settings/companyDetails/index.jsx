@@ -1,8 +1,7 @@
-import React from "react";
-import PageLayout from "../../../PageLayout";
 import { MdStorefront } from "react-icons/md";
 import { FaRegEnvelope, FaRegUser } from "react-icons/fa";
 import { CiPhone } from "react-icons/ci";
+import PageLayout from "@/components/layout/PageLayout";
 const Index = () => {
   return (
     <PageLayout>
@@ -30,7 +29,7 @@ const Index = () => {
               NEAR LINGAYTA BHAVAN
             </p>
             <small className="text-gray-400">
-              <i>*We'll use this logo on your packaging slip</i>{" "}
+              <i>*We&#39;ll use this logo on your packaging slip</i>{" "}
             </small>
           </div>
         </div>
