@@ -1,4 +1,3 @@
-import React from "react";
 import { BsFillLightningChargeFill, BsTicketFill } from "react-icons/bs";
 import { FaWallet, FaCalculator } from "react-icons/fa";
 import { IoReload } from "react-icons/io5";

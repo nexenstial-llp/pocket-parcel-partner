@@ -1,7 +1,6 @@
-import React from "react";
-import PageLayout from "@/components/PageLayout";
 import { Link } from "@tanstack/react-router";
 import { BsArrowLeft } from "react-icons/bs";
+import PageLayout from "./PageLayout";
 const NotFound = () => {
   return (
     <PageLayout>
@@ -18,13 +17,13 @@ const NotFound = () => {
                 Page not found
               </h1>
               <p className="mt-2 text-base text-gray-500">
-                Sorry, we couldn't find the page you're looking for.
+                Sorry, we couldn&#39;t find the page you&#39;re looking for.
               </p>
             </div>
           </div>
           <div className="mt-8">
             <Link
-              to="/"
+              to="/home"
               className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
               <BsArrowLeft className="h-4 w-4 mr-2" />

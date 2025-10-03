@@ -1,7 +1,6 @@
-import React from "react";
-import PageLayout from "@/components/PageLayout";
 import { LuRefreshCw } from "react-icons/lu";
 import { Link } from "@tanstack/react-router";
+import PageLayout from "./PageLayout";
 const ErrorPage = () => {
   return (
     <PageLayout>

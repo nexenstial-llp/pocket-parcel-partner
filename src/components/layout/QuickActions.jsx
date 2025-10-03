@@ -1,5 +1,5 @@
+/* eslint-disable react/prop-types */
 import { useNavigate } from "@tanstack/react-router";
-import React from "react";
 
 const QuickActions = ({ icon, text, navigateTo }) => {
   const navigate = useNavigate();
