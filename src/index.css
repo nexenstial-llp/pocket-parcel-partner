@@ -12,13 +12,13 @@
   scrollbar-width: thin;
 }
 
-@media only screen and (max-width: 767px) {
+/* @media only screen and (max-width: 767px) {
   .pp-container {
     margin: 0 auto;
     max-height: 100%;
     max-width: 100%;
   }
-}
+} */
 
 /* Fix for submenu background color in collapsed mode */
 .sidebar-container
