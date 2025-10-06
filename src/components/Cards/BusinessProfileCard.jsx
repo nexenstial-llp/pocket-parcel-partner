@@ -1,8 +1,10 @@
+/* eslint-disable react/prop-types */
 import { useNavigate } from "@tanstack/react-router";
-import React, { useState } from "react";
+import { useState } from "react";
 import { FaCheckCircle } from "react-icons/fa";
 import SocialMediaModal from "../Modals/SocialMediaModal";
 import { Button } from "antd";
+import ResponsiveCard from "../ui/ResponsiveCard";
 
 const BusinessProfileCard = ({ title, subTitle, icon, isCompleted }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -23,7 +25,7 @@ const BusinessProfileCard = ({ title, subTitle, icon, isCompleted }) => {
     showModal();
   };
   return (
-    <div className="card flex flex-col gap-2 h-full">
+    <ResponsiveCard className="flex flex-col gap-2 h-full">
       <SocialMediaModal
         isModalOpen={isModalOpen}
         handleOk={handleOk}
@@ -51,7 +53,7 @@ const BusinessProfileCard = ({ title, subTitle, icon, isCompleted }) => {
           )}
         </div>
       </div>
-    </div>
+    </ResponsiveCard>
   );
 };
 
