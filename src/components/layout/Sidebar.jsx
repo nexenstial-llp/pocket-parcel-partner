@@ -13,7 +13,7 @@ import {
 import { HiHome } from "react-icons/hi";
 import { BsTools } from "react-icons/bs";
 import { PiKeyReturnFill } from "react-icons/pi";
-import { TbTruckDelivery } from "react-icons/tb";
+import { TbBuildingWarehouse, TbTruckDelivery } from "react-icons/tb";
 import { GoLaw } from "react-icons/go";
 import { FaAnglesRight } from "react-icons/fa6";
 
@@ -27,12 +27,37 @@ const sidebarData = [
   {
     key: "dashboard",
     icon: <AiOutlinePieChart />,
-    label: <Link to="/dashboard">Dashboard</Link>,
+    label: <Link to="/dashboard/domestic/overview">Dashboard</Link>,
   },
   {
     key: "orders",
     icon: <AiTwotoneContainer />,
     label: <Link to="/orders">Orders</Link>,
+    children: [
+      {
+        key: "/orders",
+        label: <Link to="/orders">Orders</Link>,
+      },
+      {
+        key: "/orders/create",
+        label: <Link to="/orders/create">Create Order</Link>,
+      },
+    ],
+  },
+  {
+    key: "warehouse",
+    icon: <TbBuildingWarehouse />,
+    label: <Link to="/warehouse">Warehouse</Link>,
+    children: [
+      {
+        key: "/warehouse/list",
+        label: <Link to="/warehouse/list">List</Link>,
+      },
+      {
+        key: "/warehouse/create",
+        label: <Link to="/warehouse/create">Create</Link>,
+      },
+    ],
   },
   {
     key: "returns",
@@ -139,7 +164,6 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
   const { selectedKey, openKey: activeOpenKey } = findActiveKey(
     location.pathname
   );
-
   const [openKeys, setOpenKeys] = useState(
     activeOpenKey ? [activeOpenKey] : []
   );
@@ -157,7 +181,7 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
     <div className="z-[100]">
       <Sider
         style={{
-          overflow: "auto",
+          overflowY: "auto",
           maxHeight: "100vh",
           position: "fixed",
           top: 0,
@@ -170,7 +194,7 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
         width={240}
         className="transition-all ease-in-out duration-300 delay-100 "
       >
-        <Link to="/dashboard">
+        <Link to="/home">
           <div className="h-16 font-bold text-white py-2 text-xl text-center flex justify-center items-center relative">
             <span
               className={`transition-transform duration-300 ease-in-out delay-100 absolute ${collapsed ? "opacity-0 scale-0" : "opacity-100 scale-100"}`}
