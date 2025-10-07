@@ -17,11 +17,16 @@ import { Route as SettingsRouteImport } from './routes/settings/route'
 import { Route as DashboardRouteImport } from './routes/dashboard/route'
 import { Route as IndexImport } from './routes/index'
 import { Route as ToolsIndexImport } from './routes/tools/index'
+import { Route as OrdersIndexImport } from './routes/orders/index'
 import { Route as HomeIndexImport } from './routes/home/index'
 import { Route as AddOrdersIndexImport } from './routes/add-orders/index'
 import { Route as ToolsReportsRouteImport } from './routes/tools/reports/route'
 import { Route as ToolsRateCardRouteImport } from './routes/tools/rate-card/route'
 import { Route as ToolsRateCalculatorRouteImport } from './routes/tools/rate-calculator/route'
+import { Route as DashboardInternationalRouteImport } from './routes/dashboard/international/route'
+import { Route as DashboardDomesticRouteImport } from './routes/dashboard/domestic/route'
+import { Route as WarehouseListIndexImport } from './routes/warehouse/list/index'
+import { Route as WarehouseCreateIndexImport } from './routes/warehouse/create/index'
 import { Route as ToolsActivityLogsIndexImport } from './routes/tools/activity-logs/index'
 import { Route as SettingsUsersIndexImport } from './routes/settings/users/index'
 import { Route as SettingsTaxConfigurationIndexImport } from './routes/settings/tax-configuration/index'
@@ -30,6 +35,7 @@ import { Route as SettingsInvoiceTemplatesIndexImport } from './routes/settings/
 import { Route as SettingsCompanyDetailsIndexImport } from './routes/settings/company-details/index'
 import { Route as SettingsBankDetailsIndexImport } from './routes/settings/bank-details/index'
 import { Route as SettingsApiSetupsIndexImport } from './routes/settings/api-setups/index'
+import { Route as OrdersCreateIndexImport } from './routes/orders/create/index'
 import { Route as AddOrdersLayoutSingleOrderImport } from './routes/add-orders/_layout/single-order'
 import { Route as ToolsReportsDownloadReportsRouteImport } from './routes/tools/reports/download-reports/route'
 import { Route as ToolsReportsReportsSchedulerIndexImport } from './routes/tools/reports/reports-scheduler/index'
@@ -38,6 +44,9 @@ import { Route as ToolsRateCardForwardIndexImport } from './routes/tools/rate-ca
 import { Route as ToolsRateCardDocumentIndexImport } from './routes/tools/rate-card/document/index'
 import { Route as ToolsRateCalculatorInternationalIndexImport } from './routes/tools/rate-calculator/international/index'
 import { Route as ToolsRateCalculatorDomesticIndexImport } from './routes/tools/rate-calculator/domestic/index'
+import { Route as DashboardInternationalOverviewIndexImport } from './routes/dashboard/international/overview/index'
+import { Route as DashboardDomesticOverviewIndexImport } from './routes/dashboard/domestic/overview/index'
+import { Route as DashboardDomesticOrdersIndexImport } from './routes/dashboard/domestic/orders/index'
 import { Route as ToolsReportsDownloadReportsInstantReportsIndexImport } from './routes/tools/reports/download-reports/instant-reports/index'
 
 // Create Virtual Routes
@@ -71,6 +80,12 @@ const ToolsIndexRoute = ToolsIndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const OrdersIndexRoute = OrdersIndexImport.update({
+  id: '/orders/',
+  path: '/orders/',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const HomeIndexRoute = HomeIndexImport.update({
   id: '/home/',
   path: '/home/',
@@ -98,6 +113,31 @@ const ToolsRateCardRouteRoute = ToolsRateCardRouteImport.update({
 const ToolsRateCalculatorRouteRoute = ToolsRateCalculatorRouteImport.update({
   id: '/tools/rate-calculator',
   path: '/tools/rate-calculator',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const DashboardInternationalRouteRoute =
+  DashboardInternationalRouteImport.update({
+    id: '/international',
+    path: '/international',
+    getParentRoute: () => DashboardRouteRoute,
+  } as any)
+
+const DashboardDomesticRouteRoute = DashboardDomesticRouteImport.update({
+  id: '/domestic',
+  path: '/domestic',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
+
+const WarehouseListIndexRoute = WarehouseListIndexImport.update({
+  id: '/warehouse/list/',
+  path: '/warehouse/list/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const WarehouseCreateIndexRoute = WarehouseCreateIndexImport.update({
+  id: '/warehouse/create/',
+  path: '/warehouse/create/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -151,6 +191,12 @@ const SettingsApiSetupsIndexRoute = SettingsApiSetupsIndexImport.update({
   id: '/api-setups/',
   path: '/api-setups/',
   getParentRoute: () => SettingsRouteRoute,
+} as any)
+
+const OrdersCreateIndexRoute = OrdersCreateIndexImport.update({
+  id: '/orders/create/',
+  path: '/orders/create/',
+  getParentRoute: () => rootRoute,
 } as any)
 
 const AddOrdersLayoutSingleOrderRoute = AddOrdersLayoutSingleOrderImport.update(
@@ -209,6 +255,27 @@ const ToolsRateCalculatorDomesticIndexRoute =
     getParentRoute: () => ToolsRateCalculatorRouteRoute,
   } as any)
 
+const DashboardInternationalOverviewIndexRoute =
+  DashboardInternationalOverviewIndexImport.update({
+    id: '/overview/',
+    path: '/overview/',
+    getParentRoute: () => DashboardInternationalRouteRoute,
+  } as any)
+
+const DashboardDomesticOverviewIndexRoute =
+  DashboardDomesticOverviewIndexImport.update({
+    id: '/overview/',
+    path: '/overview/',
+    getParentRoute: () => DashboardDomesticRouteRoute,
+  } as any)
+
+const DashboardDomesticOrdersIndexRoute =
+  DashboardDomesticOrdersIndexImport.update({
+    id: '/orders/',
+    path: '/orders/',
+    getParentRoute: () => DashboardDomesticRouteRoute,
+  } as any)
+
 const ToolsReportsDownloadReportsScheduledReportsIndexLazyRoute =
   ToolsReportsDownloadReportsScheduledReportsIndexLazyImport.update({
     id: '/scheduled-reports/',
@@ -252,6 +319,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SettingsRouteImport
       parentRoute: typeof rootRoute
     }
+    '/dashboard/domestic': {
+      id: '/dashboard/domestic'
+      path: '/domestic'
+      fullPath: '/dashboard/domestic'
+      preLoaderRoute: typeof DashboardDomesticRouteImport
+      parentRoute: typeof DashboardRouteImport
+    }
+    '/dashboard/international': {
+      id: '/dashboard/international'
+      path: '/international'
+      fullPath: '/dashboard/international'
+      preLoaderRoute: typeof DashboardInternationalRouteImport
+      parentRoute: typeof DashboardRouteImport
+    }
     '/tools/rate-calculator': {
       id: '/tools/rate-calculator'
       path: '/tools/rate-calculator'
@@ -287,6 +368,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HomeIndexImport
       parentRoute: typeof rootRoute
     }
+    '/orders/': {
+      id: '/orders/'
+      path: '/orders'
+      fullPath: '/orders'
+      preLoaderRoute: typeof OrdersIndexImport
+      parentRoute: typeof rootRoute
+    }
     '/tools/': {
       id: '/tools/'
       path: '/tools'
@@ -306,6 +394,13 @@ declare module '@tanstack/react-router' {
       path: '/add-orders/single-order'
       fullPath: '/add-orders/single-order'
       preLoaderRoute: typeof AddOrdersLayoutSingleOrderImport
+      parentRoute: typeof rootRoute
+    }
+    '/orders/create/': {
+      id: '/orders/create/'
+      path: '/orders/create'
+      fullPath: '/orders/create'
+      preLoaderRoute: typeof OrdersCreateIndexImport
       parentRoute: typeof rootRoute
     }
     '/settings/api-setups/': {
@@ -363,6 +458,41 @@ declare module '@tanstack/react-router' {
       fullPath: '/tools/activity-logs'
       preLoaderRoute: typeof ToolsActivityLogsIndexImport
       parentRoute: typeof rootRoute
+    }
+    '/warehouse/create/': {
+      id: '/warehouse/create/'
+      path: '/warehouse/create'
+      fullPath: '/warehouse/create'
+      preLoaderRoute: typeof WarehouseCreateIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/warehouse/list/': {
+      id: '/warehouse/list/'
+      path: '/warehouse/list'
+      fullPath: '/warehouse/list'
+      preLoaderRoute: typeof WarehouseListIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/dashboard/domestic/orders/': {
+      id: '/dashboard/domestic/orders/'
+      path: '/orders'
+      fullPath: '/dashboard/domestic/orders'
+      preLoaderRoute: typeof DashboardDomesticOrdersIndexImport
+      parentRoute: typeof DashboardDomesticRouteImport
+    }
+    '/dashboard/domestic/overview/': {
+      id: '/dashboard/domestic/overview/'
+      path: '/overview'
+      fullPath: '/dashboard/domestic/overview'
+      preLoaderRoute: typeof DashboardDomesticOverviewIndexImport
+      parentRoute: typeof DashboardDomesticRouteImport
+    }
+    '/dashboard/international/overview/': {
+      id: '/dashboard/international/overview/'
+      path: '/overview'
+      fullPath: '/dashboard/international/overview'
+      preLoaderRoute: typeof DashboardInternationalOverviewIndexImport
+      parentRoute: typeof DashboardInternationalRouteImport
     }
     '/tools/rate-calculator/domestic/': {
       id: '/tools/rate-calculator/domestic/'
@@ -424,6 +554,52 @@ declare module '@tanstack/react-router' {
 }
 
 // Create and export the route tree
+
+interface DashboardDomesticRouteRouteChildren {
+  DashboardDomesticOrdersIndexRoute: typeof DashboardDomesticOrdersIndexRoute
+  DashboardDomesticOverviewIndexRoute: typeof DashboardDomesticOverviewIndexRoute
+}
+
+const DashboardDomesticRouteRouteChildren: DashboardDomesticRouteRouteChildren =
+  {
+    DashboardDomesticOrdersIndexRoute: DashboardDomesticOrdersIndexRoute,
+    DashboardDomesticOverviewIndexRoute: DashboardDomesticOverviewIndexRoute,
+  }
+
+const DashboardDomesticRouteRouteWithChildren =
+  DashboardDomesticRouteRoute._addFileChildren(
+    DashboardDomesticRouteRouteChildren,
+  )
+
+interface DashboardInternationalRouteRouteChildren {
+  DashboardInternationalOverviewIndexRoute: typeof DashboardInternationalOverviewIndexRoute
+}
+
+const DashboardInternationalRouteRouteChildren: DashboardInternationalRouteRouteChildren =
+  {
+    DashboardInternationalOverviewIndexRoute:
+      DashboardInternationalOverviewIndexRoute,
+  }
+
+const DashboardInternationalRouteRouteWithChildren =
+  DashboardInternationalRouteRoute._addFileChildren(
+    DashboardInternationalRouteRouteChildren,
+  )
+
+interface DashboardRouteRouteChildren {
+  DashboardDomesticRouteRoute: typeof DashboardDomesticRouteRouteWithChildren
+  DashboardInternationalRouteRoute: typeof DashboardInternationalRouteRouteWithChildren
+}
+
+const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
+  DashboardDomesticRouteRoute: DashboardDomesticRouteRouteWithChildren,
+  DashboardInternationalRouteRoute:
+    DashboardInternationalRouteRouteWithChildren,
+}
+
+const DashboardRouteRouteWithChildren = DashboardRouteRoute._addFileChildren(
+  DashboardRouteRouteChildren,
+)
 
 interface SettingsRouteRouteChildren {
   SettingsApiSetupsIndexRoute: typeof SettingsApiSetupsIndexRoute
@@ -517,16 +693,20 @@ const ToolsReportsRouteRouteWithChildren =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/dashboard': typeof DashboardRouteRoute
+  '/dashboard': typeof DashboardRouteRouteWithChildren
   '/settings': typeof SettingsRouteRouteWithChildren
+  '/dashboard/domestic': typeof DashboardDomesticRouteRouteWithChildren
+  '/dashboard/international': typeof DashboardInternationalRouteRouteWithChildren
   '/tools/rate-calculator': typeof ToolsRateCalculatorRouteRouteWithChildren
   '/tools/rate-card': typeof ToolsRateCardRouteRouteWithChildren
   '/tools/reports': typeof ToolsReportsRouteRouteWithChildren
   '/add-orders': typeof AddOrdersIndexRoute
   '/home': typeof HomeIndexRoute
+  '/orders': typeof OrdersIndexRoute
   '/tools': typeof ToolsIndexRoute
   '/tools/reports/download-reports': typeof ToolsReportsDownloadReportsRouteRouteWithChildren
   '/add-orders/single-order': typeof AddOrdersLayoutSingleOrderRoute
+  '/orders/create': typeof OrdersCreateIndexRoute
   '/settings/api-setups': typeof SettingsApiSetupsIndexRoute
   '/settings/bank-details': typeof SettingsBankDetailsIndexRoute
   '/settings/company-details': typeof SettingsCompanyDetailsIndexRoute
@@ -535,6 +715,11 @@ export interface FileRoutesByFullPath {
   '/settings/tax-configuration': typeof SettingsTaxConfigurationIndexRoute
   '/settings/users': typeof SettingsUsersIndexRoute
   '/tools/activity-logs': typeof ToolsActivityLogsIndexRoute
+  '/warehouse/create': typeof WarehouseCreateIndexRoute
+  '/warehouse/list': typeof WarehouseListIndexRoute
+  '/dashboard/domestic/orders': typeof DashboardDomesticOrdersIndexRoute
+  '/dashboard/domestic/overview': typeof DashboardDomesticOverviewIndexRoute
+  '/dashboard/international/overview': typeof DashboardInternationalOverviewIndexRoute
   '/tools/rate-calculator/domestic': typeof ToolsRateCalculatorDomesticIndexRoute
   '/tools/rate-calculator/international': typeof ToolsRateCalculatorInternationalIndexRoute
   '/tools/rate-card/document': typeof ToolsRateCardDocumentIndexRoute
@@ -547,16 +732,20 @@ export interface FileRoutesByFullPath {
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/dashboard': typeof DashboardRouteRoute
+  '/dashboard': typeof DashboardRouteRouteWithChildren
   '/settings': typeof SettingsRouteRouteWithChildren
+  '/dashboard/domestic': typeof DashboardDomesticRouteRouteWithChildren
+  '/dashboard/international': typeof DashboardInternationalRouteRouteWithChildren
   '/tools/rate-calculator': typeof ToolsRateCalculatorRouteRouteWithChildren
   '/tools/rate-card': typeof ToolsRateCardRouteRouteWithChildren
   '/tools/reports': typeof ToolsReportsRouteRouteWithChildren
   '/add-orders': typeof AddOrdersIndexRoute
   '/home': typeof HomeIndexRoute
+  '/orders': typeof OrdersIndexRoute
   '/tools': typeof ToolsIndexRoute
   '/tools/reports/download-reports': typeof ToolsReportsDownloadReportsRouteRouteWithChildren
   '/add-orders/single-order': typeof AddOrdersLayoutSingleOrderRoute
+  '/orders/create': typeof OrdersCreateIndexRoute
   '/settings/api-setups': typeof SettingsApiSetupsIndexRoute
   '/settings/bank-details': typeof SettingsBankDetailsIndexRoute
   '/settings/company-details': typeof SettingsCompanyDetailsIndexRoute
@@ -565,6 +754,11 @@ export interface FileRoutesByTo {
   '/settings/tax-configuration': typeof SettingsTaxConfigurationIndexRoute
   '/settings/users': typeof SettingsUsersIndexRoute
   '/tools/activity-logs': typeof ToolsActivityLogsIndexRoute
+  '/warehouse/create': typeof WarehouseCreateIndexRoute
+  '/warehouse/list': typeof WarehouseListIndexRoute
+  '/dashboard/domestic/orders': typeof DashboardDomesticOrdersIndexRoute
+  '/dashboard/domestic/overview': typeof DashboardDomesticOverviewIndexRoute
+  '/dashboard/international/overview': typeof DashboardInternationalOverviewIndexRoute
   '/tools/rate-calculator/domestic': typeof ToolsRateCalculatorDomesticIndexRoute
   '/tools/rate-calculator/international': typeof ToolsRateCalculatorInternationalIndexRoute
   '/tools/rate-card/document': typeof ToolsRateCardDocumentIndexRoute
@@ -578,16 +772,20 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
-  '/dashboard': typeof DashboardRouteRoute
+  '/dashboard': typeof DashboardRouteRouteWithChildren
   '/settings': typeof SettingsRouteRouteWithChildren
+  '/dashboard/domestic': typeof DashboardDomesticRouteRouteWithChildren
+  '/dashboard/international': typeof DashboardInternationalRouteRouteWithChildren
   '/tools/rate-calculator': typeof ToolsRateCalculatorRouteRouteWithChildren
   '/tools/rate-card': typeof ToolsRateCardRouteRouteWithChildren
   '/tools/reports': typeof ToolsReportsRouteRouteWithChildren
   '/add-orders/': typeof AddOrdersIndexRoute
   '/home/': typeof HomeIndexRoute
+  '/orders/': typeof OrdersIndexRoute
   '/tools/': typeof ToolsIndexRoute
   '/tools/reports/download-reports': typeof ToolsReportsDownloadReportsRouteRouteWithChildren
   '/add-orders/_layout/single-order': typeof AddOrdersLayoutSingleOrderRoute
+  '/orders/create/': typeof OrdersCreateIndexRoute
   '/settings/api-setups/': typeof SettingsApiSetupsIndexRoute
   '/settings/bank-details/': typeof SettingsBankDetailsIndexRoute
   '/settings/company-details/': typeof SettingsCompanyDetailsIndexRoute
@@ -596,6 +794,11 @@ export interface FileRoutesById {
   '/settings/tax-configuration/': typeof SettingsTaxConfigurationIndexRoute
   '/settings/users/': typeof SettingsUsersIndexRoute
   '/tools/activity-logs/': typeof ToolsActivityLogsIndexRoute
+  '/warehouse/create/': typeof WarehouseCreateIndexRoute
+  '/warehouse/list/': typeof WarehouseListIndexRoute
+  '/dashboard/domestic/orders/': typeof DashboardDomesticOrdersIndexRoute
+  '/dashboard/domestic/overview/': typeof DashboardDomesticOverviewIndexRoute
+  '/dashboard/international/overview/': typeof DashboardInternationalOverviewIndexRoute
   '/tools/rate-calculator/domestic/': typeof ToolsRateCalculatorDomesticIndexRoute
   '/tools/rate-calculator/international/': typeof ToolsRateCalculatorInternationalIndexRoute
   '/tools/rate-card/document/': typeof ToolsRateCardDocumentIndexRoute
@@ -612,14 +815,18 @@ export interface FileRouteTypes {
     | '/'
     | '/dashboard'
     | '/settings'
+    | '/dashboard/domestic'
+    | '/dashboard/international'
     | '/tools/rate-calculator'
     | '/tools/rate-card'
     | '/tools/reports'
     | '/add-orders'
     | '/home'
+    | '/orders'
     | '/tools'
     | '/tools/reports/download-reports'
     | '/add-orders/single-order'
+    | '/orders/create'
     | '/settings/api-setups'
     | '/settings/bank-details'
     | '/settings/company-details'
@@ -628,6 +835,11 @@ export interface FileRouteTypes {
     | '/settings/tax-configuration'
     | '/settings/users'
     | '/tools/activity-logs'
+    | '/warehouse/create'
+    | '/warehouse/list'
+    | '/dashboard/domestic/orders'
+    | '/dashboard/domestic/overview'
+    | '/dashboard/international/overview'
     | '/tools/rate-calculator/domestic'
     | '/tools/rate-calculator/international'
     | '/tools/rate-card/document'
@@ -641,14 +853,18 @@ export interface FileRouteTypes {
     | '/'
     | '/dashboard'
     | '/settings'
+    | '/dashboard/domestic'
+    | '/dashboard/international'
     | '/tools/rate-calculator'
     | '/tools/rate-card'
     | '/tools/reports'
     | '/add-orders'
     | '/home'
+    | '/orders'
     | '/tools'
     | '/tools/reports/download-reports'
     | '/add-orders/single-order'
+    | '/orders/create'
     | '/settings/api-setups'
     | '/settings/bank-details'
     | '/settings/company-details'
@@ -657,6 +873,11 @@ export interface FileRouteTypes {
     | '/settings/tax-configuration'
     | '/settings/users'
     | '/tools/activity-logs'
+    | '/warehouse/create'
+    | '/warehouse/list'
+    | '/dashboard/domestic/orders'
+    | '/dashboard/domestic/overview'
+    | '/dashboard/international/overview'
     | '/tools/rate-calculator/domestic'
     | '/tools/rate-calculator/international'
     | '/tools/rate-card/document'
@@ -670,14 +891,18 @@ export interface FileRouteTypes {
     | '/'
     | '/dashboard'
     | '/settings'
+    | '/dashboard/domestic'
+    | '/dashboard/international'
     | '/tools/rate-calculator'
     | '/tools/rate-card'
     | '/tools/reports'
     | '/add-orders/'
     | '/home/'
+    | '/orders/'
     | '/tools/'
     | '/tools/reports/download-reports'
     | '/add-orders/_layout/single-order'
+    | '/orders/create/'
     | '/settings/api-setups/'
     | '/settings/bank-details/'
     | '/settings/company-details/'
@@ -686,6 +911,11 @@ export interface FileRouteTypes {
     | '/settings/tax-configuration/'
     | '/settings/users/'
     | '/tools/activity-logs/'
+    | '/warehouse/create/'
+    | '/warehouse/list/'
+    | '/dashboard/domestic/orders/'
+    | '/dashboard/domestic/overview/'
+    | '/dashboard/international/overview/'
     | '/tools/rate-calculator/domestic/'
     | '/tools/rate-calculator/international/'
     | '/tools/rate-card/document/'
@@ -699,30 +929,38 @@ export interface FileRouteTypes {
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  DashboardRouteRoute: typeof DashboardRouteRoute
+  DashboardRouteRoute: typeof DashboardRouteRouteWithChildren
   SettingsRouteRoute: typeof SettingsRouteRouteWithChildren
   ToolsRateCalculatorRouteRoute: typeof ToolsRateCalculatorRouteRouteWithChildren
   ToolsRateCardRouteRoute: typeof ToolsRateCardRouteRouteWithChildren
   ToolsReportsRouteRoute: typeof ToolsReportsRouteRouteWithChildren
   AddOrdersIndexRoute: typeof AddOrdersIndexRoute
   HomeIndexRoute: typeof HomeIndexRoute
+  OrdersIndexRoute: typeof OrdersIndexRoute
   ToolsIndexRoute: typeof ToolsIndexRoute
   AddOrdersLayoutSingleOrderRoute: typeof AddOrdersLayoutSingleOrderRoute
+  OrdersCreateIndexRoute: typeof OrdersCreateIndexRoute
   ToolsActivityLogsIndexRoute: typeof ToolsActivityLogsIndexRoute
+  WarehouseCreateIndexRoute: typeof WarehouseCreateIndexRoute
+  WarehouseListIndexRoute: typeof WarehouseListIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  DashboardRouteRoute: DashboardRouteRoute,
+  DashboardRouteRoute: DashboardRouteRouteWithChildren,
   SettingsRouteRoute: SettingsRouteRouteWithChildren,
   ToolsRateCalculatorRouteRoute: ToolsRateCalculatorRouteRouteWithChildren,
   ToolsRateCardRouteRoute: ToolsRateCardRouteRouteWithChildren,
   ToolsReportsRouteRoute: ToolsReportsRouteRouteWithChildren,
   AddOrdersIndexRoute: AddOrdersIndexRoute,
   HomeIndexRoute: HomeIndexRoute,
+  OrdersIndexRoute: OrdersIndexRoute,
   ToolsIndexRoute: ToolsIndexRoute,
   AddOrdersLayoutSingleOrderRoute: AddOrdersLayoutSingleOrderRoute,
+  OrdersCreateIndexRoute: OrdersCreateIndexRoute,
   ToolsActivityLogsIndexRoute: ToolsActivityLogsIndexRoute,
+  WarehouseCreateIndexRoute: WarehouseCreateIndexRoute,
+  WarehouseListIndexRoute: WarehouseListIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -743,16 +981,24 @@ export const routeTree = rootRoute
         "/tools/reports",
         "/add-orders/",
         "/home/",
+        "/orders/",
         "/tools/",
         "/add-orders/_layout/single-order",
-        "/tools/activity-logs/"
+        "/orders/create/",
+        "/tools/activity-logs/",
+        "/warehouse/create/",
+        "/warehouse/list/"
       ]
     },
     "/": {
       "filePath": "index.jsx"
     },
     "/dashboard": {
-      "filePath": "dashboard/route.jsx"
+      "filePath": "dashboard/route.jsx",
+      "children": [
+        "/dashboard/domestic",
+        "/dashboard/international"
+      ]
     },
     "/settings": {
       "filePath": "settings/route.jsx",
@@ -764,6 +1010,21 @@ export const routeTree = rootRoute
         "/settings/pickup-locations/",
         "/settings/tax-configuration/",
         "/settings/users/"
+      ]
+    },
+    "/dashboard/domestic": {
+      "filePath": "dashboard/domestic/route.jsx",
+      "parent": "/dashboard",
+      "children": [
+        "/dashboard/domestic/orders/",
+        "/dashboard/domestic/overview/"
+      ]
+    },
+    "/dashboard/international": {
+      "filePath": "dashboard/international/route.jsx",
+      "parent": "/dashboard",
+      "children": [
+        "/dashboard/international/overview/"
       ]
     },
     "/tools/rate-calculator": {
@@ -794,6 +1055,9 @@ export const routeTree = rootRoute
     "/home/": {
       "filePath": "home/index.jsx"
     },
+    "/orders/": {
+      "filePath": "orders/index.jsx"
+    },
     "/tools/": {
       "filePath": "tools/index.jsx"
     },
@@ -807,6 +1071,9 @@ export const routeTree = rootRoute
     },
     "/add-orders/_layout/single-order": {
       "filePath": "add-orders/_layout/single-order.jsx"
+    },
+    "/orders/create/": {
+      "filePath": "orders/create/index.jsx"
     },
     "/settings/api-setups/": {
       "filePath": "settings/api-setups/index.jsx",
@@ -838,6 +1105,24 @@ export const routeTree = rootRoute
     },
     "/tools/activity-logs/": {
       "filePath": "tools/activity-logs/index.jsx"
+    },
+    "/warehouse/create/": {
+      "filePath": "warehouse/create/index.jsx"
+    },
+    "/warehouse/list/": {
+      "filePath": "warehouse/list/index.jsx"
+    },
+    "/dashboard/domestic/orders/": {
+      "filePath": "dashboard/domestic/orders/index.jsx",
+      "parent": "/dashboard/domestic"
+    },
+    "/dashboard/domestic/overview/": {
+      "filePath": "dashboard/domestic/overview/index.jsx",
+      "parent": "/dashboard/domestic"
+    },
+    "/dashboard/international/overview/": {
+      "filePath": "dashboard/international/overview/index.jsx",
+      "parent": "/dashboard/international"
     },
     "/tools/rate-calculator/domestic/": {
       "filePath": "tools/rate-calculator/domestic/index.jsx",
