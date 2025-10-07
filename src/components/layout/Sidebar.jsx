@@ -32,7 +32,7 @@ const sidebarData = [
   {
     key: "orders",
     icon: <AiTwotoneContainer />,
-    label: <Link to="/orders">Orders</Link>,
+    label: "Orders",
     children: [
       {
         key: "/orders",
@@ -47,7 +47,7 @@ const sidebarData = [
   {
     key: "warehouse",
     icon: <TbBuildingWarehouse />,
-    label: <Link to="/warehouse">Warehouse</Link>,
+    label: "Warehouse",
     children: [
       {
         key: "/warehouse/list",

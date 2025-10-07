@@ -39,7 +39,7 @@ const Navbar = () => {
     <nav className="bg-white text-indigo-600 p-4 shadow-md">
       <div className="container mx-auto flex justify-between items-center ">
         <div className="flex divide-x-2 items-center space-x-4 ml-auto">
-          <div className="px-3 relative group ">
+          {/* <div className="px-3 relative group ">
             <button className="flex gap-1 items-center ">
               <BsFillLightningChargeFill />
               Quick Actions
@@ -57,7 +57,7 @@ const Navbar = () => {
                 ))}
               </div>
             </div>
-          </div>
+          </div> */}
           <div className="px-3 text-gray-600  flex items-center gap-1">
             <FaWallet /> $100
             <IoReload />
@@ -80,12 +80,12 @@ const Navbar = () => {
               >
                 Profile
               </a>
-              <a
+              <span
                 href="#"
                 className="block px-4 py-2 text-gray-800 hover:bg-gray-200"
               >
                 Logout
-              </a>
+              </span>
             </div>
           </div>
         </div>

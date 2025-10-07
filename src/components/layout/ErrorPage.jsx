@@ -1,7 +1,8 @@
+/* eslint-disable react/prop-types */
 import { LuRefreshCw } from "react-icons/lu";
 import { Link } from "@tanstack/react-router";
 import PageLayout from "./PageLayout";
-const ErrorPage = () => {
+const ErrorPage = ({ error }) => {
   return (
     <PageLayout>
       <div className="min-h-[80vh] flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8">
@@ -17,7 +18,10 @@ const ErrorPage = () => {
                 Something went wrong
               </h1>
               <p className="mt-2 text-base text-gray-500">
-                An unexpected error occurred. Please try again later.
+                {error?.message ||
+                  error?.error ||
+                  "An unexpected error occurred"}
+                . Please try again later.
               </p>
             </div>
           </div>
