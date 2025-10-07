@@ -10,7 +10,9 @@ import Navbar from "@/components/layout/Navbar";
 export const Route = createRootRoute({
   component: RootComponent,
   notFoundComponent: () => <NotFound />,
-  errorComponent: () => <ErrorPage />,
+  errorComponent: ({ error }) => {
+    return <ErrorPage error={error} />;
+  },
 });
 
 function RootComponent() {
