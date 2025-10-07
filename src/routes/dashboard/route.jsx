@@ -2,7 +2,7 @@ import PageLayout from "@/components/layout/PageLayout";
 import TitleText from "@/components/ui/TitleText";
 import { useLocation } from "@tanstack/react-router";
 import { createFileRoute, Outlet, useNavigate } from "@tanstack/react-router";
-import { Radio, Select } from "antd";
+import { Radio } from "antd";
 
 export const Route = createFileRoute("/dashboard")({
   component: RouteComponent,
@@ -20,7 +20,7 @@ function RouteComponent() {
     <PageLayout>
       <div className="flex items-center gap-4">
         <TitleText title="Dashboard" />
-        <Select
+        {/* <Select
           className="w-32"
           value={isDomestic ? "domestic" : "international"}
           onChange={(e) => handleChange(e)}
@@ -28,8 +28,9 @@ function RouteComponent() {
             { label: "Domestic", value: "domestic" },
             { label: "International", value: "international" },
           ]}
-        />
+        /> */}
         <Radio.Group
+          size="small"
           value={isDomestic ? "domestic" : "international"}
           defaultValue="domestic"
           buttonStyle="solid"
