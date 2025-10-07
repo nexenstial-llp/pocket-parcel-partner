@@ -1,81 +1,43 @@
 import PageLayout from "@/components/layout/PageLayout";
-import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
-import { Select } from "antd";
+import TitleText from "@/components/ui/TitleText";
+import { useLocation } from "@tanstack/react-router";
+import { createFileRoute, Outlet, useNavigate } from "@tanstack/react-router";
+import { Radio, Select } from "antd";
 
-const tabLinks = [
-  {
-    label: "Overview",
-    to: "/dashboard/domestic/overview",
-  },
-  {
-    label: "Orders",
-    to: "/dashboard/domestic/orders",
-  },
-  {
-    label: "Shipments",
-    to: "/dashboard/domestic/shipments",
-  },
-  {
-    label: "NDR",
-    to: "/dashboard/domestic/ndr",
-  },
-  {
-    label: "NDR",
-    to: "/dashboard/domestic/ndr",
-  },
-  {
-    label: "WhatsApp Comm",
-    to: "/dashboard/domestic/whatsapp",
-  },
-  {
-    label: "RTO",
-    to: "/dashboard/domestic/rto",
-  },
-  {
-    label: "Courier",
-    to: "/dashboard/domestic/courier",
-  },
-  {
-    label: "Delays",
-    to: "/dashboard/domestic/delays",
-  },
-];
 export const Route = createFileRoute("/dashboard")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const isDomestic = location.pathname.includes("domestic");
+  const handleChange = (value) => {
+    if (value === "domestic") navigate({ to: "/dashboard/domestic/overview" });
+    else navigate({ to: "/dashboard/international/overview" });
+  };
   return (
     <PageLayout>
       <div className="flex items-center gap-4">
-        <h2 className="text-xl">Dashboard</h2>
+        <TitleText title="Dashboard" />
         <Select
           className="w-32"
-          defaultValue={"domestic"}
+          value={isDomestic ? "domestic" : "international"}
+          onChange={(e) => handleChange(e)}
           options={[
             { label: "Domestic", value: "domestic" },
             { label: "International", value: "international" },
           ]}
         />
-      </div>
-      <div className="flex mt-4 text-lg gap-4 font-semibold text-gray-500">
-        {tabLinks?.map((item) => (
-          <Link
-            activeProps={{ className: "text-indigo-500" }}
-            to={item?.to}
-            key={item?.label}
-          >
-            {({ isActive }) => {
-              return (
-                <div
-                  className={`${isActive ? "border-b-2 border-indigo-400 " : ""} delay-150`}
-                >
-                  <span>{item?.label}</span>
-                </div>
-              );
-            }}
-          </Link>
-        ))}
+        <Radio.Group
+          value={isDomestic ? "domestic" : "international"}
+          defaultValue="domestic"
+          buttonStyle="solid"
+          onChange={(e) => handleChange(e.target.value)}
+        >
+          <Radio.Button value="domestic">Domestic</Radio.Button>
+          <Radio.Button value="international">International</Radio.Button>
+        </Radio.Group>
       </div>
       <Outlet />
     </PageLayout>
