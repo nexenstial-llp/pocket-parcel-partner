@@ -1,6 +1,6 @@
 import { Link, useSearch } from "@tanstack/react-router";
 import React from "react";
-import { Route } from "@/routes/tools/activity-logs";
+import { Route } from "@/routes/_authenticated/tools/activity-logs";
 const menuItems = [
   {
     title: "ORDERS",

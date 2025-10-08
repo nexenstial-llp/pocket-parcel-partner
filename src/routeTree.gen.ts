@@ -13,58 +13,53 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as SettingsRouteImport } from './routes/settings/route'
-import { Route as DashboardRouteImport } from './routes/dashboard/route'
+import { Route as AuthenticatedImport } from './routes/_authenticated'
 import { Route as IndexImport } from './routes/index'
-import { Route as ToolsIndexImport } from './routes/tools/index'
-import { Route as OrdersIndexImport } from './routes/orders/index'
-import { Route as HomeIndexImport } from './routes/home/index'
-import { Route as AddOrdersIndexImport } from './routes/add-orders/index'
-import { Route as ToolsReportsRouteImport } from './routes/tools/reports/route'
-import { Route as ToolsRateCardRouteImport } from './routes/tools/rate-card/route'
-import { Route as ToolsRateCalculatorRouteImport } from './routes/tools/rate-calculator/route'
-import { Route as DashboardInternationalRouteImport } from './routes/dashboard/international/route'
-import { Route as DashboardDomesticRouteImport } from './routes/dashboard/domestic/route'
-import { Route as WarehouseListIndexImport } from './routes/warehouse/list/index'
-import { Route as WarehouseCreateIndexImport } from './routes/warehouse/create/index'
-import { Route as ToolsActivityLogsIndexImport } from './routes/tools/activity-logs/index'
-import { Route as SettingsUsersIndexImport } from './routes/settings/users/index'
-import { Route as SettingsTaxConfigurationIndexImport } from './routes/settings/tax-configuration/index'
-import { Route as SettingsPickupLocationsIndexImport } from './routes/settings/pickup-locations/index'
-import { Route as SettingsInvoiceTemplatesIndexImport } from './routes/settings/invoice-templates/index'
-import { Route as SettingsCompanyDetailsIndexImport } from './routes/settings/company-details/index'
-import { Route as SettingsBankDetailsIndexImport } from './routes/settings/bank-details/index'
-import { Route as SettingsApiSetupsIndexImport } from './routes/settings/api-setups/index'
-import { Route as OrdersCreateIndexImport } from './routes/orders/create/index'
-import { Route as AddOrdersLayoutSingleOrderImport } from './routes/add-orders/_layout/single-order'
-import { Route as ToolsReportsDownloadReportsRouteImport } from './routes/tools/reports/download-reports/route'
-import { Route as ToolsReportsReportsSchedulerIndexImport } from './routes/tools/reports/reports-scheduler/index'
-import { Route as ToolsRateCardReverseIndexImport } from './routes/tools/rate-card/reverse/index'
-import { Route as ToolsRateCardForwardIndexImport } from './routes/tools/rate-card/forward/index'
-import { Route as ToolsRateCardDocumentIndexImport } from './routes/tools/rate-card/document/index'
-import { Route as ToolsRateCalculatorInternationalIndexImport } from './routes/tools/rate-calculator/international/index'
-import { Route as ToolsRateCalculatorDomesticIndexImport } from './routes/tools/rate-calculator/domestic/index'
-import { Route as DashboardInternationalOverviewIndexImport } from './routes/dashboard/international/overview/index'
-import { Route as DashboardDomesticOverviewIndexImport } from './routes/dashboard/domestic/overview/index'
-import { Route as DashboardDomesticOrdersIndexImport } from './routes/dashboard/domestic/orders/index'
-import { Route as ToolsReportsDownloadReportsInstantReportsIndexImport } from './routes/tools/reports/download-reports/instant-reports/index'
+import { Route as AuthLoginImport } from './routes/auth/Login'
+import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings/route'
+import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard/route'
+import { Route as AuthenticatedToolsIndexImport } from './routes/_authenticated/tools/index'
+import { Route as AuthenticatedOrdersIndexImport } from './routes/_authenticated/orders/index'
+import { Route as AuthenticatedHomeIndexImport } from './routes/_authenticated/home/index'
+import { Route as AuthenticatedToolsReportsRouteImport } from './routes/_authenticated/tools/reports/route'
+import { Route as AuthenticatedToolsRateCardRouteImport } from './routes/_authenticated/tools/rate-card/route'
+import { Route as AuthenticatedToolsRateCalculatorRouteImport } from './routes/_authenticated/tools/rate-calculator/route'
+import { Route as AuthenticatedDashboardInternationalRouteImport } from './routes/_authenticated/dashboard/international/route'
+import { Route as AuthenticatedDashboardDomesticRouteImport } from './routes/_authenticated/dashboard/domestic/route'
+import { Route as AuthenticatedWarehouseListIndexImport } from './routes/_authenticated/warehouse/list/index'
+import { Route as AuthenticatedWarehouseCreateIndexImport } from './routes/_authenticated/warehouse/create/index'
+import { Route as AuthenticatedToolsActivityLogsIndexImport } from './routes/_authenticated/tools/activity-logs/index'
+import { Route as AuthenticatedSettingsUsersIndexImport } from './routes/_authenticated/settings/users/index'
+import { Route as AuthenticatedSettingsTaxConfigurationIndexImport } from './routes/_authenticated/settings/tax-configuration/index'
+import { Route as AuthenticatedSettingsPickupLocationsIndexImport } from './routes/_authenticated/settings/pickup-locations/index'
+import { Route as AuthenticatedSettingsInvoiceTemplatesIndexImport } from './routes/_authenticated/settings/invoice-templates/index'
+import { Route as AuthenticatedSettingsCompanyDetailsIndexImport } from './routes/_authenticated/settings/company-details/index'
+import { Route as AuthenticatedSettingsBankDetailsIndexImport } from './routes/_authenticated/settings/bank-details/index'
+import { Route as AuthenticatedSettingsApiSetupsIndexImport } from './routes/_authenticated/settings/api-setups/index'
+import { Route as AuthenticatedOrdersCreateIndexImport } from './routes/_authenticated/orders/create/index'
+import { Route as AuthenticatedToolsReportsDownloadReportsRouteImport } from './routes/_authenticated/tools/reports/download-reports/route'
+import { Route as AuthenticatedToolsReportsReportsSchedulerIndexImport } from './routes/_authenticated/tools/reports/reports-scheduler/index'
+import { Route as AuthenticatedToolsRateCardReverseIndexImport } from './routes/_authenticated/tools/rate-card/reverse/index'
+import { Route as AuthenticatedToolsRateCardForwardIndexImport } from './routes/_authenticated/tools/rate-card/forward/index'
+import { Route as AuthenticatedToolsRateCardDocumentIndexImport } from './routes/_authenticated/tools/rate-card/document/index'
+import { Route as AuthenticatedToolsRateCalculatorInternationalIndexImport } from './routes/_authenticated/tools/rate-calculator/international/index'
+import { Route as AuthenticatedToolsRateCalculatorDomesticIndexImport } from './routes/_authenticated/tools/rate-calculator/domestic/index'
+import { Route as AuthenticatedDashboardInternationalOverviewIndexImport } from './routes/_authenticated/dashboard/international/overview/index'
+import { Route as AuthenticatedDashboardDomesticOverviewIndexImport } from './routes/_authenticated/dashboard/domestic/overview/index'
+import { Route as AuthenticatedDashboardDomesticOrdersIndexImport } from './routes/_authenticated/dashboard/domestic/orders/index'
+import { Route as AuthenticatedToolsReportsDownloadReportsInstantReportsIndexImport } from './routes/_authenticated/tools/reports/download-reports/instant-reports/index'
 
 // Create Virtual Routes
 
-const ToolsReportsDownloadReportsScheduledReportsIndexLazyImport =
-  createFileRoute('/tools/reports/download-reports/scheduled-reports/')()
+const AuthenticatedToolsReportsDownloadReportsScheduledReportsIndexLazyImport =
+  createFileRoute(
+    '/_authenticated/tools/reports/download-reports/scheduled-reports/',
+  )()
 
 // Create/Update Routes
 
-const SettingsRouteRoute = SettingsRouteImport.update({
-  id: '/settings',
-  path: '/settings',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const DashboardRouteRoute = DashboardRouteImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
+const AuthenticatedRoute = AuthenticatedImport.update({
+  id: '/_authenticated',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -74,224 +69,245 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const ToolsIndexRoute = ToolsIndexImport.update({
+const AuthLoginRoute = AuthLoginImport.update({
+  id: '/auth/Login',
+  path: '/auth/Login',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AuthenticatedSettingsRouteRoute = AuthenticatedSettingsRouteImport.update(
+  {
+    id: '/settings',
+    path: '/settings',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any,
+)
+
+const AuthenticatedDashboardRouteRoute =
+  AuthenticatedDashboardRouteImport.update({
+    id: '/dashboard',
+    path: '/dashboard',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+
+const AuthenticatedToolsIndexRoute = AuthenticatedToolsIndexImport.update({
   id: '/tools/',
   path: '/tools/',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => AuthenticatedRoute,
 } as any)
 
-const OrdersIndexRoute = OrdersIndexImport.update({
+const AuthenticatedOrdersIndexRoute = AuthenticatedOrdersIndexImport.update({
   id: '/orders/',
   path: '/orders/',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => AuthenticatedRoute,
 } as any)
 
-const HomeIndexRoute = HomeIndexImport.update({
+const AuthenticatedHomeIndexRoute = AuthenticatedHomeIndexImport.update({
   id: '/home/',
   path: '/home/',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => AuthenticatedRoute,
 } as any)
 
-const AddOrdersIndexRoute = AddOrdersIndexImport.update({
-  id: '/add-orders/',
-  path: '/add-orders/',
-  getParentRoute: () => rootRoute,
-} as any)
+const AuthenticatedToolsReportsRouteRoute =
+  AuthenticatedToolsReportsRouteImport.update({
+    id: '/tools/reports',
+    path: '/tools/reports',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 
-const ToolsReportsRouteRoute = ToolsReportsRouteImport.update({
-  id: '/tools/reports',
-  path: '/tools/reports',
-  getParentRoute: () => rootRoute,
-} as any)
+const AuthenticatedToolsRateCardRouteRoute =
+  AuthenticatedToolsRateCardRouteImport.update({
+    id: '/tools/rate-card',
+    path: '/tools/rate-card',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 
-const ToolsRateCardRouteRoute = ToolsRateCardRouteImport.update({
-  id: '/tools/rate-card',
-  path: '/tools/rate-card',
-  getParentRoute: () => rootRoute,
-} as any)
+const AuthenticatedToolsRateCalculatorRouteRoute =
+  AuthenticatedToolsRateCalculatorRouteImport.update({
+    id: '/tools/rate-calculator',
+    path: '/tools/rate-calculator',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 
-const ToolsRateCalculatorRouteRoute = ToolsRateCalculatorRouteImport.update({
-  id: '/tools/rate-calculator',
-  path: '/tools/rate-calculator',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const DashboardInternationalRouteRoute =
-  DashboardInternationalRouteImport.update({
+const AuthenticatedDashboardInternationalRouteRoute =
+  AuthenticatedDashboardInternationalRouteImport.update({
     id: '/international',
     path: '/international',
-    getParentRoute: () => DashboardRouteRoute,
+    getParentRoute: () => AuthenticatedDashboardRouteRoute,
   } as any)
 
-const DashboardDomesticRouteRoute = DashboardDomesticRouteImport.update({
-  id: '/domestic',
-  path: '/domestic',
-  getParentRoute: () => DashboardRouteRoute,
-} as any)
+const AuthenticatedDashboardDomesticRouteRoute =
+  AuthenticatedDashboardDomesticRouteImport.update({
+    id: '/domestic',
+    path: '/domestic',
+    getParentRoute: () => AuthenticatedDashboardRouteRoute,
+  } as any)
 
-const WarehouseListIndexRoute = WarehouseListIndexImport.update({
-  id: '/warehouse/list/',
-  path: '/warehouse/list/',
-  getParentRoute: () => rootRoute,
-} as any)
+const AuthenticatedWarehouseListIndexRoute =
+  AuthenticatedWarehouseListIndexImport.update({
+    id: '/warehouse/list/',
+    path: '/warehouse/list/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 
-const WarehouseCreateIndexRoute = WarehouseCreateIndexImport.update({
-  id: '/warehouse/create/',
-  path: '/warehouse/create/',
-  getParentRoute: () => rootRoute,
-} as any)
+const AuthenticatedWarehouseCreateIndexRoute =
+  AuthenticatedWarehouseCreateIndexImport.update({
+    id: '/warehouse/create/',
+    path: '/warehouse/create/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 
-const ToolsActivityLogsIndexRoute = ToolsActivityLogsIndexImport.update({
-  id: '/tools/activity-logs/',
-  path: '/tools/activity-logs/',
-  getParentRoute: () => rootRoute,
-} as any)
+const AuthenticatedToolsActivityLogsIndexRoute =
+  AuthenticatedToolsActivityLogsIndexImport.update({
+    id: '/tools/activity-logs/',
+    path: '/tools/activity-logs/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 
-const SettingsUsersIndexRoute = SettingsUsersIndexImport.update({
-  id: '/users/',
-  path: '/users/',
-  getParentRoute: () => SettingsRouteRoute,
-} as any)
+const AuthenticatedSettingsUsersIndexRoute =
+  AuthenticatedSettingsUsersIndexImport.update({
+    id: '/users/',
+    path: '/users/',
+    getParentRoute: () => AuthenticatedSettingsRouteRoute,
+  } as any)
 
-const SettingsTaxConfigurationIndexRoute =
-  SettingsTaxConfigurationIndexImport.update({
+const AuthenticatedSettingsTaxConfigurationIndexRoute =
+  AuthenticatedSettingsTaxConfigurationIndexImport.update({
     id: '/tax-configuration/',
     path: '/tax-configuration/',
-    getParentRoute: () => SettingsRouteRoute,
+    getParentRoute: () => AuthenticatedSettingsRouteRoute,
   } as any)
 
-const SettingsPickupLocationsIndexRoute =
-  SettingsPickupLocationsIndexImport.update({
+const AuthenticatedSettingsPickupLocationsIndexRoute =
+  AuthenticatedSettingsPickupLocationsIndexImport.update({
     id: '/pickup-locations/',
     path: '/pickup-locations/',
-    getParentRoute: () => SettingsRouteRoute,
+    getParentRoute: () => AuthenticatedSettingsRouteRoute,
   } as any)
 
-const SettingsInvoiceTemplatesIndexRoute =
-  SettingsInvoiceTemplatesIndexImport.update({
+const AuthenticatedSettingsInvoiceTemplatesIndexRoute =
+  AuthenticatedSettingsInvoiceTemplatesIndexImport.update({
     id: '/invoice-templates/',
     path: '/invoice-templates/',
-    getParentRoute: () => SettingsRouteRoute,
+    getParentRoute: () => AuthenticatedSettingsRouteRoute,
   } as any)
 
-const SettingsCompanyDetailsIndexRoute =
-  SettingsCompanyDetailsIndexImport.update({
+const AuthenticatedSettingsCompanyDetailsIndexRoute =
+  AuthenticatedSettingsCompanyDetailsIndexImport.update({
     id: '/company-details/',
     path: '/company-details/',
-    getParentRoute: () => SettingsRouteRoute,
+    getParentRoute: () => AuthenticatedSettingsRouteRoute,
   } as any)
 
-const SettingsBankDetailsIndexRoute = SettingsBankDetailsIndexImport.update({
-  id: '/bank-details/',
-  path: '/bank-details/',
-  getParentRoute: () => SettingsRouteRoute,
-} as any)
+const AuthenticatedSettingsBankDetailsIndexRoute =
+  AuthenticatedSettingsBankDetailsIndexImport.update({
+    id: '/bank-details/',
+    path: '/bank-details/',
+    getParentRoute: () => AuthenticatedSettingsRouteRoute,
+  } as any)
 
-const SettingsApiSetupsIndexRoute = SettingsApiSetupsIndexImport.update({
-  id: '/api-setups/',
-  path: '/api-setups/',
-  getParentRoute: () => SettingsRouteRoute,
-} as any)
+const AuthenticatedSettingsApiSetupsIndexRoute =
+  AuthenticatedSettingsApiSetupsIndexImport.update({
+    id: '/api-setups/',
+    path: '/api-setups/',
+    getParentRoute: () => AuthenticatedSettingsRouteRoute,
+  } as any)
 
-const OrdersCreateIndexRoute = OrdersCreateIndexImport.update({
-  id: '/orders/create/',
-  path: '/orders/create/',
-  getParentRoute: () => rootRoute,
-} as any)
+const AuthenticatedOrdersCreateIndexRoute =
+  AuthenticatedOrdersCreateIndexImport.update({
+    id: '/orders/create/',
+    path: '/orders/create/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 
-const AddOrdersLayoutSingleOrderRoute = AddOrdersLayoutSingleOrderImport.update(
-  {
-    id: '/add-orders/_layout/single-order',
-    path: '/add-orders/single-order',
-    getParentRoute: () => rootRoute,
-  } as any,
-)
-
-const ToolsReportsDownloadReportsRouteRoute =
-  ToolsReportsDownloadReportsRouteImport.update({
+const AuthenticatedToolsReportsDownloadReportsRouteRoute =
+  AuthenticatedToolsReportsDownloadReportsRouteImport.update({
     id: '/download-reports',
     path: '/download-reports',
-    getParentRoute: () => ToolsReportsRouteRoute,
+    getParentRoute: () => AuthenticatedToolsReportsRouteRoute,
   } as any)
 
-const ToolsReportsReportsSchedulerIndexRoute =
-  ToolsReportsReportsSchedulerIndexImport.update({
+const AuthenticatedToolsReportsReportsSchedulerIndexRoute =
+  AuthenticatedToolsReportsReportsSchedulerIndexImport.update({
     id: '/reports-scheduler/',
     path: '/reports-scheduler/',
-    getParentRoute: () => ToolsReportsRouteRoute,
+    getParentRoute: () => AuthenticatedToolsReportsRouteRoute,
   } as any)
 
-const ToolsRateCardReverseIndexRoute = ToolsRateCardReverseIndexImport.update({
-  id: '/reverse/',
-  path: '/reverse/',
-  getParentRoute: () => ToolsRateCardRouteRoute,
-} as any)
+const AuthenticatedToolsRateCardReverseIndexRoute =
+  AuthenticatedToolsRateCardReverseIndexImport.update({
+    id: '/reverse/',
+    path: '/reverse/',
+    getParentRoute: () => AuthenticatedToolsRateCardRouteRoute,
+  } as any)
 
-const ToolsRateCardForwardIndexRoute = ToolsRateCardForwardIndexImport.update({
-  id: '/forward/',
-  path: '/forward/',
-  getParentRoute: () => ToolsRateCardRouteRoute,
-} as any)
+const AuthenticatedToolsRateCardForwardIndexRoute =
+  AuthenticatedToolsRateCardForwardIndexImport.update({
+    id: '/forward/',
+    path: '/forward/',
+    getParentRoute: () => AuthenticatedToolsRateCardRouteRoute,
+  } as any)
 
-const ToolsRateCardDocumentIndexRoute = ToolsRateCardDocumentIndexImport.update(
-  {
+const AuthenticatedToolsRateCardDocumentIndexRoute =
+  AuthenticatedToolsRateCardDocumentIndexImport.update({
     id: '/document/',
     path: '/document/',
-    getParentRoute: () => ToolsRateCardRouteRoute,
-  } as any,
-)
+    getParentRoute: () => AuthenticatedToolsRateCardRouteRoute,
+  } as any)
 
-const ToolsRateCalculatorInternationalIndexRoute =
-  ToolsRateCalculatorInternationalIndexImport.update({
+const AuthenticatedToolsRateCalculatorInternationalIndexRoute =
+  AuthenticatedToolsRateCalculatorInternationalIndexImport.update({
     id: '/international/',
     path: '/international/',
-    getParentRoute: () => ToolsRateCalculatorRouteRoute,
+    getParentRoute: () => AuthenticatedToolsRateCalculatorRouteRoute,
   } as any)
 
-const ToolsRateCalculatorDomesticIndexRoute =
-  ToolsRateCalculatorDomesticIndexImport.update({
+const AuthenticatedToolsRateCalculatorDomesticIndexRoute =
+  AuthenticatedToolsRateCalculatorDomesticIndexImport.update({
     id: '/domestic/',
     path: '/domestic/',
-    getParentRoute: () => ToolsRateCalculatorRouteRoute,
+    getParentRoute: () => AuthenticatedToolsRateCalculatorRouteRoute,
   } as any)
 
-const DashboardInternationalOverviewIndexRoute =
-  DashboardInternationalOverviewIndexImport.update({
+const AuthenticatedDashboardInternationalOverviewIndexRoute =
+  AuthenticatedDashboardInternationalOverviewIndexImport.update({
     id: '/overview/',
     path: '/overview/',
-    getParentRoute: () => DashboardInternationalRouteRoute,
+    getParentRoute: () => AuthenticatedDashboardInternationalRouteRoute,
   } as any)
 
-const DashboardDomesticOverviewIndexRoute =
-  DashboardDomesticOverviewIndexImport.update({
+const AuthenticatedDashboardDomesticOverviewIndexRoute =
+  AuthenticatedDashboardDomesticOverviewIndexImport.update({
     id: '/overview/',
     path: '/overview/',
-    getParentRoute: () => DashboardDomesticRouteRoute,
+    getParentRoute: () => AuthenticatedDashboardDomesticRouteRoute,
   } as any)
 
-const DashboardDomesticOrdersIndexRoute =
-  DashboardDomesticOrdersIndexImport.update({
+const AuthenticatedDashboardDomesticOrdersIndexRoute =
+  AuthenticatedDashboardDomesticOrdersIndexImport.update({
     id: '/orders/',
     path: '/orders/',
-    getParentRoute: () => DashboardDomesticRouteRoute,
+    getParentRoute: () => AuthenticatedDashboardDomesticRouteRoute,
   } as any)
 
-const ToolsReportsDownloadReportsScheduledReportsIndexLazyRoute =
-  ToolsReportsDownloadReportsScheduledReportsIndexLazyImport.update({
-    id: '/scheduled-reports/',
-    path: '/scheduled-reports/',
-    getParentRoute: () => ToolsReportsDownloadReportsRouteRoute,
-  } as any).lazy(() =>
+const AuthenticatedToolsReportsDownloadReportsScheduledReportsIndexLazyRoute =
+  AuthenticatedToolsReportsDownloadReportsScheduledReportsIndexLazyImport.update(
+    {
+      id: '/scheduled-reports/',
+      path: '/scheduled-reports/',
+      getParentRoute: () => AuthenticatedToolsReportsDownloadReportsRouteRoute,
+    } as any,
+  ).lazy(() =>
     import(
-      './routes/tools/reports/download-reports/scheduled-reports/index.lazy'
+      './routes/_authenticated/tools/reports/download-reports/scheduled-reports/index.lazy'
     ).then((d) => d.Route),
   )
 
-const ToolsReportsDownloadReportsInstantReportsIndexRoute =
-  ToolsReportsDownloadReportsInstantReportsIndexImport.update({
+const AuthenticatedToolsReportsDownloadReportsInstantReportsIndexRoute =
+  AuthenticatedToolsReportsDownloadReportsInstantReportsIndexImport.update({
     id: '/instant-reports/',
     path: '/instant-reports/',
-    getParentRoute: () => ToolsReportsDownloadReportsRouteRoute,
+    getParentRoute: () => AuthenticatedToolsReportsDownloadReportsRouteRoute,
   } as any)
 
 // Populate the FileRoutesByPath interface
@@ -305,527 +321,589 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
-    '/dashboard': {
-      id: '/dashboard'
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AuthenticatedImport
+      parentRoute: typeof rootRoute
+    }
+    '/_authenticated/dashboard': {
+      id: '/_authenticated/dashboard'
       path: '/dashboard'
       fullPath: '/dashboard'
-      preLoaderRoute: typeof DashboardRouteImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof AuthenticatedDashboardRouteImport
+      parentRoute: typeof AuthenticatedImport
     }
-    '/settings': {
-      id: '/settings'
+    '/_authenticated/settings': {
+      id: '/_authenticated/settings'
       path: '/settings'
       fullPath: '/settings'
-      preLoaderRoute: typeof SettingsRouteImport
+      preLoaderRoute: typeof AuthenticatedSettingsRouteImport
+      parentRoute: typeof AuthenticatedImport
+    }
+    '/auth/Login': {
+      id: '/auth/Login'
+      path: '/auth/Login'
+      fullPath: '/auth/Login'
+      preLoaderRoute: typeof AuthLoginImport
       parentRoute: typeof rootRoute
     }
-    '/dashboard/domestic': {
-      id: '/dashboard/domestic'
+    '/_authenticated/dashboard/domestic': {
+      id: '/_authenticated/dashboard/domestic'
       path: '/domestic'
       fullPath: '/dashboard/domestic'
-      preLoaderRoute: typeof DashboardDomesticRouteImport
-      parentRoute: typeof DashboardRouteImport
+      preLoaderRoute: typeof AuthenticatedDashboardDomesticRouteImport
+      parentRoute: typeof AuthenticatedDashboardRouteImport
     }
-    '/dashboard/international': {
-      id: '/dashboard/international'
+    '/_authenticated/dashboard/international': {
+      id: '/_authenticated/dashboard/international'
       path: '/international'
       fullPath: '/dashboard/international'
-      preLoaderRoute: typeof DashboardInternationalRouteImport
-      parentRoute: typeof DashboardRouteImport
+      preLoaderRoute: typeof AuthenticatedDashboardInternationalRouteImport
+      parentRoute: typeof AuthenticatedDashboardRouteImport
     }
-    '/tools/rate-calculator': {
-      id: '/tools/rate-calculator'
+    '/_authenticated/tools/rate-calculator': {
+      id: '/_authenticated/tools/rate-calculator'
       path: '/tools/rate-calculator'
       fullPath: '/tools/rate-calculator'
-      preLoaderRoute: typeof ToolsRateCalculatorRouteImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof AuthenticatedToolsRateCalculatorRouteImport
+      parentRoute: typeof AuthenticatedImport
     }
-    '/tools/rate-card': {
-      id: '/tools/rate-card'
+    '/_authenticated/tools/rate-card': {
+      id: '/_authenticated/tools/rate-card'
       path: '/tools/rate-card'
       fullPath: '/tools/rate-card'
-      preLoaderRoute: typeof ToolsRateCardRouteImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof AuthenticatedToolsRateCardRouteImport
+      parentRoute: typeof AuthenticatedImport
     }
-    '/tools/reports': {
-      id: '/tools/reports'
+    '/_authenticated/tools/reports': {
+      id: '/_authenticated/tools/reports'
       path: '/tools/reports'
       fullPath: '/tools/reports'
-      preLoaderRoute: typeof ToolsReportsRouteImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof AuthenticatedToolsReportsRouteImport
+      parentRoute: typeof AuthenticatedImport
     }
-    '/add-orders/': {
-      id: '/add-orders/'
-      path: '/add-orders'
-      fullPath: '/add-orders'
-      preLoaderRoute: typeof AddOrdersIndexImport
-      parentRoute: typeof rootRoute
-    }
-    '/home/': {
-      id: '/home/'
+    '/_authenticated/home/': {
+      id: '/_authenticated/home/'
       path: '/home'
       fullPath: '/home'
-      preLoaderRoute: typeof HomeIndexImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof AuthenticatedHomeIndexImport
+      parentRoute: typeof AuthenticatedImport
     }
-    '/orders/': {
-      id: '/orders/'
+    '/_authenticated/orders/': {
+      id: '/_authenticated/orders/'
       path: '/orders'
       fullPath: '/orders'
-      preLoaderRoute: typeof OrdersIndexImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof AuthenticatedOrdersIndexImport
+      parentRoute: typeof AuthenticatedImport
     }
-    '/tools/': {
-      id: '/tools/'
+    '/_authenticated/tools/': {
+      id: '/_authenticated/tools/'
       path: '/tools'
       fullPath: '/tools'
-      preLoaderRoute: typeof ToolsIndexImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof AuthenticatedToolsIndexImport
+      parentRoute: typeof AuthenticatedImport
     }
-    '/tools/reports/download-reports': {
-      id: '/tools/reports/download-reports'
+    '/_authenticated/tools/reports/download-reports': {
+      id: '/_authenticated/tools/reports/download-reports'
       path: '/download-reports'
       fullPath: '/tools/reports/download-reports'
-      preLoaderRoute: typeof ToolsReportsDownloadReportsRouteImport
-      parentRoute: typeof ToolsReportsRouteImport
+      preLoaderRoute: typeof AuthenticatedToolsReportsDownloadReportsRouteImport
+      parentRoute: typeof AuthenticatedToolsReportsRouteImport
     }
-    '/add-orders/_layout/single-order': {
-      id: '/add-orders/_layout/single-order'
-      path: '/add-orders/single-order'
-      fullPath: '/add-orders/single-order'
-      preLoaderRoute: typeof AddOrdersLayoutSingleOrderImport
-      parentRoute: typeof rootRoute
-    }
-    '/orders/create/': {
-      id: '/orders/create/'
+    '/_authenticated/orders/create/': {
+      id: '/_authenticated/orders/create/'
       path: '/orders/create'
       fullPath: '/orders/create'
-      preLoaderRoute: typeof OrdersCreateIndexImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof AuthenticatedOrdersCreateIndexImport
+      parentRoute: typeof AuthenticatedImport
     }
-    '/settings/api-setups/': {
-      id: '/settings/api-setups/'
+    '/_authenticated/settings/api-setups/': {
+      id: '/_authenticated/settings/api-setups/'
       path: '/api-setups'
       fullPath: '/settings/api-setups'
-      preLoaderRoute: typeof SettingsApiSetupsIndexImport
-      parentRoute: typeof SettingsRouteImport
+      preLoaderRoute: typeof AuthenticatedSettingsApiSetupsIndexImport
+      parentRoute: typeof AuthenticatedSettingsRouteImport
     }
-    '/settings/bank-details/': {
-      id: '/settings/bank-details/'
+    '/_authenticated/settings/bank-details/': {
+      id: '/_authenticated/settings/bank-details/'
       path: '/bank-details'
       fullPath: '/settings/bank-details'
-      preLoaderRoute: typeof SettingsBankDetailsIndexImport
-      parentRoute: typeof SettingsRouteImport
+      preLoaderRoute: typeof AuthenticatedSettingsBankDetailsIndexImport
+      parentRoute: typeof AuthenticatedSettingsRouteImport
     }
-    '/settings/company-details/': {
-      id: '/settings/company-details/'
+    '/_authenticated/settings/company-details/': {
+      id: '/_authenticated/settings/company-details/'
       path: '/company-details'
       fullPath: '/settings/company-details'
-      preLoaderRoute: typeof SettingsCompanyDetailsIndexImport
-      parentRoute: typeof SettingsRouteImport
+      preLoaderRoute: typeof AuthenticatedSettingsCompanyDetailsIndexImport
+      parentRoute: typeof AuthenticatedSettingsRouteImport
     }
-    '/settings/invoice-templates/': {
-      id: '/settings/invoice-templates/'
+    '/_authenticated/settings/invoice-templates/': {
+      id: '/_authenticated/settings/invoice-templates/'
       path: '/invoice-templates'
       fullPath: '/settings/invoice-templates'
-      preLoaderRoute: typeof SettingsInvoiceTemplatesIndexImport
-      parentRoute: typeof SettingsRouteImport
+      preLoaderRoute: typeof AuthenticatedSettingsInvoiceTemplatesIndexImport
+      parentRoute: typeof AuthenticatedSettingsRouteImport
     }
-    '/settings/pickup-locations/': {
-      id: '/settings/pickup-locations/'
+    '/_authenticated/settings/pickup-locations/': {
+      id: '/_authenticated/settings/pickup-locations/'
       path: '/pickup-locations'
       fullPath: '/settings/pickup-locations'
-      preLoaderRoute: typeof SettingsPickupLocationsIndexImport
-      parentRoute: typeof SettingsRouteImport
+      preLoaderRoute: typeof AuthenticatedSettingsPickupLocationsIndexImport
+      parentRoute: typeof AuthenticatedSettingsRouteImport
     }
-    '/settings/tax-configuration/': {
-      id: '/settings/tax-configuration/'
+    '/_authenticated/settings/tax-configuration/': {
+      id: '/_authenticated/settings/tax-configuration/'
       path: '/tax-configuration'
       fullPath: '/settings/tax-configuration'
-      preLoaderRoute: typeof SettingsTaxConfigurationIndexImport
-      parentRoute: typeof SettingsRouteImport
+      preLoaderRoute: typeof AuthenticatedSettingsTaxConfigurationIndexImport
+      parentRoute: typeof AuthenticatedSettingsRouteImport
     }
-    '/settings/users/': {
-      id: '/settings/users/'
+    '/_authenticated/settings/users/': {
+      id: '/_authenticated/settings/users/'
       path: '/users'
       fullPath: '/settings/users'
-      preLoaderRoute: typeof SettingsUsersIndexImport
-      parentRoute: typeof SettingsRouteImport
+      preLoaderRoute: typeof AuthenticatedSettingsUsersIndexImport
+      parentRoute: typeof AuthenticatedSettingsRouteImport
     }
-    '/tools/activity-logs/': {
-      id: '/tools/activity-logs/'
+    '/_authenticated/tools/activity-logs/': {
+      id: '/_authenticated/tools/activity-logs/'
       path: '/tools/activity-logs'
       fullPath: '/tools/activity-logs'
-      preLoaderRoute: typeof ToolsActivityLogsIndexImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof AuthenticatedToolsActivityLogsIndexImport
+      parentRoute: typeof AuthenticatedImport
     }
-    '/warehouse/create/': {
-      id: '/warehouse/create/'
+    '/_authenticated/warehouse/create/': {
+      id: '/_authenticated/warehouse/create/'
       path: '/warehouse/create'
       fullPath: '/warehouse/create'
-      preLoaderRoute: typeof WarehouseCreateIndexImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof AuthenticatedWarehouseCreateIndexImport
+      parentRoute: typeof AuthenticatedImport
     }
-    '/warehouse/list/': {
-      id: '/warehouse/list/'
+    '/_authenticated/warehouse/list/': {
+      id: '/_authenticated/warehouse/list/'
       path: '/warehouse/list'
       fullPath: '/warehouse/list'
-      preLoaderRoute: typeof WarehouseListIndexImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof AuthenticatedWarehouseListIndexImport
+      parentRoute: typeof AuthenticatedImport
     }
-    '/dashboard/domestic/orders/': {
-      id: '/dashboard/domestic/orders/'
+    '/_authenticated/dashboard/domestic/orders/': {
+      id: '/_authenticated/dashboard/domestic/orders/'
       path: '/orders'
       fullPath: '/dashboard/domestic/orders'
-      preLoaderRoute: typeof DashboardDomesticOrdersIndexImport
-      parentRoute: typeof DashboardDomesticRouteImport
+      preLoaderRoute: typeof AuthenticatedDashboardDomesticOrdersIndexImport
+      parentRoute: typeof AuthenticatedDashboardDomesticRouteImport
     }
-    '/dashboard/domestic/overview/': {
-      id: '/dashboard/domestic/overview/'
+    '/_authenticated/dashboard/domestic/overview/': {
+      id: '/_authenticated/dashboard/domestic/overview/'
       path: '/overview'
       fullPath: '/dashboard/domestic/overview'
-      preLoaderRoute: typeof DashboardDomesticOverviewIndexImport
-      parentRoute: typeof DashboardDomesticRouteImport
+      preLoaderRoute: typeof AuthenticatedDashboardDomesticOverviewIndexImport
+      parentRoute: typeof AuthenticatedDashboardDomesticRouteImport
     }
-    '/dashboard/international/overview/': {
-      id: '/dashboard/international/overview/'
+    '/_authenticated/dashboard/international/overview/': {
+      id: '/_authenticated/dashboard/international/overview/'
       path: '/overview'
       fullPath: '/dashboard/international/overview'
-      preLoaderRoute: typeof DashboardInternationalOverviewIndexImport
-      parentRoute: typeof DashboardInternationalRouteImport
+      preLoaderRoute: typeof AuthenticatedDashboardInternationalOverviewIndexImport
+      parentRoute: typeof AuthenticatedDashboardInternationalRouteImport
     }
-    '/tools/rate-calculator/domestic/': {
-      id: '/tools/rate-calculator/domestic/'
+    '/_authenticated/tools/rate-calculator/domestic/': {
+      id: '/_authenticated/tools/rate-calculator/domestic/'
       path: '/domestic'
       fullPath: '/tools/rate-calculator/domestic'
-      preLoaderRoute: typeof ToolsRateCalculatorDomesticIndexImport
-      parentRoute: typeof ToolsRateCalculatorRouteImport
+      preLoaderRoute: typeof AuthenticatedToolsRateCalculatorDomesticIndexImport
+      parentRoute: typeof AuthenticatedToolsRateCalculatorRouteImport
     }
-    '/tools/rate-calculator/international/': {
-      id: '/tools/rate-calculator/international/'
+    '/_authenticated/tools/rate-calculator/international/': {
+      id: '/_authenticated/tools/rate-calculator/international/'
       path: '/international'
       fullPath: '/tools/rate-calculator/international'
-      preLoaderRoute: typeof ToolsRateCalculatorInternationalIndexImport
-      parentRoute: typeof ToolsRateCalculatorRouteImport
+      preLoaderRoute: typeof AuthenticatedToolsRateCalculatorInternationalIndexImport
+      parentRoute: typeof AuthenticatedToolsRateCalculatorRouteImport
     }
-    '/tools/rate-card/document/': {
-      id: '/tools/rate-card/document/'
+    '/_authenticated/tools/rate-card/document/': {
+      id: '/_authenticated/tools/rate-card/document/'
       path: '/document'
       fullPath: '/tools/rate-card/document'
-      preLoaderRoute: typeof ToolsRateCardDocumentIndexImport
-      parentRoute: typeof ToolsRateCardRouteImport
+      preLoaderRoute: typeof AuthenticatedToolsRateCardDocumentIndexImport
+      parentRoute: typeof AuthenticatedToolsRateCardRouteImport
     }
-    '/tools/rate-card/forward/': {
-      id: '/tools/rate-card/forward/'
+    '/_authenticated/tools/rate-card/forward/': {
+      id: '/_authenticated/tools/rate-card/forward/'
       path: '/forward'
       fullPath: '/tools/rate-card/forward'
-      preLoaderRoute: typeof ToolsRateCardForwardIndexImport
-      parentRoute: typeof ToolsRateCardRouteImport
+      preLoaderRoute: typeof AuthenticatedToolsRateCardForwardIndexImport
+      parentRoute: typeof AuthenticatedToolsRateCardRouteImport
     }
-    '/tools/rate-card/reverse/': {
-      id: '/tools/rate-card/reverse/'
+    '/_authenticated/tools/rate-card/reverse/': {
+      id: '/_authenticated/tools/rate-card/reverse/'
       path: '/reverse'
       fullPath: '/tools/rate-card/reverse'
-      preLoaderRoute: typeof ToolsRateCardReverseIndexImport
-      parentRoute: typeof ToolsRateCardRouteImport
+      preLoaderRoute: typeof AuthenticatedToolsRateCardReverseIndexImport
+      parentRoute: typeof AuthenticatedToolsRateCardRouteImport
     }
-    '/tools/reports/reports-scheduler/': {
-      id: '/tools/reports/reports-scheduler/'
+    '/_authenticated/tools/reports/reports-scheduler/': {
+      id: '/_authenticated/tools/reports/reports-scheduler/'
       path: '/reports-scheduler'
       fullPath: '/tools/reports/reports-scheduler'
-      preLoaderRoute: typeof ToolsReportsReportsSchedulerIndexImport
-      parentRoute: typeof ToolsReportsRouteImport
+      preLoaderRoute: typeof AuthenticatedToolsReportsReportsSchedulerIndexImport
+      parentRoute: typeof AuthenticatedToolsReportsRouteImport
     }
-    '/tools/reports/download-reports/instant-reports/': {
-      id: '/tools/reports/download-reports/instant-reports/'
+    '/_authenticated/tools/reports/download-reports/instant-reports/': {
+      id: '/_authenticated/tools/reports/download-reports/instant-reports/'
       path: '/instant-reports'
       fullPath: '/tools/reports/download-reports/instant-reports'
-      preLoaderRoute: typeof ToolsReportsDownloadReportsInstantReportsIndexImport
-      parentRoute: typeof ToolsReportsDownloadReportsRouteImport
+      preLoaderRoute: typeof AuthenticatedToolsReportsDownloadReportsInstantReportsIndexImport
+      parentRoute: typeof AuthenticatedToolsReportsDownloadReportsRouteImport
     }
-    '/tools/reports/download-reports/scheduled-reports/': {
-      id: '/tools/reports/download-reports/scheduled-reports/'
+    '/_authenticated/tools/reports/download-reports/scheduled-reports/': {
+      id: '/_authenticated/tools/reports/download-reports/scheduled-reports/'
       path: '/scheduled-reports'
       fullPath: '/tools/reports/download-reports/scheduled-reports'
-      preLoaderRoute: typeof ToolsReportsDownloadReportsScheduledReportsIndexLazyImport
-      parentRoute: typeof ToolsReportsDownloadReportsRouteImport
+      preLoaderRoute: typeof AuthenticatedToolsReportsDownloadReportsScheduledReportsIndexLazyImport
+      parentRoute: typeof AuthenticatedToolsReportsDownloadReportsRouteImport
     }
   }
 }
 
 // Create and export the route tree
 
-interface DashboardDomesticRouteRouteChildren {
-  DashboardDomesticOrdersIndexRoute: typeof DashboardDomesticOrdersIndexRoute
-  DashboardDomesticOverviewIndexRoute: typeof DashboardDomesticOverviewIndexRoute
+interface AuthenticatedDashboardDomesticRouteRouteChildren {
+  AuthenticatedDashboardDomesticOrdersIndexRoute: typeof AuthenticatedDashboardDomesticOrdersIndexRoute
+  AuthenticatedDashboardDomesticOverviewIndexRoute: typeof AuthenticatedDashboardDomesticOverviewIndexRoute
 }
 
-const DashboardDomesticRouteRouteChildren: DashboardDomesticRouteRouteChildren =
+const AuthenticatedDashboardDomesticRouteRouteChildren: AuthenticatedDashboardDomesticRouteRouteChildren =
   {
-    DashboardDomesticOrdersIndexRoute: DashboardDomesticOrdersIndexRoute,
-    DashboardDomesticOverviewIndexRoute: DashboardDomesticOverviewIndexRoute,
+    AuthenticatedDashboardDomesticOrdersIndexRoute:
+      AuthenticatedDashboardDomesticOrdersIndexRoute,
+    AuthenticatedDashboardDomesticOverviewIndexRoute:
+      AuthenticatedDashboardDomesticOverviewIndexRoute,
   }
 
-const DashboardDomesticRouteRouteWithChildren =
-  DashboardDomesticRouteRoute._addFileChildren(
-    DashboardDomesticRouteRouteChildren,
+const AuthenticatedDashboardDomesticRouteRouteWithChildren =
+  AuthenticatedDashboardDomesticRouteRoute._addFileChildren(
+    AuthenticatedDashboardDomesticRouteRouteChildren,
   )
 
-interface DashboardInternationalRouteRouteChildren {
-  DashboardInternationalOverviewIndexRoute: typeof DashboardInternationalOverviewIndexRoute
+interface AuthenticatedDashboardInternationalRouteRouteChildren {
+  AuthenticatedDashboardInternationalOverviewIndexRoute: typeof AuthenticatedDashboardInternationalOverviewIndexRoute
 }
 
-const DashboardInternationalRouteRouteChildren: DashboardInternationalRouteRouteChildren =
+const AuthenticatedDashboardInternationalRouteRouteChildren: AuthenticatedDashboardInternationalRouteRouteChildren =
   {
-    DashboardInternationalOverviewIndexRoute:
-      DashboardInternationalOverviewIndexRoute,
+    AuthenticatedDashboardInternationalOverviewIndexRoute:
+      AuthenticatedDashboardInternationalOverviewIndexRoute,
   }
 
-const DashboardInternationalRouteRouteWithChildren =
-  DashboardInternationalRouteRoute._addFileChildren(
-    DashboardInternationalRouteRouteChildren,
+const AuthenticatedDashboardInternationalRouteRouteWithChildren =
+  AuthenticatedDashboardInternationalRouteRoute._addFileChildren(
+    AuthenticatedDashboardInternationalRouteRouteChildren,
   )
 
-interface DashboardRouteRouteChildren {
-  DashboardDomesticRouteRoute: typeof DashboardDomesticRouteRouteWithChildren
-  DashboardInternationalRouteRoute: typeof DashboardInternationalRouteRouteWithChildren
+interface AuthenticatedDashboardRouteRouteChildren {
+  AuthenticatedDashboardDomesticRouteRoute: typeof AuthenticatedDashboardDomesticRouteRouteWithChildren
+  AuthenticatedDashboardInternationalRouteRoute: typeof AuthenticatedDashboardInternationalRouteRouteWithChildren
 }
 
-const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
-  DashboardDomesticRouteRoute: DashboardDomesticRouteRouteWithChildren,
-  DashboardInternationalRouteRoute:
-    DashboardInternationalRouteRouteWithChildren,
+const AuthenticatedDashboardRouteRouteChildren: AuthenticatedDashboardRouteRouteChildren =
+  {
+    AuthenticatedDashboardDomesticRouteRoute:
+      AuthenticatedDashboardDomesticRouteRouteWithChildren,
+    AuthenticatedDashboardInternationalRouteRoute:
+      AuthenticatedDashboardInternationalRouteRouteWithChildren,
+  }
+
+const AuthenticatedDashboardRouteRouteWithChildren =
+  AuthenticatedDashboardRouteRoute._addFileChildren(
+    AuthenticatedDashboardRouteRouteChildren,
+  )
+
+interface AuthenticatedSettingsRouteRouteChildren {
+  AuthenticatedSettingsApiSetupsIndexRoute: typeof AuthenticatedSettingsApiSetupsIndexRoute
+  AuthenticatedSettingsBankDetailsIndexRoute: typeof AuthenticatedSettingsBankDetailsIndexRoute
+  AuthenticatedSettingsCompanyDetailsIndexRoute: typeof AuthenticatedSettingsCompanyDetailsIndexRoute
+  AuthenticatedSettingsInvoiceTemplatesIndexRoute: typeof AuthenticatedSettingsInvoiceTemplatesIndexRoute
+  AuthenticatedSettingsPickupLocationsIndexRoute: typeof AuthenticatedSettingsPickupLocationsIndexRoute
+  AuthenticatedSettingsTaxConfigurationIndexRoute: typeof AuthenticatedSettingsTaxConfigurationIndexRoute
+  AuthenticatedSettingsUsersIndexRoute: typeof AuthenticatedSettingsUsersIndexRoute
 }
 
-const DashboardRouteRouteWithChildren = DashboardRouteRoute._addFileChildren(
-  DashboardRouteRouteChildren,
+const AuthenticatedSettingsRouteRouteChildren: AuthenticatedSettingsRouteRouteChildren =
+  {
+    AuthenticatedSettingsApiSetupsIndexRoute:
+      AuthenticatedSettingsApiSetupsIndexRoute,
+    AuthenticatedSettingsBankDetailsIndexRoute:
+      AuthenticatedSettingsBankDetailsIndexRoute,
+    AuthenticatedSettingsCompanyDetailsIndexRoute:
+      AuthenticatedSettingsCompanyDetailsIndexRoute,
+    AuthenticatedSettingsInvoiceTemplatesIndexRoute:
+      AuthenticatedSettingsInvoiceTemplatesIndexRoute,
+    AuthenticatedSettingsPickupLocationsIndexRoute:
+      AuthenticatedSettingsPickupLocationsIndexRoute,
+    AuthenticatedSettingsTaxConfigurationIndexRoute:
+      AuthenticatedSettingsTaxConfigurationIndexRoute,
+    AuthenticatedSettingsUsersIndexRoute: AuthenticatedSettingsUsersIndexRoute,
+  }
+
+const AuthenticatedSettingsRouteRouteWithChildren =
+  AuthenticatedSettingsRouteRoute._addFileChildren(
+    AuthenticatedSettingsRouteRouteChildren,
+  )
+
+interface AuthenticatedToolsRateCalculatorRouteRouteChildren {
+  AuthenticatedToolsRateCalculatorDomesticIndexRoute: typeof AuthenticatedToolsRateCalculatorDomesticIndexRoute
+  AuthenticatedToolsRateCalculatorInternationalIndexRoute: typeof AuthenticatedToolsRateCalculatorInternationalIndexRoute
+}
+
+const AuthenticatedToolsRateCalculatorRouteRouteChildren: AuthenticatedToolsRateCalculatorRouteRouteChildren =
+  {
+    AuthenticatedToolsRateCalculatorDomesticIndexRoute:
+      AuthenticatedToolsRateCalculatorDomesticIndexRoute,
+    AuthenticatedToolsRateCalculatorInternationalIndexRoute:
+      AuthenticatedToolsRateCalculatorInternationalIndexRoute,
+  }
+
+const AuthenticatedToolsRateCalculatorRouteRouteWithChildren =
+  AuthenticatedToolsRateCalculatorRouteRoute._addFileChildren(
+    AuthenticatedToolsRateCalculatorRouteRouteChildren,
+  )
+
+interface AuthenticatedToolsRateCardRouteRouteChildren {
+  AuthenticatedToolsRateCardDocumentIndexRoute: typeof AuthenticatedToolsRateCardDocumentIndexRoute
+  AuthenticatedToolsRateCardForwardIndexRoute: typeof AuthenticatedToolsRateCardForwardIndexRoute
+  AuthenticatedToolsRateCardReverseIndexRoute: typeof AuthenticatedToolsRateCardReverseIndexRoute
+}
+
+const AuthenticatedToolsRateCardRouteRouteChildren: AuthenticatedToolsRateCardRouteRouteChildren =
+  {
+    AuthenticatedToolsRateCardDocumentIndexRoute:
+      AuthenticatedToolsRateCardDocumentIndexRoute,
+    AuthenticatedToolsRateCardForwardIndexRoute:
+      AuthenticatedToolsRateCardForwardIndexRoute,
+    AuthenticatedToolsRateCardReverseIndexRoute:
+      AuthenticatedToolsRateCardReverseIndexRoute,
+  }
+
+const AuthenticatedToolsRateCardRouteRouteWithChildren =
+  AuthenticatedToolsRateCardRouteRoute._addFileChildren(
+    AuthenticatedToolsRateCardRouteRouteChildren,
+  )
+
+interface AuthenticatedToolsReportsDownloadReportsRouteRouteChildren {
+  AuthenticatedToolsReportsDownloadReportsInstantReportsIndexRoute: typeof AuthenticatedToolsReportsDownloadReportsInstantReportsIndexRoute
+  AuthenticatedToolsReportsDownloadReportsScheduledReportsIndexLazyRoute: typeof AuthenticatedToolsReportsDownloadReportsScheduledReportsIndexLazyRoute
+}
+
+const AuthenticatedToolsReportsDownloadReportsRouteRouteChildren: AuthenticatedToolsReportsDownloadReportsRouteRouteChildren =
+  {
+    AuthenticatedToolsReportsDownloadReportsInstantReportsIndexRoute:
+      AuthenticatedToolsReportsDownloadReportsInstantReportsIndexRoute,
+    AuthenticatedToolsReportsDownloadReportsScheduledReportsIndexLazyRoute:
+      AuthenticatedToolsReportsDownloadReportsScheduledReportsIndexLazyRoute,
+  }
+
+const AuthenticatedToolsReportsDownloadReportsRouteRouteWithChildren =
+  AuthenticatedToolsReportsDownloadReportsRouteRoute._addFileChildren(
+    AuthenticatedToolsReportsDownloadReportsRouteRouteChildren,
+  )
+
+interface AuthenticatedToolsReportsRouteRouteChildren {
+  AuthenticatedToolsReportsDownloadReportsRouteRoute: typeof AuthenticatedToolsReportsDownloadReportsRouteRouteWithChildren
+  AuthenticatedToolsReportsReportsSchedulerIndexRoute: typeof AuthenticatedToolsReportsReportsSchedulerIndexRoute
+}
+
+const AuthenticatedToolsReportsRouteRouteChildren: AuthenticatedToolsReportsRouteRouteChildren =
+  {
+    AuthenticatedToolsReportsDownloadReportsRouteRoute:
+      AuthenticatedToolsReportsDownloadReportsRouteRouteWithChildren,
+    AuthenticatedToolsReportsReportsSchedulerIndexRoute:
+      AuthenticatedToolsReportsReportsSchedulerIndexRoute,
+  }
+
+const AuthenticatedToolsReportsRouteRouteWithChildren =
+  AuthenticatedToolsReportsRouteRoute._addFileChildren(
+    AuthenticatedToolsReportsRouteRouteChildren,
+  )
+
+interface AuthenticatedRouteChildren {
+  AuthenticatedDashboardRouteRoute: typeof AuthenticatedDashboardRouteRouteWithChildren
+  AuthenticatedSettingsRouteRoute: typeof AuthenticatedSettingsRouteRouteWithChildren
+  AuthenticatedToolsRateCalculatorRouteRoute: typeof AuthenticatedToolsRateCalculatorRouteRouteWithChildren
+  AuthenticatedToolsRateCardRouteRoute: typeof AuthenticatedToolsRateCardRouteRouteWithChildren
+  AuthenticatedToolsReportsRouteRoute: typeof AuthenticatedToolsReportsRouteRouteWithChildren
+  AuthenticatedHomeIndexRoute: typeof AuthenticatedHomeIndexRoute
+  AuthenticatedOrdersIndexRoute: typeof AuthenticatedOrdersIndexRoute
+  AuthenticatedToolsIndexRoute: typeof AuthenticatedToolsIndexRoute
+  AuthenticatedOrdersCreateIndexRoute: typeof AuthenticatedOrdersCreateIndexRoute
+  AuthenticatedToolsActivityLogsIndexRoute: typeof AuthenticatedToolsActivityLogsIndexRoute
+  AuthenticatedWarehouseCreateIndexRoute: typeof AuthenticatedWarehouseCreateIndexRoute
+  AuthenticatedWarehouseListIndexRoute: typeof AuthenticatedWarehouseListIndexRoute
+}
+
+const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedDashboardRouteRoute:
+    AuthenticatedDashboardRouteRouteWithChildren,
+  AuthenticatedSettingsRouteRoute: AuthenticatedSettingsRouteRouteWithChildren,
+  AuthenticatedToolsRateCalculatorRouteRoute:
+    AuthenticatedToolsRateCalculatorRouteRouteWithChildren,
+  AuthenticatedToolsRateCardRouteRoute:
+    AuthenticatedToolsRateCardRouteRouteWithChildren,
+  AuthenticatedToolsReportsRouteRoute:
+    AuthenticatedToolsReportsRouteRouteWithChildren,
+  AuthenticatedHomeIndexRoute: AuthenticatedHomeIndexRoute,
+  AuthenticatedOrdersIndexRoute: AuthenticatedOrdersIndexRoute,
+  AuthenticatedToolsIndexRoute: AuthenticatedToolsIndexRoute,
+  AuthenticatedOrdersCreateIndexRoute: AuthenticatedOrdersCreateIndexRoute,
+  AuthenticatedToolsActivityLogsIndexRoute:
+    AuthenticatedToolsActivityLogsIndexRoute,
+  AuthenticatedWarehouseCreateIndexRoute:
+    AuthenticatedWarehouseCreateIndexRoute,
+  AuthenticatedWarehouseListIndexRoute: AuthenticatedWarehouseListIndexRoute,
+}
+
+const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
+  AuthenticatedRouteChildren,
 )
-
-interface SettingsRouteRouteChildren {
-  SettingsApiSetupsIndexRoute: typeof SettingsApiSetupsIndexRoute
-  SettingsBankDetailsIndexRoute: typeof SettingsBankDetailsIndexRoute
-  SettingsCompanyDetailsIndexRoute: typeof SettingsCompanyDetailsIndexRoute
-  SettingsInvoiceTemplatesIndexRoute: typeof SettingsInvoiceTemplatesIndexRoute
-  SettingsPickupLocationsIndexRoute: typeof SettingsPickupLocationsIndexRoute
-  SettingsTaxConfigurationIndexRoute: typeof SettingsTaxConfigurationIndexRoute
-  SettingsUsersIndexRoute: typeof SettingsUsersIndexRoute
-}
-
-const SettingsRouteRouteChildren: SettingsRouteRouteChildren = {
-  SettingsApiSetupsIndexRoute: SettingsApiSetupsIndexRoute,
-  SettingsBankDetailsIndexRoute: SettingsBankDetailsIndexRoute,
-  SettingsCompanyDetailsIndexRoute: SettingsCompanyDetailsIndexRoute,
-  SettingsInvoiceTemplatesIndexRoute: SettingsInvoiceTemplatesIndexRoute,
-  SettingsPickupLocationsIndexRoute: SettingsPickupLocationsIndexRoute,
-  SettingsTaxConfigurationIndexRoute: SettingsTaxConfigurationIndexRoute,
-  SettingsUsersIndexRoute: SettingsUsersIndexRoute,
-}
-
-const SettingsRouteRouteWithChildren = SettingsRouteRoute._addFileChildren(
-  SettingsRouteRouteChildren,
-)
-
-interface ToolsRateCalculatorRouteRouteChildren {
-  ToolsRateCalculatorDomesticIndexRoute: typeof ToolsRateCalculatorDomesticIndexRoute
-  ToolsRateCalculatorInternationalIndexRoute: typeof ToolsRateCalculatorInternationalIndexRoute
-}
-
-const ToolsRateCalculatorRouteRouteChildren: ToolsRateCalculatorRouteRouteChildren =
-  {
-    ToolsRateCalculatorDomesticIndexRoute:
-      ToolsRateCalculatorDomesticIndexRoute,
-    ToolsRateCalculatorInternationalIndexRoute:
-      ToolsRateCalculatorInternationalIndexRoute,
-  }
-
-const ToolsRateCalculatorRouteRouteWithChildren =
-  ToolsRateCalculatorRouteRoute._addFileChildren(
-    ToolsRateCalculatorRouteRouteChildren,
-  )
-
-interface ToolsRateCardRouteRouteChildren {
-  ToolsRateCardDocumentIndexRoute: typeof ToolsRateCardDocumentIndexRoute
-  ToolsRateCardForwardIndexRoute: typeof ToolsRateCardForwardIndexRoute
-  ToolsRateCardReverseIndexRoute: typeof ToolsRateCardReverseIndexRoute
-}
-
-const ToolsRateCardRouteRouteChildren: ToolsRateCardRouteRouteChildren = {
-  ToolsRateCardDocumentIndexRoute: ToolsRateCardDocumentIndexRoute,
-  ToolsRateCardForwardIndexRoute: ToolsRateCardForwardIndexRoute,
-  ToolsRateCardReverseIndexRoute: ToolsRateCardReverseIndexRoute,
-}
-
-const ToolsRateCardRouteRouteWithChildren =
-  ToolsRateCardRouteRoute._addFileChildren(ToolsRateCardRouteRouteChildren)
-
-interface ToolsReportsDownloadReportsRouteRouteChildren {
-  ToolsReportsDownloadReportsInstantReportsIndexRoute: typeof ToolsReportsDownloadReportsInstantReportsIndexRoute
-  ToolsReportsDownloadReportsScheduledReportsIndexLazyRoute: typeof ToolsReportsDownloadReportsScheduledReportsIndexLazyRoute
-}
-
-const ToolsReportsDownloadReportsRouteRouteChildren: ToolsReportsDownloadReportsRouteRouteChildren =
-  {
-    ToolsReportsDownloadReportsInstantReportsIndexRoute:
-      ToolsReportsDownloadReportsInstantReportsIndexRoute,
-    ToolsReportsDownloadReportsScheduledReportsIndexLazyRoute:
-      ToolsReportsDownloadReportsScheduledReportsIndexLazyRoute,
-  }
-
-const ToolsReportsDownloadReportsRouteRouteWithChildren =
-  ToolsReportsDownloadReportsRouteRoute._addFileChildren(
-    ToolsReportsDownloadReportsRouteRouteChildren,
-  )
-
-interface ToolsReportsRouteRouteChildren {
-  ToolsReportsDownloadReportsRouteRoute: typeof ToolsReportsDownloadReportsRouteRouteWithChildren
-  ToolsReportsReportsSchedulerIndexRoute: typeof ToolsReportsReportsSchedulerIndexRoute
-}
-
-const ToolsReportsRouteRouteChildren: ToolsReportsRouteRouteChildren = {
-  ToolsReportsDownloadReportsRouteRoute:
-    ToolsReportsDownloadReportsRouteRouteWithChildren,
-  ToolsReportsReportsSchedulerIndexRoute:
-    ToolsReportsReportsSchedulerIndexRoute,
-}
-
-const ToolsReportsRouteRouteWithChildren =
-  ToolsReportsRouteRoute._addFileChildren(ToolsReportsRouteRouteChildren)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/dashboard': typeof DashboardRouteRouteWithChildren
-  '/settings': typeof SettingsRouteRouteWithChildren
-  '/dashboard/domestic': typeof DashboardDomesticRouteRouteWithChildren
-  '/dashboard/international': typeof DashboardInternationalRouteRouteWithChildren
-  '/tools/rate-calculator': typeof ToolsRateCalculatorRouteRouteWithChildren
-  '/tools/rate-card': typeof ToolsRateCardRouteRouteWithChildren
-  '/tools/reports': typeof ToolsReportsRouteRouteWithChildren
-  '/add-orders': typeof AddOrdersIndexRoute
-  '/home': typeof HomeIndexRoute
-  '/orders': typeof OrdersIndexRoute
-  '/tools': typeof ToolsIndexRoute
-  '/tools/reports/download-reports': typeof ToolsReportsDownloadReportsRouteRouteWithChildren
-  '/add-orders/single-order': typeof AddOrdersLayoutSingleOrderRoute
-  '/orders/create': typeof OrdersCreateIndexRoute
-  '/settings/api-setups': typeof SettingsApiSetupsIndexRoute
-  '/settings/bank-details': typeof SettingsBankDetailsIndexRoute
-  '/settings/company-details': typeof SettingsCompanyDetailsIndexRoute
-  '/settings/invoice-templates': typeof SettingsInvoiceTemplatesIndexRoute
-  '/settings/pickup-locations': typeof SettingsPickupLocationsIndexRoute
-  '/settings/tax-configuration': typeof SettingsTaxConfigurationIndexRoute
-  '/settings/users': typeof SettingsUsersIndexRoute
-  '/tools/activity-logs': typeof ToolsActivityLogsIndexRoute
-  '/warehouse/create': typeof WarehouseCreateIndexRoute
-  '/warehouse/list': typeof WarehouseListIndexRoute
-  '/dashboard/domestic/orders': typeof DashboardDomesticOrdersIndexRoute
-  '/dashboard/domestic/overview': typeof DashboardDomesticOverviewIndexRoute
-  '/dashboard/international/overview': typeof DashboardInternationalOverviewIndexRoute
-  '/tools/rate-calculator/domestic': typeof ToolsRateCalculatorDomesticIndexRoute
-  '/tools/rate-calculator/international': typeof ToolsRateCalculatorInternationalIndexRoute
-  '/tools/rate-card/document': typeof ToolsRateCardDocumentIndexRoute
-  '/tools/rate-card/forward': typeof ToolsRateCardForwardIndexRoute
-  '/tools/rate-card/reverse': typeof ToolsRateCardReverseIndexRoute
-  '/tools/reports/reports-scheduler': typeof ToolsReportsReportsSchedulerIndexRoute
-  '/tools/reports/download-reports/instant-reports': typeof ToolsReportsDownloadReportsInstantReportsIndexRoute
-  '/tools/reports/download-reports/scheduled-reports': typeof ToolsReportsDownloadReportsScheduledReportsIndexLazyRoute
+  '': typeof AuthenticatedRouteWithChildren
+  '/dashboard': typeof AuthenticatedDashboardRouteRouteWithChildren
+  '/settings': typeof AuthenticatedSettingsRouteRouteWithChildren
+  '/auth/Login': typeof AuthLoginRoute
+  '/dashboard/domestic': typeof AuthenticatedDashboardDomesticRouteRouteWithChildren
+  '/dashboard/international': typeof AuthenticatedDashboardInternationalRouteRouteWithChildren
+  '/tools/rate-calculator': typeof AuthenticatedToolsRateCalculatorRouteRouteWithChildren
+  '/tools/rate-card': typeof AuthenticatedToolsRateCardRouteRouteWithChildren
+  '/tools/reports': typeof AuthenticatedToolsReportsRouteRouteWithChildren
+  '/home': typeof AuthenticatedHomeIndexRoute
+  '/orders': typeof AuthenticatedOrdersIndexRoute
+  '/tools': typeof AuthenticatedToolsIndexRoute
+  '/tools/reports/download-reports': typeof AuthenticatedToolsReportsDownloadReportsRouteRouteWithChildren
+  '/orders/create': typeof AuthenticatedOrdersCreateIndexRoute
+  '/settings/api-setups': typeof AuthenticatedSettingsApiSetupsIndexRoute
+  '/settings/bank-details': typeof AuthenticatedSettingsBankDetailsIndexRoute
+  '/settings/company-details': typeof AuthenticatedSettingsCompanyDetailsIndexRoute
+  '/settings/invoice-templates': typeof AuthenticatedSettingsInvoiceTemplatesIndexRoute
+  '/settings/pickup-locations': typeof AuthenticatedSettingsPickupLocationsIndexRoute
+  '/settings/tax-configuration': typeof AuthenticatedSettingsTaxConfigurationIndexRoute
+  '/settings/users': typeof AuthenticatedSettingsUsersIndexRoute
+  '/tools/activity-logs': typeof AuthenticatedToolsActivityLogsIndexRoute
+  '/warehouse/create': typeof AuthenticatedWarehouseCreateIndexRoute
+  '/warehouse/list': typeof AuthenticatedWarehouseListIndexRoute
+  '/dashboard/domestic/orders': typeof AuthenticatedDashboardDomesticOrdersIndexRoute
+  '/dashboard/domestic/overview': typeof AuthenticatedDashboardDomesticOverviewIndexRoute
+  '/dashboard/international/overview': typeof AuthenticatedDashboardInternationalOverviewIndexRoute
+  '/tools/rate-calculator/domestic': typeof AuthenticatedToolsRateCalculatorDomesticIndexRoute
+  '/tools/rate-calculator/international': typeof AuthenticatedToolsRateCalculatorInternationalIndexRoute
+  '/tools/rate-card/document': typeof AuthenticatedToolsRateCardDocumentIndexRoute
+  '/tools/rate-card/forward': typeof AuthenticatedToolsRateCardForwardIndexRoute
+  '/tools/rate-card/reverse': typeof AuthenticatedToolsRateCardReverseIndexRoute
+  '/tools/reports/reports-scheduler': typeof AuthenticatedToolsReportsReportsSchedulerIndexRoute
+  '/tools/reports/download-reports/instant-reports': typeof AuthenticatedToolsReportsDownloadReportsInstantReportsIndexRoute
+  '/tools/reports/download-reports/scheduled-reports': typeof AuthenticatedToolsReportsDownloadReportsScheduledReportsIndexLazyRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/dashboard': typeof DashboardRouteRouteWithChildren
-  '/settings': typeof SettingsRouteRouteWithChildren
-  '/dashboard/domestic': typeof DashboardDomesticRouteRouteWithChildren
-  '/dashboard/international': typeof DashboardInternationalRouteRouteWithChildren
-  '/tools/rate-calculator': typeof ToolsRateCalculatorRouteRouteWithChildren
-  '/tools/rate-card': typeof ToolsRateCardRouteRouteWithChildren
-  '/tools/reports': typeof ToolsReportsRouteRouteWithChildren
-  '/add-orders': typeof AddOrdersIndexRoute
-  '/home': typeof HomeIndexRoute
-  '/orders': typeof OrdersIndexRoute
-  '/tools': typeof ToolsIndexRoute
-  '/tools/reports/download-reports': typeof ToolsReportsDownloadReportsRouteRouteWithChildren
-  '/add-orders/single-order': typeof AddOrdersLayoutSingleOrderRoute
-  '/orders/create': typeof OrdersCreateIndexRoute
-  '/settings/api-setups': typeof SettingsApiSetupsIndexRoute
-  '/settings/bank-details': typeof SettingsBankDetailsIndexRoute
-  '/settings/company-details': typeof SettingsCompanyDetailsIndexRoute
-  '/settings/invoice-templates': typeof SettingsInvoiceTemplatesIndexRoute
-  '/settings/pickup-locations': typeof SettingsPickupLocationsIndexRoute
-  '/settings/tax-configuration': typeof SettingsTaxConfigurationIndexRoute
-  '/settings/users': typeof SettingsUsersIndexRoute
-  '/tools/activity-logs': typeof ToolsActivityLogsIndexRoute
-  '/warehouse/create': typeof WarehouseCreateIndexRoute
-  '/warehouse/list': typeof WarehouseListIndexRoute
-  '/dashboard/domestic/orders': typeof DashboardDomesticOrdersIndexRoute
-  '/dashboard/domestic/overview': typeof DashboardDomesticOverviewIndexRoute
-  '/dashboard/international/overview': typeof DashboardInternationalOverviewIndexRoute
-  '/tools/rate-calculator/domestic': typeof ToolsRateCalculatorDomesticIndexRoute
-  '/tools/rate-calculator/international': typeof ToolsRateCalculatorInternationalIndexRoute
-  '/tools/rate-card/document': typeof ToolsRateCardDocumentIndexRoute
-  '/tools/rate-card/forward': typeof ToolsRateCardForwardIndexRoute
-  '/tools/rate-card/reverse': typeof ToolsRateCardReverseIndexRoute
-  '/tools/reports/reports-scheduler': typeof ToolsReportsReportsSchedulerIndexRoute
-  '/tools/reports/download-reports/instant-reports': typeof ToolsReportsDownloadReportsInstantReportsIndexRoute
-  '/tools/reports/download-reports/scheduled-reports': typeof ToolsReportsDownloadReportsScheduledReportsIndexLazyRoute
+  '': typeof AuthenticatedRouteWithChildren
+  '/dashboard': typeof AuthenticatedDashboardRouteRouteWithChildren
+  '/settings': typeof AuthenticatedSettingsRouteRouteWithChildren
+  '/auth/Login': typeof AuthLoginRoute
+  '/dashboard/domestic': typeof AuthenticatedDashboardDomesticRouteRouteWithChildren
+  '/dashboard/international': typeof AuthenticatedDashboardInternationalRouteRouteWithChildren
+  '/tools/rate-calculator': typeof AuthenticatedToolsRateCalculatorRouteRouteWithChildren
+  '/tools/rate-card': typeof AuthenticatedToolsRateCardRouteRouteWithChildren
+  '/tools/reports': typeof AuthenticatedToolsReportsRouteRouteWithChildren
+  '/home': typeof AuthenticatedHomeIndexRoute
+  '/orders': typeof AuthenticatedOrdersIndexRoute
+  '/tools': typeof AuthenticatedToolsIndexRoute
+  '/tools/reports/download-reports': typeof AuthenticatedToolsReportsDownloadReportsRouteRouteWithChildren
+  '/orders/create': typeof AuthenticatedOrdersCreateIndexRoute
+  '/settings/api-setups': typeof AuthenticatedSettingsApiSetupsIndexRoute
+  '/settings/bank-details': typeof AuthenticatedSettingsBankDetailsIndexRoute
+  '/settings/company-details': typeof AuthenticatedSettingsCompanyDetailsIndexRoute
+  '/settings/invoice-templates': typeof AuthenticatedSettingsInvoiceTemplatesIndexRoute
+  '/settings/pickup-locations': typeof AuthenticatedSettingsPickupLocationsIndexRoute
+  '/settings/tax-configuration': typeof AuthenticatedSettingsTaxConfigurationIndexRoute
+  '/settings/users': typeof AuthenticatedSettingsUsersIndexRoute
+  '/tools/activity-logs': typeof AuthenticatedToolsActivityLogsIndexRoute
+  '/warehouse/create': typeof AuthenticatedWarehouseCreateIndexRoute
+  '/warehouse/list': typeof AuthenticatedWarehouseListIndexRoute
+  '/dashboard/domestic/orders': typeof AuthenticatedDashboardDomesticOrdersIndexRoute
+  '/dashboard/domestic/overview': typeof AuthenticatedDashboardDomesticOverviewIndexRoute
+  '/dashboard/international/overview': typeof AuthenticatedDashboardInternationalOverviewIndexRoute
+  '/tools/rate-calculator/domestic': typeof AuthenticatedToolsRateCalculatorDomesticIndexRoute
+  '/tools/rate-calculator/international': typeof AuthenticatedToolsRateCalculatorInternationalIndexRoute
+  '/tools/rate-card/document': typeof AuthenticatedToolsRateCardDocumentIndexRoute
+  '/tools/rate-card/forward': typeof AuthenticatedToolsRateCardForwardIndexRoute
+  '/tools/rate-card/reverse': typeof AuthenticatedToolsRateCardReverseIndexRoute
+  '/tools/reports/reports-scheduler': typeof AuthenticatedToolsReportsReportsSchedulerIndexRoute
+  '/tools/reports/download-reports/instant-reports': typeof AuthenticatedToolsReportsDownloadReportsInstantReportsIndexRoute
+  '/tools/reports/download-reports/scheduled-reports': typeof AuthenticatedToolsReportsDownloadReportsScheduledReportsIndexLazyRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
-  '/dashboard': typeof DashboardRouteRouteWithChildren
-  '/settings': typeof SettingsRouteRouteWithChildren
-  '/dashboard/domestic': typeof DashboardDomesticRouteRouteWithChildren
-  '/dashboard/international': typeof DashboardInternationalRouteRouteWithChildren
-  '/tools/rate-calculator': typeof ToolsRateCalculatorRouteRouteWithChildren
-  '/tools/rate-card': typeof ToolsRateCardRouteRouteWithChildren
-  '/tools/reports': typeof ToolsReportsRouteRouteWithChildren
-  '/add-orders/': typeof AddOrdersIndexRoute
-  '/home/': typeof HomeIndexRoute
-  '/orders/': typeof OrdersIndexRoute
-  '/tools/': typeof ToolsIndexRoute
-  '/tools/reports/download-reports': typeof ToolsReportsDownloadReportsRouteRouteWithChildren
-  '/add-orders/_layout/single-order': typeof AddOrdersLayoutSingleOrderRoute
-  '/orders/create/': typeof OrdersCreateIndexRoute
-  '/settings/api-setups/': typeof SettingsApiSetupsIndexRoute
-  '/settings/bank-details/': typeof SettingsBankDetailsIndexRoute
-  '/settings/company-details/': typeof SettingsCompanyDetailsIndexRoute
-  '/settings/invoice-templates/': typeof SettingsInvoiceTemplatesIndexRoute
-  '/settings/pickup-locations/': typeof SettingsPickupLocationsIndexRoute
-  '/settings/tax-configuration/': typeof SettingsTaxConfigurationIndexRoute
-  '/settings/users/': typeof SettingsUsersIndexRoute
-  '/tools/activity-logs/': typeof ToolsActivityLogsIndexRoute
-  '/warehouse/create/': typeof WarehouseCreateIndexRoute
-  '/warehouse/list/': typeof WarehouseListIndexRoute
-  '/dashboard/domestic/orders/': typeof DashboardDomesticOrdersIndexRoute
-  '/dashboard/domestic/overview/': typeof DashboardDomesticOverviewIndexRoute
-  '/dashboard/international/overview/': typeof DashboardInternationalOverviewIndexRoute
-  '/tools/rate-calculator/domestic/': typeof ToolsRateCalculatorDomesticIndexRoute
-  '/tools/rate-calculator/international/': typeof ToolsRateCalculatorInternationalIndexRoute
-  '/tools/rate-card/document/': typeof ToolsRateCardDocumentIndexRoute
-  '/tools/rate-card/forward/': typeof ToolsRateCardForwardIndexRoute
-  '/tools/rate-card/reverse/': typeof ToolsRateCardReverseIndexRoute
-  '/tools/reports/reports-scheduler/': typeof ToolsReportsReportsSchedulerIndexRoute
-  '/tools/reports/download-reports/instant-reports/': typeof ToolsReportsDownloadReportsInstantReportsIndexRoute
-  '/tools/reports/download-reports/scheduled-reports/': typeof ToolsReportsDownloadReportsScheduledReportsIndexLazyRoute
+  '/_authenticated': typeof AuthenticatedRouteWithChildren
+  '/_authenticated/dashboard': typeof AuthenticatedDashboardRouteRouteWithChildren
+  '/_authenticated/settings': typeof AuthenticatedSettingsRouteRouteWithChildren
+  '/auth/Login': typeof AuthLoginRoute
+  '/_authenticated/dashboard/domestic': typeof AuthenticatedDashboardDomesticRouteRouteWithChildren
+  '/_authenticated/dashboard/international': typeof AuthenticatedDashboardInternationalRouteRouteWithChildren
+  '/_authenticated/tools/rate-calculator': typeof AuthenticatedToolsRateCalculatorRouteRouteWithChildren
+  '/_authenticated/tools/rate-card': typeof AuthenticatedToolsRateCardRouteRouteWithChildren
+  '/_authenticated/tools/reports': typeof AuthenticatedToolsReportsRouteRouteWithChildren
+  '/_authenticated/home/': typeof AuthenticatedHomeIndexRoute
+  '/_authenticated/orders/': typeof AuthenticatedOrdersIndexRoute
+  '/_authenticated/tools/': typeof AuthenticatedToolsIndexRoute
+  '/_authenticated/tools/reports/download-reports': typeof AuthenticatedToolsReportsDownloadReportsRouteRouteWithChildren
+  '/_authenticated/orders/create/': typeof AuthenticatedOrdersCreateIndexRoute
+  '/_authenticated/settings/api-setups/': typeof AuthenticatedSettingsApiSetupsIndexRoute
+  '/_authenticated/settings/bank-details/': typeof AuthenticatedSettingsBankDetailsIndexRoute
+  '/_authenticated/settings/company-details/': typeof AuthenticatedSettingsCompanyDetailsIndexRoute
+  '/_authenticated/settings/invoice-templates/': typeof AuthenticatedSettingsInvoiceTemplatesIndexRoute
+  '/_authenticated/settings/pickup-locations/': typeof AuthenticatedSettingsPickupLocationsIndexRoute
+  '/_authenticated/settings/tax-configuration/': typeof AuthenticatedSettingsTaxConfigurationIndexRoute
+  '/_authenticated/settings/users/': typeof AuthenticatedSettingsUsersIndexRoute
+  '/_authenticated/tools/activity-logs/': typeof AuthenticatedToolsActivityLogsIndexRoute
+  '/_authenticated/warehouse/create/': typeof AuthenticatedWarehouseCreateIndexRoute
+  '/_authenticated/warehouse/list/': typeof AuthenticatedWarehouseListIndexRoute
+  '/_authenticated/dashboard/domestic/orders/': typeof AuthenticatedDashboardDomesticOrdersIndexRoute
+  '/_authenticated/dashboard/domestic/overview/': typeof AuthenticatedDashboardDomesticOverviewIndexRoute
+  '/_authenticated/dashboard/international/overview/': typeof AuthenticatedDashboardInternationalOverviewIndexRoute
+  '/_authenticated/tools/rate-calculator/domestic/': typeof AuthenticatedToolsRateCalculatorDomesticIndexRoute
+  '/_authenticated/tools/rate-calculator/international/': typeof AuthenticatedToolsRateCalculatorInternationalIndexRoute
+  '/_authenticated/tools/rate-card/document/': typeof AuthenticatedToolsRateCardDocumentIndexRoute
+  '/_authenticated/tools/rate-card/forward/': typeof AuthenticatedToolsRateCardForwardIndexRoute
+  '/_authenticated/tools/rate-card/reverse/': typeof AuthenticatedToolsRateCardReverseIndexRoute
+  '/_authenticated/tools/reports/reports-scheduler/': typeof AuthenticatedToolsReportsReportsSchedulerIndexRoute
+  '/_authenticated/tools/reports/download-reports/instant-reports/': typeof AuthenticatedToolsReportsDownloadReportsInstantReportsIndexRoute
+  '/_authenticated/tools/reports/download-reports/scheduled-reports/': typeof AuthenticatedToolsReportsDownloadReportsScheduledReportsIndexLazyRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | ''
     | '/dashboard'
     | '/settings'
+    | '/auth/Login'
     | '/dashboard/domestic'
     | '/dashboard/international'
     | '/tools/rate-calculator'
     | '/tools/rate-card'
     | '/tools/reports'
-    | '/add-orders'
     | '/home'
     | '/orders'
     | '/tools'
     | '/tools/reports/download-reports'
-    | '/add-orders/single-order'
     | '/orders/create'
     | '/settings/api-setups'
     | '/settings/bank-details'
@@ -851,19 +929,19 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | ''
     | '/dashboard'
     | '/settings'
+    | '/auth/Login'
     | '/dashboard/domestic'
     | '/dashboard/international'
     | '/tools/rate-calculator'
     | '/tools/rate-card'
     | '/tools/reports'
-    | '/add-orders'
     | '/home'
     | '/orders'
     | '/tools'
     | '/tools/reports/download-reports'
-    | '/add-orders/single-order'
     | '/orders/create'
     | '/settings/api-setups'
     | '/settings/bank-details'
@@ -889,78 +967,54 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
-    | '/dashboard'
-    | '/settings'
-    | '/dashboard/domestic'
-    | '/dashboard/international'
-    | '/tools/rate-calculator'
-    | '/tools/rate-card'
-    | '/tools/reports'
-    | '/add-orders/'
-    | '/home/'
-    | '/orders/'
-    | '/tools/'
-    | '/tools/reports/download-reports'
-    | '/add-orders/_layout/single-order'
-    | '/orders/create/'
-    | '/settings/api-setups/'
-    | '/settings/bank-details/'
-    | '/settings/company-details/'
-    | '/settings/invoice-templates/'
-    | '/settings/pickup-locations/'
-    | '/settings/tax-configuration/'
-    | '/settings/users/'
-    | '/tools/activity-logs/'
-    | '/warehouse/create/'
-    | '/warehouse/list/'
-    | '/dashboard/domestic/orders/'
-    | '/dashboard/domestic/overview/'
-    | '/dashboard/international/overview/'
-    | '/tools/rate-calculator/domestic/'
-    | '/tools/rate-calculator/international/'
-    | '/tools/rate-card/document/'
-    | '/tools/rate-card/forward/'
-    | '/tools/rate-card/reverse/'
-    | '/tools/reports/reports-scheduler/'
-    | '/tools/reports/download-reports/instant-reports/'
-    | '/tools/reports/download-reports/scheduled-reports/'
+    | '/_authenticated'
+    | '/_authenticated/dashboard'
+    | '/_authenticated/settings'
+    | '/auth/Login'
+    | '/_authenticated/dashboard/domestic'
+    | '/_authenticated/dashboard/international'
+    | '/_authenticated/tools/rate-calculator'
+    | '/_authenticated/tools/rate-card'
+    | '/_authenticated/tools/reports'
+    | '/_authenticated/home/'
+    | '/_authenticated/orders/'
+    | '/_authenticated/tools/'
+    | '/_authenticated/tools/reports/download-reports'
+    | '/_authenticated/orders/create/'
+    | '/_authenticated/settings/api-setups/'
+    | '/_authenticated/settings/bank-details/'
+    | '/_authenticated/settings/company-details/'
+    | '/_authenticated/settings/invoice-templates/'
+    | '/_authenticated/settings/pickup-locations/'
+    | '/_authenticated/settings/tax-configuration/'
+    | '/_authenticated/settings/users/'
+    | '/_authenticated/tools/activity-logs/'
+    | '/_authenticated/warehouse/create/'
+    | '/_authenticated/warehouse/list/'
+    | '/_authenticated/dashboard/domestic/orders/'
+    | '/_authenticated/dashboard/domestic/overview/'
+    | '/_authenticated/dashboard/international/overview/'
+    | '/_authenticated/tools/rate-calculator/domestic/'
+    | '/_authenticated/tools/rate-calculator/international/'
+    | '/_authenticated/tools/rate-card/document/'
+    | '/_authenticated/tools/rate-card/forward/'
+    | '/_authenticated/tools/rate-card/reverse/'
+    | '/_authenticated/tools/reports/reports-scheduler/'
+    | '/_authenticated/tools/reports/download-reports/instant-reports/'
+    | '/_authenticated/tools/reports/download-reports/scheduled-reports/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  DashboardRouteRoute: typeof DashboardRouteRouteWithChildren
-  SettingsRouteRoute: typeof SettingsRouteRouteWithChildren
-  ToolsRateCalculatorRouteRoute: typeof ToolsRateCalculatorRouteRouteWithChildren
-  ToolsRateCardRouteRoute: typeof ToolsRateCardRouteRouteWithChildren
-  ToolsReportsRouteRoute: typeof ToolsReportsRouteRouteWithChildren
-  AddOrdersIndexRoute: typeof AddOrdersIndexRoute
-  HomeIndexRoute: typeof HomeIndexRoute
-  OrdersIndexRoute: typeof OrdersIndexRoute
-  ToolsIndexRoute: typeof ToolsIndexRoute
-  AddOrdersLayoutSingleOrderRoute: typeof AddOrdersLayoutSingleOrderRoute
-  OrdersCreateIndexRoute: typeof OrdersCreateIndexRoute
-  ToolsActivityLogsIndexRoute: typeof ToolsActivityLogsIndexRoute
-  WarehouseCreateIndexRoute: typeof WarehouseCreateIndexRoute
-  WarehouseListIndexRoute: typeof WarehouseListIndexRoute
+  AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
+  AuthLoginRoute: typeof AuthLoginRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  DashboardRouteRoute: DashboardRouteRouteWithChildren,
-  SettingsRouteRoute: SettingsRouteRouteWithChildren,
-  ToolsRateCalculatorRouteRoute: ToolsRateCalculatorRouteRouteWithChildren,
-  ToolsRateCardRouteRoute: ToolsRateCardRouteRouteWithChildren,
-  ToolsReportsRouteRoute: ToolsReportsRouteRouteWithChildren,
-  AddOrdersIndexRoute: AddOrdersIndexRoute,
-  HomeIndexRoute: HomeIndexRoute,
-  OrdersIndexRoute: OrdersIndexRoute,
-  ToolsIndexRoute: ToolsIndexRoute,
-  AddOrdersLayoutSingleOrderRoute: AddOrdersLayoutSingleOrderRoute,
-  OrdersCreateIndexRoute: OrdersCreateIndexRoute,
-  ToolsActivityLogsIndexRoute: ToolsActivityLogsIndexRoute,
-  WarehouseCreateIndexRoute: WarehouseCreateIndexRoute,
-  WarehouseListIndexRoute: WarehouseListIndexRoute,
+  AuthenticatedRoute: AuthenticatedRouteWithChildren,
+  AuthLoginRoute: AuthLoginRoute,
 }
 
 export const routeTree = rootRoute
@@ -974,187 +1028,201 @@ export const routeTree = rootRoute
       "filePath": "__root.jsx",
       "children": [
         "/",
-        "/dashboard",
-        "/settings",
-        "/tools/rate-calculator",
-        "/tools/rate-card",
-        "/tools/reports",
-        "/add-orders/",
-        "/home/",
-        "/orders/",
-        "/tools/",
-        "/add-orders/_layout/single-order",
-        "/orders/create/",
-        "/tools/activity-logs/",
-        "/warehouse/create/",
-        "/warehouse/list/"
+        "/_authenticated",
+        "/auth/Login"
       ]
     },
     "/": {
       "filePath": "index.jsx"
     },
-    "/dashboard": {
-      "filePath": "dashboard/route.jsx",
+    "/_authenticated": {
+      "filePath": "_authenticated.jsx",
       "children": [
-        "/dashboard/domestic",
-        "/dashboard/international"
+        "/_authenticated/dashboard",
+        "/_authenticated/settings",
+        "/_authenticated/tools/rate-calculator",
+        "/_authenticated/tools/rate-card",
+        "/_authenticated/tools/reports",
+        "/_authenticated/home/",
+        "/_authenticated/orders/",
+        "/_authenticated/tools/",
+        "/_authenticated/orders/create/",
+        "/_authenticated/tools/activity-logs/",
+        "/_authenticated/warehouse/create/",
+        "/_authenticated/warehouse/list/"
       ]
     },
-    "/settings": {
-      "filePath": "settings/route.jsx",
+    "/_authenticated/dashboard": {
+      "filePath": "_authenticated/dashboard/route.jsx",
+      "parent": "/_authenticated",
       "children": [
-        "/settings/api-setups/",
-        "/settings/bank-details/",
-        "/settings/company-details/",
-        "/settings/invoice-templates/",
-        "/settings/pickup-locations/",
-        "/settings/tax-configuration/",
-        "/settings/users/"
+        "/_authenticated/dashboard/domestic",
+        "/_authenticated/dashboard/international"
       ]
     },
-    "/dashboard/domestic": {
-      "filePath": "dashboard/domestic/route.jsx",
-      "parent": "/dashboard",
+    "/_authenticated/settings": {
+      "filePath": "_authenticated/settings/route.jsx",
+      "parent": "/_authenticated",
       "children": [
-        "/dashboard/domestic/orders/",
-        "/dashboard/domestic/overview/"
+        "/_authenticated/settings/api-setups/",
+        "/_authenticated/settings/bank-details/",
+        "/_authenticated/settings/company-details/",
+        "/_authenticated/settings/invoice-templates/",
+        "/_authenticated/settings/pickup-locations/",
+        "/_authenticated/settings/tax-configuration/",
+        "/_authenticated/settings/users/"
       ]
     },
-    "/dashboard/international": {
-      "filePath": "dashboard/international/route.jsx",
-      "parent": "/dashboard",
+    "/auth/Login": {
+      "filePath": "auth/Login.jsx"
+    },
+    "/_authenticated/dashboard/domestic": {
+      "filePath": "_authenticated/dashboard/domestic/route.jsx",
+      "parent": "/_authenticated/dashboard",
       "children": [
-        "/dashboard/international/overview/"
+        "/_authenticated/dashboard/domestic/orders/",
+        "/_authenticated/dashboard/domestic/overview/"
       ]
     },
-    "/tools/rate-calculator": {
-      "filePath": "tools/rate-calculator/route.jsx",
+    "/_authenticated/dashboard/international": {
+      "filePath": "_authenticated/dashboard/international/route.jsx",
+      "parent": "/_authenticated/dashboard",
       "children": [
-        "/tools/rate-calculator/domestic/",
-        "/tools/rate-calculator/international/"
+        "/_authenticated/dashboard/international/overview/"
       ]
     },
-    "/tools/rate-card": {
-      "filePath": "tools/rate-card/route.jsx",
+    "/_authenticated/tools/rate-calculator": {
+      "filePath": "_authenticated/tools/rate-calculator/route.jsx",
+      "parent": "/_authenticated",
       "children": [
-        "/tools/rate-card/document/",
-        "/tools/rate-card/forward/",
-        "/tools/rate-card/reverse/"
+        "/_authenticated/tools/rate-calculator/domestic/",
+        "/_authenticated/tools/rate-calculator/international/"
       ]
     },
-    "/tools/reports": {
-      "filePath": "tools/reports/route.jsx",
+    "/_authenticated/tools/rate-card": {
+      "filePath": "_authenticated/tools/rate-card/route.jsx",
+      "parent": "/_authenticated",
       "children": [
-        "/tools/reports/download-reports",
-        "/tools/reports/reports-scheduler/"
+        "/_authenticated/tools/rate-card/document/",
+        "/_authenticated/tools/rate-card/forward/",
+        "/_authenticated/tools/rate-card/reverse/"
       ]
     },
-    "/add-orders/": {
-      "filePath": "add-orders/index.jsx"
-    },
-    "/home/": {
-      "filePath": "home/index.jsx"
-    },
-    "/orders/": {
-      "filePath": "orders/index.jsx"
-    },
-    "/tools/": {
-      "filePath": "tools/index.jsx"
-    },
-    "/tools/reports/download-reports": {
-      "filePath": "tools/reports/download-reports/route.jsx",
-      "parent": "/tools/reports",
+    "/_authenticated/tools/reports": {
+      "filePath": "_authenticated/tools/reports/route.jsx",
+      "parent": "/_authenticated",
       "children": [
-        "/tools/reports/download-reports/instant-reports/",
-        "/tools/reports/download-reports/scheduled-reports/"
+        "/_authenticated/tools/reports/download-reports",
+        "/_authenticated/tools/reports/reports-scheduler/"
       ]
     },
-    "/add-orders/_layout/single-order": {
-      "filePath": "add-orders/_layout/single-order.jsx"
+    "/_authenticated/home/": {
+      "filePath": "_authenticated/home/index.jsx",
+      "parent": "/_authenticated"
     },
-    "/orders/create/": {
-      "filePath": "orders/create/index.jsx"
+    "/_authenticated/orders/": {
+      "filePath": "_authenticated/orders/index.jsx",
+      "parent": "/_authenticated"
     },
-    "/settings/api-setups/": {
-      "filePath": "settings/api-setups/index.jsx",
-      "parent": "/settings"
+    "/_authenticated/tools/": {
+      "filePath": "_authenticated/tools/index.jsx",
+      "parent": "/_authenticated"
     },
-    "/settings/bank-details/": {
-      "filePath": "settings/bank-details/index.jsx",
-      "parent": "/settings"
+    "/_authenticated/tools/reports/download-reports": {
+      "filePath": "_authenticated/tools/reports/download-reports/route.jsx",
+      "parent": "/_authenticated/tools/reports",
+      "children": [
+        "/_authenticated/tools/reports/download-reports/instant-reports/",
+        "/_authenticated/tools/reports/download-reports/scheduled-reports/"
+      ]
     },
-    "/settings/company-details/": {
-      "filePath": "settings/company-details/index.jsx",
-      "parent": "/settings"
+    "/_authenticated/orders/create/": {
+      "filePath": "_authenticated/orders/create/index.jsx",
+      "parent": "/_authenticated"
     },
-    "/settings/invoice-templates/": {
-      "filePath": "settings/invoice-templates/index.jsx",
-      "parent": "/settings"
+    "/_authenticated/settings/api-setups/": {
+      "filePath": "_authenticated/settings/api-setups/index.jsx",
+      "parent": "/_authenticated/settings"
     },
-    "/settings/pickup-locations/": {
-      "filePath": "settings/pickup-locations/index.jsx",
-      "parent": "/settings"
+    "/_authenticated/settings/bank-details/": {
+      "filePath": "_authenticated/settings/bank-details/index.jsx",
+      "parent": "/_authenticated/settings"
     },
-    "/settings/tax-configuration/": {
-      "filePath": "settings/tax-configuration/index.jsx",
-      "parent": "/settings"
+    "/_authenticated/settings/company-details/": {
+      "filePath": "_authenticated/settings/company-details/index.jsx",
+      "parent": "/_authenticated/settings"
     },
-    "/settings/users/": {
-      "filePath": "settings/users/index.jsx",
-      "parent": "/settings"
+    "/_authenticated/settings/invoice-templates/": {
+      "filePath": "_authenticated/settings/invoice-templates/index.jsx",
+      "parent": "/_authenticated/settings"
     },
-    "/tools/activity-logs/": {
-      "filePath": "tools/activity-logs/index.jsx"
+    "/_authenticated/settings/pickup-locations/": {
+      "filePath": "_authenticated/settings/pickup-locations/index.jsx",
+      "parent": "/_authenticated/settings"
     },
-    "/warehouse/create/": {
-      "filePath": "warehouse/create/index.jsx"
+    "/_authenticated/settings/tax-configuration/": {
+      "filePath": "_authenticated/settings/tax-configuration/index.jsx",
+      "parent": "/_authenticated/settings"
     },
-    "/warehouse/list/": {
-      "filePath": "warehouse/list/index.jsx"
+    "/_authenticated/settings/users/": {
+      "filePath": "_authenticated/settings/users/index.jsx",
+      "parent": "/_authenticated/settings"
     },
-    "/dashboard/domestic/orders/": {
-      "filePath": "dashboard/domestic/orders/index.jsx",
-      "parent": "/dashboard/domestic"
+    "/_authenticated/tools/activity-logs/": {
+      "filePath": "_authenticated/tools/activity-logs/index.jsx",
+      "parent": "/_authenticated"
     },
-    "/dashboard/domestic/overview/": {
-      "filePath": "dashboard/domestic/overview/index.jsx",
-      "parent": "/dashboard/domestic"
+    "/_authenticated/warehouse/create/": {
+      "filePath": "_authenticated/warehouse/create/index.jsx",
+      "parent": "/_authenticated"
     },
-    "/dashboard/international/overview/": {
-      "filePath": "dashboard/international/overview/index.jsx",
-      "parent": "/dashboard/international"
+    "/_authenticated/warehouse/list/": {
+      "filePath": "_authenticated/warehouse/list/index.jsx",
+      "parent": "/_authenticated"
     },
-    "/tools/rate-calculator/domestic/": {
-      "filePath": "tools/rate-calculator/domestic/index.jsx",
-      "parent": "/tools/rate-calculator"
+    "/_authenticated/dashboard/domestic/orders/": {
+      "filePath": "_authenticated/dashboard/domestic/orders/index.jsx",
+      "parent": "/_authenticated/dashboard/domestic"
     },
-    "/tools/rate-calculator/international/": {
-      "filePath": "tools/rate-calculator/international/index.jsx",
-      "parent": "/tools/rate-calculator"
+    "/_authenticated/dashboard/domestic/overview/": {
+      "filePath": "_authenticated/dashboard/domestic/overview/index.jsx",
+      "parent": "/_authenticated/dashboard/domestic"
     },
-    "/tools/rate-card/document/": {
-      "filePath": "tools/rate-card/document/index.jsx",
-      "parent": "/tools/rate-card"
+    "/_authenticated/dashboard/international/overview/": {
+      "filePath": "_authenticated/dashboard/international/overview/index.jsx",
+      "parent": "/_authenticated/dashboard/international"
     },
-    "/tools/rate-card/forward/": {
-      "filePath": "tools/rate-card/forward/index.jsx",
-      "parent": "/tools/rate-card"
+    "/_authenticated/tools/rate-calculator/domestic/": {
+      "filePath": "_authenticated/tools/rate-calculator/domestic/index.jsx",
+      "parent": "/_authenticated/tools/rate-calculator"
     },
-    "/tools/rate-card/reverse/": {
-      "filePath": "tools/rate-card/reverse/index.jsx",
-      "parent": "/tools/rate-card"
+    "/_authenticated/tools/rate-calculator/international/": {
+      "filePath": "_authenticated/tools/rate-calculator/international/index.jsx",
+      "parent": "/_authenticated/tools/rate-calculator"
     },
-    "/tools/reports/reports-scheduler/": {
-      "filePath": "tools/reports/reports-scheduler/index.jsx",
-      "parent": "/tools/reports"
+    "/_authenticated/tools/rate-card/document/": {
+      "filePath": "_authenticated/tools/rate-card/document/index.jsx",
+      "parent": "/_authenticated/tools/rate-card"
     },
-    "/tools/reports/download-reports/instant-reports/": {
-      "filePath": "tools/reports/download-reports/instant-reports/index.jsx",
-      "parent": "/tools/reports/download-reports"
+    "/_authenticated/tools/rate-card/forward/": {
+      "filePath": "_authenticated/tools/rate-card/forward/index.jsx",
+      "parent": "/_authenticated/tools/rate-card"
     },
-    "/tools/reports/download-reports/scheduled-reports/": {
-      "filePath": "tools/reports/download-reports/scheduled-reports/index.lazy.jsx",
-      "parent": "/tools/reports/download-reports"
+    "/_authenticated/tools/rate-card/reverse/": {
+      "filePath": "_authenticated/tools/rate-card/reverse/index.jsx",
+      "parent": "/_authenticated/tools/rate-card"
+    },
+    "/_authenticated/tools/reports/reports-scheduler/": {
+      "filePath": "_authenticated/tools/reports/reports-scheduler/index.jsx",
+      "parent": "/_authenticated/tools/reports"
+    },
+    "/_authenticated/tools/reports/download-reports/instant-reports/": {
+      "filePath": "_authenticated/tools/reports/download-reports/instant-reports/index.jsx",
+      "parent": "/_authenticated/tools/reports/download-reports"
+    },
+    "/_authenticated/tools/reports/download-reports/scheduled-reports/": {
+      "filePath": "_authenticated/tools/reports/download-reports/scheduled-reports/index.lazy.jsx",
+      "parent": "/_authenticated/tools/reports/download-reports"
     }
   }
 }

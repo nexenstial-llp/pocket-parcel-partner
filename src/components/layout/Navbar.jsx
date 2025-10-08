@@ -1,40 +1,59 @@
-import { BsFillLightningChargeFill, BsTicketFill } from "react-icons/bs";
-import { FaWallet, FaCalculator } from "react-icons/fa";
+/* eslint-disable react/prop-types */
+import { FaWallet } from "react-icons/fa";
 import { IoReload } from "react-icons/io5";
 import { IoIosNotifications } from "react-icons/io";
 import { FaUser } from "react-icons/fa";
-import { GoChevronDown } from "react-icons/go";
-import { FaBoxOpen, FaMapLocationDot } from "react-icons/fa6";
-import QuickActions from "./QuickActions";
-import { LiaShippingFastSolid } from "react-icons/lia";
-const quickActionsData = [
+import { Avatar, Dropdown, message } from "antd";
+import { DownOutlined } from "@ant-design/icons";
+import { Space } from "antd";
+const items = [
   {
-    icon: <FaBoxOpen size={40} />,
-    text: "Add an Order",
-    navigateTo: "/add-orders",
+    key: "1",
+    label: "Profile",
   },
   {
-    icon: <LiaShippingFastSolid size={40} />,
-    text: "Create a Quick Shipment",
-    navigateTo: "/add-orders",
-  },
-  {
-    icon: <FaCalculator size={40} />,
-    text: "Rate Calculator",
-    navigateTo: "/add-orders",
-  },
-  {
-    icon: <BsTicketFill size={40} />,
-    text: "Create a Ticket",
-    navigateTo: "/add-orders",
-  },
-  {
-    icon: <FaMapLocationDot size={40} />,
-    text: "Track Shipment",
-    navigateTo: "/add-orders",
+    key: "2",
+    label: "Logout",
   },
 ];
-const Navbar = () => {
+
+// const quickActionsData = [
+//   {
+//     icon: <FaBoxOpen size={40} />,
+//     text: "Add an Order",
+//     navigateTo: "/add-orders",
+//   },
+//   {
+//     icon: <LiaShippingFastSolid size={40} />,
+//     text: "Create a Quick Shipment",
+//     navigateTo: "/add-orders",
+//   },
+//   {
+//     icon: <FaCalculator size={40} />,
+//     text: "Rate Calculator",
+//     navigateTo: "/add-orders",
+//   },
+//   {
+//     icon: <BsTicketFill size={40} />,
+//     text: "Create a Ticket",
+//     navigateTo: "/add-orders",
+//   },
+//   {
+//     icon: <FaMapLocationDot size={40} />,
+//     text: "Track Shipment",
+//     navigateTo: "/add-orders",
+//   },
+// ];
+const Navbar = ({ auth }) => {
+  const onClick = ({ key }) => {
+    if (key === "2") {
+      message.success("Logout Successfully");
+      auth.logout();
+      return;
+    }
+    message.success(`Click on item ${key}`);
+  };
+
   return (
     <nav className="bg-white text-indigo-600 p-4 shadow-md">
       <div className="container mx-auto flex justify-between items-center ">
@@ -69,25 +88,15 @@ const Navbar = () => {
             <IoIosNotifications size={25} />
           </button>
           <button className=" px-3">All Products</button>
-          <div className="px-3 relative group">
-            <button className="flex gap-1 items-center text-gray-600 ">
-              <FaUser /> <GoChevronDown />
-            </button>
-            <div className="absolute right-0 mt-2 w-48 bg-gray-50 rounded-md shadow-lg py-2 z-20 hidden group-hover:block">
-              <a
-                href="#"
-                className="block px-4 py-2 text-gray-800 hover:bg-gray-200"
-              >
-                Profile
-              </a>
-              <span
-                href="#"
-                className="block px-4 py-2 text-gray-800 hover:bg-gray-200"
-              >
-                Logout
-              </span>
-            </div>
-          </div>
+
+          <Dropdown menu={{ items, onClick }}>
+            <a onClick={(e) => e.preventDefault()}>
+              <Space>
+                <Avatar icon={<FaUser />} />
+                <DownOutlined />
+              </Space>
+            </a>
+          </Dropdown>
         </div>
       </div>
     </nav>
