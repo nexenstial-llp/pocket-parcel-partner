@@ -6,6 +6,7 @@ import Sidebar from "@/components/layout/Sidebar";
 import Navbar from "@/components/layout/Navbar";
 import NotFound from "@/components/layout/NotFoundPage";
 import ErrorPage from "@/components/layout/ErrorPage";
+import { Spin } from "antd";
 
 export const Route = createFileRoute("/_authenticated")({
   // The beforeLoad hook runs before navigation completes and before the component renders.
@@ -25,6 +26,11 @@ export const Route = createFileRoute("/_authenticated")({
   errorComponent: ({ error }) => {
     return <ErrorPage error={error} />;
   },
+  pendingComponent: () => (
+    <div className="flex items-center justify-center min-h-screen">
+      <Spin fullscreen />
+    </div>
+  ),
 });
 function RootComponent() {
   const [collapsed, setCollapsed] = React.useState(true);

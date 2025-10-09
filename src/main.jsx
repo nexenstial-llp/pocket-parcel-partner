@@ -29,6 +29,11 @@ root.render(
           // Seed Token
           colorPrimary: "#6366f1",
         },
+        components: {
+          Menu: {
+            collapsedWidth: "72px",
+          },
+        },
       }}
     >
       <QueryClientProvider client={queryClient}>

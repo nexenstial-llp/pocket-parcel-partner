@@ -182,6 +182,7 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
       <Sider
         style={{
           overflowY: "auto",
+          // overflowX: "hidden",
           maxHeight: "100vh",
           position: "fixed",
           top: 0,
