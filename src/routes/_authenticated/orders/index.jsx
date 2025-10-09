@@ -1,15 +1,8 @@
 import PageLayout from "@/components/layout/PageLayout";
 import ResponsiveCard from "@/components/ui/cards/ResponsiveCard";
+import SearchPanelCard from "@/components/ui/cards/SearchPanelCard";
 import { createFileRoute } from "@tanstack/react-router";
-import {
-  Breadcrumb,
-  Button,
-  DatePicker,
-  Input,
-  Radio,
-  Select,
-  Table,
-} from "antd";
+import { Breadcrumb, Button, DatePicker, Select, Table } from "antd";
 
 export const Route = createFileRoute("/_authenticated/orders/")({
   component: RouteComponent,
@@ -62,24 +55,22 @@ function RouteComponent() {
   return (
     <PageLayout>
       <Breadcrumb items={[{ title: "Home" }, { title: "Orders" }]} />
-      <ResponsiveCard size="small" title="Search">
-        <div className="flex flex-col sm:flex-row sm:justify-between">
-          <div className="flex flex-col gap-2">
-            <Radio.Group>
-              <Radio value={"AWB"}>AWB</Radio>
-              <Radio value={"reference_number"}>Reference Number</Radio>
-              <Radio value={"order_id"}>Order ID</Radio>
-            </Radio.Group>
-            <Input.Search placeholder="Search" />
-          </div>
-          <div className="flex gap-2">
-            <Button disabled type="primary">
-              Generate Report
-            </Button>
-            <Button disabled>Bulk Download labels</Button>
-          </div>
-        </div>
-      </ResponsiveCard>
+      <SearchPanelCard
+        searchTypeOptions={[
+          { label: "AWB", value: "AWB" },
+          { label: "Order ID", value: "order_id" },
+          { label: "Reference Number", value: "reference_number" },
+          { label: "Phone No", value: "phone" },
+        ]}
+        extraButtons={[
+          <Button size="small" key={"Report Status"}>
+            Report Status
+          </Button>,
+          <Button size="small" key={"Generate Report"} type="primary">
+            Generate Report
+          </Button>,
+        ]}
+      />
       <ResponsiveCard size="small">
         <div className="flex flex-col gap-2">
           <div className="flex gap-2 items-center overflow-x-auto">
