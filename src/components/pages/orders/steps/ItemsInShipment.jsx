@@ -1,7 +1,7 @@
 import { Form, Button } from "antd";
 import { PlusOutlined, MinusCircleOutlined } from "@ant-design/icons";
 import ResponsiveCard from "@/components/ui/cards/ResponsiveCard";
-import DynamicFormField from "@/components/ui/DynamicFormField";
+import DynamicFormField from "@/components/ui/formFields/DynamicFormField";
 
 const ItemsInShipment = () => (
   <ResponsiveCard title="Item In Shipment" size="small">

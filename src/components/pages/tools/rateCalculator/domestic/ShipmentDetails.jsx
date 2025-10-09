@@ -1,4 +1,4 @@
-import InputTag from "@/components/ui/inputTag/InputTag";
+import InputTag from "@/components/ui/formFields/InputTag";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, Card, Form, Radio, Tooltip } from "antd";
 import React, { useEffect } from "react";

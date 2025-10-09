@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button, Modal } from "antd";
-import InputTag from "@/components/ui/inputTag/InputTag";
+import InputTag from "@/components/ui/formFields/InputTag";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";

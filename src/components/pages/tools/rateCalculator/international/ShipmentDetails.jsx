@@ -3,7 +3,7 @@ import { Button, Card, Form, Tooltip } from "antd";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { internationalSchema } from "@/schemas/tools/rateCalculator/internationalSchema";
-import InputTag from "@/components/ui/inputTag/InputTag";
+import InputTag from "@/components/ui/formFields/InputTag";
 import SelectTag from "@/components/ui/selectTag/SelectTag";
 import { AiTwotoneQuestionCircle } from "react-icons/ai";
 const destinationCountryOptions = [

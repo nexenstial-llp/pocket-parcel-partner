@@ -2,7 +2,7 @@
 import { Form, Input, Select } from "antd";
 import { PhoneOutlined, MailOutlined } from "@ant-design/icons";
 import ResponsiveCard from "@/components/ui/cards/ResponsiveCard";
-import DynamicFormField from "@/components/ui/DynamicFormField";
+import DynamicFormField from "@/components/ui/formFields/DynamicFormField";
 
 const { Option } = Select;
 

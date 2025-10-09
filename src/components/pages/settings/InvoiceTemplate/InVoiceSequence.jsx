@@ -2,7 +2,7 @@ import { useState } from "react";
 import { BsEye } from "react-icons/bs";
 // Components
 
-import InputTag from "@/components/ui/inputTag/InputTag";
+import InputTag from "@/components/ui/formFields/InputTag";
 import { Button } from "antd";
 const InvoiceSequence = () => {
   const [channel, setChannel] = useState("");

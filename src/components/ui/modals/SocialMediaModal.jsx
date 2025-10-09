@@ -1,6 +1,6 @@
 import { Input, Modal } from "antd";
 import React from "react";
-import InputTag from "../inputTag/InputTag";
+import InputTag from "../formFields/InputTag";
 import {
   FaInstagram,
   FaWhatsappSquare,

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Button, Modal } from "antd";
 
 import { CiLocationOn } from "react-icons/ci";
-import InputTag from "../../../ui/inputTag/InputTag";
+import InputTag from "../../../ui/formFields/InputTag";
 import { MdOutlineWorkOutline } from "react-icons/md";
 import { FaCheck } from "react-icons/fa";
 const workingDayData = [

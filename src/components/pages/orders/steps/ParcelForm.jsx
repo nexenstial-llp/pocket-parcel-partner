@@ -1,4 +1,4 @@
-import DynamicFormField from "@/components/ui/DynamicFormField";
+import DynamicFormField from "@/components/ui/formFields/DynamicFormField";
 import ResponsiveCard from "@/components/ui/cards/ResponsiveCard";
 import { Form, Select } from "antd";
 

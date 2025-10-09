@@ -1,4 +1,4 @@
-import InputTag from "@/components/ui/inputTag/InputTag";
+import InputTag from "@/components/ui/formFields/InputTag";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";

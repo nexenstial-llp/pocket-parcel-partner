@@ -1,4 +1,4 @@
-import InputTag from "@/components/ui/inputTag/InputTag";
+import InputTag from "@/components/ui/formFields/InputTag";
 import SelectTag from "@/components/ui/selectTag/SelectTag";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, Drawer, Form, Tabs } from "antd";
