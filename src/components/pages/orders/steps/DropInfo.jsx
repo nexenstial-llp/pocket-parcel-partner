@@ -1,51 +1,29 @@
-// components/steps/PickupInfoForm.jsx
 import { Form, Input, Select } from "antd";
 import { PhoneOutlined, MailOutlined } from "@ant-design/icons";
-import ResponsiveCard from "@/components/ui/ResponsiveCard";
-import DynamicFormField from "@/components/ui/DynamicFormField";
+import ResponsiveCard from "@/components/ui/cards/ResponsiveCard";
 
 const { Option } = Select;
-
-const PickupInfoForm = () => {
+const DropInfo = () => {
   return (
-    <ResponsiveCard
-      size="small"
-      title="Pickup Information"
-      className="shadow-sm"
-    >
-      <DynamicFormField
-        name={["pickup_info", "pickup_time"]}
-        label="Pickup Time"
-        componentType="date"
-        required={false}
-        formProps={{ wrapperCol: { span: 6 } }}
-        fieldProps={{ format: "DD-MM-YYYY hh:mm", showTime: true }}
-      />
-
+    <ResponsiveCard size="small" title="Drop Information" className="shadow-sm">
       <Form.Item
         wrapperCol={{ span: 6 }}
-        name={["pickup_info", "Warehouses"]}
+        name={["drop_info", "Warehouses"]}
         label="Warehouses"
       >
         <Select placeholder="Select warehouse" />
       </Form.Item>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4">
-        <DynamicFormField
-          name={["pickup_info", "pickup_name"]}
-          label="Name"
-          required={true}
-          placeholder="Enter pickup name"
-        />
-        {/* <Form.Item
-          name={["pickup_info", "pickup_name"]}
-          label="Name"
-          rules={[{ required: true, message: "Please enter pickup name" }]}
-        >
-          <Input placeholder="Enter pickup name" />
-        </Form.Item> */}
         <Form.Item
-          name={["pickup_info", "pickup_phone"]}
+          name={["drop_info", "drop_name"]}
+          label="Name"
+          rules={[{ required: true, message: "Please enter drop name" }]}
+        >
+          <Input placeholder="Enter drop name" />
+        </Form.Item>
+        <Form.Item
+          name={["drop_info", "drop_phone"]}
           label="Phone"
           rules={[
             { required: true, message: "Please enter phone number" },
@@ -58,7 +36,7 @@ const PickupInfoForm = () => {
           <Input prefix={<PhoneOutlined />} placeholder="Enter phone number" />
         </Form.Item>
         <Form.Item
-          name={["pickup_info", "email"]}
+          name={["drop_info", "email"]}
           label="Email"
           rules={[
             { required: true, message: "Please enter email" },
@@ -68,7 +46,7 @@ const PickupInfoForm = () => {
           <Input prefix={<MailOutlined />} placeholder="Enter email" />
         </Form.Item>
         <Form.Item
-          name={["pickup_info", "pickup_address"]}
+          name={["drop_info", "drop_address"]}
           label="Address"
           rules={[{ required: true, message: "Please enter address" }]}
         >
@@ -76,28 +54,28 @@ const PickupInfoForm = () => {
         </Form.Item>
 
         <Form.Item
-          name={["pickup_info", "pickup_pincode"]}
+          name={["drop_info", "drop_pincode"]}
           label="Pincode"
           rules={[{ required: true, message: "Please enter pincode" }]}
         >
           <Input placeholder="Enter pincode" />
         </Form.Item>
         <Form.Item
-          name={["pickup_info", "pickup_city"]}
+          name={["drop_info", "drop_city"]}
           label="City"
           rules={[{ required: true, message: "Please enter city" }]}
         >
           <Input placeholder="Enter city" />
         </Form.Item>
         <Form.Item
-          name={["pickup_info", "pickup_state"]}
+          name={["drop_info", "drop_state"]}
           label="State"
           rules={[{ required: true, message: "Please enter state" }]}
         >
           <Input placeholder="Enter state" />
         </Form.Item>
         <Form.Item
-          name={["pickup_info", "pickup_country"]}
+          name={["drop_info", "drop_country"]}
           label="Country"
           rules={[{ required: true, message: "Please select country" }]}
         >
@@ -107,13 +85,23 @@ const PickupInfoForm = () => {
             <Option value="UK">UK</Option>
           </Select>
         </Form.Item>
-        <Form.Item name={["pickup_info", "tin"]} label="TIN Number">
+        <Form.Item
+          name={["drop_info", "address_type"]}
+          label="Address Type"
+          rules={[{ required: true, message: "Please Address Type" }]}
+        >
+          <Select placeholder="Select country">
+            <Option value="RESIDENTIAL">RESIDENTIAL</Option>
+            <Option value="OFFICE">OFFICE</Option>
+          </Select>
+        </Form.Item>
+        <Form.Item name={["drop_info", "drop_vendor_code"]} label="Vendor Code">
+          <Input placeholder="Enter Vendor code" />
+        </Form.Item>
+        <Form.Item name={["drop_info", "drop_lat"]} label="Latitude">
           <Input placeholder="Enter TIN number" />
         </Form.Item>
-        <Form.Item name={["pickup_info", "pickup_lat"]} label="Latitude">
-          <Input placeholder="Enter TIN number" />
-        </Form.Item>
-        <Form.Item name={["pickup_info", "pickup_long"]} label="Longitude">
+        <Form.Item name={["drop_info", "drop_long"]} label="Longitude">
           <Input placeholder="Enter TIN number" />
         </Form.Item>
       </div>
@@ -121,4 +109,4 @@ const PickupInfoForm = () => {
   );
 };
 
-export default PickupInfoForm;
+export default DropInfo;

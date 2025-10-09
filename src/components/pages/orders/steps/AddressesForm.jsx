@@ -1,4 +1,4 @@
-import ResponsiveCard from "@/components/ui/ResponsiveCard";
+import ResponsiveCard from "@/components/ui/cards/ResponsiveCard";
 import PickupInfoForm from "./PickupInfoForm";
 import DropInfo from "./DropInfo";
 import ReturnInfo from "./ReturnInfo";

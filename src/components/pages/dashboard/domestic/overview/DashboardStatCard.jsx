@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
-import ResponsiveCard from "@/components/ui/ResponsiveCard";
-import { cn } from "@/components/utils/classname.util";
+import ResponsiveCard from "@/components/ui/cards/ResponsiveCard";
+import { cn } from "@/utils/classname.util";
 import { LiaClipboardListSolid } from "react-icons/lia";
 import DefaultExtraContent from "./DefaultExtraContent";
 

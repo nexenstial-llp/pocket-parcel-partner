@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { cn } from "../utils/classname.util";
+import { cn } from "../../utils/classname.util";
 
 const PageLayout = ({ className, children }) => {
   return (

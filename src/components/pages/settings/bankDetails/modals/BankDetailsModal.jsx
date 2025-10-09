@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 // COmponents
 
-import InputTag from "../../../../InputTag/InputTag";
+import InputTag from "../../../../ui/inputTag/InputTag";
 import { zodResolver } from "@hookform/resolvers/zod";
 const bankDetailsSchema = z
   .object({

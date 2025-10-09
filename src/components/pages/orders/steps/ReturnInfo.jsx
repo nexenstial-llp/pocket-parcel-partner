@@ -1,6 +1,6 @@
 import { Form, Input, Select } from "antd";
 import { PhoneOutlined } from "@ant-design/icons";
-import ResponsiveCard from "@/components/ui/ResponsiveCard";
+import ResponsiveCard from "@/components/ui/cards/ResponsiveCard";
 
 const { Option } = Select;
 const ReturnInfo = () => {

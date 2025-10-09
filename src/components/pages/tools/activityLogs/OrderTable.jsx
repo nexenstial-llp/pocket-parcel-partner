@@ -1,5 +1,5 @@
 import React from "react";
-import ResponsiveTable from "@/components/ResponsiveTable/ResponsiveTable";
+import ResponsiveTable from "@/components/ui/tables/ResponsiveTable";
 const columns = [
   {
     title: "Start Time",

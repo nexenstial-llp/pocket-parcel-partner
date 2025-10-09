@@ -1,5 +1,5 @@
 import DynamicFormField from "@/components/ui/DynamicFormField";
-import ResponsiveCard from "@/components/ui/ResponsiveCard";
+import ResponsiveCard from "@/components/ui/cards/ResponsiveCard";
 import { Form, Select } from "antd";
 
 const ParcelForm = () => {

@@ -1,6 +1,6 @@
 import { Form, Button } from "antd";
 import { PlusOutlined, MinusCircleOutlined } from "@ant-design/icons";
-import ResponsiveCard from "@/components/ui/ResponsiveCard";
+import ResponsiveCard from "@/components/ui/cards/ResponsiveCard";
 import DynamicFormField from "@/components/ui/DynamicFormField";
 
 const ItemDetails = () => (

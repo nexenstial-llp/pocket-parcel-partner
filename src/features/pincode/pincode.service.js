@@ -1,4 +1,4 @@
-import axiosInstance from "@/components/utils/axiosInstance.util";
+import axiosInstance from "@/utils/axiosInstance.util";
 
 export const getCitySateFromPincode = async (pincode) => {
   const response = await axiosInstance.get(

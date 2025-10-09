@@ -1,11 +1,11 @@
-import InputTag from "@/components/InputTag/InputTag";
+import InputTag from "@/components/ui/inputTag/InputTag";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 // Components
-import SelectTag from "@/components/SelectTag/SelectTag";
+import SelectTag from "@/components/ui/selectTag/SelectTag";
 import { Button } from "antd";
 // Type Options
 const typeOptions = [

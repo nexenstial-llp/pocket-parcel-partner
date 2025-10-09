@@ -2,7 +2,7 @@
 
 import { Link } from "@tanstack/react-router";
 import { Breadcrumb } from "antd";
-import { cn } from "../utils/classname.util";
+import { cn } from "../../utils/classname.util";
 /**
  * @param {import("antd").BreadcrumbProps} props
  * @param {import("antd").BreadcrumbItemProps} props

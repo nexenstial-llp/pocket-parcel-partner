@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { Button, Modal } from "antd";
-import InputTag from "@/components/InputTag/InputTag";
+import InputTag from "@/components/ui/inputTag/InputTag";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import SelectTag from "@/components/SelectTag/SelectTag";
+import SelectTag from "@/components/ui/selectTag/SelectTag";
 const userRoleOptions = [
   { label: "Owner", value: "owner" },
   { label: "Admin", value: "admin" },

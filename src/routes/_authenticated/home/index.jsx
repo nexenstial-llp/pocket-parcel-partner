@@ -7,8 +7,8 @@ import { BsBank2 } from "react-icons/bs";
 import { TiSocialInstagram } from "react-icons/ti";
 
 // Components
-import GettingStartedCard from "@/components/Cards/GettingStartedCard";
-import BusinessProfileCard from "@/components/Cards/BusinessProfileCard";
+import GettingStartedCard from "@/components/ui/cards/GettingStartedCard";
+import BusinessProfileCard from "@/components/ui/cards/BusinessProfileCard";
 // Assets
 import AttentionImage from "@/assets/attentionToday.svg";
 import NoPickups from "@/assets/noPickups.svg";

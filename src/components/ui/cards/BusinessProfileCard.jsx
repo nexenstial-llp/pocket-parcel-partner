@@ -2,9 +2,9 @@
 import { useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { FaCheckCircle } from "react-icons/fa";
-import SocialMediaModal from "../Modals/SocialMediaModal";
+import SocialMediaModal from "../modals/SocialMediaModal";
 import { Button } from "antd";
-import ResponsiveCard from "../ui/ResponsiveCard";
+import ResponsiveCard from "./ResponsiveCard";
 
 const BusinessProfileCard = ({ title, subTitle, icon, isCompleted }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
