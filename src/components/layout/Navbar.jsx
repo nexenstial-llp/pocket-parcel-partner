@@ -78,7 +78,7 @@ const Navbar = ({ auth }) => {
             </div>
           </div> */}
           <div className="px-3 text-gray-600  flex items-center gap-1">
-            <FaWallet /> $100
+            <FaWallet /> ₹100
             <IoReload />
           </div>
           <a href="#" className="px-3 bg-gray-100 py-1 rounded-md">
