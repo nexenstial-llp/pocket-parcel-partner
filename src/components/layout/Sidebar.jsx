@@ -13,7 +13,11 @@ import {
 import { HiHome } from "react-icons/hi";
 import { BsTools } from "react-icons/bs";
 import { PiKeyReturnFill } from "react-icons/pi";
-import { TbBuildingWarehouse, TbTruckDelivery } from "react-icons/tb";
+import {
+  TbBuildingWarehouse,
+  TbTruckDelivery,
+  TbTruckReturn,
+} from "react-icons/tb";
 import { GoLaw } from "react-icons/go";
 import { FaAnglesRight } from "react-icons/fa6";
 
@@ -41,6 +45,21 @@ const sidebarData = [
       {
         key: "/orders/create",
         label: <Link to="/orders/create">Create Order</Link>,
+      },
+    ],
+  },
+  {
+    key: "ndr",
+    label: "NDR",
+    icon: <TbTruckReturn />,
+    children: [
+      {
+        key: "/ndr/cases",
+        label: <Link to="/ndr/cases">Cases</Link>,
+      },
+      {
+        key: "/ndr/cases/create",
+        label: <Link to="/ndr/cases/create">Create Case</Link>,
       },
     ],
   },
@@ -183,8 +202,9 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
         style={{
           overflowY: "auto",
           // overflowX: "hidden",
+          // position: "fixed",
           maxHeight: "100vh",
-          position: "fixed",
+          minHeight: "100vh",
           top: 0,
           bottom: 0,
           scrollbarWidth: "thin",
@@ -193,9 +213,9 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
         collapsed={collapsed}
         onCollapse={setCollapsed}
         width={240}
-        className="transition-all ease-in-out duration-300 delay-100 "
+        className="custom-scrollbar transition-all ease-in-out duration-300 delay-100 "
       >
-        <Link to="/home">
+        {/* <Link to="/home">
           <div className="h-16 font-bold text-white py-2 text-xl text-center flex justify-center items-center relative">
             <span
               className={`transition-transform duration-300 ease-in-out delay-100 absolute ${collapsed ? "opacity-0 scale-0" : "opacity-100 scale-100"}`}
@@ -208,16 +228,36 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
               PP
             </span>
           </div>
-        </Link>
-
-        <Menu
-          theme="dark"
-          mode="inline"
-          selectedKeys={[selectedKey]}
-          openKeys={collapsed ? undefined : openKeys} // <-- Use 'undefined' when collapsed
-          onOpenChange={onOpenChange}
-          items={sidebarData}
-        />
+        </Link> */}
+        {/* 🔹 Fixed Header */}
+        <div className="h-16 sticky top-0 z-10 mb-2 flex items-center justify-center bg-[#001529] text-white font-bold text-xl border-b border-gray-700">
+          <Link to="/home" className="w-full text-center relative">
+            <span
+              className={`absolute inset-0 flex justify-center items-center transition-all duration-300 ease-in-out ${
+                collapsed ? "opacity-0 scale-0" : "opacity-100 scale-100"
+              }`}
+            >
+              Pocket Parcel
+            </span>
+            <span
+              className={`absolute inset-0 flex justify-center items-center transition-all duration-300 ease-in-out ${
+                collapsed ? "opacity-100 scale-100" : "opacity-0 scale-0"
+              }`}
+            >
+              PP
+            </span>
+          </Link>
+        </div>
+        <div className="flex justify-center">
+          <Menu
+            theme="dark"
+            mode="inline"
+            selectedKeys={[selectedKey]}
+            openKeys={collapsed ? undefined : openKeys} // <-- Use 'undefined' when collapsed
+            onOpenChange={onOpenChange}
+            items={sidebarData}
+          />
+        </div>
       </Sider>
       {/* Toggle button outside sidebar */}
 
