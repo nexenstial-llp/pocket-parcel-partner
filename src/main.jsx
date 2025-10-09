@@ -31,7 +31,7 @@ root.render(
         },
         components: {
           Menu: {
-            collapsedWidth: "72px",
+            collapsedWidth: "70px",
           },
         },
       }}
