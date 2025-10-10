@@ -58,8 +58,8 @@ const sidebarData = [
         label: <Link to="/ndr/cases">Cases</Link>,
       },
       {
-        key: "/ndr/cases/create",
-        label: <Link to="/ndr/cases/create">Create Case</Link>,
+        key: "/ndr/reports",
+        label: <Link to="/ndr/reports">Reports</Link>,
       },
     ],
   },
@@ -231,16 +231,16 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
         </Link> */}
         {/* 🔹 Fixed Header */}
         <div className="h-16 sticky top-0 z-10 mb-2 flex items-center justify-center bg-[#001529] text-white font-bold text-xl border-b border-gray-700">
-          <Link to="/home" className="w-full text-center relative">
+          <Link to="/home" className="w-full text-center relative ">
             <span
-              className={`absolute inset-0 flex justify-center items-center transition-all duration-300 ease-in-out ${
+              className={`text-white absolute inset-0 flex justify-center items-center transition-all duration-300 ease-in-out ${
                 collapsed ? "opacity-0 scale-0" : "opacity-100 scale-100"
               }`}
             >
               Pocket Parcel
             </span>
             <span
-              className={`absolute inset-0 flex justify-center items-center transition-all duration-300 ease-in-out ${
+              className={`text-white absolute inset-0 flex justify-center items-center transition-all duration-300 ease-in-out ${
                 collapsed ? "opacity-100 scale-100" : "opacity-0 scale-0"
               }`}
             >
