@@ -27,6 +27,7 @@ root.render(
       theme={{
         token: {
           // Seed Token
+          // colorPrimary: "#3883FF",
           colorPrimary: "#6366f1",
         },
         components: {

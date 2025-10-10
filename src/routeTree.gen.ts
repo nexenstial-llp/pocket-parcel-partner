@@ -37,6 +37,7 @@ import { Route as AuthenticatedSettingsCompanyDetailsIndexImport } from './route
 import { Route as AuthenticatedSettingsBankDetailsIndexImport } from './routes/_authenticated/settings/bank-details/index'
 import { Route as AuthenticatedSettingsApiSetupsIndexImport } from './routes/_authenticated/settings/api-setups/index'
 import { Route as AuthenticatedOrdersCreateIndexImport } from './routes/_authenticated/orders/create/index'
+import { Route as AuthenticatedNdrReportsIndexImport } from './routes/_authenticated/ndr/reports/index'
 import { Route as AuthenticatedNdrCasesIndexImport } from './routes/_authenticated/ndr/cases/index'
 import { Route as AuthenticatedToolsReportsDownloadReportsRouteImport } from './routes/_authenticated/tools/reports/download-reports/route'
 import { Route as AuthenticatedToolsReportsReportsSchedulerIndexImport } from './routes/_authenticated/tools/reports/reports-scheduler/index'
@@ -218,6 +219,13 @@ const AuthenticatedOrdersCreateIndexRoute =
   AuthenticatedOrdersCreateIndexImport.update({
     id: '/orders/create/',
     path: '/orders/create/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+
+const AuthenticatedNdrReportsIndexRoute =
+  AuthenticatedNdrReportsIndexImport.update({
+    id: '/ndr/reports/',
+    path: '/ndr/reports/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 
@@ -426,6 +434,13 @@ declare module '@tanstack/react-router' {
       path: '/ndr/cases'
       fullPath: '/ndr/cases'
       preLoaderRoute: typeof AuthenticatedNdrCasesIndexImport
+      parentRoute: typeof AuthenticatedImport
+    }
+    '/_authenticated/ndr/reports/': {
+      id: '/_authenticated/ndr/reports/'
+      path: '/ndr/reports'
+      fullPath: '/ndr/reports'
+      preLoaderRoute: typeof AuthenticatedNdrReportsIndexImport
       parentRoute: typeof AuthenticatedImport
     }
     '/_authenticated/orders/create/': {
@@ -755,6 +770,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedOrdersIndexRoute: typeof AuthenticatedOrdersIndexRoute
   AuthenticatedToolsIndexRoute: typeof AuthenticatedToolsIndexRoute
   AuthenticatedNdrCasesIndexRoute: typeof AuthenticatedNdrCasesIndexRoute
+  AuthenticatedNdrReportsIndexRoute: typeof AuthenticatedNdrReportsIndexRoute
   AuthenticatedOrdersCreateIndexRoute: typeof AuthenticatedOrdersCreateIndexRoute
   AuthenticatedToolsActivityLogsIndexRoute: typeof AuthenticatedToolsActivityLogsIndexRoute
   AuthenticatedWarehouseCreateIndexRoute: typeof AuthenticatedWarehouseCreateIndexRoute
@@ -775,6 +791,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedOrdersIndexRoute: AuthenticatedOrdersIndexRoute,
   AuthenticatedToolsIndexRoute: AuthenticatedToolsIndexRoute,
   AuthenticatedNdrCasesIndexRoute: AuthenticatedNdrCasesIndexRoute,
+  AuthenticatedNdrReportsIndexRoute: AuthenticatedNdrReportsIndexRoute,
   AuthenticatedOrdersCreateIndexRoute: AuthenticatedOrdersCreateIndexRoute,
   AuthenticatedToolsActivityLogsIndexRoute:
     AuthenticatedToolsActivityLogsIndexRoute,
@@ -803,6 +820,7 @@ export interface FileRoutesByFullPath {
   '/tools': typeof AuthenticatedToolsIndexRoute
   '/tools/reports/download-reports': typeof AuthenticatedToolsReportsDownloadReportsRouteRouteWithChildren
   '/ndr/cases': typeof AuthenticatedNdrCasesIndexRoute
+  '/ndr/reports': typeof AuthenticatedNdrReportsIndexRoute
   '/orders/create': typeof AuthenticatedOrdersCreateIndexRoute
   '/settings/api-setups': typeof AuthenticatedSettingsApiSetupsIndexRoute
   '/settings/bank-details': typeof AuthenticatedSettingsBankDetailsIndexRoute
@@ -843,6 +861,7 @@ export interface FileRoutesByTo {
   '/tools': typeof AuthenticatedToolsIndexRoute
   '/tools/reports/download-reports': typeof AuthenticatedToolsReportsDownloadReportsRouteRouteWithChildren
   '/ndr/cases': typeof AuthenticatedNdrCasesIndexRoute
+  '/ndr/reports': typeof AuthenticatedNdrReportsIndexRoute
   '/orders/create': typeof AuthenticatedOrdersCreateIndexRoute
   '/settings/api-setups': typeof AuthenticatedSettingsApiSetupsIndexRoute
   '/settings/bank-details': typeof AuthenticatedSettingsBankDetailsIndexRoute
@@ -884,6 +903,7 @@ export interface FileRoutesById {
   '/_authenticated/tools/': typeof AuthenticatedToolsIndexRoute
   '/_authenticated/tools/reports/download-reports': typeof AuthenticatedToolsReportsDownloadReportsRouteRouteWithChildren
   '/_authenticated/ndr/cases/': typeof AuthenticatedNdrCasesIndexRoute
+  '/_authenticated/ndr/reports/': typeof AuthenticatedNdrReportsIndexRoute
   '/_authenticated/orders/create/': typeof AuthenticatedOrdersCreateIndexRoute
   '/_authenticated/settings/api-setups/': typeof AuthenticatedSettingsApiSetupsIndexRoute
   '/_authenticated/settings/bank-details/': typeof AuthenticatedSettingsBankDetailsIndexRoute
@@ -926,6 +946,7 @@ export interface FileRouteTypes {
     | '/tools'
     | '/tools/reports/download-reports'
     | '/ndr/cases'
+    | '/ndr/reports'
     | '/orders/create'
     | '/settings/api-setups'
     | '/settings/bank-details'
@@ -965,6 +986,7 @@ export interface FileRouteTypes {
     | '/tools'
     | '/tools/reports/download-reports'
     | '/ndr/cases'
+    | '/ndr/reports'
     | '/orders/create'
     | '/settings/api-setups'
     | '/settings/bank-details'
@@ -1004,6 +1026,7 @@ export interface FileRouteTypes {
     | '/_authenticated/tools/'
     | '/_authenticated/tools/reports/download-reports'
     | '/_authenticated/ndr/cases/'
+    | '/_authenticated/ndr/reports/'
     | '/_authenticated/orders/create/'
     | '/_authenticated/settings/api-setups/'
     | '/_authenticated/settings/bank-details/'
@@ -1071,6 +1094,7 @@ export const routeTree = rootRoute
         "/_authenticated/orders/",
         "/_authenticated/tools/",
         "/_authenticated/ndr/cases/",
+        "/_authenticated/ndr/reports/",
         "/_authenticated/orders/create/",
         "/_authenticated/tools/activity-logs/",
         "/_authenticated/warehouse/create/",
@@ -1163,6 +1187,10 @@ export const routeTree = rootRoute
     },
     "/_authenticated/ndr/cases/": {
       "filePath": "_authenticated/ndr/cases/index.jsx",
+      "parent": "/_authenticated"
+    },
+    "/_authenticated/ndr/reports/": {
+      "filePath": "_authenticated/ndr/reports/index.jsx",
       "parent": "/_authenticated"
     },
     "/_authenticated/orders/create/": {
