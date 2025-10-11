@@ -1,5 +1,4 @@
 /* eslint-disable react/prop-types */
-// src/components/Sidebar.jsx
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "@tanstack/react-router";
 import { Menu, Layout } from "antd";
@@ -11,15 +10,7 @@ import {
   AiTwotoneContainer,
 } from "react-icons/ai";
 import { HiHome } from "react-icons/hi";
-import { BsTools } from "react-icons/bs";
-import { PiKeyReturnFill } from "react-icons/pi";
-import {
-  TbBuildingWarehouse,
-  TbTruckDelivery,
-  TbTruckReturn,
-} from "react-icons/tb";
-import { GoLaw } from "react-icons/go";
-// import { FaAnglesRight } from "react-icons/fa6";
+import { TbBuildingWarehouse, TbTruckReturn } from "react-icons/tb";
 
 const { Sider } = Layout;
 const sidebarData = [
@@ -78,68 +69,68 @@ const sidebarData = [
       },
     ],
   },
-  {
-    key: "returns",
-    icon: <PiKeyReturnFill />,
-    label: <Link to="/returns">Returns</Link>,
-  },
-  {
-    key: "quick-instant-delivery",
-    icon: <TbTruckDelivery />,
-    label: "Quick Instant delivery",
-    children: [
-      {
-        key: "/quick-instant-delivery/add-order",
-        label: <Link to="/quick-instant-delivery/add-order">Add Order</Link>,
-      },
-      {
-        key: "/quick-instant-delivery/all-order",
-        label: <Link to="/quick-instant-delivery/all-order">All Order</Link>,
-      },
-    ],
-  },
-  {
-    key: "weight-management",
-    icon: <GoLaw />,
-    label: <Link to={"/weight-management"}>Weight Management</Link>,
-  },
-  {
-    key: "tools",
-    icon: <BsTools />,
-    label: "Tools",
-    children: [
-      {
-        key: "/tools/rate-calculator/domestic",
-        label: (
-          <Link to="/tools/rate-calculator/domestic">Rate Calculator</Link>
-        ),
-      },
-      {
-        key: "/tools/rate-card/forward",
-        label: <Link to="/tools/rate-card/forward">Rate card</Link>,
-      },
-      {
-        key: "/tools/rate-calculator/international",
-        label: (
-          <Link to="/tools/rate-calculator/international">
-            International Rate Calculator
-          </Link>
-        ),
-      },
-      {
-        key: "/tools/reports/download-reports/instant-reports",
-        label: (
-          <Link to="/tools/reports/download-reports/instant-reports">
-            Reports
-          </Link>
-        ),
-      },
-      {
-        key: "/tools/activity-logs",
-        label: <Link to="/tools/activity-logs">Activity Logs</Link>,
-      },
-    ],
-  },
+  // {
+  //   key: "returns",
+  //   icon: <PiKeyReturnFill />,
+  //   label: <Link to="/returns">Returns</Link>,
+  // },
+  // {
+  //   key: "quick-instant-delivery",
+  //   icon: <TbTruckDelivery />,
+  //   label: "Quick Instant delivery",
+  //   children: [
+  //     {
+  //       key: "/quick-instant-delivery/add-order",
+  //       label: <Link to="/quick-instant-delivery/add-order">Add Order</Link>,
+  //     },
+  //     {
+  //       key: "/quick-instant-delivery/all-order",
+  //       label: <Link to="/quick-instant-delivery/all-order">All Order</Link>,
+  //     },
+  //   ],
+  // },
+  // {
+  //   key: "weight-management",
+  //   icon: <GoLaw />,
+  //   label: <Link to={"/weight-management"}>Weight Management</Link>,
+  // },
+  // {
+  //   key: "tools",
+  //   icon: <BsTools />,
+  //   label: "Tools",
+  //   children: [
+  //     {
+  //       key: "/tools/rate-calculator/domestic",
+  //       label: (
+  //         <Link to="/tools/rate-calculator/domestic">Rate Calculator</Link>
+  //       ),
+  //     },
+  //     {
+  //       key: "/tools/rate-card/forward",
+  //       label: <Link to="/tools/rate-card/forward">Rate card</Link>,
+  //     },
+  //     {
+  //       key: "/tools/rate-calculator/international",
+  //       label: (
+  //         <Link to="/tools/rate-calculator/international">
+  //           International Rate Calculator
+  //         </Link>
+  //       ),
+  //     },
+  //     {
+  //       key: "/tools/reports/download-reports/instant-reports",
+  //       label: (
+  //         <Link to="/tools/reports/download-reports/instant-reports">
+  //           Reports
+  //         </Link>
+  //       ),
+  //     },
+  //     {
+  //       key: "/tools/activity-logs",
+  //       label: <Link to="/tools/activity-logs">Activity Logs</Link>,
+  //     },
+  //   ],
+  // },
   {
     key: "settings",
     icon: <AiOutlineTeam />,
