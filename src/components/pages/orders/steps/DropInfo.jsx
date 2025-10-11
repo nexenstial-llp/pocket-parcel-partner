@@ -1,11 +1,10 @@
-import { Form, Input, Select } from "antd";
-import { PhoneOutlined, MailOutlined } from "@ant-design/icons";
+import { Form, Select } from "antd";
 import ResponsiveCard from "@/components/ui/cards/ResponsiveCard";
+import DynamicFormField from "@/components/ui/formFields/DynamicFormField";
 
-const { Option } = Select;
 const DropInfo = () => {
   return (
-    <ResponsiveCard size="small" title="Drop Information" className="shadow-sm">
+    <ResponsiveCard size="small" title="Drop Information">
       <Form.Item
         wrapperCol={{ span: 6 }}
         name={["drop_info", "Warehouses"]}
@@ -15,95 +14,103 @@ const DropInfo = () => {
       </Form.Item>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4">
-        <Form.Item
-          name={["drop_info", "drop_name"]}
-          label="Name"
-          rules={[{ required: true, message: "Please enter drop name" }]}
-        >
-          <Input placeholder="Enter drop name" />
-        </Form.Item>
-        <Form.Item
-          name={["drop_info", "drop_phone"]}
-          label="Phone"
-          rules={[
-            { required: true, message: "Please enter phone number" },
-            {
-              pattern: /^[0-9]{10}$/,
-              message: "Please enter valid phone number",
-            },
-          ]}
-        >
-          <Input prefix={<PhoneOutlined />} placeholder="Enter phone number" />
-        </Form.Item>
-        <Form.Item
-          name={["drop_info", "email"]}
-          label="Email"
-          rules={[
-            { required: true, message: "Please enter email" },
-            { type: "email", message: "Please enter valid email" },
-          ]}
-        >
-          <Input prefix={<MailOutlined />} placeholder="Enter email" />
-        </Form.Item>
-        <Form.Item
+        <DynamicFormField
           name={["drop_info", "drop_address"]}
           label="Address"
-          rules={[{ required: true, message: "Please enter address" }]}
-        >
-          <Input placeholder="Enter complete address" />
-        </Form.Item>
-
-        <Form.Item
-          name={["drop_info", "drop_pincode"]}
-          label="Pincode"
-          rules={[{ required: true, message: "Please enter pincode" }]}
-        >
-          <Input placeholder="Enter pincode" />
-        </Form.Item>
-        <Form.Item
-          name={["drop_info", "drop_city"]}
-          label="City"
-          rules={[{ required: true, message: "Please enter city" }]}
-        >
-          <Input placeholder="Enter city" />
-        </Form.Item>
-        <Form.Item
-          name={["drop_info", "drop_state"]}
-          label="State"
-          rules={[{ required: true, message: "Please enter state" }]}
-        >
-          <Input placeholder="Enter state" />
-        </Form.Item>
-        <Form.Item
+          required
+        />
+        <DynamicFormField
+          name={["drop_info", "drop_phone"]}
+          label="Phone"
+          required
+        />
+        <DynamicFormField
           name={["drop_info", "drop_country"]}
           label="Country"
-          rules={[{ required: true, message: "Please select country" }]}
-        >
-          <Select placeholder="Select country">
-            <Option value="India">India</Option>
-            <Option value="USA">USA</Option>
-            <Option value="UK">UK</Option>
-          </Select>
-        </Form.Item>
-        <Form.Item
-          name={["drop_info", "address_type"]}
+          required
+        />
+        <DynamicFormField
+          name={["drop_info", "drop_state"]}
+          label="State"
+          required
+        />
+        <DynamicFormField
+          name={["drop_info", "drop_pincode"]}
+          label="Pincode"
+          required
+        />
+        <DynamicFormField
+          name={["drop_info", "drop_city"]}
+          label="City"
+          required
+        />
+        <DynamicFormField
+          name={["drop_info", "drop_name"]}
+          label="Name"
+          required
+        />
+        <DynamicFormField
+          name={["drop_info", "drop_email"]}
+          label="Email"
+          required
+          type="email"
+        />
+        <DynamicFormField
+          name={["drop_info", "drop_lat"]}
+          label="Latitude"
+          required
+          componentType="number"
+        />
+        <DynamicFormField
+          name={["drop_info", "drop_long"]}
+          label="Longitude"
+          required
+          componentType="number"
+        />
+        <DynamicFormField
+          name={["drop_info", "drop_organisation"]}
+          label="Organisation"
+        />
+        <DynamicFormField
+          name={["drop_info", "drop_district"]}
+          label="District"
+        />
+        <DynamicFormField
+          name={["drop_info", "drop_landmark"]}
+          label="Landmark"
+        />
+        <DynamicFormField
+          name={["drop_info", "drop_start_time"]}
+          label="Start Time"
+          componentType="date"
+        />
+        <DynamicFormField
+          name={["drop_info", "drop_end_time"]}
+          label="End Time"
+          componentType="date"
+        />
+        <DynamicFormField
+          name={["drop_info", "drop_address_type"]}
           label="Address Type"
-          rules={[{ required: true, message: "Please Address Type" }]}
-        >
-          <Select placeholder="Select country">
-            <Option value="RESIDENTIAL">RESIDENTIAL</Option>
-            <Option value="OFFICE">OFFICE</Option>
-          </Select>
-        </Form.Item>
-        <Form.Item name={["drop_info", "drop_vendor_code"]} label="Vendor Code">
-          <Input placeholder="Enter Vendor code" />
-        </Form.Item>
-        <Form.Item name={["drop_info", "drop_lat"]} label="Latitude">
-          <Input placeholder="Enter TIN number" />
-        </Form.Item>
-        <Form.Item name={["drop_info", "drop_long"]} label="Longitude">
-          <Input placeholder="Enter TIN number" />
-        </Form.Item>
+          options={[
+            { value: "RESIDENTIAL", label: "Residential" },
+            { value: "OFFICE", label: "Office" },
+            { value: "WAREHOUSE", label: "Warehouse" },
+          ]}
+          componentType="select"
+        />
+        <DynamicFormField
+          name={["drop_info", "drop_vendor_code"]}
+          label="Vendor Code"
+        />
+        <DynamicFormField
+          name={["drop_info", "location_type"]}
+          label="Vendor Code"
+        />
+        <DynamicFormField
+          name={["drop_info", "location_value"]}
+          label="Location Value"
+        />
       </div>
     </ResponsiveCard>
   );

@@ -3,7 +3,8 @@ import { useState, useEffect } from "react";
 import { flushSync } from "react-dom";
 import { router } from "@/router";
 import { AuthContext } from "./AuthContext";
-import { Spin } from "antd";
+// import { Spin } from "antd";
+import Loader from "@/components/layout/Loader";
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
@@ -41,7 +42,7 @@ export function AuthProvider({ children }) {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <Spin fullscreen />
+        <Loader />
       </div>
     );
   }

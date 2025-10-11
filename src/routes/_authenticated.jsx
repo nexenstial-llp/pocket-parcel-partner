@@ -6,7 +6,8 @@ import Sidebar from "@/components/layout/Sidebar";
 import Navbar from "@/components/layout/Navbar";
 import NotFound from "@/components/layout/NotFoundPage";
 import ErrorPage from "@/components/layout/ErrorPage";
-import { Spin } from "antd";
+// import { Spin } from "antd";
+import Loader from "@/components/layout/Loader";
 
 export const Route = createFileRoute("/_authenticated")({
   // The beforeLoad hook runs before navigation completes and before the component renders.
@@ -28,7 +29,7 @@ export const Route = createFileRoute("/_authenticated")({
   },
   pendingComponent: () => (
     <div className="flex items-center justify-center min-h-screen">
-      <Spin fullscreen />
+      <Loader />
     </div>
   ),
 });

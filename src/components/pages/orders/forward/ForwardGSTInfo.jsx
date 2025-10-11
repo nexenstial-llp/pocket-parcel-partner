@@ -1,9 +1,9 @@
-import DynamicFormField from "@/components/ui/formFields/DynamicFormField";
 import ResponsiveCard from "@/components/ui/cards/ResponsiveCard";
+import DynamicFormField from "@/components/ui/formFields/DynamicFormField";
 
-const GstInfo = () => {
+const ForwardGSTInfo = () => {
   return (
-    <ResponsiveCard size="small" title={"GST"}>
+    <ResponsiveCard size="small" title="GST Info">
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4">
         <DynamicFormField
           name={["gst_info", "seller_gstin"]}
@@ -164,4 +164,4 @@ const GstInfo = () => {
   );
 };
 
-export default GstInfo;
+export default ForwardGSTInfo;
