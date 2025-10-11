@@ -19,7 +19,7 @@ import {
   TbTruckReturn,
 } from "react-icons/tb";
 import { GoLaw } from "react-icons/go";
-import { FaAnglesRight } from "react-icons/fa6";
+// import { FaAnglesRight } from "react-icons/fa6";
 
 const { Sider } = Layout;
 const sidebarData = [
@@ -200,35 +200,23 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
     <div className="z-[100]">
       <Sider
         style={{
-          overflowY: "auto",
+          // overflowY: "auto",
           // overflowX: "hidden",
           // position: "fixed",
-          maxHeight: "100vh",
-          minHeight: "100vh",
-          top: 0,
-          bottom: 0,
-          scrollbarWidth: "thin",
+          // maxHeight: "100vh",
+          // minHeight: "100vh",
+          // top: 0,
+          // bottom: 0,
+          // scrollbarWidth: "thin",
           background: "#001529",
         }}
         collapsed={collapsed}
         onCollapse={setCollapsed}
         width={240}
-        className="custom-scrollbar transition-all ease-in-out duration-300 delay-100 "
+        className="custom-scrollbar transition-all ease-in-out duration-300 "
+        onMouseEnter={() => setCollapsed(false)}
+        onMouseLeave={() => setCollapsed(true)}
       >
-        {/* <Link to="/home">
-          <div className="h-16 font-bold text-white py-2 text-xl text-center flex justify-center items-center relative">
-            <span
-              className={`transition-transform duration-300 ease-in-out delay-100 absolute ${collapsed ? "opacity-0 scale-0" : "opacity-100 scale-100"}`}
-            >
-              Pocket Parcel
-            </span>
-            <span
-              className={`transition-transform duration-300 ease-in-out delay-100 absolute ${collapsed ? "opacity-100 scale-100" : "opacity-0 scale-0"}`}
-            >
-              PP
-            </span>
-          </div>
-        </Link> */}
         {/* 🔹 Fixed Header */}
         <div className="h-16 sticky top-0 z-10 mb-2 flex items-center justify-center bg-[#001529] text-white font-bold text-xl border-b border-gray-700">
           <Link to="/home" className="w-full text-center relative ">
@@ -248,7 +236,19 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
             </span>
           </Link>
         </div>
-        <div className="flex justify-center">
+        <div
+          style={{
+            overflowY: "auto",
+            // overflowX: "hidden",
+            // position: "fixed",
+            maxHeight: "calc(100vh - 73px)",
+            minHeight: "calc(100vh - 73px)",
+            top: 0,
+            bottom: 0,
+            // scrollbarWidth: "thin",
+          }}
+          className="flex justify-center custom-scrollbar"
+        >
           <Menu
             theme="dark"
             mode="inline"
@@ -261,7 +261,7 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
       </Sider>
       {/* Toggle button outside sidebar */}
 
-      <FaAnglesRight
+      {/* <FaAnglesRight
         style={{
           position: "fixed",
           top: 22,
@@ -273,7 +273,7 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
           collapsed ? "-right-10" : "rotate-180 -right-10"
         }`}
         onClick={() => setCollapsed(!collapsed)}
-      />
+      /> */}
     </div>
   );
 };
