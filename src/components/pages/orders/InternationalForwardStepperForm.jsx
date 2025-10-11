@@ -17,6 +17,7 @@ import {
   ArrowRightOutlined,
   CheckOutlined,
 } from "@ant-design/icons";
+import ResponsiveCard from "@/components/ui/cards/ResponsiveCard";
 
 const { Step } = Steps;
 
@@ -152,7 +153,7 @@ const InternationalForwardStepperForm = () => {
     {
       title: "Additional & Return Info",
       content: (
-        <div className="">
+        <ResponsiveCard title="Additional & Return Info" size="small">
           <div className="grid col-span-6 grid-cols-1 sm:grid-cols-12 gap-x-4">
             <Form.Item
               name={["additional", "label"]}
@@ -257,69 +258,74 @@ const InternationalForwardStepperForm = () => {
               <Input />
             </Form.Item>
           </div>
-        </div>
+        </ResponsiveCard>
       ),
     },
     {
       title: "Tax Info",
       content: (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4">
-          <Form.Item
-            name={["tax_info", "tax_paid"]}
-            label="Tax Paid"
-            valuePropName="checked"
-          >
-            <Switch />
-          </Form.Item>
-          <Form.Item name={["tax_info", "tax_amount"]} label="Tax Amount">
-            <InputNumber style={{ width: "100%" }} />
-          </Form.Item>
-          <Form.Item name={["tax_info", "exporter_type"]} label="Exporter Type">
-            <Input />
-          </Form.Item>
-          <Form.Item
-            name={["tax_info", "shipper_tax_id"]}
-            label="Shipper Tax ID"
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            name={["tax_info", "consignee_tax_id"]}
-            label="Consignee Tax ID"
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            name={["tax_info", "consignee_tax_type"]}
-            label="Consignee Tax Type"
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            name={["tax_info", "consignee_tax_country_code"]}
-            label="Consignee Tax Country Code"
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            name={["tax_info", "exporter_tax_id"]}
-            label="Exporter Tax ID"
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            name={["tax_info", "exporter_tax_type"]}
-            label="Exporter Tax Type"
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            name={["tax_info", "exporter_tax_country_code"]}
-            label="Exporter Tax Country Code"
-          >
-            <Input />
-          </Form.Item>
-        </div>
+        <ResponsiveCard title="Tax Info" size="small">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4">
+            <Form.Item
+              name={["tax_info", "tax_paid"]}
+              label="Tax Paid"
+              valuePropName="checked"
+            >
+              <Switch />
+            </Form.Item>
+            <Form.Item name={["tax_info", "tax_amount"]} label="Tax Amount">
+              <InputNumber style={{ width: "100%" }} />
+            </Form.Item>
+            <Form.Item
+              name={["tax_info", "exporter_type"]}
+              label="Exporter Type"
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              name={["tax_info", "shipper_tax_id"]}
+              label="Shipper Tax ID"
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              name={["tax_info", "consignee_tax_id"]}
+              label="Consignee Tax ID"
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              name={["tax_info", "consignee_tax_type"]}
+              label="Consignee Tax Type"
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              name={["tax_info", "consignee_tax_country_code"]}
+              label="Consignee Tax Country Code"
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              name={["tax_info", "exporter_tax_id"]}
+              label="Exporter Tax ID"
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              name={["tax_info", "exporter_tax_type"]}
+              label="Exporter Tax Type"
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              name={["tax_info", "exporter_tax_country_code"]}
+              label="Exporter Tax Country Code"
+            >
+              <Input />
+            </Form.Item>
+          </div>
+        </ResponsiveCard>
       ),
     },
   ];

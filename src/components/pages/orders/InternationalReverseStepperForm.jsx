@@ -17,6 +17,7 @@ import {
   ArrowRightOutlined,
   CheckOutlined,
 } from "@ant-design/icons";
+import ResponsiveCard from "@/components/ui/cards/ResponsiveCard";
 
 const { Step } = Steps;
 
@@ -157,266 +158,281 @@ const InternationalReverseStepperForm = () => {
     {
       title: "Tax Info",
       content: (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4">
-          <Form.Item
-            name={["tax_info", "tax_paid"]}
-            label="Tax Paid"
-            valuePropName="checked"
-          >
-            <Switch />
-          </Form.Item>
-          <Form.Item name={["tax_info", "tax_amount"]} label="Tax Amount">
-            <InputNumber style={{ width: "100%" }} />
-          </Form.Item>
-          <Form.Item name={["tax_info", "exporter_type"]} label="Exporter Type">
-            <Input />
-          </Form.Item>
-          <Form.Item
-            name={["tax_info", "shipper_tax_id"]}
-            label="Shipper Tax ID"
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            name={["tax_info", "consignee_tax_id"]}
-            label="Consignee Tax ID"
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            name={["tax_info", "consignee_tax_type"]}
-            label="Consignee Tax Type"
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            name={["tax_info", "consignee_tax_country_code"]}
-            label="Consignee Tax Country Code"
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            name={["tax_info", "exporter_tax_id"]}
-            label="Exporter Tax ID"
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            name={["tax_info", "exporter_tax_type"]}
-            label="Exporter Tax Type"
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            name={["tax_info", "exporter_tax_country_code"]}
-            label="Exporter Tax Country Code"
-          >
-            <Input />
-          </Form.Item>
-        </div>
+        <ResponsiveCard title="Tax Info" size="small">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4">
+            <Form.Item
+              name={["tax_info", "tax_paid"]}
+              label="Tax Paid"
+              valuePropName="checked"
+            >
+              <Switch />
+            </Form.Item>
+            <Form.Item name={["tax_info", "tax_amount"]} label="Tax Amount">
+              <InputNumber style={{ width: "100%" }} />
+            </Form.Item>
+            <Form.Item
+              name={["tax_info", "exporter_type"]}
+              label="Exporter Type"
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              name={["tax_info", "shipper_tax_id"]}
+              label="Shipper Tax ID"
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              name={["tax_info", "consignee_tax_id"]}
+              label="Consignee Tax ID"
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              name={["tax_info", "consignee_tax_type"]}
+              label="Consignee Tax Type"
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              name={["tax_info", "consignee_tax_country_code"]}
+              label="Consignee Tax Country Code"
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              name={["tax_info", "exporter_tax_id"]}
+              label="Exporter Tax ID"
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              name={["tax_info", "exporter_tax_type"]}
+              label="Exporter Tax Type"
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              name={["tax_info", "exporter_tax_country_code"]}
+              label="Exporter Tax Country Code"
+            >
+              <Input />
+            </Form.Item>
+          </div>
+        </ResponsiveCard>
       ),
     },
     {
       title: "Shipment Items",
       content: (
-        <Form.List name={["shipment_details", "items"]}>
-          {(fields, { add, remove }) => (
-            <>
-              {fields.map(({ key, name, ...restField }) => (
-                <Card
-                  key={key}
-                  title={`Item ${name + 1}`}
-                  style={{ marginBottom: 16 }}
+        <ResponsiveCard title="Shipment Items" size="small">
+          <Form.List name={["shipment_details", "items"]}>
+            {(fields, { add, remove }) => (
+              <>
+                {fields.map(({ key, name, ...restField }) => (
+                  <Card
+                    key={key}
+                    title={`Item ${name + 1}`}
+                    style={{ marginBottom: 16 }}
+                  >
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4">
+                      <Form.Item
+                        {...restField}
+                        name={[name, "sku"]}
+                        label="SKU"
+                      >
+                        <Input />
+                      </Form.Item>
+                      <Form.Item
+                        {...restField}
+                        name={[name, "price"]}
+                        label="Price"
+                      >
+                        <InputNumber style={{ width: "100%" }} />
+                      </Form.Item>
+                      <Form.Item
+                        {...restField}
+                        name={[name, "weight"]}
+                        label="Weight"
+                      >
+                        <InputNumber style={{ width: "100%" }} />
+                      </Form.Item>
+                      <Form.Item
+                        {...restField}
+                        name={[name, "hs_code"]}
+                        label="HS Code"
+                      >
+                        <Input />
+                      </Form.Item>
+                      <Form.Item
+                        {...restField}
+                        name={[name, "length"]}
+                        label="Length"
+                      >
+                        <InputNumber style={{ width: "100%" }} />
+                      </Form.Item>
+                      <Form.Item
+                        {...restField}
+                        name={[name, "breadth"]}
+                        label="Breadth"
+                      >
+                        <InputNumber style={{ width: "100%" }} />
+                      </Form.Item>
+                      <Form.Item
+                        {...restField}
+                        name={[name, "height"]}
+                        label="Height"
+                      >
+                        <InputNumber style={{ width: "100%" }} />
+                      </Form.Item>
+                      <Form.Item
+                        {...restField}
+                        name={[name, "quantity"]}
+                        label="Quantity"
+                      >
+                        <InputNumber style={{ width: "100%" }} />
+                      </Form.Item>
+                      <Form.Item
+                        {...restField}
+                        name={[name, "description"]}
+                        label="Description"
+                      >
+                        <Input />
+                      </Form.Item>
+                      <Form.Item
+                        {...restField}
+                        name={[name, "manufacture_country"]}
+                        label="Manufacture Country"
+                      >
+                        <Input />
+                      </Form.Item>
+                      <Form.Item
+                        {...restField}
+                        name={[name, "manufacture_country_code"]}
+                        label="Manufacture Country Code"
+                      >
+                        <Input />
+                      </Form.Item>
+                      <Form.Item
+                        {...restField}
+                        name={[name, "cat"]}
+                        label="Category"
+                      >
+                        <Input />
+                      </Form.Item>
+                      <Form.Item
+                        {...restField}
+                        name={[name, "images"]}
+                        label="Images"
+                      >
+                        <Input />
+                      </Form.Item>
+                      <Form.Item
+                        {...restField}
+                        name={[name, "product_url"]}
+                        label="Product URL"
+                      >
+                        <Input />
+                      </Form.Item>
+                      <Form.Item
+                        {...restField}
+                        name={[name, "return_days"]}
+                        label="Return Days"
+                      >
+                        <InputNumber style={{ width: "100%" }} />
+                      </Form.Item>
+                      <Form.Item
+                        {...restField}
+                        name={[name, "exchange_days"]}
+                        label="Exchange Days"
+                      >
+                        <InputNumber style={{ width: "100%" }} />
+                      </Form.Item>
+                      <Form.Item
+                        {...restField}
+                        name={[name, "color"]}
+                        label="Color"
+                      >
+                        <Input />
+                      </Form.Item>
+                      <Form.Item
+                        {...restField}
+                        name={[name, "brand"]}
+                        label="Brand"
+                      >
+                        <Input />
+                      </Form.Item>
+                      <Form.Item
+                        {...restField}
+                        name={[name, "size"]}
+                        label="Size"
+                      >
+                        <Input />
+                      </Form.Item>
+                      <Form.Item
+                        {...restField}
+                        name={[name, "sub_category"]}
+                        label="Sub Category"
+                      >
+                        <Input />
+                      </Form.Item>
+                      <Form.Item
+                        {...restField}
+                        name={[name, "return_reason"]}
+                        label="Return Reason"
+                      >
+                        <Input />
+                      </Form.Item>
+                      <Form.Item
+                        {...restField}
+                        name={[name, "special_instructions"]}
+                        label="Special Instructions"
+                      >
+                        <Input />
+                      </Form.Item>
+                      <Form.Item
+                        {...restField}
+                        name={[name, "imei"]}
+                        label="IMEI"
+                      >
+                        <Input />
+                      </Form.Item>
+                      <Form.Item
+                        {...restField}
+                        name={[name, "ean"]}
+                        label="EAN"
+                      >
+                        <Input />
+                      </Form.Item>
+                    </div>
+                    {fields.length > 1 && (
+                      <Button
+                        danger
+                        className="mt-2"
+                        onClick={() => remove(name)}
+                      >
+                        Remove
+                      </Button>
+                    )}
+                  </Card>
+                ))}
+                <Button
+                  type="dashed"
+                  style={{ width: "100%" }}
+                  onClick={() => add(defaultItem)}
                 >
-                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4">
-                    <Form.Item {...restField} name={[name, "sku"]} label="SKU">
-                      <Input />
-                    </Form.Item>
-                    <Form.Item
-                      {...restField}
-                      name={[name, "price"]}
-                      label="Price"
-                    >
-                      <InputNumber style={{ width: "100%" }} />
-                    </Form.Item>
-                    <Form.Item
-                      {...restField}
-                      name={[name, "weight"]}
-                      label="Weight"
-                    >
-                      <InputNumber style={{ width: "100%" }} />
-                    </Form.Item>
-                    <Form.Item
-                      {...restField}
-                      name={[name, "hs_code"]}
-                      label="HS Code"
-                    >
-                      <Input />
-                    </Form.Item>
-                    <Form.Item
-                      {...restField}
-                      name={[name, "length"]}
-                      label="Length"
-                    >
-                      <InputNumber style={{ width: "100%" }} />
-                    </Form.Item>
-                    <Form.Item
-                      {...restField}
-                      name={[name, "breadth"]}
-                      label="Breadth"
-                    >
-                      <InputNumber style={{ width: "100%" }} />
-                    </Form.Item>
-                    <Form.Item
-                      {...restField}
-                      name={[name, "height"]}
-                      label="Height"
-                    >
-                      <InputNumber style={{ width: "100%" }} />
-                    </Form.Item>
-                    <Form.Item
-                      {...restField}
-                      name={[name, "quantity"]}
-                      label="Quantity"
-                    >
-                      <InputNumber style={{ width: "100%" }} />
-                    </Form.Item>
-                    <Form.Item
-                      {...restField}
-                      name={[name, "description"]}
-                      label="Description"
-                    >
-                      <Input />
-                    </Form.Item>
-                    <Form.Item
-                      {...restField}
-                      name={[name, "manufacture_country"]}
-                      label="Manufacture Country"
-                    >
-                      <Input />
-                    </Form.Item>
-                    <Form.Item
-                      {...restField}
-                      name={[name, "manufacture_country_code"]}
-                      label="Manufacture Country Code"
-                    >
-                      <Input />
-                    </Form.Item>
-                    <Form.Item
-                      {...restField}
-                      name={[name, "cat"]}
-                      label="Category"
-                    >
-                      <Input />
-                    </Form.Item>
-                    <Form.Item
-                      {...restField}
-                      name={[name, "images"]}
-                      label="Images"
-                    >
-                      <Input />
-                    </Form.Item>
-                    <Form.Item
-                      {...restField}
-                      name={[name, "product_url"]}
-                      label="Product URL"
-                    >
-                      <Input />
-                    </Form.Item>
-                    <Form.Item
-                      {...restField}
-                      name={[name, "return_days"]}
-                      label="Return Days"
-                    >
-                      <InputNumber style={{ width: "100%" }} />
-                    </Form.Item>
-                    <Form.Item
-                      {...restField}
-                      name={[name, "exchange_days"]}
-                      label="Exchange Days"
-                    >
-                      <InputNumber style={{ width: "100%" }} />
-                    </Form.Item>
-                    <Form.Item
-                      {...restField}
-                      name={[name, "color"]}
-                      label="Color"
-                    >
-                      <Input />
-                    </Form.Item>
-                    <Form.Item
-                      {...restField}
-                      name={[name, "brand"]}
-                      label="Brand"
-                    >
-                      <Input />
-                    </Form.Item>
-                    <Form.Item
-                      {...restField}
-                      name={[name, "size"]}
-                      label="Size"
-                    >
-                      <Input />
-                    </Form.Item>
-                    <Form.Item
-                      {...restField}
-                      name={[name, "sub_category"]}
-                      label="Sub Category"
-                    >
-                      <Input />
-                    </Form.Item>
-                    <Form.Item
-                      {...restField}
-                      name={[name, "return_reason"]}
-                      label="Return Reason"
-                    >
-                      <Input />
-                    </Form.Item>
-                    <Form.Item
-                      {...restField}
-                      name={[name, "special_instructions"]}
-                      label="Special Instructions"
-                    >
-                      <Input />
-                    </Form.Item>
-                    <Form.Item
-                      {...restField}
-                      name={[name, "imei"]}
-                      label="IMEI"
-                    >
-                      <Input />
-                    </Form.Item>
-                    <Form.Item {...restField} name={[name, "ean"]} label="EAN">
-                      <Input />
-                    </Form.Item>
-                  </div>
-                  {fields.length > 1 && (
-                    <Button
-                      danger
-                      className="mt-2"
-                      onClick={() => remove(name)}
-                    >
-                      Remove
-                    </Button>
-                  )}
-                </Card>
-              ))}
-              <Button
-                type="dashed"
-                style={{ width: "100%" }}
-                onClick={() => add(defaultItem)}
-              >
-                Add Item
-              </Button>
-            </>
-          )}
-        </Form.List>
+                  Add Item
+                </Button>
+              </>
+            )}
+          </Form.List>
+        </ResponsiveCard>
       ),
     },
     {
       title: "Additional & Return Info",
       content: (
-        <div>
+        <ResponsiveCard title="Additional & Return Info" size="small">
           <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-x-4">
             <Form.Item
               name={["additional", "label"]}
@@ -525,7 +541,7 @@ const InternationalReverseStepperForm = () => {
               <Input />
             </Form.Item>
           </div>
-        </div>
+        </ResponsiveCard>
       ),
     },
   ];
