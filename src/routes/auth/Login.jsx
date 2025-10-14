@@ -44,7 +44,7 @@ function LoginComponent() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-100 via-gray-200 to-gray-300">
+    <div className="min-h-screen flex items-center justify-center  bg-gradient-to-r from-[#a6a5ad80]   to-blue-300">
       <form
         onSubmit={handleSubmit}
         className="w-full max-w-md bg-white rounded-xl shadow-lg p-8 border border-gray-200"
