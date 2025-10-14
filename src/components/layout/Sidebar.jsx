@@ -4,11 +4,7 @@ import { Link, useLocation } from "@tanstack/react-router";
 import { Menu, Layout } from "antd";
 
 //icons
-import {
-  AiOutlinePieChart,
-  AiOutlineTeam,
-  AiTwotoneContainer,
-} from "react-icons/ai";
+import { AiOutlinePieChart, AiTwotoneContainer } from "react-icons/ai";
 import { HiHome } from "react-icons/hi";
 import { TbBuildingWarehouse, TbTruckReturn } from "react-icons/tb";
 
@@ -135,11 +131,11 @@ const sidebarData = [
   //     },
   //   ],
   // },
-  {
-    key: "settings",
-    icon: <AiOutlineTeam />,
-    label: <Link to="/settings">Settings</Link>,
-  },
+  // {
+  //   key: "settings",
+  //   icon: <AiOutlineTeam />,
+  //   label: <Link to="/settings">Settings</Link>,
+  // },
 ];
 
 const Sidebar = ({ collapsed, setCollapsed }) => {
