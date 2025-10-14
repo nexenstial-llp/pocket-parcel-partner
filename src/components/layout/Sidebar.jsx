@@ -37,6 +37,10 @@ const sidebarData = [
         key: "/orders/create",
         label: <Link to="/orders/create">Create Order</Link>,
       },
+      {
+        key: "/orders/returns",
+        label: <Link to="/orders/returns">Returns</Link>,
+      },
     ],
   },
   {
