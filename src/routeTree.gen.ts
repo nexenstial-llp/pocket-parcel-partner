@@ -19,11 +19,13 @@ import { Route as AuthLoginImport } from './routes/auth/Login'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings/route'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard/route'
 import { Route as AuthenticatedToolsIndexImport } from './routes/_authenticated/tools/index'
+import { Route as AuthenticatedOverviewIndexImport } from './routes/_authenticated/overview/index'
 import { Route as AuthenticatedOrdersIndexImport } from './routes/_authenticated/orders/index'
 import { Route as AuthenticatedHomeIndexImport } from './routes/_authenticated/home/index'
 import { Route as AuthenticatedToolsReportsRouteImport } from './routes/_authenticated/tools/reports/route'
 import { Route as AuthenticatedToolsRateCardRouteImport } from './routes/_authenticated/tools/rate-card/route'
 import { Route as AuthenticatedToolsRateCalculatorRouteImport } from './routes/_authenticated/tools/rate-calculator/route'
+import { Route as AuthenticatedOrdersReturnsRouteImport } from './routes/_authenticated/orders/returns/route'
 import { Route as AuthenticatedDashboardInternationalRouteImport } from './routes/_authenticated/dashboard/international/route'
 import { Route as AuthenticatedDashboardDomesticRouteImport } from './routes/_authenticated/dashboard/domestic/route'
 import { Route as AuthenticatedWarehouseListIndexImport } from './routes/_authenticated/warehouse/list/index'
@@ -98,6 +100,14 @@ const AuthenticatedToolsIndexRoute = AuthenticatedToolsIndexImport.update({
   getParentRoute: () => AuthenticatedRoute,
 } as any)
 
+const AuthenticatedOverviewIndexRoute = AuthenticatedOverviewIndexImport.update(
+  {
+    id: '/overview/',
+    path: '/overview/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any,
+)
+
 const AuthenticatedOrdersIndexRoute = AuthenticatedOrdersIndexImport.update({
   id: '/orders/',
   path: '/orders/',
@@ -128,6 +138,13 @@ const AuthenticatedToolsRateCalculatorRouteRoute =
   AuthenticatedToolsRateCalculatorRouteImport.update({
     id: '/tools/rate-calculator',
     path: '/tools/rate-calculator',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+
+const AuthenticatedOrdersReturnsRouteRoute =
+  AuthenticatedOrdersReturnsRouteImport.update({
+    id: '/orders/returns',
+    path: '/orders/returns',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 
@@ -380,6 +397,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardInternationalRouteImport
       parentRoute: typeof AuthenticatedDashboardRouteImport
     }
+    '/_authenticated/orders/returns': {
+      id: '/_authenticated/orders/returns'
+      path: '/orders/returns'
+      fullPath: '/orders/returns'
+      preLoaderRoute: typeof AuthenticatedOrdersReturnsRouteImport
+      parentRoute: typeof AuthenticatedImport
+    }
     '/_authenticated/tools/rate-calculator': {
       id: '/_authenticated/tools/rate-calculator'
       path: '/tools/rate-calculator'
@@ -413,6 +437,13 @@ declare module '@tanstack/react-router' {
       path: '/orders'
       fullPath: '/orders'
       preLoaderRoute: typeof AuthenticatedOrdersIndexImport
+      parentRoute: typeof AuthenticatedImport
+    }
+    '/_authenticated/overview/': {
+      id: '/_authenticated/overview/'
+      path: '/overview'
+      fullPath: '/overview'
+      preLoaderRoute: typeof AuthenticatedOverviewIndexImport
       parentRoute: typeof AuthenticatedImport
     }
     '/_authenticated/tools/': {
@@ -763,11 +794,13 @@ const AuthenticatedToolsReportsRouteRouteWithChildren =
 interface AuthenticatedRouteChildren {
   AuthenticatedDashboardRouteRoute: typeof AuthenticatedDashboardRouteRouteWithChildren
   AuthenticatedSettingsRouteRoute: typeof AuthenticatedSettingsRouteRouteWithChildren
+  AuthenticatedOrdersReturnsRouteRoute: typeof AuthenticatedOrdersReturnsRouteRoute
   AuthenticatedToolsRateCalculatorRouteRoute: typeof AuthenticatedToolsRateCalculatorRouteRouteWithChildren
   AuthenticatedToolsRateCardRouteRoute: typeof AuthenticatedToolsRateCardRouteRouteWithChildren
   AuthenticatedToolsReportsRouteRoute: typeof AuthenticatedToolsReportsRouteRouteWithChildren
   AuthenticatedHomeIndexRoute: typeof AuthenticatedHomeIndexRoute
   AuthenticatedOrdersIndexRoute: typeof AuthenticatedOrdersIndexRoute
+  AuthenticatedOverviewIndexRoute: typeof AuthenticatedOverviewIndexRoute
   AuthenticatedToolsIndexRoute: typeof AuthenticatedToolsIndexRoute
   AuthenticatedNdrCasesIndexRoute: typeof AuthenticatedNdrCasesIndexRoute
   AuthenticatedNdrReportsIndexRoute: typeof AuthenticatedNdrReportsIndexRoute
@@ -781,6 +814,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedDashboardRouteRoute:
     AuthenticatedDashboardRouteRouteWithChildren,
   AuthenticatedSettingsRouteRoute: AuthenticatedSettingsRouteRouteWithChildren,
+  AuthenticatedOrdersReturnsRouteRoute: AuthenticatedOrdersReturnsRouteRoute,
   AuthenticatedToolsRateCalculatorRouteRoute:
     AuthenticatedToolsRateCalculatorRouteRouteWithChildren,
   AuthenticatedToolsRateCardRouteRoute:
@@ -789,6 +823,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
     AuthenticatedToolsReportsRouteRouteWithChildren,
   AuthenticatedHomeIndexRoute: AuthenticatedHomeIndexRoute,
   AuthenticatedOrdersIndexRoute: AuthenticatedOrdersIndexRoute,
+  AuthenticatedOverviewIndexRoute: AuthenticatedOverviewIndexRoute,
   AuthenticatedToolsIndexRoute: AuthenticatedToolsIndexRoute,
   AuthenticatedNdrCasesIndexRoute: AuthenticatedNdrCasesIndexRoute,
   AuthenticatedNdrReportsIndexRoute: AuthenticatedNdrReportsIndexRoute,
@@ -812,11 +847,13 @@ export interface FileRoutesByFullPath {
   '/auth/Login': typeof AuthLoginRoute
   '/dashboard/domestic': typeof AuthenticatedDashboardDomesticRouteRouteWithChildren
   '/dashboard/international': typeof AuthenticatedDashboardInternationalRouteRouteWithChildren
+  '/orders/returns': typeof AuthenticatedOrdersReturnsRouteRoute
   '/tools/rate-calculator': typeof AuthenticatedToolsRateCalculatorRouteRouteWithChildren
   '/tools/rate-card': typeof AuthenticatedToolsRateCardRouteRouteWithChildren
   '/tools/reports': typeof AuthenticatedToolsReportsRouteRouteWithChildren
   '/home': typeof AuthenticatedHomeIndexRoute
   '/orders': typeof AuthenticatedOrdersIndexRoute
+  '/overview': typeof AuthenticatedOverviewIndexRoute
   '/tools': typeof AuthenticatedToolsIndexRoute
   '/tools/reports/download-reports': typeof AuthenticatedToolsReportsDownloadReportsRouteRouteWithChildren
   '/ndr/cases': typeof AuthenticatedNdrCasesIndexRoute
@@ -853,11 +890,13 @@ export interface FileRoutesByTo {
   '/auth/Login': typeof AuthLoginRoute
   '/dashboard/domestic': typeof AuthenticatedDashboardDomesticRouteRouteWithChildren
   '/dashboard/international': typeof AuthenticatedDashboardInternationalRouteRouteWithChildren
+  '/orders/returns': typeof AuthenticatedOrdersReturnsRouteRoute
   '/tools/rate-calculator': typeof AuthenticatedToolsRateCalculatorRouteRouteWithChildren
   '/tools/rate-card': typeof AuthenticatedToolsRateCardRouteRouteWithChildren
   '/tools/reports': typeof AuthenticatedToolsReportsRouteRouteWithChildren
   '/home': typeof AuthenticatedHomeIndexRoute
   '/orders': typeof AuthenticatedOrdersIndexRoute
+  '/overview': typeof AuthenticatedOverviewIndexRoute
   '/tools': typeof AuthenticatedToolsIndexRoute
   '/tools/reports/download-reports': typeof AuthenticatedToolsReportsDownloadReportsRouteRouteWithChildren
   '/ndr/cases': typeof AuthenticatedNdrCasesIndexRoute
@@ -895,11 +934,13 @@ export interface FileRoutesById {
   '/auth/Login': typeof AuthLoginRoute
   '/_authenticated/dashboard/domestic': typeof AuthenticatedDashboardDomesticRouteRouteWithChildren
   '/_authenticated/dashboard/international': typeof AuthenticatedDashboardInternationalRouteRouteWithChildren
+  '/_authenticated/orders/returns': typeof AuthenticatedOrdersReturnsRouteRoute
   '/_authenticated/tools/rate-calculator': typeof AuthenticatedToolsRateCalculatorRouteRouteWithChildren
   '/_authenticated/tools/rate-card': typeof AuthenticatedToolsRateCardRouteRouteWithChildren
   '/_authenticated/tools/reports': typeof AuthenticatedToolsReportsRouteRouteWithChildren
   '/_authenticated/home/': typeof AuthenticatedHomeIndexRoute
   '/_authenticated/orders/': typeof AuthenticatedOrdersIndexRoute
+  '/_authenticated/overview/': typeof AuthenticatedOverviewIndexRoute
   '/_authenticated/tools/': typeof AuthenticatedToolsIndexRoute
   '/_authenticated/tools/reports/download-reports': typeof AuthenticatedToolsReportsDownloadReportsRouteRouteWithChildren
   '/_authenticated/ndr/cases/': typeof AuthenticatedNdrCasesIndexRoute
@@ -938,11 +979,13 @@ export interface FileRouteTypes {
     | '/auth/Login'
     | '/dashboard/domestic'
     | '/dashboard/international'
+    | '/orders/returns'
     | '/tools/rate-calculator'
     | '/tools/rate-card'
     | '/tools/reports'
     | '/home'
     | '/orders'
+    | '/overview'
     | '/tools'
     | '/tools/reports/download-reports'
     | '/ndr/cases'
@@ -978,11 +1021,13 @@ export interface FileRouteTypes {
     | '/auth/Login'
     | '/dashboard/domestic'
     | '/dashboard/international'
+    | '/orders/returns'
     | '/tools/rate-calculator'
     | '/tools/rate-card'
     | '/tools/reports'
     | '/home'
     | '/orders'
+    | '/overview'
     | '/tools'
     | '/tools/reports/download-reports'
     | '/ndr/cases'
@@ -1018,11 +1063,13 @@ export interface FileRouteTypes {
     | '/auth/Login'
     | '/_authenticated/dashboard/domestic'
     | '/_authenticated/dashboard/international'
+    | '/_authenticated/orders/returns'
     | '/_authenticated/tools/rate-calculator'
     | '/_authenticated/tools/rate-card'
     | '/_authenticated/tools/reports'
     | '/_authenticated/home/'
     | '/_authenticated/orders/'
+    | '/_authenticated/overview/'
     | '/_authenticated/tools/'
     | '/_authenticated/tools/reports/download-reports'
     | '/_authenticated/ndr/cases/'
@@ -1087,11 +1134,13 @@ export const routeTree = rootRoute
       "children": [
         "/_authenticated/dashboard",
         "/_authenticated/settings",
+        "/_authenticated/orders/returns",
         "/_authenticated/tools/rate-calculator",
         "/_authenticated/tools/rate-card",
         "/_authenticated/tools/reports",
         "/_authenticated/home/",
         "/_authenticated/orders/",
+        "/_authenticated/overview/",
         "/_authenticated/tools/",
         "/_authenticated/ndr/cases/",
         "/_authenticated/ndr/reports/",
@@ -1140,6 +1189,10 @@ export const routeTree = rootRoute
         "/_authenticated/dashboard/international/overview/"
       ]
     },
+    "/_authenticated/orders/returns": {
+      "filePath": "_authenticated/orders/returns/route.jsx",
+      "parent": "/_authenticated"
+    },
     "/_authenticated/tools/rate-calculator": {
       "filePath": "_authenticated/tools/rate-calculator/route.jsx",
       "parent": "/_authenticated",
@@ -1171,6 +1224,10 @@ export const routeTree = rootRoute
     },
     "/_authenticated/orders/": {
       "filePath": "_authenticated/orders/index.jsx",
+      "parent": "/_authenticated"
+    },
+    "/_authenticated/overview/": {
+      "filePath": "_authenticated/overview/index.jsx",
       "parent": "/_authenticated"
     },
     "/_authenticated/tools/": {
