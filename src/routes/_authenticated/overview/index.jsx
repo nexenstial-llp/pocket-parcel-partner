@@ -2,12 +2,53 @@ import PageLayout from "@/components/layout/PageLayout";
 import ResponsiveCard from "@/components/ui/cards/ResponsiveCard";
 import { presetDateRanges } from "@/utils/date";
 import { createFileRoute } from "@tanstack/react-router";
-import { DatePicker, Tooltip } from "antd";
-import { FaTruck } from "react-icons/fa";
-
+import { DatePicker, Divider, Tooltip } from "antd";
+import { FaBoxOpen, FaInfoCircle, FaTruck } from "react-icons/fa";
+import { TbTruckReturn } from "react-icons/tb";
+import { GiTakeMyMoney } from "react-icons/gi";
+import TopCarriers from "@/components/pages/overview/TopCarriers";
+import OrderStatus from "@/components/pages/overview/OrderStatus";
 export const Route = createFileRoute("/_authenticated/overview/")({
   component: RouteComponent,
 });
+const overViewData = [
+  {
+    title: "Total Dispatched",
+    value: 0,
+    subtitle: "(0)",
+    icon: <FaTruck size={20} />,
+    iconColor: "#3b7f94",
+    bgColor: "#e4f9ff",
+    tooltip: "Total dispatched orders",
+  },
+  {
+    title: "Total Delivered (Forward)",
+    value: 0,
+    subtitle: "(0)",
+    icon: <FaBoxOpen size={20} />,
+    iconColor: "#55a55e",
+    bgColor: "#ddffe1",
+    tooltip: "Total delivered orders",
+  },
+  {
+    title: "Total RTO",
+    value: 0,
+    subtitle: "(0)",
+    icon: <TbTruckReturn size={20} />,
+    iconColor: "#9b705d",
+    bgColor: "#feeaeb",
+    tooltip: "Orders returned to origin",
+  },
+  {
+    title: "Total Revenue",
+    value: 0,
+    subtitle: "(0)",
+    icon: <GiTakeMyMoney size={20} />,
+    iconColor: "#3b7f94",
+    bgColor: "#e4f9ff",
+    tooltip: "Value of delivered orders",
+  },
+];
 
 function RouteComponent() {
   return (
@@ -32,68 +73,34 @@ function RouteComponent() {
             />
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4  gap-2 sm:gap-3 md:gap-4">
-            <ResponsiveCard
-              styles={{
-                header: {
-                  background: "#e4f9ff",
-                },
-              }}
-              title={
-                <div className="flex items-center gap-2 text-[#3b7f94]">
-                  <FaTruck size={20} /> Total Dispatched{" "}
-                  <Tooltip title="Total orders dispatched (Forward)"></Tooltip>
-                </div>
-              }
-              size="small"
-            >
-              0 <br /> (0)
-            </ResponsiveCard>
-            <ResponsiveCard
-              styles={{
-                header: {
-                  background: "#ddffe1",
-                },
-              }}
-              title={
-                <div className="flex items-center gap-2 text-[#55a55e]">
-                  <FaTruck size={20} /> Total Delivered (Forward)
-                </div>
-              }
-              size="small"
-            >
-              0 <br /> (0)
-            </ResponsiveCard>
-            <ResponsiveCard
-              styles={{
-                header: {
-                  background: "#feeaeb",
-                },
-              }}
-              title={
-                <div className="flex items-center gap-2 text-[#9b705d]">
-                  <FaTruck size={20} /> Total RTO
-                </div>
-              }
-              size="small"
-            >
-              0 <br /> (0)
-            </ResponsiveCard>
-            <ResponsiveCard
-              styles={{
-                header: {
-                  background: "#e4f9ff",
-                },
-              }}
-              title={
-                <div className="flex items-center gap-2 text-[#3b7f94]">
-                  <FaTruck size={20} /> Total Revenue
-                </div>
-              }
-              size="small"
-            >
-              0 <br /> (0)
-            </ResponsiveCard>
+            {overViewData.map((data, index) => (
+              <ResponsiveCard
+                key={index}
+                styles={{
+                  header: {
+                    background: data.bgColor,
+                  },
+                }}
+                title={
+                  <div
+                    className="flex items-center gap-2"
+                    style={{ color: data.iconColor }}
+                  >
+                    {data.icon} {data.title}{" "}
+                    <Tooltip title={data.tooltip}>
+                      <FaInfoCircle size={10} />
+                    </Tooltip>
+                  </div>
+                }
+                size="small"
+              >
+                {data.value} <br /> {data.subtitle}
+              </ResponsiveCard>
+            ))}
           </div>
+          <Divider style={{ margin: "12px 0px" }} />
+          <TopCarriers />
+          <OrderStatus />
         </div>
       </ResponsiveCard>
     </PageLayout>

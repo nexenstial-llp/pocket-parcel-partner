@@ -32,60 +32,58 @@ const codStatusData = [
 ];
 function RouteComponent() {
   return (
-    <ResponsiveCard>
-      <div className="grid grid-cols-12 gap-4">
-        <DashboardStatCard
-          title="Today's Orders"
-          value={"0"}
-          previousLabel="Yesterday"
-          previousValue={0}
-        />
-        <OperationsStatCard
-          title="Shipment Details"
-          stats={shipmentDetailsData}
-          icon={<TbFileTime />}
-        />
-        <DashboardStatCard
-          title="Today's Revenue"
-          value={"0"}
-          previousLabel="Yesterday"
-          previousValue={0}
-        />
-        <OperationsStatCard
-          lg={6}
-          md={12}
-          sm={12}
-          xs={12}
-          title="NDR Details"
-          stats={ndrDetailsData}
-          icon={<TbFileTime />}
-        />
-        <DashboardStatCard
-          title="Average Shipping Cost"
-          value={"0"}
-          extra={<span className="text-[12px]">Last 30 days</span>}
-        />
-        <OperationsStatCard
-          lg={6}
-          md={12}
-          sm={12}
-          xs={12}
-          title="COD Status"
-          stats={codStatusData}
-          icon={<TbFileTime />}
-        />
-        <ResponsiveCard
-          className="col-span-4"
-          title="Couriers Split"
-          size="small"
-          extra={<span className="text-[12px]">Last 30 days</span>}
-          styles={{
-            header: { border: "none" },
-          }}
-        >
-          <Empty />
-        </ResponsiveCard>
-      </div>
-    </ResponsiveCard>
+    <div className="grid grid-cols-12 gap-4">
+      <DashboardStatCard
+        title="Today's Orders"
+        value={"0"}
+        previousLabel="Yesterday"
+        previousValue={0}
+      />
+      <OperationsStatCard
+        title="Shipment Details"
+        stats={shipmentDetailsData}
+        icon={<TbFileTime />}
+      />
+      <DashboardStatCard
+        title="Today's Revenue"
+        value={"0"}
+        previousLabel="Yesterday"
+        previousValue={0}
+      />
+      <OperationsStatCard
+        lg={6}
+        md={12}
+        sm={12}
+        xs={12}
+        title="NDR Details"
+        stats={ndrDetailsData}
+        icon={<TbFileTime />}
+      />
+      <DashboardStatCard
+        title="Average Shipping Cost"
+        value={"0"}
+        extra={<span className="text-[12px]">Last 30 days</span>}
+      />
+      <OperationsStatCard
+        lg={6}
+        md={12}
+        sm={12}
+        xs={12}
+        title="COD Status"
+        stats={codStatusData}
+        icon={<TbFileTime />}
+      />
+      <ResponsiveCard
+        className="col-span-4"
+        title="Couriers Split"
+        size="small"
+        extra={<span className="text-[12px]">Last 30 days</span>}
+        styles={{
+          header: { border: "none" },
+        }}
+      >
+        <Empty />
+      </ResponsiveCard>
+    </div>
   );
 }
