@@ -1,7 +1,7 @@
 import PageLayout from "@/components/layout/PageLayout";
 import ResponsiveCard from "@/components/ui/cards/ResponsiveCard";
 import SearchPanelCard from "@/components/ui/cards/SearchPanelCard";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { Breadcrumb, Button, DatePicker, Select, Table } from "antd";
 
 export const Route = createFileRoute("/_authenticated/orders/")({
@@ -71,7 +71,17 @@ function RouteComponent() {
           </Button>,
         ]}
       />
-      <ResponsiveCard size="small">
+      <ResponsiveCard
+        size="small"
+        extra={
+          <Link to="/orders/create">
+            <Button type="primary" size="small">
+              Create
+            </Button>
+          </Link>
+        }
+        title="Orders"
+      >
         <div className="flex flex-col gap-2">
           <div className="flex gap-2 items-center overflow-x-auto">
             <Select

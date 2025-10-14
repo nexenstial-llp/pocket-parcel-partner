@@ -13,6 +13,16 @@ const SearchPanelCard = ({ searchTypeOptions = [], extraButtons = [] }) => {
   const search = useSearch({ strict: false });
 
   const handleSearch = () => {
+    if (!searchState.search_value) {
+      return navigate({
+        search: {
+          ...search,
+          search_type: undefined,
+          search_value: undefined,
+        },
+      });
+    }
+
     navigate({
       search: {
         search_type: searchState.search_type,
