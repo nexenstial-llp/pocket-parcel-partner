@@ -41,6 +41,7 @@ import { Route as AuthenticatedSettingsApiSetupsIndexImport } from './routes/_au
 import { Route as AuthenticatedOrdersCreateIndexImport } from './routes/_authenticated/orders/create/index'
 import { Route as AuthenticatedNdrReportsIndexImport } from './routes/_authenticated/ndr/reports/index'
 import { Route as AuthenticatedNdrCasesIndexImport } from './routes/_authenticated/ndr/cases/index'
+import { Route as AuthenticatedAccessControlUsersIndexImport } from './routes/_authenticated/access-control/users/index'
 import { Route as AuthenticatedToolsReportsDownloadReportsRouteImport } from './routes/_authenticated/tools/reports/download-reports/route'
 import { Route as AuthenticatedToolsReportsReportsSchedulerIndexImport } from './routes/_authenticated/tools/reports/reports-scheduler/index'
 import { Route as AuthenticatedToolsRateCardReverseIndexImport } from './routes/_authenticated/tools/rate-card/reverse/index'
@@ -51,6 +52,8 @@ import { Route as AuthenticatedToolsRateCalculatorDomesticIndexImport } from './
 import { Route as AuthenticatedDashboardInternationalOverviewIndexImport } from './routes/_authenticated/dashboard/international/overview/index'
 import { Route as AuthenticatedDashboardDomesticOverviewIndexImport } from './routes/_authenticated/dashboard/domestic/overview/index'
 import { Route as AuthenticatedDashboardDomesticOrdersIndexImport } from './routes/_authenticated/dashboard/domestic/orders/index'
+import { Route as AuthenticatedAccessControlUsersCreateIndexImport } from './routes/_authenticated/access-control/users/create/index'
+import { Route as AuthenticatedAccessControlRolesCreateIndexImport } from './routes/_authenticated/access-control/roles/create/index'
 import { Route as AuthenticatedToolsReportsDownloadReportsInstantReportsIndexImport } from './routes/_authenticated/tools/reports/download-reports/instant-reports/index'
 
 // Create Virtual Routes
@@ -254,6 +257,13 @@ const AuthenticatedNdrCasesIndexRoute = AuthenticatedNdrCasesIndexImport.update(
   } as any,
 )
 
+const AuthenticatedAccessControlUsersIndexRoute =
+  AuthenticatedAccessControlUsersIndexImport.update({
+    id: '/access-control/users/',
+    path: '/access-control/users/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+
 const AuthenticatedToolsReportsDownloadReportsRouteRoute =
   AuthenticatedToolsReportsDownloadReportsRouteImport.update({
     id: '/download-reports',
@@ -322,6 +332,20 @@ const AuthenticatedDashboardDomesticOrdersIndexRoute =
     id: '/orders/',
     path: '/orders/',
     getParentRoute: () => AuthenticatedDashboardDomesticRouteRoute,
+  } as any)
+
+const AuthenticatedAccessControlUsersCreateIndexRoute =
+  AuthenticatedAccessControlUsersCreateIndexImport.update({
+    id: '/access-control/users/create/',
+    path: '/access-control/users/create/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+
+const AuthenticatedAccessControlRolesCreateIndexRoute =
+  AuthenticatedAccessControlRolesCreateIndexImport.update({
+    id: '/access-control/roles/create/',
+    path: '/access-control/roles/create/',
+    getParentRoute: () => AuthenticatedRoute,
   } as any)
 
 const AuthenticatedToolsReportsDownloadReportsScheduledReportsIndexLazyRoute =
@@ -460,6 +484,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedToolsReportsDownloadReportsRouteImport
       parentRoute: typeof AuthenticatedToolsReportsRouteImport
     }
+    '/_authenticated/access-control/users/': {
+      id: '/_authenticated/access-control/users/'
+      path: '/access-control/users'
+      fullPath: '/access-control/users'
+      preLoaderRoute: typeof AuthenticatedAccessControlUsersIndexImport
+      parentRoute: typeof AuthenticatedImport
+    }
     '/_authenticated/ndr/cases/': {
       id: '/_authenticated/ndr/cases/'
       path: '/ndr/cases'
@@ -549,6 +580,20 @@ declare module '@tanstack/react-router' {
       path: '/warehouse/list'
       fullPath: '/warehouse/list'
       preLoaderRoute: typeof AuthenticatedWarehouseListIndexImport
+      parentRoute: typeof AuthenticatedImport
+    }
+    '/_authenticated/access-control/roles/create/': {
+      id: '/_authenticated/access-control/roles/create/'
+      path: '/access-control/roles/create'
+      fullPath: '/access-control/roles/create'
+      preLoaderRoute: typeof AuthenticatedAccessControlRolesCreateIndexImport
+      parentRoute: typeof AuthenticatedImport
+    }
+    '/_authenticated/access-control/users/create/': {
+      id: '/_authenticated/access-control/users/create/'
+      path: '/access-control/users/create'
+      fullPath: '/access-control/users/create'
+      preLoaderRoute: typeof AuthenticatedAccessControlUsersCreateIndexImport
       parentRoute: typeof AuthenticatedImport
     }
     '/_authenticated/dashboard/domestic/orders/': {
@@ -802,12 +847,15 @@ interface AuthenticatedRouteChildren {
   AuthenticatedOrdersIndexRoute: typeof AuthenticatedOrdersIndexRoute
   AuthenticatedOverviewIndexRoute: typeof AuthenticatedOverviewIndexRoute
   AuthenticatedToolsIndexRoute: typeof AuthenticatedToolsIndexRoute
+  AuthenticatedAccessControlUsersIndexRoute: typeof AuthenticatedAccessControlUsersIndexRoute
   AuthenticatedNdrCasesIndexRoute: typeof AuthenticatedNdrCasesIndexRoute
   AuthenticatedNdrReportsIndexRoute: typeof AuthenticatedNdrReportsIndexRoute
   AuthenticatedOrdersCreateIndexRoute: typeof AuthenticatedOrdersCreateIndexRoute
   AuthenticatedToolsActivityLogsIndexRoute: typeof AuthenticatedToolsActivityLogsIndexRoute
   AuthenticatedWarehouseCreateIndexRoute: typeof AuthenticatedWarehouseCreateIndexRoute
   AuthenticatedWarehouseListIndexRoute: typeof AuthenticatedWarehouseListIndexRoute
+  AuthenticatedAccessControlRolesCreateIndexRoute: typeof AuthenticatedAccessControlRolesCreateIndexRoute
+  AuthenticatedAccessControlUsersCreateIndexRoute: typeof AuthenticatedAccessControlUsersCreateIndexRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
@@ -825,6 +873,8 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedOrdersIndexRoute: AuthenticatedOrdersIndexRoute,
   AuthenticatedOverviewIndexRoute: AuthenticatedOverviewIndexRoute,
   AuthenticatedToolsIndexRoute: AuthenticatedToolsIndexRoute,
+  AuthenticatedAccessControlUsersIndexRoute:
+    AuthenticatedAccessControlUsersIndexRoute,
   AuthenticatedNdrCasesIndexRoute: AuthenticatedNdrCasesIndexRoute,
   AuthenticatedNdrReportsIndexRoute: AuthenticatedNdrReportsIndexRoute,
   AuthenticatedOrdersCreateIndexRoute: AuthenticatedOrdersCreateIndexRoute,
@@ -833,6 +883,10 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedWarehouseCreateIndexRoute:
     AuthenticatedWarehouseCreateIndexRoute,
   AuthenticatedWarehouseListIndexRoute: AuthenticatedWarehouseListIndexRoute,
+  AuthenticatedAccessControlRolesCreateIndexRoute:
+    AuthenticatedAccessControlRolesCreateIndexRoute,
+  AuthenticatedAccessControlUsersCreateIndexRoute:
+    AuthenticatedAccessControlUsersCreateIndexRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
@@ -856,6 +910,7 @@ export interface FileRoutesByFullPath {
   '/overview': typeof AuthenticatedOverviewIndexRoute
   '/tools': typeof AuthenticatedToolsIndexRoute
   '/tools/reports/download-reports': typeof AuthenticatedToolsReportsDownloadReportsRouteRouteWithChildren
+  '/access-control/users': typeof AuthenticatedAccessControlUsersIndexRoute
   '/ndr/cases': typeof AuthenticatedNdrCasesIndexRoute
   '/ndr/reports': typeof AuthenticatedNdrReportsIndexRoute
   '/orders/create': typeof AuthenticatedOrdersCreateIndexRoute
@@ -869,6 +924,8 @@ export interface FileRoutesByFullPath {
   '/tools/activity-logs': typeof AuthenticatedToolsActivityLogsIndexRoute
   '/warehouse/create': typeof AuthenticatedWarehouseCreateIndexRoute
   '/warehouse/list': typeof AuthenticatedWarehouseListIndexRoute
+  '/access-control/roles/create': typeof AuthenticatedAccessControlRolesCreateIndexRoute
+  '/access-control/users/create': typeof AuthenticatedAccessControlUsersCreateIndexRoute
   '/dashboard/domestic/orders': typeof AuthenticatedDashboardDomesticOrdersIndexRoute
   '/dashboard/domestic/overview': typeof AuthenticatedDashboardDomesticOverviewIndexRoute
   '/dashboard/international/overview': typeof AuthenticatedDashboardInternationalOverviewIndexRoute
@@ -899,6 +956,7 @@ export interface FileRoutesByTo {
   '/overview': typeof AuthenticatedOverviewIndexRoute
   '/tools': typeof AuthenticatedToolsIndexRoute
   '/tools/reports/download-reports': typeof AuthenticatedToolsReportsDownloadReportsRouteRouteWithChildren
+  '/access-control/users': typeof AuthenticatedAccessControlUsersIndexRoute
   '/ndr/cases': typeof AuthenticatedNdrCasesIndexRoute
   '/ndr/reports': typeof AuthenticatedNdrReportsIndexRoute
   '/orders/create': typeof AuthenticatedOrdersCreateIndexRoute
@@ -912,6 +970,8 @@ export interface FileRoutesByTo {
   '/tools/activity-logs': typeof AuthenticatedToolsActivityLogsIndexRoute
   '/warehouse/create': typeof AuthenticatedWarehouseCreateIndexRoute
   '/warehouse/list': typeof AuthenticatedWarehouseListIndexRoute
+  '/access-control/roles/create': typeof AuthenticatedAccessControlRolesCreateIndexRoute
+  '/access-control/users/create': typeof AuthenticatedAccessControlUsersCreateIndexRoute
   '/dashboard/domestic/orders': typeof AuthenticatedDashboardDomesticOrdersIndexRoute
   '/dashboard/domestic/overview': typeof AuthenticatedDashboardDomesticOverviewIndexRoute
   '/dashboard/international/overview': typeof AuthenticatedDashboardInternationalOverviewIndexRoute
@@ -943,6 +1003,7 @@ export interface FileRoutesById {
   '/_authenticated/overview/': typeof AuthenticatedOverviewIndexRoute
   '/_authenticated/tools/': typeof AuthenticatedToolsIndexRoute
   '/_authenticated/tools/reports/download-reports': typeof AuthenticatedToolsReportsDownloadReportsRouteRouteWithChildren
+  '/_authenticated/access-control/users/': typeof AuthenticatedAccessControlUsersIndexRoute
   '/_authenticated/ndr/cases/': typeof AuthenticatedNdrCasesIndexRoute
   '/_authenticated/ndr/reports/': typeof AuthenticatedNdrReportsIndexRoute
   '/_authenticated/orders/create/': typeof AuthenticatedOrdersCreateIndexRoute
@@ -956,6 +1017,8 @@ export interface FileRoutesById {
   '/_authenticated/tools/activity-logs/': typeof AuthenticatedToolsActivityLogsIndexRoute
   '/_authenticated/warehouse/create/': typeof AuthenticatedWarehouseCreateIndexRoute
   '/_authenticated/warehouse/list/': typeof AuthenticatedWarehouseListIndexRoute
+  '/_authenticated/access-control/roles/create/': typeof AuthenticatedAccessControlRolesCreateIndexRoute
+  '/_authenticated/access-control/users/create/': typeof AuthenticatedAccessControlUsersCreateIndexRoute
   '/_authenticated/dashboard/domestic/orders/': typeof AuthenticatedDashboardDomesticOrdersIndexRoute
   '/_authenticated/dashboard/domestic/overview/': typeof AuthenticatedDashboardDomesticOverviewIndexRoute
   '/_authenticated/dashboard/international/overview/': typeof AuthenticatedDashboardInternationalOverviewIndexRoute
@@ -988,6 +1051,7 @@ export interface FileRouteTypes {
     | '/overview'
     | '/tools'
     | '/tools/reports/download-reports'
+    | '/access-control/users'
     | '/ndr/cases'
     | '/ndr/reports'
     | '/orders/create'
@@ -1001,6 +1065,8 @@ export interface FileRouteTypes {
     | '/tools/activity-logs'
     | '/warehouse/create'
     | '/warehouse/list'
+    | '/access-control/roles/create'
+    | '/access-control/users/create'
     | '/dashboard/domestic/orders'
     | '/dashboard/domestic/overview'
     | '/dashboard/international/overview'
@@ -1030,6 +1096,7 @@ export interface FileRouteTypes {
     | '/overview'
     | '/tools'
     | '/tools/reports/download-reports'
+    | '/access-control/users'
     | '/ndr/cases'
     | '/ndr/reports'
     | '/orders/create'
@@ -1043,6 +1110,8 @@ export interface FileRouteTypes {
     | '/tools/activity-logs'
     | '/warehouse/create'
     | '/warehouse/list'
+    | '/access-control/roles/create'
+    | '/access-control/users/create'
     | '/dashboard/domestic/orders'
     | '/dashboard/domestic/overview'
     | '/dashboard/international/overview'
@@ -1072,6 +1141,7 @@ export interface FileRouteTypes {
     | '/_authenticated/overview/'
     | '/_authenticated/tools/'
     | '/_authenticated/tools/reports/download-reports'
+    | '/_authenticated/access-control/users/'
     | '/_authenticated/ndr/cases/'
     | '/_authenticated/ndr/reports/'
     | '/_authenticated/orders/create/'
@@ -1085,6 +1155,8 @@ export interface FileRouteTypes {
     | '/_authenticated/tools/activity-logs/'
     | '/_authenticated/warehouse/create/'
     | '/_authenticated/warehouse/list/'
+    | '/_authenticated/access-control/roles/create/'
+    | '/_authenticated/access-control/users/create/'
     | '/_authenticated/dashboard/domestic/orders/'
     | '/_authenticated/dashboard/domestic/overview/'
     | '/_authenticated/dashboard/international/overview/'
@@ -1142,12 +1214,15 @@ export const routeTree = rootRoute
         "/_authenticated/orders/",
         "/_authenticated/overview/",
         "/_authenticated/tools/",
+        "/_authenticated/access-control/users/",
         "/_authenticated/ndr/cases/",
         "/_authenticated/ndr/reports/",
         "/_authenticated/orders/create/",
         "/_authenticated/tools/activity-logs/",
         "/_authenticated/warehouse/create/",
-        "/_authenticated/warehouse/list/"
+        "/_authenticated/warehouse/list/",
+        "/_authenticated/access-control/roles/create/",
+        "/_authenticated/access-control/users/create/"
       ]
     },
     "/_authenticated/dashboard": {
@@ -1242,6 +1317,10 @@ export const routeTree = rootRoute
         "/_authenticated/tools/reports/download-reports/scheduled-reports/"
       ]
     },
+    "/_authenticated/access-control/users/": {
+      "filePath": "_authenticated/access-control/users/index.jsx",
+      "parent": "/_authenticated"
+    },
     "/_authenticated/ndr/cases/": {
       "filePath": "_authenticated/ndr/cases/index.jsx",
       "parent": "/_authenticated"
@@ -1292,6 +1371,14 @@ export const routeTree = rootRoute
     },
     "/_authenticated/warehouse/list/": {
       "filePath": "_authenticated/warehouse/list/index.jsx",
+      "parent": "/_authenticated"
+    },
+    "/_authenticated/access-control/roles/create/": {
+      "filePath": "_authenticated/access-control/roles/create/index.jsx",
+      "parent": "/_authenticated"
+    },
+    "/_authenticated/access-control/users/create/": {
+      "filePath": "_authenticated/access-control/users/create/index.jsx",
       "parent": "/_authenticated"
     },
     "/_authenticated/dashboard/domestic/orders/": {
