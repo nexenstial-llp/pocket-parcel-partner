@@ -65,6 +65,7 @@ export function AuthProvider({ children }) {
       router.invalidate();
       // Store token for persistence
       localStorage.setItem("auth-token", userData.accessToken);
+      localStorage.setItem("refresh-token", userData.refreshToken);
     } else {
       console.log(`Error: ${response.statusText}`);
       throw new Error("Authentication failed");
