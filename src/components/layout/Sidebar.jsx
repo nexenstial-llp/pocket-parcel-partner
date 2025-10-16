@@ -238,7 +238,7 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
             bottom: 0,
             // scrollbarWidth: "thin",
           }}
-          className="flex justify-center custom-scrollbar"
+          className="custom-scrollbar flex flex-col"
         >
           <Menu
             theme="dark"
