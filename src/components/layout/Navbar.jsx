@@ -3,16 +3,21 @@ import { FaWallet } from "react-icons/fa";
 import { IoReload } from "react-icons/io5";
 import { IoIosNotifications } from "react-icons/io";
 import { FaUser } from "react-icons/fa";
-import { Avatar, Dropdown, message } from "antd";
+import { Avatar, Button, Dropdown, message } from "antd";
 import { DownOutlined } from "@ant-design/icons";
 import { Space } from "antd";
+import { useNavigate } from "@tanstack/react-router";
 const items = [
+  // {
+  //   key: "1",
+  //   label: "Profile",
+  // },
   {
-    key: "1",
-    label: "Profile",
+    key: "/access-control/users",
+    label: "Manage Users",
   },
   {
-    key: "2",
+    key: "logout",
     label: "Logout",
   },
 ];
@@ -45,10 +50,19 @@ const items = [
 //   },
 // ];
 const Navbar = ({ auth }) => {
+  const navigate = useNavigate();
   const onClick = ({ key }) => {
-    if (key === "2") {
+    if (key === "logout") {
       message.success("Logout Successfully");
       auth.logout();
+      return;
+    }
+    if (key === "/access-control/users") {
+      // if(auth.user?.role !== "admin"){
+      //   message.error("Access Denied! You are not an admin.");
+      //   return;
+      // }
+      navigate({ to: key });
       return;
     }
     message.success(`Click on item ${key}`);
@@ -57,7 +71,7 @@ const Navbar = ({ auth }) => {
   return (
     <nav className="bg-white text-indigo-600 p-4 shadow-md border-b border-[#cdd0d4]">
       <div className="container mx-auto flex justify-between items-center ">
-        <div className="flex divide-x-2 items-center space-x-4 ml-auto">
+        <div className="flex gap-2 divide-x-2 divide-gray-500 items-center ml-auto">
           {/* <div className="px-3 relative group ">
             <button className="flex gap-1 items-center ">
               <BsFillLightningChargeFill />
@@ -77,26 +91,25 @@ const Navbar = ({ auth }) => {
               </div>
             </div>
           </div> */}
-          <div className="px-3 text-gray-600  flex items-center gap-1">
-            <FaWallet /> ₹100
-            <IoReload />
+          <div className="px-3 text-gray-600 flex items-center gap-1">
+            <FaWallet /> ₹100 <IoReload />
           </div>
-          <a href="#" className="px-3 bg-gray-100 py-1 rounded-md">
-            Recharge Wallet
-          </a>
-          <button className="px-3 text-gray-600">
-            <IoIosNotifications size={25} />
-          </button>
-          <button className=" px-3">All Products</button>
-
-          <Dropdown menu={{ items, onClick }}>
-            <a onClick={(e) => e.preventDefault()}>
-              <Space>
-                <Avatar icon={<FaUser />} />
-                <DownOutlined />
-              </Space>
-            </a>
-          </Dropdown>
+          <div className="pr-2">
+            <Button type="primary">Recharge Wallet</Button>
+          </div>
+          <div className="pr-2">
+            <Button icon={<IoIosNotifications size={25} />} type="text" />
+          </div>
+          <div>
+            <Dropdown menu={{ items, onClick }}>
+              <a onClick={(e) => e.preventDefault()}>
+                <Space>
+                  <Avatar icon={<FaUser />} />
+                  <DownOutlined />
+                </Space>
+              </a>
+            </Dropdown>
+          </div>
         </div>
       </div>
     </nav>
