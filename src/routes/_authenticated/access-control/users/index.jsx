@@ -1,3 +1,4 @@
+import { PermissionGuard } from "@/components/auth/PermissionGuard";
 import PageLayout from "@/components/layout/PageLayout";
 import ManageRolesDrawer from "@/components/pages/access-control/roles/ManageRolesDrawer";
 import ResponsiveCard from "@/components/ui/cards/ResponsiveCard";
@@ -64,6 +65,11 @@ function RouteComponent() {
               </Button>
             </Link>
             <ManageRolesDrawer />
+            <PermissionGuard roles={["admin"]} permissions={["create"]}>
+              <Button type="primary" danger>
+                Admin Only Button
+              </Button>
+            </PermissionGuard>
           </div>
         }
       >
