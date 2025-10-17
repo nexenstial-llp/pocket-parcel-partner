@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { flushSync } from "react-dom";
 import { router } from "@/router";
-import { AuthContext } from "./AuthContext";
+import { AuthContext } from "./authContext.js";
 // import { Spin } from "antd";
 import Loader from "@/components/layout/Loader";
 
@@ -10,6 +10,29 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const userData = {
+    roles: ["admin"],
+    permissions: ["create"],
+  };
+  const hasRole = (role) => {
+    return userData?.roles.includes(role) ?? false;
+  };
+
+  const hasAnyRole = (roles) => {
+    return roles.some((role) => userData?.roles?.includes(role)) ?? false;
+  };
+
+  const hasPermission = (permission) => {
+    return userData?.permissions.includes(permission) ?? false;
+  };
+
+  const hasAnyPermission = (permissions) => {
+    return (
+      permissions.some((permission) => {
+        return userData?.permissions.includes(permission);
+      }) ?? false
+    );
+  };
   // Restore auth state on app load
   useEffect(() => {
     const token = localStorage.getItem("auth-token");
@@ -82,7 +105,18 @@ export function AuthProvider({ children }) {
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, user, login, logout }}>
+    <AuthContext.Provider
+      value={{
+        isAuthenticated,
+        user,
+        login,
+        logout,
+        hasRole,
+        hasAnyRole,
+        hasPermission,
+        hasAnyPermission,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
