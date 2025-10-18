@@ -35,7 +35,7 @@ const OperationsStatCard = ({
     <ResponsiveCard
       style={{ background: bgColor }}
       className={cn(
-        "col-span-8 shadow-[2.0px_4.0px_4.0px_rgba(0,0,0,0.12)]",
+        "col-span-12 md:col-span-8 shadow-[2.0px_4.0px_4.0px_rgba(0,0,0,0.12)]",
         className
       )}
       size="small"

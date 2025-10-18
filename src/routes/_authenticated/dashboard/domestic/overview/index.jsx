@@ -2,8 +2,9 @@ import ResponsiveCard from "@/components/ui/cards/ResponsiveCard";
 import DashboardStatCard from "@/components/pages/dashboard/domestic/overview/DashboardStatCard";
 import OperationsStatCard from "@/components/pages/dashboard/domestic/overview/OperationsStatCard";
 import { createFileRoute } from "@tanstack/react-router";
-import { Empty } from "antd";
+import { Divider, Empty } from "antd";
 import { TbFileTime } from "react-icons/tb";
+import DefaultExtraContent from "@/components/pages/dashboard/domestic/overview/DefaultExtraContent";
 
 export const Route = createFileRoute(
   "/_authenticated/dashboard/domestic/overview/"
@@ -30,60 +31,131 @@ const codStatusData = [
   { label: "COD Pending (Greater than 8 days)", value: 0 },
   { label: "Last COD Remitted", value: 0 },
 ];
+
+const cardStyle = {
+  header: { border: "none" },
+};
 function RouteComponent() {
   return (
-    <div className="grid grid-cols-12 gap-4">
-      <DashboardStatCard
-        title="Today's Orders"
-        value={"0"}
-        previousLabel="Yesterday"
-        previousValue={0}
-      />
-      <OperationsStatCard
-        title="Shipment Details"
-        stats={shipmentDetailsData}
-        icon={<TbFileTime />}
-      />
-      <DashboardStatCard
-        title="Today's Revenue"
-        value={"0"}
-        previousLabel="Yesterday"
-        previousValue={0}
-      />
-      <OperationsStatCard
-        lg={6}
-        md={12}
-        sm={12}
-        xs={12}
-        title="NDR Details"
-        stats={ndrDetailsData}
-        icon={<TbFileTime />}
-      />
-      <DashboardStatCard
-        title="Average Shipping Cost"
-        value={"0"}
-        extra={<span className="text-[12px]">Last 30 days</span>}
-      />
-      <OperationsStatCard
-        lg={6}
-        md={12}
-        sm={12}
-        xs={12}
-        title="COD Status"
-        stats={codStatusData}
-        icon={<TbFileTime />}
-      />
-      <ResponsiveCard
-        className="col-span-4"
-        title="Couriers Split"
-        size="small"
-        extra={<span className="text-[12px]">Last 30 days</span>}
-        styles={{
-          header: { border: "none" },
-        }}
-      >
-        <Empty />
-      </ResponsiveCard>
-    </div>
+    <>
+      <div className="grid grid-cols-12 gap-4">
+        <DashboardStatCard
+          title="Today's Orders"
+          value={"0"}
+          previousLabel="Yesterday"
+          previousValue={0}
+        />
+        <OperationsStatCard
+          title="Shipment Details"
+          stats={shipmentDetailsData}
+          icon={<TbFileTime />}
+        />
+        <DashboardStatCard
+          title="Today's Revenue"
+          value={"0"}
+          previousLabel="Yesterday"
+          previousValue={0}
+        />
+        <OperationsStatCard
+          lg={6}
+          md={12}
+          sm={12}
+          xs={12}
+          title="NDR Details"
+          stats={ndrDetailsData}
+          icon={<TbFileTime />}
+        />
+        <DashboardStatCard
+          title="Average Shipping Cost"
+          value={"0"}
+          extra={<span className="text-[12px]">Last 30 days</span>}
+        />
+        <OperationsStatCard
+          lg={6}
+          md={12}
+          sm={12}
+          xs={12}
+          title="COD Status"
+          stats={codStatusData}
+          icon={<TbFileTime />}
+        />
+      </div>
+      <div className="grid grid-cols-12 gap-4">
+        <ResponsiveCard
+          title="Couriers Split"
+          size="small"
+          extra={<span className="text-[12px]">Last 30 days</span>}
+          styles={cardStyle}
+          className="shadow-[2.0px_4.0px_4.0px_rgba(0,0,0,0.12)] col-span-12 sm:col-span-6 md:col-span-4"
+        >
+          <Empty />
+        </ResponsiveCard>
+        <ResponsiveCard
+          title="Overall Shipment Status"
+          size="small"
+          styles={cardStyle}
+          className="shadow-[2.0px_4.0px_4.0px_rgba(0,0,0,0.12)] col-span-12 sm:col-span-6 md:col-span-4"
+          extra={<DefaultExtraContent />}
+        >
+          <Empty description="No Shipment in last 30 days" />
+        </ResponsiveCard>
+        <ResponsiveCard
+          title="Delivery Performance"
+          size="small"
+          styles={cardStyle}
+          className="shadow-[2.0px_4.0px_4.0px_rgba(0,0,0,0.12)] col-span-12 sm:col-span-6 md:col-span-4"
+          extra={<DefaultExtraContent />}
+        >
+          <Empty description="No Shipment in last 30 days" />
+        </ResponsiveCard>
+        <ResponsiveCard
+          title="Shipments - Zone Distribution"
+          size="small"
+          styles={cardStyle}
+          className="shadow-[2.0px_4.0px_4.0px_rgba(0,0,0,0.12)] col-span-12 sm:col-span-6 md:col-span-4"
+          extra={"Last 30 days"}
+        >
+          <Empty description="No Shipment in last 30 days" />
+        </ResponsiveCard>
+        <ResponsiveCard
+          title="Revenue"
+          size="small"
+          styles={cardStyle}
+          className="shadow-[2.0px_4.0px_4.0px_rgba(0,0,0,0.12)]  col-span-12 sm:col-span-6 md:col-span-4"
+          extra={"Last 30 days"}
+        >
+          <div>
+            <div className="flex justify-between ">
+              <span className="font-semibold">Last 90 Days</span>
+              <span className="text-[12px]">₹0</span>
+            </div>
+            <Divider size="small" />
+            <div className="flex justify-between ">
+              <span className="font-semibold">This Week</span>
+              <span className="text-[12px]">₹0</span>
+            </div>
+            <Divider size="small" />
+            <div className="flex justify-between ">
+              <span className="font-semibold">This Month</span>
+              <span className="text-[12px]">₹0</span>
+            </div>
+            <Divider size="small" />
+            <div className="flex justify-between ">
+              <span className="font-semibold">This Quarter</span>
+              <span className="text-[12px]">₹0</span>
+            </div>
+          </div>
+        </ResponsiveCard>
+        <ResponsiveCard
+          title="Shipment Overview by Courier"
+          size="small"
+          styles={cardStyle}
+          className=" shadow-[2.0px_4.0px_4.0px_rgba(0,0,0,0.12)] col-span-12"
+          extra={<DefaultExtraContent />}
+        >
+          <Empty description="No Shipment in last 30 days" />
+        </ResponsiveCard>
+      </div>
+    </>
   );
 }

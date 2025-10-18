@@ -38,7 +38,9 @@ import { Route as AuthenticatedSettingsInvoiceTemplatesIndexImport } from './rou
 import { Route as AuthenticatedSettingsCompanyDetailsIndexImport } from './routes/_authenticated/settings/company-details/index'
 import { Route as AuthenticatedSettingsBankDetailsIndexImport } from './routes/_authenticated/settings/bank-details/index'
 import { Route as AuthenticatedSettingsApiSetupsIndexImport } from './routes/_authenticated/settings/api-setups/index'
+import { Route as AuthenticatedOrdersTrackOrderIndexImport } from './routes/_authenticated/orders/track-order/index'
 import { Route as AuthenticatedOrdersCreateIndexImport } from './routes/_authenticated/orders/create/index'
+import { Route as AuthenticatedOrdersIdIndexImport } from './routes/_authenticated/orders/$id/index'
 import { Route as AuthenticatedNdrReportsIndexImport } from './routes/_authenticated/ndr/reports/index'
 import { Route as AuthenticatedNdrCasesIndexImport } from './routes/_authenticated/ndr/cases/index'
 import { Route as AuthenticatedAccessControlUsersIndexImport } from './routes/_authenticated/access-control/users/index'
@@ -50,6 +52,7 @@ import { Route as AuthenticatedToolsRateCardDocumentIndexImport } from './routes
 import { Route as AuthenticatedToolsRateCalculatorInternationalIndexImport } from './routes/_authenticated/tools/rate-calculator/international/index'
 import { Route as AuthenticatedToolsRateCalculatorDomesticIndexImport } from './routes/_authenticated/tools/rate-calculator/domestic/index'
 import { Route as AuthenticatedDashboardInternationalOverviewIndexImport } from './routes/_authenticated/dashboard/international/overview/index'
+import { Route as AuthenticatedDashboardDomesticShipmentsIndexImport } from './routes/_authenticated/dashboard/domestic/shipments/index'
 import { Route as AuthenticatedDashboardDomesticOverviewIndexImport } from './routes/_authenticated/dashboard/domestic/overview/index'
 import { Route as AuthenticatedDashboardDomesticOrdersIndexImport } from './routes/_authenticated/dashboard/domestic/orders/index'
 import { Route as AuthenticatedAccessControlUsersCreateIndexImport } from './routes/_authenticated/access-control/users/create/index'
@@ -235,12 +238,27 @@ const AuthenticatedSettingsApiSetupsIndexRoute =
     getParentRoute: () => AuthenticatedSettingsRouteRoute,
   } as any)
 
+const AuthenticatedOrdersTrackOrderIndexRoute =
+  AuthenticatedOrdersTrackOrderIndexImport.update({
+    id: '/orders/track-order/',
+    path: '/orders/track-order/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+
 const AuthenticatedOrdersCreateIndexRoute =
   AuthenticatedOrdersCreateIndexImport.update({
     id: '/orders/create/',
     path: '/orders/create/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+
+const AuthenticatedOrdersIdIndexRoute = AuthenticatedOrdersIdIndexImport.update(
+  {
+    id: '/orders/$id/',
+    path: '/orders/$id/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any,
+)
 
 const AuthenticatedNdrReportsIndexRoute =
   AuthenticatedNdrReportsIndexImport.update({
@@ -318,6 +336,13 @@ const AuthenticatedDashboardInternationalOverviewIndexRoute =
     id: '/overview/',
     path: '/overview/',
     getParentRoute: () => AuthenticatedDashboardInternationalRouteRoute,
+  } as any)
+
+const AuthenticatedDashboardDomesticShipmentsIndexRoute =
+  AuthenticatedDashboardDomesticShipmentsIndexImport.update({
+    id: '/shipments/',
+    path: '/shipments/',
+    getParentRoute: () => AuthenticatedDashboardDomesticRouteRoute,
   } as any)
 
 const AuthenticatedDashboardDomesticOverviewIndexRoute =
@@ -505,11 +530,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedNdrReportsIndexImport
       parentRoute: typeof AuthenticatedImport
     }
+    '/_authenticated/orders/$id/': {
+      id: '/_authenticated/orders/$id/'
+      path: '/orders/$id'
+      fullPath: '/orders/$id'
+      preLoaderRoute: typeof AuthenticatedOrdersIdIndexImport
+      parentRoute: typeof AuthenticatedImport
+    }
     '/_authenticated/orders/create/': {
       id: '/_authenticated/orders/create/'
       path: '/orders/create'
       fullPath: '/orders/create'
       preLoaderRoute: typeof AuthenticatedOrdersCreateIndexImport
+      parentRoute: typeof AuthenticatedImport
+    }
+    '/_authenticated/orders/track-order/': {
+      id: '/_authenticated/orders/track-order/'
+      path: '/orders/track-order'
+      fullPath: '/orders/track-order'
+      preLoaderRoute: typeof AuthenticatedOrdersTrackOrderIndexImport
       parentRoute: typeof AuthenticatedImport
     }
     '/_authenticated/settings/api-setups/': {
@@ -610,6 +649,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardDomesticOverviewIndexImport
       parentRoute: typeof AuthenticatedDashboardDomesticRouteImport
     }
+    '/_authenticated/dashboard/domestic/shipments/': {
+      id: '/_authenticated/dashboard/domestic/shipments/'
+      path: '/shipments'
+      fullPath: '/dashboard/domestic/shipments'
+      preLoaderRoute: typeof AuthenticatedDashboardDomesticShipmentsIndexImport
+      parentRoute: typeof AuthenticatedDashboardDomesticRouteImport
+    }
     '/_authenticated/dashboard/international/overview/': {
       id: '/_authenticated/dashboard/international/overview/'
       path: '/overview'
@@ -681,6 +727,7 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedDashboardDomesticRouteRouteChildren {
   AuthenticatedDashboardDomesticOrdersIndexRoute: typeof AuthenticatedDashboardDomesticOrdersIndexRoute
   AuthenticatedDashboardDomesticOverviewIndexRoute: typeof AuthenticatedDashboardDomesticOverviewIndexRoute
+  AuthenticatedDashboardDomesticShipmentsIndexRoute: typeof AuthenticatedDashboardDomesticShipmentsIndexRoute
 }
 
 const AuthenticatedDashboardDomesticRouteRouteChildren: AuthenticatedDashboardDomesticRouteRouteChildren =
@@ -689,6 +736,8 @@ const AuthenticatedDashboardDomesticRouteRouteChildren: AuthenticatedDashboardDo
       AuthenticatedDashboardDomesticOrdersIndexRoute,
     AuthenticatedDashboardDomesticOverviewIndexRoute:
       AuthenticatedDashboardDomesticOverviewIndexRoute,
+    AuthenticatedDashboardDomesticShipmentsIndexRoute:
+      AuthenticatedDashboardDomesticShipmentsIndexRoute,
   }
 
 const AuthenticatedDashboardDomesticRouteRouteWithChildren =
@@ -850,7 +899,9 @@ interface AuthenticatedRouteChildren {
   AuthenticatedAccessControlUsersIndexRoute: typeof AuthenticatedAccessControlUsersIndexRoute
   AuthenticatedNdrCasesIndexRoute: typeof AuthenticatedNdrCasesIndexRoute
   AuthenticatedNdrReportsIndexRoute: typeof AuthenticatedNdrReportsIndexRoute
+  AuthenticatedOrdersIdIndexRoute: typeof AuthenticatedOrdersIdIndexRoute
   AuthenticatedOrdersCreateIndexRoute: typeof AuthenticatedOrdersCreateIndexRoute
+  AuthenticatedOrdersTrackOrderIndexRoute: typeof AuthenticatedOrdersTrackOrderIndexRoute
   AuthenticatedToolsActivityLogsIndexRoute: typeof AuthenticatedToolsActivityLogsIndexRoute
   AuthenticatedWarehouseCreateIndexRoute: typeof AuthenticatedWarehouseCreateIndexRoute
   AuthenticatedWarehouseListIndexRoute: typeof AuthenticatedWarehouseListIndexRoute
@@ -877,7 +928,10 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
     AuthenticatedAccessControlUsersIndexRoute,
   AuthenticatedNdrCasesIndexRoute: AuthenticatedNdrCasesIndexRoute,
   AuthenticatedNdrReportsIndexRoute: AuthenticatedNdrReportsIndexRoute,
+  AuthenticatedOrdersIdIndexRoute: AuthenticatedOrdersIdIndexRoute,
   AuthenticatedOrdersCreateIndexRoute: AuthenticatedOrdersCreateIndexRoute,
+  AuthenticatedOrdersTrackOrderIndexRoute:
+    AuthenticatedOrdersTrackOrderIndexRoute,
   AuthenticatedToolsActivityLogsIndexRoute:
     AuthenticatedToolsActivityLogsIndexRoute,
   AuthenticatedWarehouseCreateIndexRoute:
@@ -913,7 +967,9 @@ export interface FileRoutesByFullPath {
   '/access-control/users': typeof AuthenticatedAccessControlUsersIndexRoute
   '/ndr/cases': typeof AuthenticatedNdrCasesIndexRoute
   '/ndr/reports': typeof AuthenticatedNdrReportsIndexRoute
+  '/orders/$id': typeof AuthenticatedOrdersIdIndexRoute
   '/orders/create': typeof AuthenticatedOrdersCreateIndexRoute
+  '/orders/track-order': typeof AuthenticatedOrdersTrackOrderIndexRoute
   '/settings/api-setups': typeof AuthenticatedSettingsApiSetupsIndexRoute
   '/settings/bank-details': typeof AuthenticatedSettingsBankDetailsIndexRoute
   '/settings/company-details': typeof AuthenticatedSettingsCompanyDetailsIndexRoute
@@ -928,6 +984,7 @@ export interface FileRoutesByFullPath {
   '/access-control/users/create': typeof AuthenticatedAccessControlUsersCreateIndexRoute
   '/dashboard/domestic/orders': typeof AuthenticatedDashboardDomesticOrdersIndexRoute
   '/dashboard/domestic/overview': typeof AuthenticatedDashboardDomesticOverviewIndexRoute
+  '/dashboard/domestic/shipments': typeof AuthenticatedDashboardDomesticShipmentsIndexRoute
   '/dashboard/international/overview': typeof AuthenticatedDashboardInternationalOverviewIndexRoute
   '/tools/rate-calculator/domestic': typeof AuthenticatedToolsRateCalculatorDomesticIndexRoute
   '/tools/rate-calculator/international': typeof AuthenticatedToolsRateCalculatorInternationalIndexRoute
@@ -959,7 +1016,9 @@ export interface FileRoutesByTo {
   '/access-control/users': typeof AuthenticatedAccessControlUsersIndexRoute
   '/ndr/cases': typeof AuthenticatedNdrCasesIndexRoute
   '/ndr/reports': typeof AuthenticatedNdrReportsIndexRoute
+  '/orders/$id': typeof AuthenticatedOrdersIdIndexRoute
   '/orders/create': typeof AuthenticatedOrdersCreateIndexRoute
+  '/orders/track-order': typeof AuthenticatedOrdersTrackOrderIndexRoute
   '/settings/api-setups': typeof AuthenticatedSettingsApiSetupsIndexRoute
   '/settings/bank-details': typeof AuthenticatedSettingsBankDetailsIndexRoute
   '/settings/company-details': typeof AuthenticatedSettingsCompanyDetailsIndexRoute
@@ -974,6 +1033,7 @@ export interface FileRoutesByTo {
   '/access-control/users/create': typeof AuthenticatedAccessControlUsersCreateIndexRoute
   '/dashboard/domestic/orders': typeof AuthenticatedDashboardDomesticOrdersIndexRoute
   '/dashboard/domestic/overview': typeof AuthenticatedDashboardDomesticOverviewIndexRoute
+  '/dashboard/domestic/shipments': typeof AuthenticatedDashboardDomesticShipmentsIndexRoute
   '/dashboard/international/overview': typeof AuthenticatedDashboardInternationalOverviewIndexRoute
   '/tools/rate-calculator/domestic': typeof AuthenticatedToolsRateCalculatorDomesticIndexRoute
   '/tools/rate-calculator/international': typeof AuthenticatedToolsRateCalculatorInternationalIndexRoute
@@ -1006,7 +1066,9 @@ export interface FileRoutesById {
   '/_authenticated/access-control/users/': typeof AuthenticatedAccessControlUsersIndexRoute
   '/_authenticated/ndr/cases/': typeof AuthenticatedNdrCasesIndexRoute
   '/_authenticated/ndr/reports/': typeof AuthenticatedNdrReportsIndexRoute
+  '/_authenticated/orders/$id/': typeof AuthenticatedOrdersIdIndexRoute
   '/_authenticated/orders/create/': typeof AuthenticatedOrdersCreateIndexRoute
+  '/_authenticated/orders/track-order/': typeof AuthenticatedOrdersTrackOrderIndexRoute
   '/_authenticated/settings/api-setups/': typeof AuthenticatedSettingsApiSetupsIndexRoute
   '/_authenticated/settings/bank-details/': typeof AuthenticatedSettingsBankDetailsIndexRoute
   '/_authenticated/settings/company-details/': typeof AuthenticatedSettingsCompanyDetailsIndexRoute
@@ -1021,6 +1083,7 @@ export interface FileRoutesById {
   '/_authenticated/access-control/users/create/': typeof AuthenticatedAccessControlUsersCreateIndexRoute
   '/_authenticated/dashboard/domestic/orders/': typeof AuthenticatedDashboardDomesticOrdersIndexRoute
   '/_authenticated/dashboard/domestic/overview/': typeof AuthenticatedDashboardDomesticOverviewIndexRoute
+  '/_authenticated/dashboard/domestic/shipments/': typeof AuthenticatedDashboardDomesticShipmentsIndexRoute
   '/_authenticated/dashboard/international/overview/': typeof AuthenticatedDashboardInternationalOverviewIndexRoute
   '/_authenticated/tools/rate-calculator/domestic/': typeof AuthenticatedToolsRateCalculatorDomesticIndexRoute
   '/_authenticated/tools/rate-calculator/international/': typeof AuthenticatedToolsRateCalculatorInternationalIndexRoute
@@ -1054,7 +1117,9 @@ export interface FileRouteTypes {
     | '/access-control/users'
     | '/ndr/cases'
     | '/ndr/reports'
+    | '/orders/$id'
     | '/orders/create'
+    | '/orders/track-order'
     | '/settings/api-setups'
     | '/settings/bank-details'
     | '/settings/company-details'
@@ -1069,6 +1134,7 @@ export interface FileRouteTypes {
     | '/access-control/users/create'
     | '/dashboard/domestic/orders'
     | '/dashboard/domestic/overview'
+    | '/dashboard/domestic/shipments'
     | '/dashboard/international/overview'
     | '/tools/rate-calculator/domestic'
     | '/tools/rate-calculator/international'
@@ -1099,7 +1165,9 @@ export interface FileRouteTypes {
     | '/access-control/users'
     | '/ndr/cases'
     | '/ndr/reports'
+    | '/orders/$id'
     | '/orders/create'
+    | '/orders/track-order'
     | '/settings/api-setups'
     | '/settings/bank-details'
     | '/settings/company-details'
@@ -1114,6 +1182,7 @@ export interface FileRouteTypes {
     | '/access-control/users/create'
     | '/dashboard/domestic/orders'
     | '/dashboard/domestic/overview'
+    | '/dashboard/domestic/shipments'
     | '/dashboard/international/overview'
     | '/tools/rate-calculator/domestic'
     | '/tools/rate-calculator/international'
@@ -1144,7 +1213,9 @@ export interface FileRouteTypes {
     | '/_authenticated/access-control/users/'
     | '/_authenticated/ndr/cases/'
     | '/_authenticated/ndr/reports/'
+    | '/_authenticated/orders/$id/'
     | '/_authenticated/orders/create/'
+    | '/_authenticated/orders/track-order/'
     | '/_authenticated/settings/api-setups/'
     | '/_authenticated/settings/bank-details/'
     | '/_authenticated/settings/company-details/'
@@ -1159,6 +1230,7 @@ export interface FileRouteTypes {
     | '/_authenticated/access-control/users/create/'
     | '/_authenticated/dashboard/domestic/orders/'
     | '/_authenticated/dashboard/domestic/overview/'
+    | '/_authenticated/dashboard/domestic/shipments/'
     | '/_authenticated/dashboard/international/overview/'
     | '/_authenticated/tools/rate-calculator/domestic/'
     | '/_authenticated/tools/rate-calculator/international/'
@@ -1217,7 +1289,9 @@ export const routeTree = rootRoute
         "/_authenticated/access-control/users/",
         "/_authenticated/ndr/cases/",
         "/_authenticated/ndr/reports/",
+        "/_authenticated/orders/$id/",
         "/_authenticated/orders/create/",
+        "/_authenticated/orders/track-order/",
         "/_authenticated/tools/activity-logs/",
         "/_authenticated/warehouse/create/",
         "/_authenticated/warehouse/list/",
@@ -1254,7 +1328,8 @@ export const routeTree = rootRoute
       "parent": "/_authenticated/dashboard",
       "children": [
         "/_authenticated/dashboard/domestic/orders/",
-        "/_authenticated/dashboard/domestic/overview/"
+        "/_authenticated/dashboard/domestic/overview/",
+        "/_authenticated/dashboard/domestic/shipments/"
       ]
     },
     "/_authenticated/dashboard/international": {
@@ -1329,8 +1404,16 @@ export const routeTree = rootRoute
       "filePath": "_authenticated/ndr/reports/index.jsx",
       "parent": "/_authenticated"
     },
+    "/_authenticated/orders/$id/": {
+      "filePath": "_authenticated/orders/$id/index.jsx",
+      "parent": "/_authenticated"
+    },
     "/_authenticated/orders/create/": {
       "filePath": "_authenticated/orders/create/index.jsx",
+      "parent": "/_authenticated"
+    },
+    "/_authenticated/orders/track-order/": {
+      "filePath": "_authenticated/orders/track-order/index.jsx",
       "parent": "/_authenticated"
     },
     "/_authenticated/settings/api-setups/": {
@@ -1387,6 +1470,10 @@ export const routeTree = rootRoute
     },
     "/_authenticated/dashboard/domestic/overview/": {
       "filePath": "_authenticated/dashboard/domestic/overview/index.jsx",
+      "parent": "/_authenticated/dashboard/domestic"
+    },
+    "/_authenticated/dashboard/domestic/shipments/": {
+      "filePath": "_authenticated/dashboard/domestic/shipments/index.jsx",
       "parent": "/_authenticated/dashboard/domestic"
     },
     "/_authenticated/dashboard/international/overview/": {
