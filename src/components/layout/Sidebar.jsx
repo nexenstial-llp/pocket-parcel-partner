@@ -21,6 +21,71 @@ const sidebarData = [
     label: <Link to="/dashboard/domestic/overview">Dashboard</Link>,
   },
   {
+    key: "revenue-dashboard",
+    icon: <AiTwotoneContainer />,
+    label: "Revenue Dashboard",
+    children: [
+      {
+        key: "/revenue-dashboard/my-earnings",
+        label: "My Earnings",
+        children: [
+          {
+            key: "/revenue-dashboard/my-earnings/revenue-summary",
+            label: (
+              <Link to="/revenue-dashboard/my-earnings/revenue-summary">
+                Revenue Summary
+              </Link>
+            ),
+          },
+          {
+            key: "/revenue-dashboard/my-earnings/settlements-and-payouts",
+            label: (
+              <Link to="/revenue-dashboard/my-earnings/settlements-and-payouts">
+                Settlements & Payouts
+              </Link>
+            ),
+          },
+        ],
+      },
+      {
+        key: "/revenue-dashboard/reports",
+        label: "Reports",
+        children: [
+          {
+            key: "/revenue-dashboard/reports/shipment-revenue",
+            label: (
+              <Link to="/revenue-dashboard/reports/shipment-revenue">
+                Shipment Revenue
+              </Link>
+            ),
+          },
+          {
+            key: "/revenue-dashboard/reports/commission-breakdown",
+            label: (
+              <Link to="/revenue-dashboard/reports/commission-breakdown">
+                Commission Breakdown
+              </Link>
+            ),
+          },
+        ],
+      },
+      {
+        key: "/revenue-dashboard/invoice-and-tax",
+        label: (
+          <Link to="/revenue-dashboard/invoice-and-tax">Invoices & Tax</Link>
+        ),
+      },
+      {
+        key: "/revenue-dashboard/support",
+        label: <Link to="/revenue-dashboard/support">Support</Link>,
+      },
+      {
+        key: "/revenue-dashboard/settings",
+        label: <Link to="/revenue-dashboard/settings">Settings</Link>,
+      },
+    ],
+  },
+  {
     key: "orders",
     icon: <AiTwotoneContainer />,
     label: "Orders",
@@ -151,6 +216,11 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
     sidebarData.forEach((item) => {
       if (item.children) {
         item.children.forEach((child) => {
+          if (child.children) {
+            child.children.forEach((grandChild) => {
+              allChildren.push({ child: grandChild, parent: child });
+            });
+          }
           allChildren.push({ child, parent: item });
         });
       }
@@ -161,6 +231,7 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
 
     // Find the child with the longest matching prefix
     for (const { child, parent } of allChildren) {
+      console.log({ child, parent });
       if (pathname.startsWith(child.key)) {
         return { selectedKey: child.key, openKey: parent.key };
       }

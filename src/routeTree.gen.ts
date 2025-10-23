@@ -38,6 +38,9 @@ import { Route as AuthenticatedSettingsInvoiceTemplatesIndexImport } from './rou
 import { Route as AuthenticatedSettingsCompanyDetailsIndexImport } from './routes/_authenticated/settings/company-details/index'
 import { Route as AuthenticatedSettingsBankDetailsIndexImport } from './routes/_authenticated/settings/bank-details/index'
 import { Route as AuthenticatedSettingsApiSetupsIndexImport } from './routes/_authenticated/settings/api-setups/index'
+import { Route as AuthenticatedRevenueDashboardSupportIndexImport } from './routes/_authenticated/revenue-dashboard/support/index'
+import { Route as AuthenticatedRevenueDashboardSettingsIndexImport } from './routes/_authenticated/revenue-dashboard/settings/index'
+import { Route as AuthenticatedRevenueDashboardInvoiceAndTaxIndexImport } from './routes/_authenticated/revenue-dashboard/invoice-and-tax/index'
 import { Route as AuthenticatedOrdersTrackOrderIndexImport } from './routes/_authenticated/orders/track-order/index'
 import { Route as AuthenticatedOrdersCreateIndexImport } from './routes/_authenticated/orders/create/index'
 import { Route as AuthenticatedOrdersIdIndexImport } from './routes/_authenticated/orders/$id/index'
@@ -51,6 +54,10 @@ import { Route as AuthenticatedToolsRateCardForwardIndexImport } from './routes/
 import { Route as AuthenticatedToolsRateCardDocumentIndexImport } from './routes/_authenticated/tools/rate-card/document/index'
 import { Route as AuthenticatedToolsRateCalculatorInternationalIndexImport } from './routes/_authenticated/tools/rate-calculator/international/index'
 import { Route as AuthenticatedToolsRateCalculatorDomesticIndexImport } from './routes/_authenticated/tools/rate-calculator/domestic/index'
+import { Route as AuthenticatedRevenueDashboardReportsShipmentRevenueIndexImport } from './routes/_authenticated/revenue-dashboard/reports/shipment-revenue/index'
+import { Route as AuthenticatedRevenueDashboardReportsCommissionBreakdownIndexImport } from './routes/_authenticated/revenue-dashboard/reports/commission-breakdown/index'
+import { Route as AuthenticatedRevenueDashboardMyEarningsSettlementsAndPayoutsIndexImport } from './routes/_authenticated/revenue-dashboard/my-earnings/settlements-and-payouts/index'
+import { Route as AuthenticatedRevenueDashboardMyEarningsRevenueSummaryIndexImport } from './routes/_authenticated/revenue-dashboard/my-earnings/revenue-summary/index'
 import { Route as AuthenticatedDashboardInternationalOverviewIndexImport } from './routes/_authenticated/dashboard/international/overview/index'
 import { Route as AuthenticatedDashboardDomesticShipmentsIndexImport } from './routes/_authenticated/dashboard/domestic/shipments/index'
 import { Route as AuthenticatedDashboardDomesticOverviewIndexImport } from './routes/_authenticated/dashboard/domestic/overview/index'
@@ -238,6 +245,27 @@ const AuthenticatedSettingsApiSetupsIndexRoute =
     getParentRoute: () => AuthenticatedSettingsRouteRoute,
   } as any)
 
+const AuthenticatedRevenueDashboardSupportIndexRoute =
+  AuthenticatedRevenueDashboardSupportIndexImport.update({
+    id: '/revenue-dashboard/support/',
+    path: '/revenue-dashboard/support/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+
+const AuthenticatedRevenueDashboardSettingsIndexRoute =
+  AuthenticatedRevenueDashboardSettingsIndexImport.update({
+    id: '/revenue-dashboard/settings/',
+    path: '/revenue-dashboard/settings/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+
+const AuthenticatedRevenueDashboardInvoiceAndTaxIndexRoute =
+  AuthenticatedRevenueDashboardInvoiceAndTaxIndexImport.update({
+    id: '/revenue-dashboard/invoice-and-tax/',
+    path: '/revenue-dashboard/invoice-and-tax/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+
 const AuthenticatedOrdersTrackOrderIndexRoute =
   AuthenticatedOrdersTrackOrderIndexImport.update({
     id: '/orders/track-order/',
@@ -329,6 +357,36 @@ const AuthenticatedToolsRateCalculatorDomesticIndexRoute =
     id: '/domestic/',
     path: '/domestic/',
     getParentRoute: () => AuthenticatedToolsRateCalculatorRouteRoute,
+  } as any)
+
+const AuthenticatedRevenueDashboardReportsShipmentRevenueIndexRoute =
+  AuthenticatedRevenueDashboardReportsShipmentRevenueIndexImport.update({
+    id: '/revenue-dashboard/reports/shipment-revenue/',
+    path: '/revenue-dashboard/reports/shipment-revenue/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+
+const AuthenticatedRevenueDashboardReportsCommissionBreakdownIndexRoute =
+  AuthenticatedRevenueDashboardReportsCommissionBreakdownIndexImport.update({
+    id: '/revenue-dashboard/reports/commission-breakdown/',
+    path: '/revenue-dashboard/reports/commission-breakdown/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+
+const AuthenticatedRevenueDashboardMyEarningsSettlementsAndPayoutsIndexRoute =
+  AuthenticatedRevenueDashboardMyEarningsSettlementsAndPayoutsIndexImport.update(
+    {
+      id: '/revenue-dashboard/my-earnings/settlements-and-payouts/',
+      path: '/revenue-dashboard/my-earnings/settlements-and-payouts/',
+      getParentRoute: () => AuthenticatedRoute,
+    } as any,
+  )
+
+const AuthenticatedRevenueDashboardMyEarningsRevenueSummaryIndexRoute =
+  AuthenticatedRevenueDashboardMyEarningsRevenueSummaryIndexImport.update({
+    id: '/revenue-dashboard/my-earnings/revenue-summary/',
+    path: '/revenue-dashboard/my-earnings/revenue-summary/',
+    getParentRoute: () => AuthenticatedRoute,
   } as any)
 
 const AuthenticatedDashboardInternationalOverviewIndexRoute =
@@ -551,6 +609,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedOrdersTrackOrderIndexImport
       parentRoute: typeof AuthenticatedImport
     }
+    '/_authenticated/revenue-dashboard/invoice-and-tax/': {
+      id: '/_authenticated/revenue-dashboard/invoice-and-tax/'
+      path: '/revenue-dashboard/invoice-and-tax'
+      fullPath: '/revenue-dashboard/invoice-and-tax'
+      preLoaderRoute: typeof AuthenticatedRevenueDashboardInvoiceAndTaxIndexImport
+      parentRoute: typeof AuthenticatedImport
+    }
+    '/_authenticated/revenue-dashboard/settings/': {
+      id: '/_authenticated/revenue-dashboard/settings/'
+      path: '/revenue-dashboard/settings'
+      fullPath: '/revenue-dashboard/settings'
+      preLoaderRoute: typeof AuthenticatedRevenueDashboardSettingsIndexImport
+      parentRoute: typeof AuthenticatedImport
+    }
+    '/_authenticated/revenue-dashboard/support/': {
+      id: '/_authenticated/revenue-dashboard/support/'
+      path: '/revenue-dashboard/support'
+      fullPath: '/revenue-dashboard/support'
+      preLoaderRoute: typeof AuthenticatedRevenueDashboardSupportIndexImport
+      parentRoute: typeof AuthenticatedImport
+    }
     '/_authenticated/settings/api-setups/': {
       id: '/_authenticated/settings/api-setups/'
       path: '/api-setups'
@@ -662,6 +741,34 @@ declare module '@tanstack/react-router' {
       fullPath: '/dashboard/international/overview'
       preLoaderRoute: typeof AuthenticatedDashboardInternationalOverviewIndexImport
       parentRoute: typeof AuthenticatedDashboardInternationalRouteImport
+    }
+    '/_authenticated/revenue-dashboard/my-earnings/revenue-summary/': {
+      id: '/_authenticated/revenue-dashboard/my-earnings/revenue-summary/'
+      path: '/revenue-dashboard/my-earnings/revenue-summary'
+      fullPath: '/revenue-dashboard/my-earnings/revenue-summary'
+      preLoaderRoute: typeof AuthenticatedRevenueDashboardMyEarningsRevenueSummaryIndexImport
+      parentRoute: typeof AuthenticatedImport
+    }
+    '/_authenticated/revenue-dashboard/my-earnings/settlements-and-payouts/': {
+      id: '/_authenticated/revenue-dashboard/my-earnings/settlements-and-payouts/'
+      path: '/revenue-dashboard/my-earnings/settlements-and-payouts'
+      fullPath: '/revenue-dashboard/my-earnings/settlements-and-payouts'
+      preLoaderRoute: typeof AuthenticatedRevenueDashboardMyEarningsSettlementsAndPayoutsIndexImport
+      parentRoute: typeof AuthenticatedImport
+    }
+    '/_authenticated/revenue-dashboard/reports/commission-breakdown/': {
+      id: '/_authenticated/revenue-dashboard/reports/commission-breakdown/'
+      path: '/revenue-dashboard/reports/commission-breakdown'
+      fullPath: '/revenue-dashboard/reports/commission-breakdown'
+      preLoaderRoute: typeof AuthenticatedRevenueDashboardReportsCommissionBreakdownIndexImport
+      parentRoute: typeof AuthenticatedImport
+    }
+    '/_authenticated/revenue-dashboard/reports/shipment-revenue/': {
+      id: '/_authenticated/revenue-dashboard/reports/shipment-revenue/'
+      path: '/revenue-dashboard/reports/shipment-revenue'
+      fullPath: '/revenue-dashboard/reports/shipment-revenue'
+      preLoaderRoute: typeof AuthenticatedRevenueDashboardReportsShipmentRevenueIndexImport
+      parentRoute: typeof AuthenticatedImport
     }
     '/_authenticated/tools/rate-calculator/domestic/': {
       id: '/_authenticated/tools/rate-calculator/domestic/'
@@ -902,11 +1009,18 @@ interface AuthenticatedRouteChildren {
   AuthenticatedOrdersIdIndexRoute: typeof AuthenticatedOrdersIdIndexRoute
   AuthenticatedOrdersCreateIndexRoute: typeof AuthenticatedOrdersCreateIndexRoute
   AuthenticatedOrdersTrackOrderIndexRoute: typeof AuthenticatedOrdersTrackOrderIndexRoute
+  AuthenticatedRevenueDashboardInvoiceAndTaxIndexRoute: typeof AuthenticatedRevenueDashboardInvoiceAndTaxIndexRoute
+  AuthenticatedRevenueDashboardSettingsIndexRoute: typeof AuthenticatedRevenueDashboardSettingsIndexRoute
+  AuthenticatedRevenueDashboardSupportIndexRoute: typeof AuthenticatedRevenueDashboardSupportIndexRoute
   AuthenticatedToolsActivityLogsIndexRoute: typeof AuthenticatedToolsActivityLogsIndexRoute
   AuthenticatedWarehouseCreateIndexRoute: typeof AuthenticatedWarehouseCreateIndexRoute
   AuthenticatedWarehouseListIndexRoute: typeof AuthenticatedWarehouseListIndexRoute
   AuthenticatedAccessControlRolesCreateIndexRoute: typeof AuthenticatedAccessControlRolesCreateIndexRoute
   AuthenticatedAccessControlUsersCreateIndexRoute: typeof AuthenticatedAccessControlUsersCreateIndexRoute
+  AuthenticatedRevenueDashboardMyEarningsRevenueSummaryIndexRoute: typeof AuthenticatedRevenueDashboardMyEarningsRevenueSummaryIndexRoute
+  AuthenticatedRevenueDashboardMyEarningsSettlementsAndPayoutsIndexRoute: typeof AuthenticatedRevenueDashboardMyEarningsSettlementsAndPayoutsIndexRoute
+  AuthenticatedRevenueDashboardReportsCommissionBreakdownIndexRoute: typeof AuthenticatedRevenueDashboardReportsCommissionBreakdownIndexRoute
+  AuthenticatedRevenueDashboardReportsShipmentRevenueIndexRoute: typeof AuthenticatedRevenueDashboardReportsShipmentRevenueIndexRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
@@ -932,6 +1046,12 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedOrdersCreateIndexRoute: AuthenticatedOrdersCreateIndexRoute,
   AuthenticatedOrdersTrackOrderIndexRoute:
     AuthenticatedOrdersTrackOrderIndexRoute,
+  AuthenticatedRevenueDashboardInvoiceAndTaxIndexRoute:
+    AuthenticatedRevenueDashboardInvoiceAndTaxIndexRoute,
+  AuthenticatedRevenueDashboardSettingsIndexRoute:
+    AuthenticatedRevenueDashboardSettingsIndexRoute,
+  AuthenticatedRevenueDashboardSupportIndexRoute:
+    AuthenticatedRevenueDashboardSupportIndexRoute,
   AuthenticatedToolsActivityLogsIndexRoute:
     AuthenticatedToolsActivityLogsIndexRoute,
   AuthenticatedWarehouseCreateIndexRoute:
@@ -941,6 +1061,14 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
     AuthenticatedAccessControlRolesCreateIndexRoute,
   AuthenticatedAccessControlUsersCreateIndexRoute:
     AuthenticatedAccessControlUsersCreateIndexRoute,
+  AuthenticatedRevenueDashboardMyEarningsRevenueSummaryIndexRoute:
+    AuthenticatedRevenueDashboardMyEarningsRevenueSummaryIndexRoute,
+  AuthenticatedRevenueDashboardMyEarningsSettlementsAndPayoutsIndexRoute:
+    AuthenticatedRevenueDashboardMyEarningsSettlementsAndPayoutsIndexRoute,
+  AuthenticatedRevenueDashboardReportsCommissionBreakdownIndexRoute:
+    AuthenticatedRevenueDashboardReportsCommissionBreakdownIndexRoute,
+  AuthenticatedRevenueDashboardReportsShipmentRevenueIndexRoute:
+    AuthenticatedRevenueDashboardReportsShipmentRevenueIndexRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
@@ -970,6 +1098,9 @@ export interface FileRoutesByFullPath {
   '/orders/$id': typeof AuthenticatedOrdersIdIndexRoute
   '/orders/create': typeof AuthenticatedOrdersCreateIndexRoute
   '/orders/track-order': typeof AuthenticatedOrdersTrackOrderIndexRoute
+  '/revenue-dashboard/invoice-and-tax': typeof AuthenticatedRevenueDashboardInvoiceAndTaxIndexRoute
+  '/revenue-dashboard/settings': typeof AuthenticatedRevenueDashboardSettingsIndexRoute
+  '/revenue-dashboard/support': typeof AuthenticatedRevenueDashboardSupportIndexRoute
   '/settings/api-setups': typeof AuthenticatedSettingsApiSetupsIndexRoute
   '/settings/bank-details': typeof AuthenticatedSettingsBankDetailsIndexRoute
   '/settings/company-details': typeof AuthenticatedSettingsCompanyDetailsIndexRoute
@@ -986,6 +1117,10 @@ export interface FileRoutesByFullPath {
   '/dashboard/domestic/overview': typeof AuthenticatedDashboardDomesticOverviewIndexRoute
   '/dashboard/domestic/shipments': typeof AuthenticatedDashboardDomesticShipmentsIndexRoute
   '/dashboard/international/overview': typeof AuthenticatedDashboardInternationalOverviewIndexRoute
+  '/revenue-dashboard/my-earnings/revenue-summary': typeof AuthenticatedRevenueDashboardMyEarningsRevenueSummaryIndexRoute
+  '/revenue-dashboard/my-earnings/settlements-and-payouts': typeof AuthenticatedRevenueDashboardMyEarningsSettlementsAndPayoutsIndexRoute
+  '/revenue-dashboard/reports/commission-breakdown': typeof AuthenticatedRevenueDashboardReportsCommissionBreakdownIndexRoute
+  '/revenue-dashboard/reports/shipment-revenue': typeof AuthenticatedRevenueDashboardReportsShipmentRevenueIndexRoute
   '/tools/rate-calculator/domestic': typeof AuthenticatedToolsRateCalculatorDomesticIndexRoute
   '/tools/rate-calculator/international': typeof AuthenticatedToolsRateCalculatorInternationalIndexRoute
   '/tools/rate-card/document': typeof AuthenticatedToolsRateCardDocumentIndexRoute
@@ -1019,6 +1154,9 @@ export interface FileRoutesByTo {
   '/orders/$id': typeof AuthenticatedOrdersIdIndexRoute
   '/orders/create': typeof AuthenticatedOrdersCreateIndexRoute
   '/orders/track-order': typeof AuthenticatedOrdersTrackOrderIndexRoute
+  '/revenue-dashboard/invoice-and-tax': typeof AuthenticatedRevenueDashboardInvoiceAndTaxIndexRoute
+  '/revenue-dashboard/settings': typeof AuthenticatedRevenueDashboardSettingsIndexRoute
+  '/revenue-dashboard/support': typeof AuthenticatedRevenueDashboardSupportIndexRoute
   '/settings/api-setups': typeof AuthenticatedSettingsApiSetupsIndexRoute
   '/settings/bank-details': typeof AuthenticatedSettingsBankDetailsIndexRoute
   '/settings/company-details': typeof AuthenticatedSettingsCompanyDetailsIndexRoute
@@ -1035,6 +1173,10 @@ export interface FileRoutesByTo {
   '/dashboard/domestic/overview': typeof AuthenticatedDashboardDomesticOverviewIndexRoute
   '/dashboard/domestic/shipments': typeof AuthenticatedDashboardDomesticShipmentsIndexRoute
   '/dashboard/international/overview': typeof AuthenticatedDashboardInternationalOverviewIndexRoute
+  '/revenue-dashboard/my-earnings/revenue-summary': typeof AuthenticatedRevenueDashboardMyEarningsRevenueSummaryIndexRoute
+  '/revenue-dashboard/my-earnings/settlements-and-payouts': typeof AuthenticatedRevenueDashboardMyEarningsSettlementsAndPayoutsIndexRoute
+  '/revenue-dashboard/reports/commission-breakdown': typeof AuthenticatedRevenueDashboardReportsCommissionBreakdownIndexRoute
+  '/revenue-dashboard/reports/shipment-revenue': typeof AuthenticatedRevenueDashboardReportsShipmentRevenueIndexRoute
   '/tools/rate-calculator/domestic': typeof AuthenticatedToolsRateCalculatorDomesticIndexRoute
   '/tools/rate-calculator/international': typeof AuthenticatedToolsRateCalculatorInternationalIndexRoute
   '/tools/rate-card/document': typeof AuthenticatedToolsRateCardDocumentIndexRoute
@@ -1069,6 +1211,9 @@ export interface FileRoutesById {
   '/_authenticated/orders/$id/': typeof AuthenticatedOrdersIdIndexRoute
   '/_authenticated/orders/create/': typeof AuthenticatedOrdersCreateIndexRoute
   '/_authenticated/orders/track-order/': typeof AuthenticatedOrdersTrackOrderIndexRoute
+  '/_authenticated/revenue-dashboard/invoice-and-tax/': typeof AuthenticatedRevenueDashboardInvoiceAndTaxIndexRoute
+  '/_authenticated/revenue-dashboard/settings/': typeof AuthenticatedRevenueDashboardSettingsIndexRoute
+  '/_authenticated/revenue-dashboard/support/': typeof AuthenticatedRevenueDashboardSupportIndexRoute
   '/_authenticated/settings/api-setups/': typeof AuthenticatedSettingsApiSetupsIndexRoute
   '/_authenticated/settings/bank-details/': typeof AuthenticatedSettingsBankDetailsIndexRoute
   '/_authenticated/settings/company-details/': typeof AuthenticatedSettingsCompanyDetailsIndexRoute
@@ -1085,6 +1230,10 @@ export interface FileRoutesById {
   '/_authenticated/dashboard/domestic/overview/': typeof AuthenticatedDashboardDomesticOverviewIndexRoute
   '/_authenticated/dashboard/domestic/shipments/': typeof AuthenticatedDashboardDomesticShipmentsIndexRoute
   '/_authenticated/dashboard/international/overview/': typeof AuthenticatedDashboardInternationalOverviewIndexRoute
+  '/_authenticated/revenue-dashboard/my-earnings/revenue-summary/': typeof AuthenticatedRevenueDashboardMyEarningsRevenueSummaryIndexRoute
+  '/_authenticated/revenue-dashboard/my-earnings/settlements-and-payouts/': typeof AuthenticatedRevenueDashboardMyEarningsSettlementsAndPayoutsIndexRoute
+  '/_authenticated/revenue-dashboard/reports/commission-breakdown/': typeof AuthenticatedRevenueDashboardReportsCommissionBreakdownIndexRoute
+  '/_authenticated/revenue-dashboard/reports/shipment-revenue/': typeof AuthenticatedRevenueDashboardReportsShipmentRevenueIndexRoute
   '/_authenticated/tools/rate-calculator/domestic/': typeof AuthenticatedToolsRateCalculatorDomesticIndexRoute
   '/_authenticated/tools/rate-calculator/international/': typeof AuthenticatedToolsRateCalculatorInternationalIndexRoute
   '/_authenticated/tools/rate-card/document/': typeof AuthenticatedToolsRateCardDocumentIndexRoute
@@ -1120,6 +1269,9 @@ export interface FileRouteTypes {
     | '/orders/$id'
     | '/orders/create'
     | '/orders/track-order'
+    | '/revenue-dashboard/invoice-and-tax'
+    | '/revenue-dashboard/settings'
+    | '/revenue-dashboard/support'
     | '/settings/api-setups'
     | '/settings/bank-details'
     | '/settings/company-details'
@@ -1136,6 +1288,10 @@ export interface FileRouteTypes {
     | '/dashboard/domestic/overview'
     | '/dashboard/domestic/shipments'
     | '/dashboard/international/overview'
+    | '/revenue-dashboard/my-earnings/revenue-summary'
+    | '/revenue-dashboard/my-earnings/settlements-and-payouts'
+    | '/revenue-dashboard/reports/commission-breakdown'
+    | '/revenue-dashboard/reports/shipment-revenue'
     | '/tools/rate-calculator/domestic'
     | '/tools/rate-calculator/international'
     | '/tools/rate-card/document'
@@ -1168,6 +1324,9 @@ export interface FileRouteTypes {
     | '/orders/$id'
     | '/orders/create'
     | '/orders/track-order'
+    | '/revenue-dashboard/invoice-and-tax'
+    | '/revenue-dashboard/settings'
+    | '/revenue-dashboard/support'
     | '/settings/api-setups'
     | '/settings/bank-details'
     | '/settings/company-details'
@@ -1184,6 +1343,10 @@ export interface FileRouteTypes {
     | '/dashboard/domestic/overview'
     | '/dashboard/domestic/shipments'
     | '/dashboard/international/overview'
+    | '/revenue-dashboard/my-earnings/revenue-summary'
+    | '/revenue-dashboard/my-earnings/settlements-and-payouts'
+    | '/revenue-dashboard/reports/commission-breakdown'
+    | '/revenue-dashboard/reports/shipment-revenue'
     | '/tools/rate-calculator/domestic'
     | '/tools/rate-calculator/international'
     | '/tools/rate-card/document'
@@ -1216,6 +1379,9 @@ export interface FileRouteTypes {
     | '/_authenticated/orders/$id/'
     | '/_authenticated/orders/create/'
     | '/_authenticated/orders/track-order/'
+    | '/_authenticated/revenue-dashboard/invoice-and-tax/'
+    | '/_authenticated/revenue-dashboard/settings/'
+    | '/_authenticated/revenue-dashboard/support/'
     | '/_authenticated/settings/api-setups/'
     | '/_authenticated/settings/bank-details/'
     | '/_authenticated/settings/company-details/'
@@ -1232,6 +1398,10 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard/domestic/overview/'
     | '/_authenticated/dashboard/domestic/shipments/'
     | '/_authenticated/dashboard/international/overview/'
+    | '/_authenticated/revenue-dashboard/my-earnings/revenue-summary/'
+    | '/_authenticated/revenue-dashboard/my-earnings/settlements-and-payouts/'
+    | '/_authenticated/revenue-dashboard/reports/commission-breakdown/'
+    | '/_authenticated/revenue-dashboard/reports/shipment-revenue/'
     | '/_authenticated/tools/rate-calculator/domestic/'
     | '/_authenticated/tools/rate-calculator/international/'
     | '/_authenticated/tools/rate-card/document/'
@@ -1292,11 +1462,18 @@ export const routeTree = rootRoute
         "/_authenticated/orders/$id/",
         "/_authenticated/orders/create/",
         "/_authenticated/orders/track-order/",
+        "/_authenticated/revenue-dashboard/invoice-and-tax/",
+        "/_authenticated/revenue-dashboard/settings/",
+        "/_authenticated/revenue-dashboard/support/",
         "/_authenticated/tools/activity-logs/",
         "/_authenticated/warehouse/create/",
         "/_authenticated/warehouse/list/",
         "/_authenticated/access-control/roles/create/",
-        "/_authenticated/access-control/users/create/"
+        "/_authenticated/access-control/users/create/",
+        "/_authenticated/revenue-dashboard/my-earnings/revenue-summary/",
+        "/_authenticated/revenue-dashboard/my-earnings/settlements-and-payouts/",
+        "/_authenticated/revenue-dashboard/reports/commission-breakdown/",
+        "/_authenticated/revenue-dashboard/reports/shipment-revenue/"
       ]
     },
     "/_authenticated/dashboard": {
@@ -1416,6 +1593,18 @@ export const routeTree = rootRoute
       "filePath": "_authenticated/orders/track-order/index.jsx",
       "parent": "/_authenticated"
     },
+    "/_authenticated/revenue-dashboard/invoice-and-tax/": {
+      "filePath": "_authenticated/revenue-dashboard/invoice-and-tax/index.jsx",
+      "parent": "/_authenticated"
+    },
+    "/_authenticated/revenue-dashboard/settings/": {
+      "filePath": "_authenticated/revenue-dashboard/settings/index.jsx",
+      "parent": "/_authenticated"
+    },
+    "/_authenticated/revenue-dashboard/support/": {
+      "filePath": "_authenticated/revenue-dashboard/support/index.jsx",
+      "parent": "/_authenticated"
+    },
     "/_authenticated/settings/api-setups/": {
       "filePath": "_authenticated/settings/api-setups/index.jsx",
       "parent": "/_authenticated/settings"
@@ -1479,6 +1668,22 @@ export const routeTree = rootRoute
     "/_authenticated/dashboard/international/overview/": {
       "filePath": "_authenticated/dashboard/international/overview/index.jsx",
       "parent": "/_authenticated/dashboard/international"
+    },
+    "/_authenticated/revenue-dashboard/my-earnings/revenue-summary/": {
+      "filePath": "_authenticated/revenue-dashboard/my-earnings/revenue-summary/index.jsx",
+      "parent": "/_authenticated"
+    },
+    "/_authenticated/revenue-dashboard/my-earnings/settlements-and-payouts/": {
+      "filePath": "_authenticated/revenue-dashboard/my-earnings/settlements-and-payouts/index.jsx",
+      "parent": "/_authenticated"
+    },
+    "/_authenticated/revenue-dashboard/reports/commission-breakdown/": {
+      "filePath": "_authenticated/revenue-dashboard/reports/commission-breakdown/index.jsx",
+      "parent": "/_authenticated"
+    },
+    "/_authenticated/revenue-dashboard/reports/shipment-revenue/": {
+      "filePath": "_authenticated/revenue-dashboard/reports/shipment-revenue/index.jsx",
+      "parent": "/_authenticated"
     },
     "/_authenticated/tools/rate-calculator/domestic/": {
       "filePath": "_authenticated/tools/rate-calculator/domestic/index.jsx",
