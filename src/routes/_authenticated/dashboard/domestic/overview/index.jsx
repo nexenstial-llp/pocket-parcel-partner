@@ -82,46 +82,51 @@ function RouteComponent() {
       </div>
       <div className="grid grid-cols-12 gap-4">
         <ResponsiveCard
+          shadow
           title="Couriers Split"
           size="small"
           extra={<span className="text-[12px]">Last 30 days</span>}
           styles={cardStyle}
-          className="shadow-[2.0px_4.0px_4.0px_rgba(0,0,0,0.12)] col-span-12 sm:col-span-6 md:col-span-4"
+          className="col-span-12 sm:col-span-6 md:col-span-4"
         >
           <Empty />
         </ResponsiveCard>
         <ResponsiveCard
+          shadow
           title="Overall Shipment Status"
           size="small"
           styles={cardStyle}
-          className="shadow-[2.0px_4.0px_4.0px_rgba(0,0,0,0.12)] col-span-12 sm:col-span-6 md:col-span-4"
+          className="col-span-12 sm:col-span-6 md:col-span-4"
           extra={<DefaultExtraContent />}
         >
           <Empty description="No Shipment in last 30 days" />
         </ResponsiveCard>
         <ResponsiveCard
+          shadow
           title="Delivery Performance"
           size="small"
           styles={cardStyle}
-          className="shadow-[2.0px_4.0px_4.0px_rgba(0,0,0,0.12)] col-span-12 sm:col-span-6 md:col-span-4"
+          className="col-span-12 sm:col-span-6 md:col-span-4"
           extra={<DefaultExtraContent />}
         >
           <Empty description="No Shipment in last 30 days" />
         </ResponsiveCard>
         <ResponsiveCard
+          shadow
           title="Shipments - Zone Distribution"
           size="small"
           styles={cardStyle}
-          className="shadow-[2.0px_4.0px_4.0px_rgba(0,0,0,0.12)] col-span-12 sm:col-span-6 md:col-span-4"
+          className="col-span-12 sm:col-span-6 md:col-span-4"
           extra={"Last 30 days"}
         >
           <Empty description="No Shipment in last 30 days" />
         </ResponsiveCard>
         <ResponsiveCard
+          shadow
           title="Revenue"
           size="small"
           styles={cardStyle}
-          className="shadow-[2.0px_4.0px_4.0px_rgba(0,0,0,0.12)]  col-span-12 sm:col-span-6 md:col-span-4"
+          className=" col-span-12 sm:col-span-6 md:col-span-4"
           extra={"Last 30 days"}
         >
           <div>
@@ -147,10 +152,11 @@ function RouteComponent() {
           </div>
         </ResponsiveCard>
         <ResponsiveCard
+          shadow
           title="Shipment Overview by Courier"
           size="small"
           styles={cardStyle}
-          className=" shadow-[2.0px_4.0px_4.0px_rgba(0,0,0,0.12)] col-span-12"
+          className="col-span-12"
           extra={<DefaultExtraContent />}
         >
           <Empty description="No Shipment in last 30 days" />
