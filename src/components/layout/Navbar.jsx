@@ -51,6 +51,7 @@ const items = [
 // ];
 const Navbar = ({ auth }) => {
   const navigate = useNavigate();
+  const user = auth.user;
   const onClick = ({ key }) => {
     if (key === "logout") {
       message.success("Logout Successfully");
@@ -70,8 +71,8 @@ const Navbar = ({ auth }) => {
 
   return (
     <nav className="bg-white text-indigo-600 p-4 shadow-md border-b border-[#cdd0d4]">
-      <div className="container mx-auto flex justify-between items-center ">
-        <div className="flex gap-2 divide-x-2 divide-gray-500 items-center ml-auto">
+      <div className=" mx-auto flex justify-between items-center ">
+        <div className=" flex gap-2 divide-x-2 divide-gray-500 items-center ml-auto">
           {/* <div className="px-3 relative group ">
             <button className="flex gap-1 items-center ">
               <BsFillLightningChargeFill />
@@ -100,11 +101,14 @@ const Navbar = ({ auth }) => {
           <div className="pr-2">
             <Button icon={<IoIosNotifications size={25} />} type="text" />
           </div>
-          <div>
+          <div className="">
             <Dropdown menu={{ items, onClick }}>
               <a onClick={(e) => e.preventDefault()}>
-                <Space>
-                  <Avatar icon={<FaUser />} />
+                <Space className="">
+                  <Avatar icon={<FaUser />} />{" "}
+                  <p className="truncate capitalize max-w-[100px]">
+                    {user?.username || "Name"}
+                  </p>
                   <DownOutlined />
                 </Space>
               </a>
