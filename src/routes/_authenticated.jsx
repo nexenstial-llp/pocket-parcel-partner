@@ -42,7 +42,7 @@ function RootComponent() {
         <Sidebar collapsed={collapsed} setCollapsed={setCollapsed} />
         <div
           style={{ scrollbarWidth: "thin" }}
-          className="bg-gray-100 w-full min-h-screen max-h-screen overflow-auto scroll-smooth"
+          className="bg-gradient-to-tr from-[#e8f3ff]    to-[#ffede8] w-full min-h-screen max-h-screen overflow-auto scroll-smooth"
         >
           <Navbar
             auth={auth}
