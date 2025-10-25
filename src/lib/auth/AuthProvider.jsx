@@ -89,6 +89,7 @@ export function AuthProvider({ children }) {
       // Store token for persistence
       localStorage.setItem("auth-token", userData.accessToken);
       localStorage.setItem("refresh-token", userData.refreshToken);
+      localStorage.setItem("user", JSON.stringify(userData));
     } else {
       console.log(`Error: ${response.statusText}`);
       throw new Error("Authentication failed");
