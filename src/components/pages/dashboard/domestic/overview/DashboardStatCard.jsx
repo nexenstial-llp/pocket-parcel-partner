@@ -28,13 +28,11 @@ const DashboardStatCard = ({
 }) => {
   return (
     <ResponsiveCard
+      shadow
       styles={{
         header: { border: "none" },
       }}
-      className={cn(
-        "col-span-12 md:col-span-4 shadow-[2.0px_4.0px_4.0px_rgba(0,0,0,0.12)]",
-        className
-      )}
+      className={cn("col-span-12 md:col-span-4 ", className)}
       style={{ background: bgColor }}
       size="small"
     >

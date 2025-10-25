@@ -1,4 +1,5 @@
 /* eslint-disable react/prop-types */
+import { cn } from "@/utils/classname.util";
 import { Card, Grid } from "antd";
 
 const { useBreakpoint } = Grid;
@@ -7,6 +8,7 @@ const { useBreakpoint } = Grid;
  *   title: React.ReactNode;
  *   description?: React.ReactNode;
  *   extra?: React.ReactNode;
+ *   shadow?: boolean
  * }} ResponsiveCardProps
  */
 
@@ -22,6 +24,7 @@ const ResponsiveCard = ({
   children,
   style,
   className,
+  shadow = false,
   ...props
 }) => {
   const screens = useBreakpoint();
@@ -32,7 +35,11 @@ const ResponsiveCard = ({
       extra={extra}
       size={props.size || responsiveSize}
       style={style}
-      className={className}
+      className={cn(
+        shadow &&
+          "shadow-sm hover:shadow-md transition-all duration-300 ease-in-out h-full",
+        className
+      )}
       {...props}
     >
       {description && (

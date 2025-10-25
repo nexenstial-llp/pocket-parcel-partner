@@ -25,32 +25,45 @@ const BusinessProfileCard = ({ title, subTitle, icon, isCompleted }) => {
     showModal();
   };
   return (
-    <ResponsiveCard className="flex flex-col gap-2 h-full">
+    <ResponsiveCard
+      extra={
+        <>
+          {isCompleted && (
+            <div className="badge bg-green-100 text-green-500 px-2 py-1 flex items-center gap-1 rounded-md">
+              <FaCheckCircle />
+              Completed
+            </div>
+          )}
+          {!isCompleted && (
+            <Button size="small" type="primary" onClick={handleClick}>
+              + Add
+            </Button>
+          )}{" "}
+        </>
+      }
+      styles={{
+        header: {
+          border: "none",
+          minHeight: "40px",
+          padding: "10px",
+        },
+      }}
+      hoverable
+      shadow
+      className="h-full"
+    >
       <SocialMediaModal
         isModalOpen={isModalOpen}
         handleOk={handleOk}
         handleCancel={handleCancel}
       />
       <div className="flex gap-5">
-        <div className="h-fit bg-gray-300 text-purple-500 p-2 rounded-md">
+        <div className=" bg-gray-100 p-2 rounded-md h-fit text-secondary">
           {icon}
         </div>
         <div className="">
           <h5 className="text-lg">{title}</h5>
           <p className="text-gray-700 leading-4 text-sm">{subTitle}</p>
-        </div>
-        <div className="ml-auto">
-          {isCompleted && (
-            <div className="text-sm bg-green-100 text-green-500 px-2 py-1 flex items-center gap-1 rounded-md">
-              <FaCheckCircle />
-              Completed
-            </div>
-          )}
-          {!isCompleted && (
-            <Button type="primary" onClick={handleClick}>
-              + Add
-            </Button>
-          )}
         </div>
       </div>
     </ResponsiveCard>
