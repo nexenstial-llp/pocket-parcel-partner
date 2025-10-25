@@ -1,4 +1,5 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
+import { Button } from "antd";
 import { useState } from "react";
 
 export const Route = createFileRoute("/auth/Login")({
@@ -44,7 +45,7 @@ function LoginComponent() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center  bg-gradient-to-r from-[#a6a5ad80]   to-blue-300">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-tr from-[#f0a991]  to-[#1024dd]">
       <form
         onSubmit={handleSubmit}
         className="w-full max-w-md bg-white rounded-xl shadow-lg p-8 border border-gray-200"
@@ -100,13 +101,15 @@ function LoginComponent() {
           </div>
         </div>
 
-        <button
-          type="submit"
+        <Button
+          type="primary"
+          htmlType="submit"
           disabled={isLoading}
-          className="w-full mt-6 bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full mt-6"
+          loading={isLoading}
         >
           {isLoading ? "Signing in..." : "Sign In"}
-        </button>
+        </Button>
 
         <p className="text-center text-sm text-gray-500 mt-4">
           Don’t have an account?{" "}
