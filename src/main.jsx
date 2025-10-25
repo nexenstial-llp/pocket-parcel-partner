@@ -26,13 +26,35 @@ root.render(
     <ConfigProvider
       theme={{
         token: {
-          // Seed Token
           // colorPrimary: "#3883FF",
-          colorPrimary: "#6366f1",
+          // colorPrimary: "#6366f1", //Purple
+          colorPrimary: "#2b358e", // Orange
+          // motionDurationSlow: "0.15s",
         },
         components: {
           Menu: {
+            // colorPrimaryActive: "#f4592b",
+            // colorPrimaryBg: "#f4592b",
+            // itemActiveBg: "#f4592b",
+
             collapsedWidth: "70px",
+            motionDurationSlow: "0.5s",
+            darkItemBg: "#001529",
+            darkItemHoverBg: "#f4592b",
+            darkItemHoverColor: "#fff",
+            darkItemSelectedBg: "#f4592b",
+            darkItemSelectedColor: "#fff",
+            darkSubMenuItemBg: "#001529",
+
+            // Light
+            itemHoverBg: "#f4592b",
+            itemHoverColor: "#fff",
+            itemSelectedBg: "#f4592b",
+            itemSelectedColor: "#fff",
+            // subMenuItemBg: "#001529",
+          },
+          Button: {
+            fontSize: "12px",
           },
         },
       }}
