@@ -2,11 +2,15 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "@tanstack/react-router";
 import { Menu, Layout } from "antd";
+import POCKET_PARCEL_DESKTOP from "../../assets/Pocket_parcel_Desktop.svg";
+import POCKET_PARCEL_MOBILE from "../../assets/Pocket_parcel_Mobile.png";
 
 //icons
 import { AiOutlinePieChart, AiTwotoneContainer } from "react-icons/ai";
 import { HiHome } from "react-icons/hi";
 import { TbBuildingWarehouse, TbTruckReturn } from "react-icons/tb";
+import { DollarCircleOutlined } from "@ant-design/icons";
+import { IoSettingsOutline } from "react-icons/io5";
 
 const { Sider } = Layout;
 const sidebarData = [
@@ -22,7 +26,7 @@ const sidebarData = [
   },
   {
     key: "revenue-dashboard",
-    icon: <AiTwotoneContainer />,
+    icon: <DollarCircleOutlined />,
     label: "Revenue Dashboard",
     children: [
       {
@@ -200,11 +204,11 @@ const sidebarData = [
   //     },
   //   ],
   // },
-  // {
-  //   key: "settings",
-  //   icon: <AiOutlineTeam />,
-  //   label: <Link to="/settings">Settings</Link>,
-  // },
+  {
+    key: "settings",
+    icon: <IoSettingsOutline />,
+    label: <Link to="/settings/company-details">Settings</Link>,
+  },
 ];
 
 const Sidebar = ({ collapsed, setCollapsed }) => {
@@ -218,10 +222,14 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
         item.children.forEach((child) => {
           if (child.children) {
             child.children.forEach((grandChild) => {
-              allChildren.push({ child: grandChild, parent: child });
+              allChildren.push({
+                child: grandChild,
+                parent: child,
+                grandParent: item,
+              });
             });
           }
-          allChildren.push({ child, parent: item });
+          allChildren.push({ child, parent: item, grandParent: null });
         });
       }
     });
@@ -230,61 +238,60 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
     allChildren.sort((a, b) => b.child.key.length - a.child.key.length);
 
     // Find the child with the longest matching prefix
-    for (const { child, parent } of allChildren) {
-      console.log({ child, parent });
+    for (const { child, parent, grandParent } of allChildren) {
       if (pathname.startsWith(child.key)) {
-        return { selectedKey: child.key, openKey: parent.key };
+        let openKeys = [parent?.key, grandParent?.key].filter(Boolean);
+        return { selectedKey: child.key, openKey: parent?.key, openKeys };
       }
     }
 
     // Fallback to parent menu direct match
     for (const item of sidebarData) {
       if (pathname.startsWith(`/${item.key}`)) {
-        return { selectedKey: item.key, openKey: null };
+        return { selectedKey: item.key, openKey: null, openKeys: [] };
       }
     }
-    return { selectedKey: "", openKey: "" };
+    return { selectedKey: "", openKey: "", openKeys: [] };
   };
-
-  const { selectedKey, openKey: activeOpenKey } = findActiveKey(
+  const { selectedKey, openKeys: activeOpenKeys } = findActiveKey(
     location.pathname
   );
-  const [openKeys, setOpenKeys] = useState(
-    activeOpenKey ? [activeOpenKey] : []
-  );
-
-  useEffect(() => {
-    if (!collapsed && activeOpenKey) {
-      setOpenKeys([activeOpenKey]);
-    }
-  }, [activeOpenKey, collapsed]);
+  const [openKeys, setOpenKeys] = useState(activeOpenKeys);
+  const [storedOpenKeys, setStoredOpenKeys] = useState(activeOpenKeys);
 
   const onOpenChange = (keys) => {
-    setOpenKeys(keys);
+    setOpenKeys(keys); // ✅ correct way
+    setStoredOpenKeys(keys); // store open keys so they can be restored later
   };
+
+  // ✅ Sync open keys when sidebar expands/collapses
+  useEffect(() => {
+    if (collapsed) {
+      // close all menus when collapsed
+      setOpenKeys([]);
+    } else {
+      // restore previously opened keys when uncollapsed
+      setOpenKeys(storedOpenKeys.length ? storedOpenKeys : activeOpenKeys);
+    }
+  }, [collapsed]); // only track collapse state
+  // ✅ Also track route changes
+  useEffect(() => {
+    setOpenKeys(activeOpenKeys);
+    setStoredOpenKeys(activeOpenKeys);
+  }, [location.pathname]);
+
   return (
-    <div className="z-[100]">
+    <div className="z-[100]  shadow-[2px_0px_10px_0px_#a0aec0]">
       <Sider
-        style={{
-          // overflowY: "auto",
-          // overflowX: "hidden",
-          // position: "fixed",
-          // maxHeight: "100vh",
-          // minHeight: "100vh",
-          // top: 0,
-          // bottom: 0,
-          // scrollbarWidth: "thin",
-          background: "#001529",
-        }}
         collapsed={collapsed}
         onCollapse={setCollapsed}
+        collapsible
         width={240}
-        className="custom-scrollbar transition-all ease-in-out duration-300 "
-        onMouseEnter={() => setCollapsed(false)}
-        onMouseLeave={() => setCollapsed(true)}
+        className="custom-scrollbar sidebar-container transition-all ease-in-out duration-300"
+        // theme="light"
       >
         {/* 🔹 Fixed Header */}
-        <div className="h-16 sticky top-0 z-10 mb-2 flex items-center justify-center bg-[#001529] text-white font-bold text-xl border-b border-gray-700">
+        {/* <div className="h-16 sticky top-0 z-10 mb-2 flex items-center justify-center bg-[#001529] text-white font-bold text-xl border-b border-gray-700">
           <Link to="/home" className="w-full text-center relative ">
             <span
               className={`text-white absolute inset-0 flex justify-center items-center transition-all duration-300 ease-in-out ${
@@ -301,14 +308,32 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
               PP
             </span>
           </Link>
+        </div> */}
+        <div className="h-16 sticky top-0 z-10 mb-2 flex items-center justify-center bg-white ">
+          <Link to="/home" className="flex items-center justify-center w-full">
+            {!collapsed ? (
+              <img
+                src={POCKET_PARCEL_DESKTOP}
+                alt="Pocket Parcel Desktop Logo"
+                className="max-w-[80px] h-auto object-contain"
+              />
+            ) : (
+              <img
+                src={POCKET_PARCEL_MOBILE}
+                alt="Pocket Parcel Mobile Logo"
+                className="max-w-[40px] h-auto object-contain"
+              />
+            )}
+          </Link>
         </div>
+
         <div
           style={{
             overflowY: "auto",
             // overflowX: "hidden",
             // position: "fixed",
-            maxHeight: "calc(100vh - 73px)",
-            minHeight: "calc(100vh - 73px)",
+            maxHeight: "calc(100vh - 153px)",
+            minHeight: "calc(100vh - 153px)",
             top: 0,
             bottom: 0,
             // scrollbarWidth: "thin",
