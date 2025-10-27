@@ -1,8 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, Card, Form, Tooltip } from "antd";
-import React from "react";
 import { useForm } from "react-hook-form";
-import { internationalSchema } from "@/schemas/tools/rateCalculator/internationalSchema";
+import { internationalSchema } from "@/validations/tools/rateCalculator/internationalSchema";
 import InputTag from "@/components/ui/formFields/InputTag";
 import SelectTag from "@/components/ui/selectTag/SelectTag";
 import { AiTwotoneQuestionCircle } from "react-icons/ai";
@@ -20,13 +19,7 @@ const shipmentPurposeOptions = [
   { label: "Cargo", value: "Cargo" },
 ];
 const ShipmentDetails = () => {
-  const {
-    handleSubmit,
-    control,
-    reset,
-    watch,
-    formState: { errors },
-  } = useForm({
+  const { handleSubmit, control, reset, watch } = useForm({
     resolver: zodResolver(internationalSchema),
     defaultValues: {
       pickup_pincode: "",

@@ -1,23 +1,18 @@
+/* eslint-disable react/prop-types */
 import InputTag from "@/components/ui/formFields/InputTag";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, Card, Form, Radio, Tooltip } from "antd";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { AiTwotoneQuestionCircle } from "react-icons/ai";
-import { domesticSchema } from "@/schemas/tools/rateCalculator/domesticSchema";
+import { domesticSchema } from "@/validations/tools/rateCalculator/domesticSchema";
 
 const ShipmentDetails = ({
   setDeliveryPincode,
   setPickupPincode,
   setIsFormSubmitted,
 }) => {
-  const {
-    handleSubmit,
-    control,
-    reset,
-    watch,
-    formState: { errors },
-  } = useForm({
+  const { handleSubmit, control, reset, watch } = useForm({
     resolver: zodResolver(domesticSchema),
     defaultValues: {
       shipment_type: "forward",
