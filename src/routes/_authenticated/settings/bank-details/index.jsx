@@ -1,17 +1,16 @@
-import { createFileRoute } from '@tanstack/react-router'
-import { RiBankFill } from 'react-icons/ri'
-import BankDetailsModal from '../../../../components/pages/settings/bankDetails/modals/BankDetailsModal'
-import PageLayout from '@/components/layout/PageLayout'
+import { createFileRoute } from "@tanstack/react-router";
+import { RiBankFill } from "react-icons/ri";
+import BankDetailsModal from "../../../../components/pages/settings/bankDetails/modals/BankDetailsModal";
+import ResponsiveCard from "@/components/ui/cards/ResponsiveCard";
 
-export const Route = createFileRoute('/_authenticated/settings/bank-details/')({
+export const Route = createFileRoute("/_authenticated/settings/bank-details/")({
   component: RouteComponent,
-})
+});
 
 function RouteComponent() {
   return (
-    <PageLayout>
-      <h5>Bank Details</h5>
-      <div className="w-full h-full text-center mt-[150px]">
+    <ResponsiveCard title="Bank Details">
+      <div className="w-full h-full text-center my-[50px]">
         <div className="w-17.5 h-17.5 mb-2 inline-block text-7xl">
           <RiBankFill />
         </div>
@@ -22,6 +21,6 @@ function RouteComponent() {
         </p>
         <BankDetailsModal />
       </div>
-    </PageLayout>
-  )
+    </ResponsiveCard>
+  );
 }
