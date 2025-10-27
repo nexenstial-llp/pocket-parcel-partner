@@ -1,62 +1,63 @@
-import PageLayout from '@/components/layout/PageLayout'
-import { createFileRoute, Link, Outlet } from '@tanstack/react-router'
+import PageLayout from "@/components/layout/PageLayout";
+import ResponsiveCard from "@/components/ui/cards/ResponsiveCard";
+import {
+  createFileRoute,
+  Link,
+  Outlet,
+  useLocation,
+} from "@tanstack/react-router";
+import { Menu } from "antd";
 // Components
-export const Route = createFileRoute('/_authenticated/settings')({
+export const Route = createFileRoute("/_authenticated/settings")({
   component: RouteComponent,
-})
+});
 const items = [
   {
-    label: 'Company Details',
-    key: 'company-details',
+    label: <Link to={"/settings/company-details"}>Company Details</Link>,
+    key: "/settings/company-details",
   },
   {
-    label: 'Pickup Locations',
-    key: 'pickup-locations',
+    label: <Link to={"/settings/pickup-locations"}>Pickup Locations</Link>,
+    key: "/settings/pickup-locations",
   },
   {
-    label: 'Bank Details',
-    key: 'bank-details',
+    label: <Link to={"/settings/bank-details"}>Bank Details</Link>,
+    key: "/settings/bank-details",
   },
   {
-    label: 'Invoice Templates',
-    key: 'invoice-templates',
+    label: <Link to={"/settings/invoice-templates"}>Invoice Templates</Link>,
+    key: "/settings/invoice-templates",
   },
-  // { label: "API Setups", key: "api-setups" },
   {
-    label: 'Tax Configuration',
-    key: 'tax-configuration',
+    label: <Link to={"/settings/tax-configuration"}>Tax Configuration</Link>,
+    key: "/settings/tax-configuration",
   },
-  { label: 'Users', key: 'Users' },
-]
+];
 
 function RouteComponent() {
+  const location = useLocation();
+  const pathname = location.pathname;
+
   return (
-    <PageLayout>
-      <div className="flex bg-white rounded-lg border h-full min-h-[600px]">
-        <div className=" p-4 flex flex-col w-64 h-full border-r ">
-          <h2 className="mb-4 text-xl font-semibold">Settings</h2>
-          <nav className="space-y-2">
-            {items.map((item) => (
-              <Link
-                key={item.key}
-                to={`/settings/${item.key}`}
-                className="block rounded-lg px-4 py-2 text-gray-700 hover:bg-gray-100"
-                activeProps={{
-                  className:
-                    'bg-indigo-200 text-indigo-800 hover:bg-indigo-100',
-                }}
-              >
-                {item.label}
-              </Link>
-            ))}
-          </nav>
-        </div>
+    <PageLayout
+      items={[{ title: "Home", href: "/home" }, { title: "Settings" }]}
+    >
+      <div className="flex gap-4  h-full">
+        <ResponsiveCard title="Settings">
+          <Menu
+            mode="inline"
+            items={items}
+            className="!border-none"
+            selectedKeys={[pathname]}
+            key={"key"}
+          />
+        </ResponsiveCard>
 
         {/* Main Content */}
-        <div className="flex-1 p-8">
+        <div className="flex-1">
           <Outlet />
         </div>
       </div>
     </PageLayout>
-  )
+  );
 }
