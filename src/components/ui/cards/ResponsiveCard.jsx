@@ -9,6 +9,7 @@ const { useBreakpoint } = Grid;
  *   description?: React.ReactNode;
  *   extra?: React.ReactNode;
  *   shadow?: boolean
+ *   subTitle?: React.ReactNode
  * }} ResponsiveCardProps
  */
 
@@ -24,6 +25,7 @@ const ResponsiveCard = ({
   children,
   style,
   className,
+  subTitle,
   shadow = false,
   ...props
 }) => {
@@ -31,7 +33,14 @@ const ResponsiveCard = ({
   const responsiveSize = screens.sm ? "large" : "small";
   return (
     <Card
-      title={title}
+      title={
+        title ? (
+          <div className={`flex flex-col ${subTitle && "pt-2"}`}>
+            <div className="leading-4.5">{title}</div>
+            <small className="!font-light">{subTitle}</small>
+          </div>
+        ) : null
+      }
       extra={extra}
       size={props.size || responsiveSize}
       style={style}
