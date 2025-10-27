@@ -60,8 +60,10 @@ import { Route as AuthenticatedRevenueDashboardMyEarningsSettlementsAndPayoutsIn
 import { Route as AuthenticatedRevenueDashboardMyEarningsRevenueSummaryIndexImport } from './routes/_authenticated/revenue-dashboard/my-earnings/revenue-summary/index'
 import { Route as AuthenticatedDashboardInternationalOverviewIndexImport } from './routes/_authenticated/dashboard/international/overview/index'
 import { Route as AuthenticatedDashboardDomesticShipmentsIndexImport } from './routes/_authenticated/dashboard/domestic/shipments/index'
+import { Route as AuthenticatedDashboardDomesticRtoIndexImport } from './routes/_authenticated/dashboard/domestic/rto/index'
 import { Route as AuthenticatedDashboardDomesticOverviewIndexImport } from './routes/_authenticated/dashboard/domestic/overview/index'
 import { Route as AuthenticatedDashboardDomesticOrdersIndexImport } from './routes/_authenticated/dashboard/domestic/orders/index'
+import { Route as AuthenticatedDashboardDomesticNdrIndexImport } from './routes/_authenticated/dashboard/domestic/ndr/index'
 import { Route as AuthenticatedAccessControlUsersCreateIndexImport } from './routes/_authenticated/access-control/users/create/index'
 import { Route as AuthenticatedAccessControlRolesCreateIndexImport } from './routes/_authenticated/access-control/roles/create/index'
 import { Route as AuthenticatedToolsReportsDownloadReportsInstantReportsIndexImport } from './routes/_authenticated/tools/reports/download-reports/instant-reports/index'
@@ -403,6 +405,13 @@ const AuthenticatedDashboardDomesticShipmentsIndexRoute =
     getParentRoute: () => AuthenticatedDashboardDomesticRouteRoute,
   } as any)
 
+const AuthenticatedDashboardDomesticRtoIndexRoute =
+  AuthenticatedDashboardDomesticRtoIndexImport.update({
+    id: '/rto/',
+    path: '/rto/',
+    getParentRoute: () => AuthenticatedDashboardDomesticRouteRoute,
+  } as any)
+
 const AuthenticatedDashboardDomesticOverviewIndexRoute =
   AuthenticatedDashboardDomesticOverviewIndexImport.update({
     id: '/overview/',
@@ -414,6 +423,13 @@ const AuthenticatedDashboardDomesticOrdersIndexRoute =
   AuthenticatedDashboardDomesticOrdersIndexImport.update({
     id: '/orders/',
     path: '/orders/',
+    getParentRoute: () => AuthenticatedDashboardDomesticRouteRoute,
+  } as any)
+
+const AuthenticatedDashboardDomesticNdrIndexRoute =
+  AuthenticatedDashboardDomesticNdrIndexImport.update({
+    id: '/ndr/',
+    path: '/ndr/',
     getParentRoute: () => AuthenticatedDashboardDomesticRouteRoute,
   } as any)
 
@@ -714,6 +730,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAccessControlUsersCreateIndexImport
       parentRoute: typeof AuthenticatedImport
     }
+    '/_authenticated/dashboard/domestic/ndr/': {
+      id: '/_authenticated/dashboard/domestic/ndr/'
+      path: '/ndr'
+      fullPath: '/dashboard/domestic/ndr'
+      preLoaderRoute: typeof AuthenticatedDashboardDomesticNdrIndexImport
+      parentRoute: typeof AuthenticatedDashboardDomesticRouteImport
+    }
     '/_authenticated/dashboard/domestic/orders/': {
       id: '/_authenticated/dashboard/domestic/orders/'
       path: '/orders'
@@ -726,6 +749,13 @@ declare module '@tanstack/react-router' {
       path: '/overview'
       fullPath: '/dashboard/domestic/overview'
       preLoaderRoute: typeof AuthenticatedDashboardDomesticOverviewIndexImport
+      parentRoute: typeof AuthenticatedDashboardDomesticRouteImport
+    }
+    '/_authenticated/dashboard/domestic/rto/': {
+      id: '/_authenticated/dashboard/domestic/rto/'
+      path: '/rto'
+      fullPath: '/dashboard/domestic/rto'
+      preLoaderRoute: typeof AuthenticatedDashboardDomesticRtoIndexImport
       parentRoute: typeof AuthenticatedDashboardDomesticRouteImport
     }
     '/_authenticated/dashboard/domestic/shipments/': {
@@ -832,17 +862,23 @@ declare module '@tanstack/react-router' {
 // Create and export the route tree
 
 interface AuthenticatedDashboardDomesticRouteRouteChildren {
+  AuthenticatedDashboardDomesticNdrIndexRoute: typeof AuthenticatedDashboardDomesticNdrIndexRoute
   AuthenticatedDashboardDomesticOrdersIndexRoute: typeof AuthenticatedDashboardDomesticOrdersIndexRoute
   AuthenticatedDashboardDomesticOverviewIndexRoute: typeof AuthenticatedDashboardDomesticOverviewIndexRoute
+  AuthenticatedDashboardDomesticRtoIndexRoute: typeof AuthenticatedDashboardDomesticRtoIndexRoute
   AuthenticatedDashboardDomesticShipmentsIndexRoute: typeof AuthenticatedDashboardDomesticShipmentsIndexRoute
 }
 
 const AuthenticatedDashboardDomesticRouteRouteChildren: AuthenticatedDashboardDomesticRouteRouteChildren =
   {
+    AuthenticatedDashboardDomesticNdrIndexRoute:
+      AuthenticatedDashboardDomesticNdrIndexRoute,
     AuthenticatedDashboardDomesticOrdersIndexRoute:
       AuthenticatedDashboardDomesticOrdersIndexRoute,
     AuthenticatedDashboardDomesticOverviewIndexRoute:
       AuthenticatedDashboardDomesticOverviewIndexRoute,
+    AuthenticatedDashboardDomesticRtoIndexRoute:
+      AuthenticatedDashboardDomesticRtoIndexRoute,
     AuthenticatedDashboardDomesticShipmentsIndexRoute:
       AuthenticatedDashboardDomesticShipmentsIndexRoute,
   }
@@ -1113,8 +1149,10 @@ export interface FileRoutesByFullPath {
   '/warehouse/list': typeof AuthenticatedWarehouseListIndexRoute
   '/access-control/roles/create': typeof AuthenticatedAccessControlRolesCreateIndexRoute
   '/access-control/users/create': typeof AuthenticatedAccessControlUsersCreateIndexRoute
+  '/dashboard/domestic/ndr': typeof AuthenticatedDashboardDomesticNdrIndexRoute
   '/dashboard/domestic/orders': typeof AuthenticatedDashboardDomesticOrdersIndexRoute
   '/dashboard/domestic/overview': typeof AuthenticatedDashboardDomesticOverviewIndexRoute
+  '/dashboard/domestic/rto': typeof AuthenticatedDashboardDomesticRtoIndexRoute
   '/dashboard/domestic/shipments': typeof AuthenticatedDashboardDomesticShipmentsIndexRoute
   '/dashboard/international/overview': typeof AuthenticatedDashboardInternationalOverviewIndexRoute
   '/revenue-dashboard/my-earnings/revenue-summary': typeof AuthenticatedRevenueDashboardMyEarningsRevenueSummaryIndexRoute
@@ -1169,8 +1207,10 @@ export interface FileRoutesByTo {
   '/warehouse/list': typeof AuthenticatedWarehouseListIndexRoute
   '/access-control/roles/create': typeof AuthenticatedAccessControlRolesCreateIndexRoute
   '/access-control/users/create': typeof AuthenticatedAccessControlUsersCreateIndexRoute
+  '/dashboard/domestic/ndr': typeof AuthenticatedDashboardDomesticNdrIndexRoute
   '/dashboard/domestic/orders': typeof AuthenticatedDashboardDomesticOrdersIndexRoute
   '/dashboard/domestic/overview': typeof AuthenticatedDashboardDomesticOverviewIndexRoute
+  '/dashboard/domestic/rto': typeof AuthenticatedDashboardDomesticRtoIndexRoute
   '/dashboard/domestic/shipments': typeof AuthenticatedDashboardDomesticShipmentsIndexRoute
   '/dashboard/international/overview': typeof AuthenticatedDashboardInternationalOverviewIndexRoute
   '/revenue-dashboard/my-earnings/revenue-summary': typeof AuthenticatedRevenueDashboardMyEarningsRevenueSummaryIndexRoute
@@ -1226,8 +1266,10 @@ export interface FileRoutesById {
   '/_authenticated/warehouse/list/': typeof AuthenticatedWarehouseListIndexRoute
   '/_authenticated/access-control/roles/create/': typeof AuthenticatedAccessControlRolesCreateIndexRoute
   '/_authenticated/access-control/users/create/': typeof AuthenticatedAccessControlUsersCreateIndexRoute
+  '/_authenticated/dashboard/domestic/ndr/': typeof AuthenticatedDashboardDomesticNdrIndexRoute
   '/_authenticated/dashboard/domestic/orders/': typeof AuthenticatedDashboardDomesticOrdersIndexRoute
   '/_authenticated/dashboard/domestic/overview/': typeof AuthenticatedDashboardDomesticOverviewIndexRoute
+  '/_authenticated/dashboard/domestic/rto/': typeof AuthenticatedDashboardDomesticRtoIndexRoute
   '/_authenticated/dashboard/domestic/shipments/': typeof AuthenticatedDashboardDomesticShipmentsIndexRoute
   '/_authenticated/dashboard/international/overview/': typeof AuthenticatedDashboardInternationalOverviewIndexRoute
   '/_authenticated/revenue-dashboard/my-earnings/revenue-summary/': typeof AuthenticatedRevenueDashboardMyEarningsRevenueSummaryIndexRoute
@@ -1284,8 +1326,10 @@ export interface FileRouteTypes {
     | '/warehouse/list'
     | '/access-control/roles/create'
     | '/access-control/users/create'
+    | '/dashboard/domestic/ndr'
     | '/dashboard/domestic/orders'
     | '/dashboard/domestic/overview'
+    | '/dashboard/domestic/rto'
     | '/dashboard/domestic/shipments'
     | '/dashboard/international/overview'
     | '/revenue-dashboard/my-earnings/revenue-summary'
@@ -1339,8 +1383,10 @@ export interface FileRouteTypes {
     | '/warehouse/list'
     | '/access-control/roles/create'
     | '/access-control/users/create'
+    | '/dashboard/domestic/ndr'
     | '/dashboard/domestic/orders'
     | '/dashboard/domestic/overview'
+    | '/dashboard/domestic/rto'
     | '/dashboard/domestic/shipments'
     | '/dashboard/international/overview'
     | '/revenue-dashboard/my-earnings/revenue-summary'
@@ -1394,8 +1440,10 @@ export interface FileRouteTypes {
     | '/_authenticated/warehouse/list/'
     | '/_authenticated/access-control/roles/create/'
     | '/_authenticated/access-control/users/create/'
+    | '/_authenticated/dashboard/domestic/ndr/'
     | '/_authenticated/dashboard/domestic/orders/'
     | '/_authenticated/dashboard/domestic/overview/'
+    | '/_authenticated/dashboard/domestic/rto/'
     | '/_authenticated/dashboard/domestic/shipments/'
     | '/_authenticated/dashboard/international/overview/'
     | '/_authenticated/revenue-dashboard/my-earnings/revenue-summary/'
@@ -1504,8 +1552,10 @@ export const routeTree = rootRoute
       "filePath": "_authenticated/dashboard/domestic/route.jsx",
       "parent": "/_authenticated/dashboard",
       "children": [
+        "/_authenticated/dashboard/domestic/ndr/",
         "/_authenticated/dashboard/domestic/orders/",
         "/_authenticated/dashboard/domestic/overview/",
+        "/_authenticated/dashboard/domestic/rto/",
         "/_authenticated/dashboard/domestic/shipments/"
       ]
     },
@@ -1653,12 +1703,20 @@ export const routeTree = rootRoute
       "filePath": "_authenticated/access-control/users/create/index.jsx",
       "parent": "/_authenticated"
     },
+    "/_authenticated/dashboard/domestic/ndr/": {
+      "filePath": "_authenticated/dashboard/domestic/ndr/index.jsx",
+      "parent": "/_authenticated/dashboard/domestic"
+    },
     "/_authenticated/dashboard/domestic/orders/": {
       "filePath": "_authenticated/dashboard/domestic/orders/index.jsx",
       "parent": "/_authenticated/dashboard/domestic"
     },
     "/_authenticated/dashboard/domestic/overview/": {
       "filePath": "_authenticated/dashboard/domestic/overview/index.jsx",
+      "parent": "/_authenticated/dashboard/domestic"
+    },
+    "/_authenticated/dashboard/domestic/rto/": {
+      "filePath": "_authenticated/dashboard/domestic/rto/index.jsx",
       "parent": "/_authenticated/dashboard/domestic"
     },
     "/_authenticated/dashboard/domestic/shipments/": {
