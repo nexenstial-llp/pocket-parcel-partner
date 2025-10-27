@@ -20,7 +20,7 @@ const BusinessProfileCard = ({ title, subTitle, icon, isCompleted }) => {
   const navigate = useNavigate();
   const handleClick = () => {
     if (title === "Add Bank Details") {
-      navigate({ to: "/bank-details" });
+      navigate({ to: "/settings/bank-details" });
     }
     showModal();
   };
