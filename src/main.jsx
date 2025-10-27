@@ -38,7 +38,6 @@ root.render(
             // itemActiveBg: "#f4592b",
 
             collapsedWidth: "70px",
-            motionDurationSlow: "0.5s",
             darkItemBg: "#001529",
             darkItemHoverBg: "#f4592b",
             darkItemHoverColor: "#fff",
@@ -48,7 +47,6 @@ root.render(
 
             // Light
             itemHoverBg: "#f4592b",
-            itemHoverColor: "#fff",
             itemSelectedBg: "#f4592b",
             itemSelectedColor: "#fff",
             // subMenuItemBg: "#001529",
