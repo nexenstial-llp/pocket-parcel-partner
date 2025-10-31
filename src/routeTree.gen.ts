@@ -19,6 +19,7 @@ import { Route as AuthLoginImport } from './routes/auth/Login'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings/route'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard/route'
 import { Route as AuthenticatedToolsIndexImport } from './routes/_authenticated/tools/index'
+import { Route as AuthenticatedRackIndexImport } from './routes/_authenticated/rack/index'
 import { Route as AuthenticatedOverviewIndexImport } from './routes/_authenticated/overview/index'
 import { Route as AuthenticatedOrdersIndexImport } from './routes/_authenticated/orders/index'
 import { Route as AuthenticatedHomeIndexImport } from './routes/_authenticated/home/index'
@@ -112,6 +113,12 @@ const AuthenticatedDashboardRouteRoute =
 const AuthenticatedToolsIndexRoute = AuthenticatedToolsIndexImport.update({
   id: '/tools/',
   path: '/tools/',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+
+const AuthenticatedRackIndexRoute = AuthenticatedRackIndexImport.update({
+  id: '/rack/',
+  path: '/rack/',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
 
@@ -567,6 +574,13 @@ declare module '@tanstack/react-router' {
       path: '/overview'
       fullPath: '/overview'
       preLoaderRoute: typeof AuthenticatedOverviewIndexImport
+      parentRoute: typeof AuthenticatedImport
+    }
+    '/_authenticated/rack/': {
+      id: '/_authenticated/rack/'
+      path: '/rack'
+      fullPath: '/rack'
+      preLoaderRoute: typeof AuthenticatedRackIndexImport
       parentRoute: typeof AuthenticatedImport
     }
     '/_authenticated/tools/': {
@@ -1038,6 +1052,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedHomeIndexRoute: typeof AuthenticatedHomeIndexRoute
   AuthenticatedOrdersIndexRoute: typeof AuthenticatedOrdersIndexRoute
   AuthenticatedOverviewIndexRoute: typeof AuthenticatedOverviewIndexRoute
+  AuthenticatedRackIndexRoute: typeof AuthenticatedRackIndexRoute
   AuthenticatedToolsIndexRoute: typeof AuthenticatedToolsIndexRoute
   AuthenticatedAccessControlUsersIndexRoute: typeof AuthenticatedAccessControlUsersIndexRoute
   AuthenticatedNdrCasesIndexRoute: typeof AuthenticatedNdrCasesIndexRoute
@@ -1073,6 +1088,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedHomeIndexRoute: AuthenticatedHomeIndexRoute,
   AuthenticatedOrdersIndexRoute: AuthenticatedOrdersIndexRoute,
   AuthenticatedOverviewIndexRoute: AuthenticatedOverviewIndexRoute,
+  AuthenticatedRackIndexRoute: AuthenticatedRackIndexRoute,
   AuthenticatedToolsIndexRoute: AuthenticatedToolsIndexRoute,
   AuthenticatedAccessControlUsersIndexRoute:
     AuthenticatedAccessControlUsersIndexRoute,
@@ -1126,6 +1142,7 @@ export interface FileRoutesByFullPath {
   '/home': typeof AuthenticatedHomeIndexRoute
   '/orders': typeof AuthenticatedOrdersIndexRoute
   '/overview': typeof AuthenticatedOverviewIndexRoute
+  '/rack': typeof AuthenticatedRackIndexRoute
   '/tools': typeof AuthenticatedToolsIndexRoute
   '/tools/reports/download-reports': typeof AuthenticatedToolsReportsDownloadReportsRouteRouteWithChildren
   '/access-control/users': typeof AuthenticatedAccessControlUsersIndexRoute
@@ -1184,6 +1201,7 @@ export interface FileRoutesByTo {
   '/home': typeof AuthenticatedHomeIndexRoute
   '/orders': typeof AuthenticatedOrdersIndexRoute
   '/overview': typeof AuthenticatedOverviewIndexRoute
+  '/rack': typeof AuthenticatedRackIndexRoute
   '/tools': typeof AuthenticatedToolsIndexRoute
   '/tools/reports/download-reports': typeof AuthenticatedToolsReportsDownloadReportsRouteRouteWithChildren
   '/access-control/users': typeof AuthenticatedAccessControlUsersIndexRoute
@@ -1243,6 +1261,7 @@ export interface FileRoutesById {
   '/_authenticated/home/': typeof AuthenticatedHomeIndexRoute
   '/_authenticated/orders/': typeof AuthenticatedOrdersIndexRoute
   '/_authenticated/overview/': typeof AuthenticatedOverviewIndexRoute
+  '/_authenticated/rack/': typeof AuthenticatedRackIndexRoute
   '/_authenticated/tools/': typeof AuthenticatedToolsIndexRoute
   '/_authenticated/tools/reports/download-reports': typeof AuthenticatedToolsReportsDownloadReportsRouteRouteWithChildren
   '/_authenticated/access-control/users/': typeof AuthenticatedAccessControlUsersIndexRoute
@@ -1303,6 +1322,7 @@ export interface FileRouteTypes {
     | '/home'
     | '/orders'
     | '/overview'
+    | '/rack'
     | '/tools'
     | '/tools/reports/download-reports'
     | '/access-control/users'
@@ -1360,6 +1380,7 @@ export interface FileRouteTypes {
     | '/home'
     | '/orders'
     | '/overview'
+    | '/rack'
     | '/tools'
     | '/tools/reports/download-reports'
     | '/access-control/users'
@@ -1417,6 +1438,7 @@ export interface FileRouteTypes {
     | '/_authenticated/home/'
     | '/_authenticated/orders/'
     | '/_authenticated/overview/'
+    | '/_authenticated/rack/'
     | '/_authenticated/tools/'
     | '/_authenticated/tools/reports/download-reports'
     | '/_authenticated/access-control/users/'
@@ -1503,6 +1525,7 @@ export const routeTree = rootRoute
         "/_authenticated/home/",
         "/_authenticated/orders/",
         "/_authenticated/overview/",
+        "/_authenticated/rack/",
         "/_authenticated/tools/",
         "/_authenticated/access-control/users/",
         "/_authenticated/ndr/cases/",
@@ -1605,6 +1628,10 @@ export const routeTree = rootRoute
     },
     "/_authenticated/overview/": {
       "filePath": "_authenticated/overview/index.jsx",
+      "parent": "/_authenticated"
+    },
+    "/_authenticated/rack/": {
+      "filePath": "_authenticated/rack/index.jsx",
       "parent": "/_authenticated"
     },
     "/_authenticated/tools/": {

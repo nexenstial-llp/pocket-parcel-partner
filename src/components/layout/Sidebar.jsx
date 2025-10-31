@@ -11,6 +11,7 @@ import { HiHome } from "react-icons/hi";
 import { TbBuildingWarehouse, TbTruckReturn } from "react-icons/tb";
 import { DollarCircleOutlined } from "@ant-design/icons";
 import { IoSettingsOutline } from "react-icons/io5";
+import { BiCabinet } from "react-icons/bi";
 
 const { Sider } = Layout;
 const sidebarData = [
@@ -142,6 +143,11 @@ const sidebarData = [
       },
     ],
   },
+  {
+    key: "rack",
+    icon: <BiCabinet />,
+    label: <Link to="/rack">Rack</Link>,
+  },
   // {
   //   key: "returns",
   //   icon: <PiKeyReturnFill />,
@@ -233,7 +239,6 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
         });
       }
     });
-
     // Sort children by key length descending for longest prefix match
     allChildren.sort((a, b) => b.child.key.length - a.child.key.length);
 
@@ -246,11 +251,29 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
     }
 
     // Fallback to parent menu direct match
-    for (const item of sidebarData) {
+    const sortedSidebarData = [...sidebarData].sort(
+      (a, b) => b.key.length - a.key.length
+    );
+
+    for (const item of sortedSidebarData) {
+      if (pathname === `/${item.key}`) {
+        return { selectedKey: item.key, openKey: null, openKeys: [] };
+      }
       if (pathname.startsWith(`/${item.key}`)) {
         return { selectedKey: item.key, openKey: null, openKeys: [] };
       }
     }
+
+    // // Fallback to parent menu direct match
+    // for (const item of sidebarData) {
+    //   if (pathname === `/${item.key}`) {
+    //     return { selectedKey: item.key, openKey: null, openKeys: [] };
+    //   }
+    //   if (pathname.startsWith(`/${item.key}`)) {
+    //     return { selectedKey: item.key, openKey: null, openKeys: [] };
+    //   }
+    // }
+
     return { selectedKey: "", openKey: "", openKeys: [] };
   };
   const { selectedKey, openKeys: activeOpenKeys } = findActiveKey(
