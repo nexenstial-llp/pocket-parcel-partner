@@ -44,17 +44,20 @@ function RouteComponent() {
           value={"0"}
           previousLabel="Yesterday"
           previousValue={0}
+          bgColor="#f7fff7"
         />
         <OperationsStatCard
           title="Shipment Details"
           stats={shipmentDetailsData}
           icon={<TbFileTime />}
+          bgColor="#F9EBD1"
         />
         <DashboardStatCard
           title="Today's Revenue"
           value={"0"}
           previousLabel="Yesterday"
           previousValue={0}
+          bgColor="#EDF2F4"
         />
         <OperationsStatCard
           lg={6}
@@ -64,11 +67,13 @@ function RouteComponent() {
           title="NDR Details"
           stats={ndrDetailsData}
           icon={<TbFileTime />}
+          bgColor="#f7fff7"
         />
         <DashboardStatCard
           title="Average Shipping Cost"
           value={"0"}
           extra={<span className="text-[12px]">Last 30 days</span>}
+          bgColor="#F9EBD1"
         />
         <OperationsStatCard
           lg={6}
@@ -78,6 +83,7 @@ function RouteComponent() {
           title="COD Status"
           stats={codStatusData}
           icon={<TbFileTime />}
+          bgColor="#EDF2F4"
         />
       </div>
       <div className="grid grid-cols-12 gap-4">

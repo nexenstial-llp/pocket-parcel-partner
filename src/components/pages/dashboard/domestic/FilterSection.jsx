@@ -1,4 +1,5 @@
-import { Card, Col, DatePicker, Row, Select } from "antd";
+import ResponsiveCard from "@/components/ui/cards/ResponsiveCard";
+import { Col, DatePicker, Row, Select } from "antd";
 import { useState } from "react";
 
 const { RangePicker } = DatePicker;
@@ -11,7 +12,7 @@ const FilterSection = () => {
   const [paymentMode, setPaymentMode] = useState(undefined);
   const [shipmentMode, setShipmentMode] = useState(undefined);
   return (
-    <Card>
+    <ResponsiveCard shadow title="Filters" size="small">
       <Row gutter={16} className="flex flex-wrap">
         <Col xs={24} sm={12} md={6}>
           <label className="block text-gray-700 mb-1">Date Range</label>
@@ -80,7 +81,7 @@ const FilterSection = () => {
           </Select>
         </Col>
       </Row>
-    </Card>
+    </ResponsiveCard>
   );
 };
 

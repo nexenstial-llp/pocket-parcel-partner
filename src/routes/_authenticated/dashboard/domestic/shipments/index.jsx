@@ -1,3 +1,4 @@
+import FilterSection from "@/components/pages/dashboard/domestic/FilterSection";
 import CourierWiseShipmentsChart from "@/components/pages/dashboard/domestic/overview/shipments/CourierWiseShipmentsChart";
 import { createFileRoute } from "@tanstack/react-router";
 
@@ -9,7 +10,8 @@ export const Route = createFileRoute(
 
 function RouteComponent() {
   return (
-    <div>
+    <div className="flex flex-col gap-4">
+      <FilterSection />
       <CourierWiseShipmentsChart />
     </div>
   );

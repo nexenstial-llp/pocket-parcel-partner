@@ -1,5 +1,6 @@
-import { Card, Switch, Row, Col, Empty } from "antd";
+import { Switch, Row, Col, Empty } from "antd";
 import DefaultExtraContent from "../DefaultExtraContent";
+import ResponsiveCard from "@/components/ui/cards/ResponsiveCard";
 
 const CourierWiseShipmentsChart = () => {
   // Example date ranges – these should be dynamic in real usage
@@ -8,7 +9,7 @@ const CourierWiseShipmentsChart = () => {
 
   return (
     <div className="flex flex-col gap-4">
-      <Card>
+      <ResponsiveCard className="shadow">
         <Row align="middle" className="mb-2">
           <Col xs={24} md={16}>
             <div className="flex items-center">
@@ -39,8 +40,8 @@ const CourierWiseShipmentsChart = () => {
             <Empty description=" Data not found for the selected filters." />
           </Col>
         </Row>
-      </Card>
-      <Card>
+      </ResponsiveCard>
+      <ResponsiveCard className="shadow">
         <div className="flex items-center">
           <span className="text-lg font-semibold text-gray-700">
             Zone Wise Shipments
@@ -52,37 +53,37 @@ const CourierWiseShipmentsChart = () => {
             <Empty description=" Data not found for the selected filters." />
           </Col>
         </Row>
-      </Card>
+      </ResponsiveCard>
       <Row gutter={[16, 16]}>
         <Col xs={24} sm={12} md={8}>
-          <Card className="shadow">
+          <ResponsiveCard className="shadow">
             <div className="flex items-center">
               <span className="text-lg font-semibold text-gray-700">
                 Shipment&apos;s Channel
               </span>
             </div>
             <Empty description=" Data not found for the selected filters." />
-          </Card>
+          </ResponsiveCard>
         </Col>
         <Col xs={24} sm={12} md={8}>
-          <Card className="shadow">
+          <ResponsiveCard className="shadow">
             <div className="flex items-center">
               <span className="text-lg font-semibold text-gray-700">
                 Weight Profile (in Kgs)
               </span>
             </div>
             <Empty description=" Data not found for the selected filters." />
-          </Card>
+          </ResponsiveCard>
         </Col>
         <Col xs={24} sm={12} md={8}>
-          <Card className="shadow">
+          <ResponsiveCard className="shadow">
             <div className="flex items-center">
               <span className="text-lg font-semibold text-gray-700">
                 Shipment&apos;s Zone
               </span>
             </div>
             <Empty description=" Data not found for the selected filters." />
-          </Card>
+          </ResponsiveCard>
         </Col>
       </Row>
     </div>

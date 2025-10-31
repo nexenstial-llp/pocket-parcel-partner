@@ -30,14 +30,13 @@ function RouteComponent() {
   return (
     <>
       <Menu
-        className="button-menu"
+        className="button-menu bg-blue-50!"
         onClick={onClick}
         selectedKeys={[activeKey]}
         mode="horizontal"
         items={items}
         activeKey={activeKey}
       />
-
       <Outlet />
     </>
   );

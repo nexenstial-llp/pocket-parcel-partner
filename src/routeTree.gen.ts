@@ -65,6 +65,8 @@ import { Route as AuthenticatedDashboardDomesticRtoIndexImport } from './routes/
 import { Route as AuthenticatedDashboardDomesticOverviewIndexImport } from './routes/_authenticated/dashboard/domestic/overview/index'
 import { Route as AuthenticatedDashboardDomesticOrdersIndexImport } from './routes/_authenticated/dashboard/domestic/orders/index'
 import { Route as AuthenticatedDashboardDomesticNdrIndexImport } from './routes/_authenticated/dashboard/domestic/ndr/index'
+import { Route as AuthenticatedDashboardDomesticDelaysIndexImport } from './routes/_authenticated/dashboard/domestic/delays/index'
+import { Route as AuthenticatedDashboardDomesticCourierIndexImport } from './routes/_authenticated/dashboard/domestic/courier/index'
 import { Route as AuthenticatedAccessControlUsersCreateIndexImport } from './routes/_authenticated/access-control/users/create/index'
 import { Route as AuthenticatedAccessControlRolesCreateIndexImport } from './routes/_authenticated/access-control/roles/create/index'
 import { Route as AuthenticatedToolsReportsDownloadReportsInstantReportsIndexImport } from './routes/_authenticated/tools/reports/download-reports/instant-reports/index'
@@ -440,6 +442,20 @@ const AuthenticatedDashboardDomesticNdrIndexRoute =
     getParentRoute: () => AuthenticatedDashboardDomesticRouteRoute,
   } as any)
 
+const AuthenticatedDashboardDomesticDelaysIndexRoute =
+  AuthenticatedDashboardDomesticDelaysIndexImport.update({
+    id: '/delays/',
+    path: '/delays/',
+    getParentRoute: () => AuthenticatedDashboardDomesticRouteRoute,
+  } as any)
+
+const AuthenticatedDashboardDomesticCourierIndexRoute =
+  AuthenticatedDashboardDomesticCourierIndexImport.update({
+    id: '/courier/',
+    path: '/courier/',
+    getParentRoute: () => AuthenticatedDashboardDomesticRouteRoute,
+  } as any)
+
 const AuthenticatedAccessControlUsersCreateIndexRoute =
   AuthenticatedAccessControlUsersCreateIndexImport.update({
     id: '/access-control/users/create/',
@@ -744,6 +760,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAccessControlUsersCreateIndexImport
       parentRoute: typeof AuthenticatedImport
     }
+    '/_authenticated/dashboard/domestic/courier/': {
+      id: '/_authenticated/dashboard/domestic/courier/'
+      path: '/courier'
+      fullPath: '/dashboard/domestic/courier'
+      preLoaderRoute: typeof AuthenticatedDashboardDomesticCourierIndexImport
+      parentRoute: typeof AuthenticatedDashboardDomesticRouteImport
+    }
+    '/_authenticated/dashboard/domestic/delays/': {
+      id: '/_authenticated/dashboard/domestic/delays/'
+      path: '/delays'
+      fullPath: '/dashboard/domestic/delays'
+      preLoaderRoute: typeof AuthenticatedDashboardDomesticDelaysIndexImport
+      parentRoute: typeof AuthenticatedDashboardDomesticRouteImport
+    }
     '/_authenticated/dashboard/domestic/ndr/': {
       id: '/_authenticated/dashboard/domestic/ndr/'
       path: '/ndr'
@@ -876,6 +906,8 @@ declare module '@tanstack/react-router' {
 // Create and export the route tree
 
 interface AuthenticatedDashboardDomesticRouteRouteChildren {
+  AuthenticatedDashboardDomesticCourierIndexRoute: typeof AuthenticatedDashboardDomesticCourierIndexRoute
+  AuthenticatedDashboardDomesticDelaysIndexRoute: typeof AuthenticatedDashboardDomesticDelaysIndexRoute
   AuthenticatedDashboardDomesticNdrIndexRoute: typeof AuthenticatedDashboardDomesticNdrIndexRoute
   AuthenticatedDashboardDomesticOrdersIndexRoute: typeof AuthenticatedDashboardDomesticOrdersIndexRoute
   AuthenticatedDashboardDomesticOverviewIndexRoute: typeof AuthenticatedDashboardDomesticOverviewIndexRoute
@@ -885,6 +917,10 @@ interface AuthenticatedDashboardDomesticRouteRouteChildren {
 
 const AuthenticatedDashboardDomesticRouteRouteChildren: AuthenticatedDashboardDomesticRouteRouteChildren =
   {
+    AuthenticatedDashboardDomesticCourierIndexRoute:
+      AuthenticatedDashboardDomesticCourierIndexRoute,
+    AuthenticatedDashboardDomesticDelaysIndexRoute:
+      AuthenticatedDashboardDomesticDelaysIndexRoute,
     AuthenticatedDashboardDomesticNdrIndexRoute:
       AuthenticatedDashboardDomesticNdrIndexRoute,
     AuthenticatedDashboardDomesticOrdersIndexRoute:
@@ -1166,6 +1202,8 @@ export interface FileRoutesByFullPath {
   '/warehouse/list': typeof AuthenticatedWarehouseListIndexRoute
   '/access-control/roles/create': typeof AuthenticatedAccessControlRolesCreateIndexRoute
   '/access-control/users/create': typeof AuthenticatedAccessControlUsersCreateIndexRoute
+  '/dashboard/domestic/courier': typeof AuthenticatedDashboardDomesticCourierIndexRoute
+  '/dashboard/domestic/delays': typeof AuthenticatedDashboardDomesticDelaysIndexRoute
   '/dashboard/domestic/ndr': typeof AuthenticatedDashboardDomesticNdrIndexRoute
   '/dashboard/domestic/orders': typeof AuthenticatedDashboardDomesticOrdersIndexRoute
   '/dashboard/domestic/overview': typeof AuthenticatedDashboardDomesticOverviewIndexRoute
@@ -1225,6 +1263,8 @@ export interface FileRoutesByTo {
   '/warehouse/list': typeof AuthenticatedWarehouseListIndexRoute
   '/access-control/roles/create': typeof AuthenticatedAccessControlRolesCreateIndexRoute
   '/access-control/users/create': typeof AuthenticatedAccessControlUsersCreateIndexRoute
+  '/dashboard/domestic/courier': typeof AuthenticatedDashboardDomesticCourierIndexRoute
+  '/dashboard/domestic/delays': typeof AuthenticatedDashboardDomesticDelaysIndexRoute
   '/dashboard/domestic/ndr': typeof AuthenticatedDashboardDomesticNdrIndexRoute
   '/dashboard/domestic/orders': typeof AuthenticatedDashboardDomesticOrdersIndexRoute
   '/dashboard/domestic/overview': typeof AuthenticatedDashboardDomesticOverviewIndexRoute
@@ -1285,6 +1325,8 @@ export interface FileRoutesById {
   '/_authenticated/warehouse/list/': typeof AuthenticatedWarehouseListIndexRoute
   '/_authenticated/access-control/roles/create/': typeof AuthenticatedAccessControlRolesCreateIndexRoute
   '/_authenticated/access-control/users/create/': typeof AuthenticatedAccessControlUsersCreateIndexRoute
+  '/_authenticated/dashboard/domestic/courier/': typeof AuthenticatedDashboardDomesticCourierIndexRoute
+  '/_authenticated/dashboard/domestic/delays/': typeof AuthenticatedDashboardDomesticDelaysIndexRoute
   '/_authenticated/dashboard/domestic/ndr/': typeof AuthenticatedDashboardDomesticNdrIndexRoute
   '/_authenticated/dashboard/domestic/orders/': typeof AuthenticatedDashboardDomesticOrdersIndexRoute
   '/_authenticated/dashboard/domestic/overview/': typeof AuthenticatedDashboardDomesticOverviewIndexRoute
@@ -1346,6 +1388,8 @@ export interface FileRouteTypes {
     | '/warehouse/list'
     | '/access-control/roles/create'
     | '/access-control/users/create'
+    | '/dashboard/domestic/courier'
+    | '/dashboard/domestic/delays'
     | '/dashboard/domestic/ndr'
     | '/dashboard/domestic/orders'
     | '/dashboard/domestic/overview'
@@ -1404,6 +1448,8 @@ export interface FileRouteTypes {
     | '/warehouse/list'
     | '/access-control/roles/create'
     | '/access-control/users/create'
+    | '/dashboard/domestic/courier'
+    | '/dashboard/domestic/delays'
     | '/dashboard/domestic/ndr'
     | '/dashboard/domestic/orders'
     | '/dashboard/domestic/overview'
@@ -1462,6 +1508,8 @@ export interface FileRouteTypes {
     | '/_authenticated/warehouse/list/'
     | '/_authenticated/access-control/roles/create/'
     | '/_authenticated/access-control/users/create/'
+    | '/_authenticated/dashboard/domestic/courier/'
+    | '/_authenticated/dashboard/domestic/delays/'
     | '/_authenticated/dashboard/domestic/ndr/'
     | '/_authenticated/dashboard/domestic/orders/'
     | '/_authenticated/dashboard/domestic/overview/'
@@ -1575,6 +1623,8 @@ export const routeTree = rootRoute
       "filePath": "_authenticated/dashboard/domestic/route.jsx",
       "parent": "/_authenticated/dashboard",
       "children": [
+        "/_authenticated/dashboard/domestic/courier/",
+        "/_authenticated/dashboard/domestic/delays/",
         "/_authenticated/dashboard/domestic/ndr/",
         "/_authenticated/dashboard/domestic/orders/",
         "/_authenticated/dashboard/domestic/overview/",
@@ -1729,6 +1779,14 @@ export const routeTree = rootRoute
     "/_authenticated/access-control/users/create/": {
       "filePath": "_authenticated/access-control/users/create/index.jsx",
       "parent": "/_authenticated"
+    },
+    "/_authenticated/dashboard/domestic/courier/": {
+      "filePath": "_authenticated/dashboard/domestic/courier/index.jsx",
+      "parent": "/_authenticated/dashboard/domestic"
+    },
+    "/_authenticated/dashboard/domestic/delays/": {
+      "filePath": "_authenticated/dashboard/domestic/delays/index.jsx",
+      "parent": "/_authenticated/dashboard/domestic"
     },
     "/_authenticated/dashboard/domestic/ndr/": {
       "filePath": "_authenticated/dashboard/domestic/ndr/index.jsx",
