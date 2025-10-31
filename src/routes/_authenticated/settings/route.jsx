@@ -24,14 +24,14 @@ const items = [
     label: <Link to={"/settings/bank-details"}>Bank Details</Link>,
     key: "/settings/bank-details",
   },
-  {
-    label: <Link to={"/settings/invoice-templates"}>Invoice Templates</Link>,
-    key: "/settings/invoice-templates",
-  },
-  {
-    label: <Link to={"/settings/tax-configuration"}>Tax Configuration</Link>,
-    key: "/settings/tax-configuration",
-  },
+  // {
+  //   label: <Link to={"/settings/invoice-templates"}>Invoice Templates</Link>,
+  //   key: "/settings/invoice-templates",
+  // },
+  // {
+  //   label: <Link to={"/settings/tax-configuration"}>Tax Configuration</Link>,
+  //   key: "/settings/tax-configuration",
+  // },
 ];
 
 function RouteComponent() {
