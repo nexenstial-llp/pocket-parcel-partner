@@ -1,310 +1,350 @@
-import { Form, Input, Upload, Typography, Button, message } from "antd";
+import { UploadOutlined } from "@ant-design/icons";
+import { Upload } from "antd";
 import {
-  InfoCircleOutlined,
-  UploadOutlined,
-  DeleteOutlined,
-} from "@ant-design/icons";
+  Form,
+  Input,
+  Button,
+  Collapse,
+  Row,
+  Col,
+  Select,
+  Switch,
+  InputNumber,
+} from "antd";
 import { useState } from "react";
 
-const { Text } = Typography;
+const { TextArea } = Input;
+const { Option } = Select;
 
 const CompanyProfileForm = () => {
   const [form] = Form.useForm();
-  const [logoUrl, setLogoUrl] = useState(null);
-  const [uploading, setUploading] = useState(false);
-  const [isUpdate, setIsUpdate] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
 
-  // Handle file upload
-  const handleUpload = async (file) => {
-    setUploading(true);
-
-    const formData = new FormData();
-    formData.append("logo", file);
-
-    try {
-      // Replace this with your actual API endpoint
-      const response = await fetch("/api/upload-logo", {
-        method: "POST",
-        body: formData,
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setLogoUrl(data.logoUrl);
-        message.success("Logo uploaded successfully!");
-      } else {
-        throw new Error("Upload failed");
-      }
-    } catch (error) {
-      console.error("Upload error:", error);
-      message.error("Failed to upload logo. Please try again.");
-    } finally {
-      setUploading(false);
-    }
-
-    return false;
+  const onFinish = (values) => {
+    console.log("Warehouse Partner Data:", values);
+    // TODO: Call your API or mutation here
   };
-
-  // Handle logo removal
-  const handleRemoveLogo = () => {
-    setLogoUrl(null);
-    message.success("Logo removed successfully");
-  };
-
-  // Preview file before upload
-  const handlePreview = (file) => {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      setLogoUrl(e.target.result);
-    };
-    reader.readAsDataURL(file);
-    return false;
-  };
-
-  const uploadProps = {
-    name: "logo",
-    accept: "image/png,image/jpeg,image/jpg,image/svg+xml",
-    maxCount: 1,
-    showUploadList: false,
-    beforeUpload: (file) => {
-      const isImage = file.type.startsWith("image/");
-      if (!isImage) {
-        message.error("You can only upload image files (PNG, JPG, JPEG, SVG)!");
-        return Upload.LIST_IGNORE;
-      }
-
-      const isLt2M = file.size / 1024 / 1024 < 2;
-      if (!isLt2M) {
-        message.error("Image must be smaller than 2MB!");
-        return Upload.LIST_IGNORE;
-      }
-
-      handlePreview(file);
-      handleUpload(file);
-
-      return false;
-    },
-  };
-
-  // Handle form submission
-  const handleFinish = async (values) => {
-    setLoading(true);
-    try {
-      // Prepare data to send
-      const dataToSend = {
-        ...values,
-        logoUrl: logoUrl, // Include logo URL
-      };
-
-      console.log("Form data to submit:", dataToSend);
-
-      // Replace with your actual API endpoint
-      const response = await fetch("/api/update-company-profile", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(dataToSend),
-      });
-
-      if (response.ok) {
-        message.success("Company profile updated successfully!");
-        setIsUpdate(false); // Exit edit mode
-      } else {
-        throw new Error("Update failed");
-      }
-    } catch (error) {
-      console.error("Save error:", error);
-      message.error("Failed to save changes. Please try again.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Handle cancel - reset form to initial values
-  const handleCancel = () => {
-    form.resetFields();
-    setLogoUrl(null);
-    setIsUpdate(false);
-  };
-
   return (
     <div>
       <Form
         form={form}
         layout="vertical"
-        name="companyProfileForm"
-        onFinish={handleFinish}
-        disabled={!isUpdate}
+        className="space-y-4"
+        disabled={isUpdating}
       >
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          {/* Form Section - 8 columns */}
-          <div className="lg:col-span-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {/* Registered Company Name */}
-              <Form.Item
-                rules={[
-                  { required: true, message: "Please enter company name" },
-                ]}
-                label={
-                  <span className="font-medium text-gray-800">
-                    Registered Company Name
-                  </span>
-                }
-                name="companyName"
-              >
-                <Input placeholder="Enter Company Name" className="w-full" />
-              </Form.Item>
-
-              {/* Company Email ID */}
-              <Form.Item
-                rules={[
-                  { required: true, message: "Please enter email" },
-                  { type: "email", message: "Please enter a valid email" },
-                ]}
-                label={
-                  <span className="font-medium text-gray-800">
-                    Company Email ID
-                  </span>
-                }
-                name="companyEmail"
-              >
-                <Input
-                  type="email"
-                  placeholder="Enter Email ID"
-                  className="w-full"
-                />
-              </Form.Item>
-
-              {/* Brand Name */}
-              <Form.Item
-                label={
-                  <span className="font-medium text-gray-800">
-                    Brand Name
-                    <small className="pl-1 text-gray-500 font-normal">
-                      (Optional)
-                    </small>
-                    <InfoCircleOutlined
-                      className="ml-2 text-gray-400 cursor-pointer text-xs"
-                      title="Your brand name as it appears to customers"
-                    />
-                  </span>
-                }
-                name="brandName"
-              >
-                <Input placeholder="Enter Brand name" className="w-full" />
-              </Form.Item>
-
-              {/* Website */}
-              <Form.Item
-                rules={[
-                  {
-                    type: "url",
-                    message: "Please enter a valid URL",
-                  },
-                ]}
-                label={
-                  <span className="font-medium text-gray-800">
-                    Website
-                    <small className="pl-1 text-gray-500 font-normal">
-                      (Optional)
-                    </small>
-                  </span>
-                }
-                name="website"
-              >
-                <Input placeholder="Enter Website link" className="w-full" />
-              </Form.Item>
-            </div>
-          </div>
-
-          {/* Logo Upload Section - 4 columns */}
-          <div className="lg:col-span-4">
-            <div className="mb-3">
-              <span className="font-medium text-gray-800">Company Logo</span>
-              <small className="pl-1 text-gray-500">(Optional)</small>
-            </div>
-
-            {!logoUrl ? (
-              <div className="flex flex-col gap-3">
-                <Text className="text-gray-500 text-xs">No logo uploaded</Text>
-                <Upload {...uploadProps} disabled={!isUpdate}>
-                  <Button
-                    icon={<UploadOutlined />}
-                    loading={uploading}
-                    className="w-full sm:w-auto"
-                    disabled={!isUpdate}
-                  >
-                    {uploading ? "Uploading..." : "Upload Logo"}
-                  </Button>
-                </Upload>
-                <Text className="text-gray-400 text-xs mt-1">
-                  Supported formats: PNG, JPG, JPEG, SVG (Max 2MB)
-                </Text>
-              </div>
-            ) : (
-              <div className="flex flex-col gap-3">
-                <div className="relative w-32 h-32 border-2 border-gray-300 rounded-lg overflow-hidden bg-gray-50 shadow-sm">
-                  <img
-                    src={logoUrl}
-                    alt="Company Logo"
-                    className="w-full h-full object-contain p-2"
-                  />
-                </div>
-                {isUpdate && (
-                  <div className="flex gap-2">
-                    <Upload {...uploadProps}>
-                      <Button
-                        icon={<UploadOutlined />}
-                        size="small"
-                        loading={uploading}
-                      >
-                        {uploading ? "Uploading..." : "Change"}
-                      </Button>
-                    </Upload>
-                    <Button
-                      icon={<DeleteOutlined />}
-                      size="small"
-                      danger
-                      onClick={handleRemoveLogo}
+        <Collapse
+          defaultActiveKey={["1"]}
+          bordered={false}
+          items={[
+            {
+              label: "Basic Information",
+              key: "1",
+              children: (
+                <Row gutter={16}>
+                  <Col span={8}>
+                    <Form.Item
+                      name="warehouse_name"
+                      label="Warehouse Name"
+                      rules={[
+                        { required: true, message: "Enter warehouse name" },
+                      ]}
                     >
-                      Remove
-                    </Button>
-                  </div>
-                )}
-                <Text className="text-gray-400 text-xs">
-                  PNG, JPG, JPEG, SVG (Max 2MB)
-                </Text>
-              </div>
-            )}
-          </div>
-        </div>
+                      <Input placeholder="e.g. BlueDart Mumbai Hub" />
+                    </Form.Item>
+                  </Col>
 
-        {/* Action Buttons */}
-        <div className="flex gap-2 mt-6">
-          {isUpdate && (
-            <>
-              <Button
-                htmlType="submit"
-                type="primary"
-                loading={loading}
-                disabled={uploading}
-              >
-                {loading ? "Saving..." : "Save"}
-              </Button>
-              <Button onClick={handleCancel} disabled={loading || uploading}>
-                Cancel
-              </Button>
-            </>
-          )}
-        </div>
+                  <Col span={8}>
+                    <Form.Item name="partner_code" label="Partner Code">
+                      <Input placeholder="e.g. BDMH001" />
+                    </Form.Item>
+                  </Col>
+
+                  <Col span={8}>
+                    <Form.Item
+                      name="type"
+                      label="Warehouse Type"
+                      rules={[{ required: true }]}
+                    >
+                      <Select placeholder="Select type">
+                        <Option value="Owned">Owned</Option>
+                        <Option value="Third-Party">Third-Party</Option>
+                        <Option value="Franchise">Franchise</Option>
+                      </Select>
+                    </Form.Item>
+                  </Col>
+
+                  <Col span={8}>
+                    <Form.Item
+                      name="is_active"
+                      label="Active Status"
+                      valuePropName="checked"
+                      initialValue={true}
+                    >
+                      <Switch />
+                    </Form.Item>
+                  </Col>
+                  <Col span={8}>
+                    <Form.Item name="warehouse_logo" label="Warehouse Logo">
+                      <Upload
+                        // listType="picture"
+                        accept=".png, .jpg, .jpeg, .svg"
+                      >
+                        <Button type="primary" icon={<UploadOutlined />}>
+                          Upload
+                        </Button>
+                      </Upload>
+                    </Form.Item>
+                  </Col>
+                  <Col span={8}>
+                    <Form.Item name="warehouse_photo" label="Warehouse Photo">
+                      <Upload accept=".png, .jpg, .jpeg, .svg">
+                        <Button type="primary" icon={<UploadOutlined />}>
+                          Upload
+                        </Button>
+                      </Upload>
+                    </Form.Item>
+                  </Col>
+                </Row>
+              ),
+            },
+            {
+              label: "Address & Location",
+              key: "2",
+              children: (
+                <Row gutter={16}>
+                  <Col span={12}>
+                    <Form.Item
+                      name={["address", "line1"]}
+                      label="Address Line 1"
+                      rules={[{ required: true }]}
+                    >
+                      <Input placeholder="Building / Street" />
+                    </Form.Item>
+                  </Col>
+
+                  <Col span={12}>
+                    <Form.Item
+                      name={["address", "line2"]}
+                      label="Address Line 2"
+                    >
+                      <Input placeholder="Landmark / Area" />
+                    </Form.Item>
+                  </Col>
+
+                  <Col span={8}>
+                    <Form.Item
+                      name={["address", "city"]}
+                      label="City"
+                      rules={[{ required: true }]}
+                    >
+                      <Input placeholder="City" />
+                    </Form.Item>
+                  </Col>
+
+                  <Col span={8}>
+                    <Form.Item
+                      name={["address", "state"]}
+                      label="State"
+                      rules={[{ required: true }]}
+                    >
+                      <Input placeholder="State" />
+                    </Form.Item>
+                  </Col>
+
+                  <Col span={8}>
+                    <Form.Item
+                      name={["address", "postal_code"]}
+                      label="Postal Code"
+                      rules={[{ required: true }]}
+                    >
+                      <Input placeholder="e.g. 400093" />
+                    </Form.Item>
+                  </Col>
+
+                  <Col span={12}>
+                    <Form.Item name={["address", "country"]} label="Country">
+                      <Input placeholder="e.g. India" />
+                    </Form.Item>
+                  </Col>
+
+                  <Col span={6}>
+                    <Form.Item name={["address", "latitude"]} label="Latitude">
+                      <InputNumber
+                        placeholder="19.0760"
+                        className="w-full"
+                        step={0.000001}
+                      />
+                    </Form.Item>
+                  </Col>
+
+                  <Col span={6}>
+                    <Form.Item
+                      name={["address", "longitude"]}
+                      label="Longitude"
+                    >
+                      <InputNumber
+                        placeholder="72.8777"
+                        className="w-full"
+                        step={0.000001}
+                      />
+                    </Form.Item>
+                  </Col>
+                </Row>
+              ),
+            },
+            {
+              label: "Contact Information",
+              key: "3",
+              children: (
+                <Row gutter={16}>
+                  <Col span={12}>
+                    <Form.Item
+                      name={["contact", "name"]}
+                      label="Primary Contact Name"
+                      rules={[{ required: true }]}
+                    >
+                      <Input placeholder="e.g. Rajesh Sharma" />
+                    </Form.Item>
+                  </Col>
+
+                  <Col span={12}>
+                    <Form.Item
+                      name={["contact", "phone"]}
+                      label="Contact Number"
+                      rules={[{ required: true }]}
+                    >
+                      <Input placeholder="+91 9876543210" />
+                    </Form.Item>
+                  </Col>
+
+                  <Col span={12}>
+                    <Form.Item
+                      name={["contact", "email"]}
+                      label="Email Address"
+                    >
+                      <Input placeholder="e.g. rajesh@bluedart.com" />
+                    </Form.Item>
+                  </Col>
+
+                  <Col span={12}>
+                    <Form.Item
+                      name={["contact", "alternate"]}
+                      label="Alternate Contact"
+                    >
+                      <Input placeholder="+91 9123456789" />
+                    </Form.Item>
+                  </Col>
+                </Row>
+              ),
+            },
+            {
+              label: "Legal & Banking Details",
+              key: "4",
+              children: (
+                <Row gutter={16}>
+                  <Col span={12}>
+                    <Form.Item name="gst_number" label="GST Number">
+                      <Input placeholder="27ABCDE1234F1Z5" />
+                    </Form.Item>
+                  </Col>
+
+                  <Col span={12}>
+                    <Form.Item name="pan_number" label="PAN Number">
+                      <Input placeholder="ABCDE1234F" />
+                    </Form.Item>
+                  </Col>
+
+                  <Col span={12}>
+                    <Form.Item
+                      name={["bank", "account_name"]}
+                      label="Account Name"
+                    >
+                      <Input placeholder="BlueDart Logistics Pvt Ltd" />
+                    </Form.Item>
+                  </Col>
+
+                  <Col span={12}>
+                    <Form.Item
+                      name={["bank", "account_number"]}
+                      label="Account Number"
+                    >
+                      <Input placeholder="1234567890" />
+                    </Form.Item>
+                  </Col>
+
+                  <Col span={12}>
+                    <Form.Item name={["bank", "ifsc"]} label="IFSC Code">
+                      <Input placeholder="HDFC0001234" />
+                    </Form.Item>
+                  </Col>
+
+                  <Col span={12}>
+                    <Form.Item name={["bank", "upi_id"]} label="UPI ID">
+                      <Input placeholder="bluedart@hdfcbank" />
+                    </Form.Item>
+                  </Col>
+                </Row>
+              ),
+            },
+            {
+              label: "Operational Information",
+              key: "5",
+              children: (
+                <Row gutter={16}>
+                  <Col span={12}>
+                    <Form.Item name="capacity" label="Storage Capacity">
+                      <Input placeholder="e.g. 10000 parcels/day" />
+                    </Form.Item>
+                  </Col>
+
+                  <Col span={12}>
+                    <Form.Item name="operating_hours" label="Operating Hours">
+                      <Input placeholder="e.g. 9:00 AM - 8:00 PM" />
+                    </Form.Item>
+                  </Col>
+
+                  <Col span={24}>
+                    <Form.Item
+                      name="service_pincodes"
+                      label="Service Pincodes"
+                      tooltip="Enter multiple pincodes separated by commas"
+                    >
+                      <Select
+                        mode="tags"
+                        tokenSeparators={[","]}
+                        placeholder="e.g. 400001, 400002"
+                      />
+                    </Form.Item>
+                  </Col>
+
+                  <Col span={24}>
+                    <Form.Item name="remarks" label="Remarks / Notes">
+                      <TextArea
+                        rows={3}
+                        placeholder="Add internal notes here"
+                      />
+                    </Form.Item>
+                  </Col>
+                </Row>
+              ),
+            },
+          ]}
+        />
       </Form>
-      {!isUpdate && (
-        <Button onClick={() => setIsUpdate(true)} type="primary">
-          Update
-        </Button>
-      )}
+      <div className="flex justify-end gap-4 mt-6">
+        {isUpdating ? (
+          <>
+            <Button htmlType="reset">Reset</Button>
+            <Button onClick={() => onFinish()} type="primary" htmlType="submit">
+              Save
+            </Button>
+          </>
+        ) : (
+          <Button type="primary" onClick={() => setIsUpdating(true)}>
+            Update
+          </Button>
+        )}
+      </div>
     </div>
   );
 };
