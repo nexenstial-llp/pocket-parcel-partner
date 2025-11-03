@@ -1,4 +1,4 @@
-import DashboardPage from "@/components/pages/dashboard/domestic/overview/orders/DashboardPage";
+import DashboardPage from "@/components/pages/dashboard/domestic/orders/DashboardPage";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute(

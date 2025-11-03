@@ -1,6 +1,7 @@
-import { Select, Card, Row, Col, Empty } from "antd";
-import DefaultExtraContent from "../DefaultExtraContent";
-import FilterSection from "../../FilterSection";
+import { Select, Row, Col, Empty } from "antd";
+import DefaultExtraContent from "../overview/DefaultExtraContent";
+import FilterSection from "../FilterSection";
+import ResponsiveCard from "@/components/ui/cards/ResponsiveCard";
 // For charts, consider using a library like ant-design-charts or recharts for real donut charts.
 
 const { Option } = Select;
@@ -11,52 +12,53 @@ export default function DashboardPage() {
       {/* Filters Row */}
       <FilterSection />
       {/* Orders Summary */}
-      <Card className="mb-8 shadow w-full">
-        <Row justify="space-between" className="text-gray-700">
-          <Col>
-            <div className="text-lg font-bold">Orders Summary</div>
-          </Col>
-          <Col>
-            {/* Real-time icon placeholder */}
-            <DefaultExtraContent />
-          </Col>
-        </Row>
+      <ResponsiveCard
+        title="Orders Summary"
+        extra={<DefaultExtraContent />}
+        className="mb-8 shadow w-full"
+      >
         <div className="py-8 flex justify-center">
           <Empty description="Orders data not found for the selected filters." />
         </div>
-      </Card>
+      </ResponsiveCard>
 
       {/* Data Cards (Donut Charts, etc.) */}
       <Row gutter={16}>
         <Col xs={24} md={8}>
-          <Card title="Prepaid vs. COD Orders" className="mb-8 shadow">
+          <ResponsiveCard
+            title="Prepaid vs. COD Orders"
+            className="mb-8 shadow"
+          >
             <div className="py-8 flex justify-center">
-              <Empty description="No data (add chart here)" />
+              <Empty description="No data" />
             </div>
-          </Card>
+          </ResponsiveCard>
         </Col>
 
         <Col xs={24} md={8}>
-          <Card title="Address Quality Score" className="mb-8 shadow">
+          <ResponsiveCard title="Address Quality Score" className="mb-8 shadow">
             <div className="py-8 flex justify-center">
-              <Empty description="No data (add chart here)" />
+              <Empty description="No data" />
             </div>
-          </Card>
+          </ResponsiveCard>
         </Col>
 
         <Col xs={24} md={8}>
-          <Card title="Most Popular Order Location" className="mb-8 shadow">
+          <ResponsiveCard
+            title="Most Popular Order Location"
+            className="mb-8 shadow"
+          >
             <div className="py-8 flex justify-center">
-              <Empty description="No data (add chart here)" />
+              <Empty description="No data" />
             </div>
-          </Card>
+          </ResponsiveCard>
         </Col>
       </Row>
 
       {/* Top Customers and Top Products */}
       <Row gutter={16} className="">
         <Col xs={24} md={12}>
-          <Card
+          <ResponsiveCard
             title="Top 10 Customers"
             className="mb-8 shadow"
             extra={
@@ -73,10 +75,10 @@ export default function DashboardPage() {
             <div className="py-8 flex justify-center">
               <Empty description="Customers data not found for selected filters." />
             </div>
-          </Card>
+          </ResponsiveCard>
         </Col>
         <Col xs={24} md={12}>
-          <Card
+          <ResponsiveCard
             title="Top 10 Products"
             className="mb-8 shadow"
             extra={
@@ -93,7 +95,7 @@ export default function DashboardPage() {
             <div className="py-8 flex justify-center">
               <Empty description="Products data not found for selected filters." />
             </div>
-          </Card>
+          </ResponsiveCard>
         </Col>
       </Row>
     </div>

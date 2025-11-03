@@ -1,6 +1,7 @@
-import { Card, Table, Tooltip, Typography } from "antd";
+import { Table, Tooltip } from "antd";
 import { InfoCircleOutlined } from "@ant-design/icons";
-const { Title } = Typography;
+import ResponsiveCard from "@/components/ui/cards/ResponsiveCard";
+import DefaultExtraContent from "../overview/DefaultExtraContent";
 
 const ndrSummaryStats = [
   { label: "NDR Raised", value: 0 },
@@ -129,84 +130,71 @@ export default function NDRDashboard() {
   return (
     <div className="flex flex-col gap-4">
       {/* NDR Summary Section */}
-      <Card className="dashboard-shadow">
-        <div className="flex flex-wrap items-center justify-between">
-          <div>
-            <Title level={5} className="m-0">
-              NDR Summary
-            </Title>
-          </div>
-          <img
-            src="https://app.shiprocket.in/sellers/assets/images/Real-time-data.svg"
-            alt="Real-time"
-            className="w-7 h-7"
-          />
-        </div>
+      <ResponsiveCard
+        title="NDR Summary"
+        extra={<DefaultExtraContent />}
+        className="dashboard-shadow"
+      >
         <div className="flex flex-wrap mt-4 gap-6">
           {ndrSummaryStats.map((stat) => (
-            <div key={stat.label} className="flex flex-col items-center">
+            <div
+              key={stat.label}
+              className="flex flex-col items-center bg-gray-100 p-2 sm:p-3  rounded-xl"
+            >
               <span className="font-bold text-lg">{stat.value}</span>
               <span className="text-sm text-gray-600">{stat.label}</span>
             </div>
           ))}
         </div>
-      </Card>
+      </ResponsiveCard>
       <div className=" grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Another summary card, e.g., Response Summary */}
-        <Card className="dashboard-shadow">
-          <div className="flex flex-wrap items-center justify-between">
-            <div>
-              <Title level={5} className="m-0">
-                NDR Response Summary
-              </Title>
-            </div>
-            <img
-              src="https://app.shiprocket.in/sellers/assets/images/Real-time-data.svg"
-              alt="Real-time"
-              className="w-7 h-7"
-            />
-          </div>
-          <div className="flex flex-wrap mt-4 gap-6">
+        <ResponsiveCard
+          title="NDR Response Summary"
+          extra={<DefaultExtraContent />}
+          className="dashboard-shadow"
+        >
+          <div className="flex flex-wrap mt-4 gap-6 ">
             {ndrSummaryStats.map((stat) => (
-              <div key={stat.label} className="flex flex-col items-center">
+              <div
+                key={stat.label}
+                className="flex flex-col items-center bg-gray-100 p-2 sm:p-3  rounded-xl"
+              >
                 <span className="font-bold text-lg">{stat.value}</span>
                 <span className="text-sm text-gray-600">{stat.label}</span>
               </div>
             ))}
           </div>
-        </Card>
-        <Card className=" flex flex-col">
-          <Title level={5}>NDR Funnel</Title>
+        </ResponsiveCard>
+        <ResponsiveCard title="NDR Funnel" className=" flex flex-col">
           <div className="flex flex-wrap mt-4 gap-6">
             {ndrSummaryStats.map((stat) => (
-              <div key={stat.label} className="flex flex-col items-center">
+              <div
+                key={stat.label}
+                className="flex flex-col items-center bg-gray-100 p-2 sm:p-3  rounded-xl"
+              >
                 <span className="font-bold text-lg">{stat.value}</span>
                 <span className="text-sm text-gray-600">{stat.label}</span>
               </div>
             ))}
           </div>
-        </Card>
+        </ResponsiveCard>
       </div>
       {/* Charts section (placeholders) */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 ">
-        <Card className="flex flex-col">
-          <Title level={5}>NDR Reason Split</Title>
+        <ResponsiveCard title="NDR Reason Split" className="flex flex-col">
           <div className="bg-gray-100 rounded-lg w-full h-72 flex items-center justify-center text-gray-400">
             Chart Placeholder
           </div>
-        </Card>
-        <Card className="flex flex-col">
-          <Title level={5}>NDR Status Split</Title>
+        </ResponsiveCard>
+        <ResponsiveCard title="NDR Status Split" className="flex flex-col">
           <div className="bg-gray-100 rounded-lg w-full h-72 flex items-center justify-center text-gray-400">
             Chart Placeholder
           </div>
-        </Card>
+        </ResponsiveCard>
       </div>
       {/* Funnel Table */}
-      <Card className="">
-        <Title level={5} className="mb-3">
-          NDR Funnel Breakdown
-        </Title>
+      <ResponsiveCard title="NDR Funnel Breakdown" className="">
         <div className="overflow-auto">
           <table className="min-w-full text-center border border-gray-200 bg-white">
             <thead>
@@ -237,12 +225,9 @@ export default function NDRDashboard() {
             </tbody>
           </table>
         </div>
-      </Card>
+      </ResponsiveCard>
       {/* NDR Response Matrix Table */}
-      <Card className="">
-        <Title level={5} className="mb-3">
-          NDR Responses by Attempt
-        </Title>
+      <ResponsiveCard title="NDR Response by Attempt" className="">
         <Table
           dataSource={ndrResponseRows}
           columns={ndrResponseColumns}
@@ -251,68 +236,35 @@ export default function NDRDashboard() {
           scroll={{ x: true }}
           rowKey="label"
         />
-      </Card>
+      </ResponsiveCard>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        <Card>
-          <div className="flex justify-between items-center">
-            <Title level={5} className="mb-2">
-              NDR to Delivery Attempt
-            </Title>
-            <img
-              src="https://app.shiprocket.in/sellers/assets/images/Real-time-data.svg"
-              alt="Real-time"
-              className="w-7 h-7"
-            />
-          </div>
+        <ResponsiveCard
+          title="NDR to Delivery Attempt"
+          extra={<DefaultExtraContent />}
+        >
           <div className="h-64 flex items-center justify-center text-gray-400 bg-gray-100 rounded-lg">
             Chart Placeholder
           </div>
-        </Card>
-        <Card>
-          <div className="flex justify-between items-center">
-            <Title level={5} className="mb-2">
-              Seller Response
-            </Title>
-            <img
-              src="https://app.shiprocket.in/sellers/assets/images/Real-time-data.svg"
-              alt="Real-time"
-              className="w-7 h-7"
-            />
-          </div>
+        </ResponsiveCard>
+        <ResponsiveCard title="Seller Response" extra={<DefaultExtraContent />}>
           <div className="h-64 flex items-center justify-center text-gray-400 bg-gray-100 rounded-lg">
             Chart Placeholder
           </div>
-        </Card>
-        <Card>
-          <div className="flex justify-between items-center">
-            <Title level={5} className="mb-2">
-              Buyer Response
-            </Title>
-            <img
-              src="https://app.shiprocket.in/sellers/assets/images/Real-time-data.svg"
-              alt="Real-time"
-              className="w-7 h-7"
-            />
-          </div>
+        </ResponsiveCard>
+        <ResponsiveCard title="Buyer Response" extra={<DefaultExtraContent />}>
           <div className="h-64 flex items-center justify-center text-gray-400 bg-gray-100 rounded-lg">
             Chart Placeholder
           </div>
-        </Card>
+        </ResponsiveCard>
       </div>
 
       {/* Success by Courier chart */}
-      <Card className="">
-        <div className="flex justify-between items-center">
-          <Title level={5} className="mb-2">
-            Success by Courier
-          </Title>
-          <img
-            src="https://app.shiprocket.in/sellers/assets/images/Real-time-data.svg"
-            alt="Real-time"
-            className="w-7 h-7"
-          />
-        </div>
+      <ResponsiveCard
+        title="Success by Courier"
+        extra={<DefaultExtraContent />}
+        className=""
+      >
         <Table
           size="small"
           bordered
@@ -348,23 +300,13 @@ export default function NDRDashboard() {
             },
           ]}
         />
-      </Card>
+      </ResponsiveCard>
 
-      <Card>
-        <div className="flex justify-between items-center">
-          <Title level={5} className="mb-2">
-            NDR Reason
-          </Title>
-          <img
-            src="https://app.shiprocket.in/sellers/assets/images/Real-time-data.svg"
-            alt="Real-time"
-            className="w-7 h-7"
-          />
-        </div>
+      <ResponsiveCard title="NDR Reason" extra={<DefaultExtraContent />}>
         <div className="h-64 flex items-center justify-center text-gray-400 bg-gray-100 rounded-lg">
           Chart Placeholder
         </div>
-      </Card>
+      </ResponsiveCard>
     </div>
   );
 }

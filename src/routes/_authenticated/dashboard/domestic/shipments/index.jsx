@@ -1,5 +1,5 @@
 import FilterSection from "@/components/pages/dashboard/domestic/FilterSection";
-import CourierWiseShipmentsChart from "@/components/pages/dashboard/domestic/overview/shipments/CourierWiseShipmentsChart";
+import CourierWiseShipmentsChart from "@/components/pages/dashboard/domestic/shipments/CourierWiseShipmentsChart";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute(
