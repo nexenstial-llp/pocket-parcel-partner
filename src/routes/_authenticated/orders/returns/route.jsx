@@ -4,7 +4,6 @@ import CreateReturn from "@/components/pages/orders/returns/CreateReturn";
 import NewReturns from "@/components/pages/orders/returns/NewReturns";
 import PickedUp from "@/components/pages/orders/returns/PickedUp";
 import PickupCreated from "@/components/pages/orders/returns/PickupCreated";
-import BreadcrumbComponent from "@/components/ui/BreadcrumbComponent";
 import SearchPanelCard from "@/components/ui/cards/SearchPanelCard";
 import {
   createFileRoute,
@@ -49,10 +48,9 @@ function RouteComponent() {
     });
   };
   return (
-    <PageLayout>
-      <BreadcrumbComponent
-        items={[{ title: "Home", href: "/home" }, { title: "Returns" }]}
-      />
+    <PageLayout
+      items={[{ title: "Home", href: "/home" }, { title: "Returns" }]}
+    >
       <SearchPanelCard
         searchTypeOptions={[
           { label: "Forward Order ID", value: "order_id" },

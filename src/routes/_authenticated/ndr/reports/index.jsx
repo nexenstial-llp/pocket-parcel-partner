@@ -1,5 +1,4 @@
 import PageLayout from "@/components/layout/PageLayout";
-import BreadcrumbComponent from "@/components/ui/BreadcrumbComponent";
 import ResponsiveCard from "@/components/ui/cards/ResponsiveCard";
 import { createFileRoute } from "@tanstack/react-router";
 import { Table } from "antd";
@@ -48,10 +47,9 @@ const columns = [
 
 function RouteComponent() {
   return (
-    <PageLayout>
-      <BreadcrumbComponent
-        items={[{ title: "Home", href: "/home" }, { title: "NDR Reports" }]}
-      />
+    <PageLayout
+      items={[{ title: "Home", href: "/home" }, { title: "NDR Reports" }]}
+    >
       <ResponsiveCard size="small" title="NDR Reports">
         <Table columns={columns} dataSource={[]} />
       </ResponsiveCard>

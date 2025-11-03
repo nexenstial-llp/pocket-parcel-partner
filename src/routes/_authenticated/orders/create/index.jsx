@@ -1,6 +1,5 @@
 import PageLayout from "@/components/layout/PageLayout";
 import ResponsiveCard from "@/components/ui/cards/ResponsiveCard";
-import BreadcrumbComponent from "@/components/ui/BreadcrumbComponent";
 import { createFileRoute } from "@tanstack/react-router";
 import ShipmentStepperForm from "@/components/pages/orders/ShipmentStepperForm";
 
@@ -10,14 +9,13 @@ export const Route = createFileRoute("/_authenticated/orders/create/")({
 
 function RouteComponent() {
   return (
-    <PageLayout>
-      <BreadcrumbComponent
-        items={[
-          { title: "Home", href: "/home" },
-          { title: "Orders", href: "/orders" },
-          { title: "Create" },
-        ]}
-      />
+    <PageLayout
+      items={[
+        { title: "Home", href: "/home" },
+        { title: "Orders", href: "/orders" },
+        { title: "Create" },
+      ]}
+    >
       <ResponsiveCard size="small" title="Create Order">
         {/* <Form layout="vertical">
           <Form.Item name={"orderType"} label={"Order Type"}>

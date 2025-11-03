@@ -4,7 +4,7 @@ import ManageRolesDrawer from "@/components/pages/access-control/roles/ManageRol
 import ResponsiveCard from "@/components/ui/cards/ResponsiveCard";
 import { UserAddOutlined } from "@ant-design/icons";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Breadcrumb, Button, Table } from "antd";
+import { Button, Table } from "antd";
 export const Route = createFileRoute("/_authenticated/access-control/users/")({
   component: RouteComponent,
 });
@@ -47,14 +47,13 @@ const columns = [
 ];
 function RouteComponent() {
   return (
-    <PageLayout>
-      <Breadcrumb
-        items={[
-          { title: "Home", href: "/home" },
-          { title: "Access Control" },
-          { title: "users" },
-        ]}
-      />
+    <PageLayout
+      items={[
+        { title: "Home", href: "/home" },
+        { title: "Access Control" },
+        { title: "users" },
+      ]}
+    >
       <ResponsiveCard
         title="Access Control"
         extra={

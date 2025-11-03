@@ -2,7 +2,7 @@ import PageLayout from "@/components/layout/PageLayout";
 import ResponsiveCard from "@/components/ui/cards/ResponsiveCard";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Breadcrumb, Button, Table } from "antd";
+import { Button, Table } from "antd";
 
 export const Route = createFileRoute("/_authenticated/warehouse/list/")({
   component: RouteComponent,
@@ -56,8 +56,9 @@ const columns = [
 ];
 function RouteComponent() {
   return (
-    <PageLayout>
-      <Breadcrumb items={[{ title: "Home" }, { title: "Warehouse List" }]} />
+    <PageLayout
+      items={[{ title: "Home", href: "/home" }, { title: "Warehouse List" }]}
+    >
       <ResponsiveCard
         title="Warehouse List"
         extra={

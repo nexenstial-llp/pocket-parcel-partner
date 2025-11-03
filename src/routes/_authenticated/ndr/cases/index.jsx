@@ -67,7 +67,9 @@ const columns = [
 ];
 function RouteComponent() {
   return (
-    <PageLayout>
+    <PageLayout
+      items={[{ title: "Home", href: "/home" }, { title: "NDR Cases" }]}
+    >
       {/* 🔍 Search Bar */}
       <SearchPanelCard
         searchTypeOptions={[

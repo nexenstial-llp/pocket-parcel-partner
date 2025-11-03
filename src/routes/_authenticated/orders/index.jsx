@@ -2,7 +2,7 @@ import PageLayout from "@/components/layout/PageLayout";
 import ResponsiveCard from "@/components/ui/cards/ResponsiveCard";
 import SearchPanelCard from "@/components/ui/cards/SearchPanelCard";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Breadcrumb, Button, DatePicker, Select, Table } from "antd";
+import { Button, DatePicker, Select, Table } from "antd";
 
 export const Route = createFileRoute("/_authenticated/orders/")({
   component: RouteComponent,
@@ -53,8 +53,7 @@ const columns = [
 
 function RouteComponent() {
   return (
-    <PageLayout>
-      <Breadcrumb items={[{ title: "Home" }, { title: "Orders" }]} />
+    <PageLayout items={[{ title: "Home", href: "/home" }, { title: "Orders" }]}>
       <SearchPanelCard
         searchTypeOptions={[
           { label: "AWB", value: "AWB" },

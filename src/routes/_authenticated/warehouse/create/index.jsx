@@ -1,7 +1,7 @@
 import PageLayout from "@/components/layout/PageLayout";
 import ResponsiveCard from "@/components/ui/cards/ResponsiveCard";
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { Breadcrumb, Button, Col, Form, Input, Row, Select } from "antd";
+import { createFileRoute } from "@tanstack/react-router";
+import { Button, Col, Form, Input, Row, Select } from "antd";
 
 export const Route = createFileRoute("/_authenticated/warehouse/create/")({
   component: RouteComponent,
@@ -16,14 +16,13 @@ const responsiveColSpan = {
 function RouteComponent() {
   const [form] = Form.useForm();
   return (
-    <PageLayout>
-      <Breadcrumb
-        items={[
-          { title: "Home" },
-          { title: <Link to="/warehouse/list">Warehouse List</Link> },
-          { title: "Create Warehouse" },
-        ]}
-      />
+    <PageLayout
+      items={[
+        { title: "Home", href: "/home" },
+        { title: "Warehouse list", href: "/warehouse/list" },
+        { title: "Create Warehouse" },
+      ]}
+    >
       <ResponsiveCard
         actions={[
           <div key={"submit"} className="flex gap-2 px-2">
