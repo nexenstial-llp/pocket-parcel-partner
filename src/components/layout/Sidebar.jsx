@@ -2,8 +2,8 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "@tanstack/react-router";
 import { Menu, Layout } from "antd";
-import POCKET_PARCEL_DESKTOP from "../../assets/Pocket_parcel_Desktop.svg";
-import POCKET_PARCEL_MOBILE from "../../assets/Pocket_parcel_Mobile.png";
+import POCKET_PARCEL_DESKTOP from "../../assets/Pocket_Parcel_Desktop.svg";
+import POCKET_PARCEL_MOBILE from "../../assets/Pocket_Parcel_Mobile.png";
 
 //icons
 import { AiOutlinePieChart, AiTwotoneContainer } from "react-icons/ai";
