@@ -70,20 +70,23 @@ function RootComponent() {
           </div>
         </div>
       </div>
-      <TanStackDevtools
-        plugins={[
-          {
-            name: "TanStack Query",
-            render: <ReactQueryDevtoolsPanel />,
-            defaultOpen: true,
-          },
-          {
-            name: "TanStack Router",
-            render: <TanStackRouterDevtoolsPanel />,
-            defaultOpen: false,
-          },
-        ]}
-      />
+
+      {import.meta.env.VITE_APP_ENV === "development" && (
+        <TanStackDevtools
+          plugins={[
+            {
+              name: "TanStack Query",
+              render: <ReactQueryDevtoolsPanel />,
+              defaultOpen: true,
+            },
+            {
+              name: "TanStack Router",
+              render: <TanStackRouterDevtoolsPanel />,
+              defaultOpen: false,
+            },
+          ]}
+        />
+      )}
     </React.Fragment>
   );
 }
