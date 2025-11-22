@@ -36,13 +36,14 @@ h6 {
   scrollbar-width: thin;
 }
 
-/* @media only screen and (max-width: 767px) {
+@media only screen and (max-width: 768px) {
   .pp-container {
+    max-height: calc(100vh - 65px);
     margin: 0 auto;
-    max-height: 100%;
+    /* max-height: 100%; */
     max-width: 100%;
   }
-} */
+}
 
 /* Fix for submenu background color in collapsed mode */
 .sidebar-container
