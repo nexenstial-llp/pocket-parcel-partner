@@ -12,7 +12,7 @@ import BreadcrumbComponent from "../ui/BreadcrumbComponent";
  */
 const PageLayout = ({ className, children, items = [] }) => {
   return (
-    <div className={cn("m-5", className)}>
+    <div className={cn("m-3 sm:md-4 md:m-5", className)}>
       {items.length > 0 && (
         <BreadcrumbComponent className="mb-1" items={items} />
       )}
