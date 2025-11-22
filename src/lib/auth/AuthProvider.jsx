@@ -1,67 +1,148 @@
 /* eslint-disable react/prop-types */
-import { useState, useEffect } from "react";
-import { flushSync } from "react-dom";
+// src/lib/auth/AuthProvider.jsx - FIXED VERSION
+import { useCallback, useEffect } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { router } from "@/router";
-import { AuthContext } from "./authContext.js";
-// import { Spin } from "antd";
 import Loader from "@/components/layout/Loader";
+import axiosInstance from "@/utils/axiosInstance.util.js";
+import { AuthContext } from "./authContext.js";
+import {
+  useEmailPasswordLogin,
+  useLogout,
+} from "@/features/auth/auth.query.js";
+import { message } from "antd";
+
+const STORAGE_KEYS = {
+  ACCESS_TOKEN: "access_token",
+  REFRESH_TOKEN: "refresh_token",
+  USER: "user",
+};
+
+const authKeys = {
+  user: ["user"],
+};
+
+async function fetchCurrentUser() {
+  const token = localStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN);
+  if (!token) return null;
+
+  try {
+    const response = await axiosInstance.get("/users/me");
+    return response?.data?.data ?? null;
+  } catch (error) {
+    Object.values(STORAGE_KEYS).forEach((key) => localStorage.removeItem(key));
+    console.error("Failed to fetch current user:", error);
+    return null;
+  }
+}
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const userData = {
-    roles: ["admin"],
-    permissions: ["create"],
-  };
-  const hasRole = (role) => {
-    return userData?.roles.includes(role) ?? false;
-  };
+  const queryClient = useQueryClient();
 
-  const hasAnyRole = (roles) => {
-    return roles.some((role) => userData?.roles?.includes(role)) ?? false;
-  };
+  const { data: user, isLoading } = useQuery({
+    queryKey: authKeys.user,
+    queryFn: fetchCurrentUser,
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
+    retry: false,
+    refetchOnWindowFocus: true,
+  });
 
-  const hasPermission = (permission) => {
-    return userData?.permissions.includes(permission) ?? false;
-  };
-
-  const hasAnyPermission = (permissions) => {
-    return (
-      permissions.some((permission) => {
-        return userData?.permissions.includes(permission);
-      }) ?? false
-    );
-  };
-  // Restore auth state on app load
   useEffect(() => {
-    const token = localStorage.getItem("auth-token");
-    if (token) {
-      // Validate token with your API
-      fetch("https://dummyjson.com/auth/me", {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-        .then((response) => response.json())
-        .then((userData) => {
-          if (userData) {
-            setUser(userData);
-            setIsAuthenticated(true);
-          } else {
-            localStorage.removeItem("auth-token");
-          }
-        })
-        .catch(() => {
-          localStorage.removeItem("auth-token");
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
+    if (user) {
+      localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(user));
     } else {
-      setIsLoading(false);
+      localStorage.removeItem(STORAGE_KEYS.USER);
     }
-  }, []);
+  }, [user]);
 
-  // Show loading state while checking auth
+  const loginMutation = useEmailPasswordLogin({
+    onSuccess: (userData) => {
+      localStorage.setItem(STORAGE_KEYS.ACCESS_TOKEN, userData.access_token);
+      localStorage.setItem(STORAGE_KEYS.REFRESH_TOKEN, userData.refresh_token);
+      // ✅ Extract and store only the user object, not the entire response
+      const userObject = userData.user || userData;
+      localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(userObject));
+
+      queryClient.setQueryData(authKeys.user, userObject);
+      router.invalidate();
+    },
+  });
+  const logoutMutation = useLogout({
+    onSuccess: async () => {
+      message.success("Logout Successfully");
+      // 1. Clear all storage
+      Object.values(STORAGE_KEYS).forEach((key) =>
+        localStorage.removeItem(key)
+      );
+
+      // 2. Reset the query (this will trigger a re-fetch with null token)
+      await queryClient.resetQueries({ queryKey: authKeys.user });
+
+      // 3. Wait a tick for state to update
+      await new Promise((resolve) => setTimeout(resolve, 0));
+
+      // 4. Navigate to login
+      await router.navigate({
+        to: "/auth/login",
+        replace: true,
+      });
+
+      // 5. Invalidate router
+      await router.invalidate();
+    },
+  });
+
+  // ✅ PROPER FIX: Use resetQueries to force re-fetch
+  const logout = useCallback(async () => {
+    logoutMutation.mutateAsync();
+  }, [logoutMutation]);
+
+  const login = useCallback(
+    async (email, password) => {
+      return loginMutation.mutateAsync({ email, password });
+    },
+    [loginMutation]
+  );
+
+  const hasRole = useCallback(
+    (role) => {
+      if (!user?.roles || !Array.isArray(user.roles)) return false;
+      return user.roles.includes(role);
+    },
+    [user]
+  );
+
+  const hasAnyRole = useCallback(
+    (roles) => {
+      if (!user?.roles || !Array.isArray(user.roles) || !roles?.length)
+        return false;
+      return roles.some((role) => user.roles.includes(role));
+    },
+    [user]
+  );
+
+  const hasPermission = useCallback(
+    (permission) => {
+      if (!user?.permissions || !Array.isArray(user.permissions)) return false;
+      return user.permissions.includes(permission);
+    },
+    [user]
+  );
+
+  const hasAnyPermission = useCallback(
+    (permissions) => {
+      if (
+        !user?.permissions ||
+        !Array.isArray(user.permissions) ||
+        !permissions?.length
+      )
+        return false;
+      return permissions.some((perm) => user.permissions.includes(perm));
+    },
+    [user]
+  );
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -70,48 +151,15 @@ export function AuthProvider({ children }) {
     );
   }
 
-  const login = async (username, password) => {
-    // Replace with your authentication logic
-    const response = await fetch("https://dummyjson.com/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, password }),
-    });
-
-    if (response.ok) {
-      const userData = await response.json();
-
-      flushSync(() => {
-        setUser(userData);
-        setIsAuthenticated(true);
-      });
-      router.invalidate();
-      // Store token for persistence
-      localStorage.setItem("auth-token", userData.accessToken);
-      localStorage.setItem("refresh-token", userData.refreshToken);
-      localStorage.setItem("user", JSON.stringify(userData));
-    } else {
-      console.log(`Error: ${response.statusText}`);
-      throw new Error("Authentication failed");
-    }
-  };
-
-  const logout = () => {
-    flushSync(() => {
-      setUser(null);
-      setIsAuthenticated(false);
-    });
-    router.invalidate();
-    localStorage.removeItem("auth-token");
-  };
-
   return (
     <AuthContext.Provider
       value={{
-        isAuthenticated,
+        isAuthenticated: !!user,
         user,
         login,
         logout,
+        isLoggingIn: loginMutation.isPending,
+        loginError: loginMutation.error,
         hasRole,
         hasAnyRole,
         hasPermission,
