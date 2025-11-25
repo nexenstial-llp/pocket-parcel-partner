@@ -21,6 +21,7 @@
     "@tanstack/react-query": "^5.90.2",
     "@tanstack/react-query-devtools": "^5.64.2",
     "@tanstack/react-router": "^1.95.5",
+    "@vis.gl/react-google-maps": "^1.7.1",
     "antd": "^5.27.5",
     "axios": "^1.7.9",
     "class-variance-authority": "^0.7.1",
