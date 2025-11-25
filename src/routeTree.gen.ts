@@ -15,11 +15,13 @@ import { createFileRoute } from '@tanstack/react-router'
 import { Route as rootRoute } from './routes/__root'
 import { Route as AuthenticatedImport } from './routes/_authenticated'
 import { Route as IndexImport } from './routes/index'
-import { Route as AuthLoginImport } from './routes/auth/Login'
+import { Route as AuthLoginImport } from './routes/auth/login'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings/route'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard/route'
+import { Route as AuthenticatedWarehousesIndexImport } from './routes/_authenticated/warehouses/index'
 import { Route as AuthenticatedToolsIndexImport } from './routes/_authenticated/tools/index'
 import { Route as AuthenticatedRackIndexImport } from './routes/_authenticated/rack/index'
+import { Route as AuthenticatedProfileIndexImport } from './routes/_authenticated/profile/index'
 import { Route as AuthenticatedOverviewIndexImport } from './routes/_authenticated/overview/index'
 import { Route as AuthenticatedOrdersIndexImport } from './routes/_authenticated/orders/index'
 import { Route as AuthenticatedHomeIndexImport } from './routes/_authenticated/home/index'
@@ -29,8 +31,7 @@ import { Route as AuthenticatedToolsRateCalculatorRouteImport } from './routes/_
 import { Route as AuthenticatedOrdersReturnsRouteImport } from './routes/_authenticated/orders/returns/route'
 import { Route as AuthenticatedDashboardInternationalRouteImport } from './routes/_authenticated/dashboard/international/route'
 import { Route as AuthenticatedDashboardDomesticRouteImport } from './routes/_authenticated/dashboard/domestic/route'
-import { Route as AuthenticatedWarehouseListIndexImport } from './routes/_authenticated/warehouse/list/index'
-import { Route as AuthenticatedWarehouseCreateIndexImport } from './routes/_authenticated/warehouse/create/index'
+import { Route as AuthenticatedWarehousesCreateIndexImport } from './routes/_authenticated/warehouses/create/index'
 import { Route as AuthenticatedToolsActivityLogsIndexImport } from './routes/_authenticated/tools/activity-logs/index'
 import { Route as AuthenticatedSettingsUsersIndexImport } from './routes/_authenticated/settings/users/index'
 import { Route as AuthenticatedSettingsTaxConfigurationIndexImport } from './routes/_authenticated/settings/tax-configuration/index'
@@ -43,12 +44,14 @@ import { Route as AuthenticatedRevenueDashboardSupportIndexImport } from './rout
 import { Route as AuthenticatedRevenueDashboardSettingsIndexImport } from './routes/_authenticated/revenue-dashboard/settings/index'
 import { Route as AuthenticatedRevenueDashboardInvoiceAndTaxIndexImport } from './routes/_authenticated/revenue-dashboard/invoice-and-tax/index'
 import { Route as AuthenticatedOrdersTrackOrderIndexImport } from './routes/_authenticated/orders/track-order/index'
+import { Route as AuthenticatedOrdersFirstMileIndexImport } from './routes/_authenticated/orders/first-mile/index'
 import { Route as AuthenticatedOrdersCreateIndexImport } from './routes/_authenticated/orders/create/index'
 import { Route as AuthenticatedOrdersIdIndexImport } from './routes/_authenticated/orders/$id/index'
 import { Route as AuthenticatedNdrReportsIndexImport } from './routes/_authenticated/ndr/reports/index'
 import { Route as AuthenticatedNdrCasesIndexImport } from './routes/_authenticated/ndr/cases/index'
 import { Route as AuthenticatedAccessControlUsersIndexImport } from './routes/_authenticated/access-control/users/index'
 import { Route as AuthenticatedToolsReportsDownloadReportsRouteImport } from './routes/_authenticated/tools/reports/download-reports/route'
+import { Route as AuthenticatedWarehousesIdEditIndexImport } from './routes/_authenticated/warehouses/$id/edit/index'
 import { Route as AuthenticatedToolsReportsReportsSchedulerIndexImport } from './routes/_authenticated/tools/reports/reports-scheduler/index'
 import { Route as AuthenticatedToolsRateCardReverseIndexImport } from './routes/_authenticated/tools/rate-card/reverse/index'
 import { Route as AuthenticatedToolsRateCardForwardIndexImport } from './routes/_authenticated/tools/rate-card/forward/index'
@@ -59,6 +62,9 @@ import { Route as AuthenticatedRevenueDashboardReportsShipmentRevenueIndexImport
 import { Route as AuthenticatedRevenueDashboardReportsCommissionBreakdownIndexImport } from './routes/_authenticated/revenue-dashboard/reports/commission-breakdown/index'
 import { Route as AuthenticatedRevenueDashboardMyEarningsSettlementsAndPayoutsIndexImport } from './routes/_authenticated/revenue-dashboard/my-earnings/settlements-and-payouts/index'
 import { Route as AuthenticatedRevenueDashboardMyEarningsRevenueSummaryIndexImport } from './routes/_authenticated/revenue-dashboard/my-earnings/revenue-summary/index'
+import { Route as AuthenticatedOrdersFirstMileCreateIndexImport } from './routes/_authenticated/orders/first-mile/create/index'
+import { Route as AuthenticatedOrdersFirstMileCalculatePriceIndexImport } from './routes/_authenticated/orders/first-mile/calculate-price/index'
+import { Route as AuthenticatedOrdersFirstMileIdIndexImport } from './routes/_authenticated/orders/first-mile/$id/index'
 import { Route as AuthenticatedDashboardInternationalOverviewIndexImport } from './routes/_authenticated/dashboard/international/overview/index'
 import { Route as AuthenticatedDashboardDomesticShipmentsIndexImport } from './routes/_authenticated/dashboard/domestic/shipments/index'
 import { Route as AuthenticatedDashboardDomesticRtoIndexImport } from './routes/_authenticated/dashboard/domestic/rto/index'
@@ -70,6 +76,7 @@ import { Route as AuthenticatedDashboardDomesticCourierIndexImport } from './rou
 import { Route as AuthenticatedAccessControlUsersCreateIndexImport } from './routes/_authenticated/access-control/users/create/index'
 import { Route as AuthenticatedAccessControlRolesCreateIndexImport } from './routes/_authenticated/access-control/roles/create/index'
 import { Route as AuthenticatedToolsReportsDownloadReportsInstantReportsIndexImport } from './routes/_authenticated/tools/reports/download-reports/instant-reports/index'
+import { Route as AuthenticatedOrdersFirstMileIdEditIndexImport } from './routes/_authenticated/orders/first-mile/$id/edit/index'
 
 // Create Virtual Routes
 
@@ -92,8 +99,8 @@ const IndexRoute = IndexImport.update({
 } as any)
 
 const AuthLoginRoute = AuthLoginImport.update({
-  id: '/auth/Login',
-  path: '/auth/Login',
+  id: '/auth/login',
+  path: '/auth/login',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -112,6 +119,13 @@ const AuthenticatedDashboardRouteRoute =
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 
+const AuthenticatedWarehousesIndexRoute =
+  AuthenticatedWarehousesIndexImport.update({
+    id: '/warehouses/',
+    path: '/warehouses/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+
 const AuthenticatedToolsIndexRoute = AuthenticatedToolsIndexImport.update({
   id: '/tools/',
   path: '/tools/',
@@ -121,6 +135,12 @@ const AuthenticatedToolsIndexRoute = AuthenticatedToolsIndexImport.update({
 const AuthenticatedRackIndexRoute = AuthenticatedRackIndexImport.update({
   id: '/rack/',
   path: '/rack/',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+
+const AuthenticatedProfileIndexRoute = AuthenticatedProfileIndexImport.update({
+  id: '/profile/',
+  path: '/profile/',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
 
@@ -186,17 +206,10 @@ const AuthenticatedDashboardDomesticRouteRoute =
     getParentRoute: () => AuthenticatedDashboardRouteRoute,
   } as any)
 
-const AuthenticatedWarehouseListIndexRoute =
-  AuthenticatedWarehouseListIndexImport.update({
-    id: '/warehouse/list/',
-    path: '/warehouse/list/',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
-
-const AuthenticatedWarehouseCreateIndexRoute =
-  AuthenticatedWarehouseCreateIndexImport.update({
-    id: '/warehouse/create/',
-    path: '/warehouse/create/',
+const AuthenticatedWarehousesCreateIndexRoute =
+  AuthenticatedWarehousesCreateIndexImport.update({
+    id: '/warehouses/create/',
+    path: '/warehouses/create/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 
@@ -284,6 +297,13 @@ const AuthenticatedOrdersTrackOrderIndexRoute =
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 
+const AuthenticatedOrdersFirstMileIndexRoute =
+  AuthenticatedOrdersFirstMileIndexImport.update({
+    id: '/orders/first-mile/',
+    path: '/orders/first-mile/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+
 const AuthenticatedOrdersCreateIndexRoute =
   AuthenticatedOrdersCreateIndexImport.update({
     id: '/orders/create/',
@@ -326,6 +346,13 @@ const AuthenticatedToolsReportsDownloadReportsRouteRoute =
     id: '/download-reports',
     path: '/download-reports',
     getParentRoute: () => AuthenticatedToolsReportsRouteRoute,
+  } as any)
+
+const AuthenticatedWarehousesIdEditIndexRoute =
+  AuthenticatedWarehousesIdEditIndexImport.update({
+    id: '/warehouses/$id/edit/',
+    path: '/warehouses/$id/edit/',
+    getParentRoute: () => AuthenticatedRoute,
   } as any)
 
 const AuthenticatedToolsReportsReportsSchedulerIndexRoute =
@@ -397,6 +424,27 @@ const AuthenticatedRevenueDashboardMyEarningsRevenueSummaryIndexRoute =
   AuthenticatedRevenueDashboardMyEarningsRevenueSummaryIndexImport.update({
     id: '/revenue-dashboard/my-earnings/revenue-summary/',
     path: '/revenue-dashboard/my-earnings/revenue-summary/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+
+const AuthenticatedOrdersFirstMileCreateIndexRoute =
+  AuthenticatedOrdersFirstMileCreateIndexImport.update({
+    id: '/orders/first-mile/create/',
+    path: '/orders/first-mile/create/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+
+const AuthenticatedOrdersFirstMileCalculatePriceIndexRoute =
+  AuthenticatedOrdersFirstMileCalculatePriceIndexImport.update({
+    id: '/orders/first-mile/calculate-price/',
+    path: '/orders/first-mile/calculate-price/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+
+const AuthenticatedOrdersFirstMileIdIndexRoute =
+  AuthenticatedOrdersFirstMileIdIndexImport.update({
+    id: '/orders/first-mile/$id/',
+    path: '/orders/first-mile/$id/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 
@@ -490,6 +538,13 @@ const AuthenticatedToolsReportsDownloadReportsInstantReportsIndexRoute =
     getParentRoute: () => AuthenticatedToolsReportsDownloadReportsRouteRoute,
   } as any)
 
+const AuthenticatedOrdersFirstMileIdEditIndexRoute =
+  AuthenticatedOrdersFirstMileIdEditIndexImport.update({
+    id: '/orders/first-mile/$id/edit/',
+    path: '/orders/first-mile/$id/edit/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -522,10 +577,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedSettingsRouteImport
       parentRoute: typeof AuthenticatedImport
     }
-    '/auth/Login': {
-      id: '/auth/Login'
-      path: '/auth/Login'
-      fullPath: '/auth/Login'
+    '/auth/login': {
+      id: '/auth/login'
+      path: '/auth/login'
+      fullPath: '/auth/login'
       preLoaderRoute: typeof AuthLoginImport
       parentRoute: typeof rootRoute
     }
@@ -592,6 +647,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedOverviewIndexImport
       parentRoute: typeof AuthenticatedImport
     }
+    '/_authenticated/profile/': {
+      id: '/_authenticated/profile/'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof AuthenticatedProfileIndexImport
+      parentRoute: typeof AuthenticatedImport
+    }
     '/_authenticated/rack/': {
       id: '/_authenticated/rack/'
       path: '/rack'
@@ -604,6 +666,13 @@ declare module '@tanstack/react-router' {
       path: '/tools'
       fullPath: '/tools'
       preLoaderRoute: typeof AuthenticatedToolsIndexImport
+      parentRoute: typeof AuthenticatedImport
+    }
+    '/_authenticated/warehouses/': {
+      id: '/_authenticated/warehouses/'
+      path: '/warehouses'
+      fullPath: '/warehouses'
+      preLoaderRoute: typeof AuthenticatedWarehousesIndexImport
       parentRoute: typeof AuthenticatedImport
     }
     '/_authenticated/tools/reports/download-reports': {
@@ -646,6 +715,13 @@ declare module '@tanstack/react-router' {
       path: '/orders/create'
       fullPath: '/orders/create'
       preLoaderRoute: typeof AuthenticatedOrdersCreateIndexImport
+      parentRoute: typeof AuthenticatedImport
+    }
+    '/_authenticated/orders/first-mile/': {
+      id: '/_authenticated/orders/first-mile/'
+      path: '/orders/first-mile'
+      fullPath: '/orders/first-mile'
+      preLoaderRoute: typeof AuthenticatedOrdersFirstMileIndexImport
       parentRoute: typeof AuthenticatedImport
     }
     '/_authenticated/orders/track-order/': {
@@ -732,18 +808,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedToolsActivityLogsIndexImport
       parentRoute: typeof AuthenticatedImport
     }
-    '/_authenticated/warehouse/create/': {
-      id: '/_authenticated/warehouse/create/'
-      path: '/warehouse/create'
-      fullPath: '/warehouse/create'
-      preLoaderRoute: typeof AuthenticatedWarehouseCreateIndexImport
-      parentRoute: typeof AuthenticatedImport
-    }
-    '/_authenticated/warehouse/list/': {
-      id: '/_authenticated/warehouse/list/'
-      path: '/warehouse/list'
-      fullPath: '/warehouse/list'
-      preLoaderRoute: typeof AuthenticatedWarehouseListIndexImport
+    '/_authenticated/warehouses/create/': {
+      id: '/_authenticated/warehouses/create/'
+      path: '/warehouses/create'
+      fullPath: '/warehouses/create'
+      preLoaderRoute: typeof AuthenticatedWarehousesCreateIndexImport
       parentRoute: typeof AuthenticatedImport
     }
     '/_authenticated/access-control/roles/create/': {
@@ -816,6 +885,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardInternationalOverviewIndexImport
       parentRoute: typeof AuthenticatedDashboardInternationalRouteImport
     }
+    '/_authenticated/orders/first-mile/$id/': {
+      id: '/_authenticated/orders/first-mile/$id/'
+      path: '/orders/first-mile/$id'
+      fullPath: '/orders/first-mile/$id'
+      preLoaderRoute: typeof AuthenticatedOrdersFirstMileIdIndexImport
+      parentRoute: typeof AuthenticatedImport
+    }
+    '/_authenticated/orders/first-mile/calculate-price/': {
+      id: '/_authenticated/orders/first-mile/calculate-price/'
+      path: '/orders/first-mile/calculate-price'
+      fullPath: '/orders/first-mile/calculate-price'
+      preLoaderRoute: typeof AuthenticatedOrdersFirstMileCalculatePriceIndexImport
+      parentRoute: typeof AuthenticatedImport
+    }
+    '/_authenticated/orders/first-mile/create/': {
+      id: '/_authenticated/orders/first-mile/create/'
+      path: '/orders/first-mile/create'
+      fullPath: '/orders/first-mile/create'
+      preLoaderRoute: typeof AuthenticatedOrdersFirstMileCreateIndexImport
+      parentRoute: typeof AuthenticatedImport
+    }
     '/_authenticated/revenue-dashboard/my-earnings/revenue-summary/': {
       id: '/_authenticated/revenue-dashboard/my-earnings/revenue-summary/'
       path: '/revenue-dashboard/my-earnings/revenue-summary'
@@ -885,6 +975,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/tools/reports/reports-scheduler'
       preLoaderRoute: typeof AuthenticatedToolsReportsReportsSchedulerIndexImport
       parentRoute: typeof AuthenticatedToolsReportsRouteImport
+    }
+    '/_authenticated/warehouses/$id/edit/': {
+      id: '/_authenticated/warehouses/$id/edit/'
+      path: '/warehouses/$id/edit'
+      fullPath: '/warehouses/$id/edit'
+      preLoaderRoute: typeof AuthenticatedWarehousesIdEditIndexImport
+      parentRoute: typeof AuthenticatedImport
+    }
+    '/_authenticated/orders/first-mile/$id/edit/': {
+      id: '/_authenticated/orders/first-mile/$id/edit/'
+      path: '/orders/first-mile/$id/edit'
+      fullPath: '/orders/first-mile/$id/edit'
+      preLoaderRoute: typeof AuthenticatedOrdersFirstMileIdEditIndexImport
+      parentRoute: typeof AuthenticatedImport
     }
     '/_authenticated/tools/reports/download-reports/instant-reports/': {
       id: '/_authenticated/tools/reports/download-reports/instant-reports/'
@@ -1088,26 +1192,33 @@ interface AuthenticatedRouteChildren {
   AuthenticatedHomeIndexRoute: typeof AuthenticatedHomeIndexRoute
   AuthenticatedOrdersIndexRoute: typeof AuthenticatedOrdersIndexRoute
   AuthenticatedOverviewIndexRoute: typeof AuthenticatedOverviewIndexRoute
+  AuthenticatedProfileIndexRoute: typeof AuthenticatedProfileIndexRoute
   AuthenticatedRackIndexRoute: typeof AuthenticatedRackIndexRoute
   AuthenticatedToolsIndexRoute: typeof AuthenticatedToolsIndexRoute
+  AuthenticatedWarehousesIndexRoute: typeof AuthenticatedWarehousesIndexRoute
   AuthenticatedAccessControlUsersIndexRoute: typeof AuthenticatedAccessControlUsersIndexRoute
   AuthenticatedNdrCasesIndexRoute: typeof AuthenticatedNdrCasesIndexRoute
   AuthenticatedNdrReportsIndexRoute: typeof AuthenticatedNdrReportsIndexRoute
   AuthenticatedOrdersIdIndexRoute: typeof AuthenticatedOrdersIdIndexRoute
   AuthenticatedOrdersCreateIndexRoute: typeof AuthenticatedOrdersCreateIndexRoute
+  AuthenticatedOrdersFirstMileIndexRoute: typeof AuthenticatedOrdersFirstMileIndexRoute
   AuthenticatedOrdersTrackOrderIndexRoute: typeof AuthenticatedOrdersTrackOrderIndexRoute
   AuthenticatedRevenueDashboardInvoiceAndTaxIndexRoute: typeof AuthenticatedRevenueDashboardInvoiceAndTaxIndexRoute
   AuthenticatedRevenueDashboardSettingsIndexRoute: typeof AuthenticatedRevenueDashboardSettingsIndexRoute
   AuthenticatedRevenueDashboardSupportIndexRoute: typeof AuthenticatedRevenueDashboardSupportIndexRoute
   AuthenticatedToolsActivityLogsIndexRoute: typeof AuthenticatedToolsActivityLogsIndexRoute
-  AuthenticatedWarehouseCreateIndexRoute: typeof AuthenticatedWarehouseCreateIndexRoute
-  AuthenticatedWarehouseListIndexRoute: typeof AuthenticatedWarehouseListIndexRoute
+  AuthenticatedWarehousesCreateIndexRoute: typeof AuthenticatedWarehousesCreateIndexRoute
   AuthenticatedAccessControlRolesCreateIndexRoute: typeof AuthenticatedAccessControlRolesCreateIndexRoute
   AuthenticatedAccessControlUsersCreateIndexRoute: typeof AuthenticatedAccessControlUsersCreateIndexRoute
+  AuthenticatedOrdersFirstMileIdIndexRoute: typeof AuthenticatedOrdersFirstMileIdIndexRoute
+  AuthenticatedOrdersFirstMileCalculatePriceIndexRoute: typeof AuthenticatedOrdersFirstMileCalculatePriceIndexRoute
+  AuthenticatedOrdersFirstMileCreateIndexRoute: typeof AuthenticatedOrdersFirstMileCreateIndexRoute
   AuthenticatedRevenueDashboardMyEarningsRevenueSummaryIndexRoute: typeof AuthenticatedRevenueDashboardMyEarningsRevenueSummaryIndexRoute
   AuthenticatedRevenueDashboardMyEarningsSettlementsAndPayoutsIndexRoute: typeof AuthenticatedRevenueDashboardMyEarningsSettlementsAndPayoutsIndexRoute
   AuthenticatedRevenueDashboardReportsCommissionBreakdownIndexRoute: typeof AuthenticatedRevenueDashboardReportsCommissionBreakdownIndexRoute
   AuthenticatedRevenueDashboardReportsShipmentRevenueIndexRoute: typeof AuthenticatedRevenueDashboardReportsShipmentRevenueIndexRoute
+  AuthenticatedWarehousesIdEditIndexRoute: typeof AuthenticatedWarehousesIdEditIndexRoute
+  AuthenticatedOrdersFirstMileIdEditIndexRoute: typeof AuthenticatedOrdersFirstMileIdEditIndexRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
@@ -1124,14 +1235,18 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedHomeIndexRoute: AuthenticatedHomeIndexRoute,
   AuthenticatedOrdersIndexRoute: AuthenticatedOrdersIndexRoute,
   AuthenticatedOverviewIndexRoute: AuthenticatedOverviewIndexRoute,
+  AuthenticatedProfileIndexRoute: AuthenticatedProfileIndexRoute,
   AuthenticatedRackIndexRoute: AuthenticatedRackIndexRoute,
   AuthenticatedToolsIndexRoute: AuthenticatedToolsIndexRoute,
+  AuthenticatedWarehousesIndexRoute: AuthenticatedWarehousesIndexRoute,
   AuthenticatedAccessControlUsersIndexRoute:
     AuthenticatedAccessControlUsersIndexRoute,
   AuthenticatedNdrCasesIndexRoute: AuthenticatedNdrCasesIndexRoute,
   AuthenticatedNdrReportsIndexRoute: AuthenticatedNdrReportsIndexRoute,
   AuthenticatedOrdersIdIndexRoute: AuthenticatedOrdersIdIndexRoute,
   AuthenticatedOrdersCreateIndexRoute: AuthenticatedOrdersCreateIndexRoute,
+  AuthenticatedOrdersFirstMileIndexRoute:
+    AuthenticatedOrdersFirstMileIndexRoute,
   AuthenticatedOrdersTrackOrderIndexRoute:
     AuthenticatedOrdersTrackOrderIndexRoute,
   AuthenticatedRevenueDashboardInvoiceAndTaxIndexRoute:
@@ -1142,13 +1257,18 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
     AuthenticatedRevenueDashboardSupportIndexRoute,
   AuthenticatedToolsActivityLogsIndexRoute:
     AuthenticatedToolsActivityLogsIndexRoute,
-  AuthenticatedWarehouseCreateIndexRoute:
-    AuthenticatedWarehouseCreateIndexRoute,
-  AuthenticatedWarehouseListIndexRoute: AuthenticatedWarehouseListIndexRoute,
+  AuthenticatedWarehousesCreateIndexRoute:
+    AuthenticatedWarehousesCreateIndexRoute,
   AuthenticatedAccessControlRolesCreateIndexRoute:
     AuthenticatedAccessControlRolesCreateIndexRoute,
   AuthenticatedAccessControlUsersCreateIndexRoute:
     AuthenticatedAccessControlUsersCreateIndexRoute,
+  AuthenticatedOrdersFirstMileIdIndexRoute:
+    AuthenticatedOrdersFirstMileIdIndexRoute,
+  AuthenticatedOrdersFirstMileCalculatePriceIndexRoute:
+    AuthenticatedOrdersFirstMileCalculatePriceIndexRoute,
+  AuthenticatedOrdersFirstMileCreateIndexRoute:
+    AuthenticatedOrdersFirstMileCreateIndexRoute,
   AuthenticatedRevenueDashboardMyEarningsRevenueSummaryIndexRoute:
     AuthenticatedRevenueDashboardMyEarningsRevenueSummaryIndexRoute,
   AuthenticatedRevenueDashboardMyEarningsSettlementsAndPayoutsIndexRoute:
@@ -1157,6 +1277,10 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
     AuthenticatedRevenueDashboardReportsCommissionBreakdownIndexRoute,
   AuthenticatedRevenueDashboardReportsShipmentRevenueIndexRoute:
     AuthenticatedRevenueDashboardReportsShipmentRevenueIndexRoute,
+  AuthenticatedWarehousesIdEditIndexRoute:
+    AuthenticatedWarehousesIdEditIndexRoute,
+  AuthenticatedOrdersFirstMileIdEditIndexRoute:
+    AuthenticatedOrdersFirstMileIdEditIndexRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
@@ -1168,7 +1292,7 @@ export interface FileRoutesByFullPath {
   '': typeof AuthenticatedRouteWithChildren
   '/dashboard': typeof AuthenticatedDashboardRouteRouteWithChildren
   '/settings': typeof AuthenticatedSettingsRouteRouteWithChildren
-  '/auth/Login': typeof AuthLoginRoute
+  '/auth/login': typeof AuthLoginRoute
   '/dashboard/domestic': typeof AuthenticatedDashboardDomesticRouteRouteWithChildren
   '/dashboard/international': typeof AuthenticatedDashboardInternationalRouteRouteWithChildren
   '/orders/returns': typeof AuthenticatedOrdersReturnsRouteRoute
@@ -1178,14 +1302,17 @@ export interface FileRoutesByFullPath {
   '/home': typeof AuthenticatedHomeIndexRoute
   '/orders': typeof AuthenticatedOrdersIndexRoute
   '/overview': typeof AuthenticatedOverviewIndexRoute
+  '/profile': typeof AuthenticatedProfileIndexRoute
   '/rack': typeof AuthenticatedRackIndexRoute
   '/tools': typeof AuthenticatedToolsIndexRoute
+  '/warehouses': typeof AuthenticatedWarehousesIndexRoute
   '/tools/reports/download-reports': typeof AuthenticatedToolsReportsDownloadReportsRouteRouteWithChildren
   '/access-control/users': typeof AuthenticatedAccessControlUsersIndexRoute
   '/ndr/cases': typeof AuthenticatedNdrCasesIndexRoute
   '/ndr/reports': typeof AuthenticatedNdrReportsIndexRoute
   '/orders/$id': typeof AuthenticatedOrdersIdIndexRoute
   '/orders/create': typeof AuthenticatedOrdersCreateIndexRoute
+  '/orders/first-mile': typeof AuthenticatedOrdersFirstMileIndexRoute
   '/orders/track-order': typeof AuthenticatedOrdersTrackOrderIndexRoute
   '/revenue-dashboard/invoice-and-tax': typeof AuthenticatedRevenueDashboardInvoiceAndTaxIndexRoute
   '/revenue-dashboard/settings': typeof AuthenticatedRevenueDashboardSettingsIndexRoute
@@ -1198,8 +1325,7 @@ export interface FileRoutesByFullPath {
   '/settings/tax-configuration': typeof AuthenticatedSettingsTaxConfigurationIndexRoute
   '/settings/users': typeof AuthenticatedSettingsUsersIndexRoute
   '/tools/activity-logs': typeof AuthenticatedToolsActivityLogsIndexRoute
-  '/warehouse/create': typeof AuthenticatedWarehouseCreateIndexRoute
-  '/warehouse/list': typeof AuthenticatedWarehouseListIndexRoute
+  '/warehouses/create': typeof AuthenticatedWarehousesCreateIndexRoute
   '/access-control/roles/create': typeof AuthenticatedAccessControlRolesCreateIndexRoute
   '/access-control/users/create': typeof AuthenticatedAccessControlUsersCreateIndexRoute
   '/dashboard/domestic/courier': typeof AuthenticatedDashboardDomesticCourierIndexRoute
@@ -1210,6 +1336,9 @@ export interface FileRoutesByFullPath {
   '/dashboard/domestic/rto': typeof AuthenticatedDashboardDomesticRtoIndexRoute
   '/dashboard/domestic/shipments': typeof AuthenticatedDashboardDomesticShipmentsIndexRoute
   '/dashboard/international/overview': typeof AuthenticatedDashboardInternationalOverviewIndexRoute
+  '/orders/first-mile/$id': typeof AuthenticatedOrdersFirstMileIdIndexRoute
+  '/orders/first-mile/calculate-price': typeof AuthenticatedOrdersFirstMileCalculatePriceIndexRoute
+  '/orders/first-mile/create': typeof AuthenticatedOrdersFirstMileCreateIndexRoute
   '/revenue-dashboard/my-earnings/revenue-summary': typeof AuthenticatedRevenueDashboardMyEarningsRevenueSummaryIndexRoute
   '/revenue-dashboard/my-earnings/settlements-and-payouts': typeof AuthenticatedRevenueDashboardMyEarningsSettlementsAndPayoutsIndexRoute
   '/revenue-dashboard/reports/commission-breakdown': typeof AuthenticatedRevenueDashboardReportsCommissionBreakdownIndexRoute
@@ -1220,6 +1349,8 @@ export interface FileRoutesByFullPath {
   '/tools/rate-card/forward': typeof AuthenticatedToolsRateCardForwardIndexRoute
   '/tools/rate-card/reverse': typeof AuthenticatedToolsRateCardReverseIndexRoute
   '/tools/reports/reports-scheduler': typeof AuthenticatedToolsReportsReportsSchedulerIndexRoute
+  '/warehouses/$id/edit': typeof AuthenticatedWarehousesIdEditIndexRoute
+  '/orders/first-mile/$id/edit': typeof AuthenticatedOrdersFirstMileIdEditIndexRoute
   '/tools/reports/download-reports/instant-reports': typeof AuthenticatedToolsReportsDownloadReportsInstantReportsIndexRoute
   '/tools/reports/download-reports/scheduled-reports': typeof AuthenticatedToolsReportsDownloadReportsScheduledReportsIndexLazyRoute
 }
@@ -1229,7 +1360,7 @@ export interface FileRoutesByTo {
   '': typeof AuthenticatedRouteWithChildren
   '/dashboard': typeof AuthenticatedDashboardRouteRouteWithChildren
   '/settings': typeof AuthenticatedSettingsRouteRouteWithChildren
-  '/auth/Login': typeof AuthLoginRoute
+  '/auth/login': typeof AuthLoginRoute
   '/dashboard/domestic': typeof AuthenticatedDashboardDomesticRouteRouteWithChildren
   '/dashboard/international': typeof AuthenticatedDashboardInternationalRouteRouteWithChildren
   '/orders/returns': typeof AuthenticatedOrdersReturnsRouteRoute
@@ -1239,14 +1370,17 @@ export interface FileRoutesByTo {
   '/home': typeof AuthenticatedHomeIndexRoute
   '/orders': typeof AuthenticatedOrdersIndexRoute
   '/overview': typeof AuthenticatedOverviewIndexRoute
+  '/profile': typeof AuthenticatedProfileIndexRoute
   '/rack': typeof AuthenticatedRackIndexRoute
   '/tools': typeof AuthenticatedToolsIndexRoute
+  '/warehouses': typeof AuthenticatedWarehousesIndexRoute
   '/tools/reports/download-reports': typeof AuthenticatedToolsReportsDownloadReportsRouteRouteWithChildren
   '/access-control/users': typeof AuthenticatedAccessControlUsersIndexRoute
   '/ndr/cases': typeof AuthenticatedNdrCasesIndexRoute
   '/ndr/reports': typeof AuthenticatedNdrReportsIndexRoute
   '/orders/$id': typeof AuthenticatedOrdersIdIndexRoute
   '/orders/create': typeof AuthenticatedOrdersCreateIndexRoute
+  '/orders/first-mile': typeof AuthenticatedOrdersFirstMileIndexRoute
   '/orders/track-order': typeof AuthenticatedOrdersTrackOrderIndexRoute
   '/revenue-dashboard/invoice-and-tax': typeof AuthenticatedRevenueDashboardInvoiceAndTaxIndexRoute
   '/revenue-dashboard/settings': typeof AuthenticatedRevenueDashboardSettingsIndexRoute
@@ -1259,8 +1393,7 @@ export interface FileRoutesByTo {
   '/settings/tax-configuration': typeof AuthenticatedSettingsTaxConfigurationIndexRoute
   '/settings/users': typeof AuthenticatedSettingsUsersIndexRoute
   '/tools/activity-logs': typeof AuthenticatedToolsActivityLogsIndexRoute
-  '/warehouse/create': typeof AuthenticatedWarehouseCreateIndexRoute
-  '/warehouse/list': typeof AuthenticatedWarehouseListIndexRoute
+  '/warehouses/create': typeof AuthenticatedWarehousesCreateIndexRoute
   '/access-control/roles/create': typeof AuthenticatedAccessControlRolesCreateIndexRoute
   '/access-control/users/create': typeof AuthenticatedAccessControlUsersCreateIndexRoute
   '/dashboard/domestic/courier': typeof AuthenticatedDashboardDomesticCourierIndexRoute
@@ -1271,6 +1404,9 @@ export interface FileRoutesByTo {
   '/dashboard/domestic/rto': typeof AuthenticatedDashboardDomesticRtoIndexRoute
   '/dashboard/domestic/shipments': typeof AuthenticatedDashboardDomesticShipmentsIndexRoute
   '/dashboard/international/overview': typeof AuthenticatedDashboardInternationalOverviewIndexRoute
+  '/orders/first-mile/$id': typeof AuthenticatedOrdersFirstMileIdIndexRoute
+  '/orders/first-mile/calculate-price': typeof AuthenticatedOrdersFirstMileCalculatePriceIndexRoute
+  '/orders/first-mile/create': typeof AuthenticatedOrdersFirstMileCreateIndexRoute
   '/revenue-dashboard/my-earnings/revenue-summary': typeof AuthenticatedRevenueDashboardMyEarningsRevenueSummaryIndexRoute
   '/revenue-dashboard/my-earnings/settlements-and-payouts': typeof AuthenticatedRevenueDashboardMyEarningsSettlementsAndPayoutsIndexRoute
   '/revenue-dashboard/reports/commission-breakdown': typeof AuthenticatedRevenueDashboardReportsCommissionBreakdownIndexRoute
@@ -1281,6 +1417,8 @@ export interface FileRoutesByTo {
   '/tools/rate-card/forward': typeof AuthenticatedToolsRateCardForwardIndexRoute
   '/tools/rate-card/reverse': typeof AuthenticatedToolsRateCardReverseIndexRoute
   '/tools/reports/reports-scheduler': typeof AuthenticatedToolsReportsReportsSchedulerIndexRoute
+  '/warehouses/$id/edit': typeof AuthenticatedWarehousesIdEditIndexRoute
+  '/orders/first-mile/$id/edit': typeof AuthenticatedOrdersFirstMileIdEditIndexRoute
   '/tools/reports/download-reports/instant-reports': typeof AuthenticatedToolsReportsDownloadReportsInstantReportsIndexRoute
   '/tools/reports/download-reports/scheduled-reports': typeof AuthenticatedToolsReportsDownloadReportsScheduledReportsIndexLazyRoute
 }
@@ -1291,7 +1429,7 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRouteRouteWithChildren
   '/_authenticated/settings': typeof AuthenticatedSettingsRouteRouteWithChildren
-  '/auth/Login': typeof AuthLoginRoute
+  '/auth/login': typeof AuthLoginRoute
   '/_authenticated/dashboard/domestic': typeof AuthenticatedDashboardDomesticRouteRouteWithChildren
   '/_authenticated/dashboard/international': typeof AuthenticatedDashboardInternationalRouteRouteWithChildren
   '/_authenticated/orders/returns': typeof AuthenticatedOrdersReturnsRouteRoute
@@ -1301,14 +1439,17 @@ export interface FileRoutesById {
   '/_authenticated/home/': typeof AuthenticatedHomeIndexRoute
   '/_authenticated/orders/': typeof AuthenticatedOrdersIndexRoute
   '/_authenticated/overview/': typeof AuthenticatedOverviewIndexRoute
+  '/_authenticated/profile/': typeof AuthenticatedProfileIndexRoute
   '/_authenticated/rack/': typeof AuthenticatedRackIndexRoute
   '/_authenticated/tools/': typeof AuthenticatedToolsIndexRoute
+  '/_authenticated/warehouses/': typeof AuthenticatedWarehousesIndexRoute
   '/_authenticated/tools/reports/download-reports': typeof AuthenticatedToolsReportsDownloadReportsRouteRouteWithChildren
   '/_authenticated/access-control/users/': typeof AuthenticatedAccessControlUsersIndexRoute
   '/_authenticated/ndr/cases/': typeof AuthenticatedNdrCasesIndexRoute
   '/_authenticated/ndr/reports/': typeof AuthenticatedNdrReportsIndexRoute
   '/_authenticated/orders/$id/': typeof AuthenticatedOrdersIdIndexRoute
   '/_authenticated/orders/create/': typeof AuthenticatedOrdersCreateIndexRoute
+  '/_authenticated/orders/first-mile/': typeof AuthenticatedOrdersFirstMileIndexRoute
   '/_authenticated/orders/track-order/': typeof AuthenticatedOrdersTrackOrderIndexRoute
   '/_authenticated/revenue-dashboard/invoice-and-tax/': typeof AuthenticatedRevenueDashboardInvoiceAndTaxIndexRoute
   '/_authenticated/revenue-dashboard/settings/': typeof AuthenticatedRevenueDashboardSettingsIndexRoute
@@ -1321,8 +1462,7 @@ export interface FileRoutesById {
   '/_authenticated/settings/tax-configuration/': typeof AuthenticatedSettingsTaxConfigurationIndexRoute
   '/_authenticated/settings/users/': typeof AuthenticatedSettingsUsersIndexRoute
   '/_authenticated/tools/activity-logs/': typeof AuthenticatedToolsActivityLogsIndexRoute
-  '/_authenticated/warehouse/create/': typeof AuthenticatedWarehouseCreateIndexRoute
-  '/_authenticated/warehouse/list/': typeof AuthenticatedWarehouseListIndexRoute
+  '/_authenticated/warehouses/create/': typeof AuthenticatedWarehousesCreateIndexRoute
   '/_authenticated/access-control/roles/create/': typeof AuthenticatedAccessControlRolesCreateIndexRoute
   '/_authenticated/access-control/users/create/': typeof AuthenticatedAccessControlUsersCreateIndexRoute
   '/_authenticated/dashboard/domestic/courier/': typeof AuthenticatedDashboardDomesticCourierIndexRoute
@@ -1333,6 +1473,9 @@ export interface FileRoutesById {
   '/_authenticated/dashboard/domestic/rto/': typeof AuthenticatedDashboardDomesticRtoIndexRoute
   '/_authenticated/dashboard/domestic/shipments/': typeof AuthenticatedDashboardDomesticShipmentsIndexRoute
   '/_authenticated/dashboard/international/overview/': typeof AuthenticatedDashboardInternationalOverviewIndexRoute
+  '/_authenticated/orders/first-mile/$id/': typeof AuthenticatedOrdersFirstMileIdIndexRoute
+  '/_authenticated/orders/first-mile/calculate-price/': typeof AuthenticatedOrdersFirstMileCalculatePriceIndexRoute
+  '/_authenticated/orders/first-mile/create/': typeof AuthenticatedOrdersFirstMileCreateIndexRoute
   '/_authenticated/revenue-dashboard/my-earnings/revenue-summary/': typeof AuthenticatedRevenueDashboardMyEarningsRevenueSummaryIndexRoute
   '/_authenticated/revenue-dashboard/my-earnings/settlements-and-payouts/': typeof AuthenticatedRevenueDashboardMyEarningsSettlementsAndPayoutsIndexRoute
   '/_authenticated/revenue-dashboard/reports/commission-breakdown/': typeof AuthenticatedRevenueDashboardReportsCommissionBreakdownIndexRoute
@@ -1343,6 +1486,8 @@ export interface FileRoutesById {
   '/_authenticated/tools/rate-card/forward/': typeof AuthenticatedToolsRateCardForwardIndexRoute
   '/_authenticated/tools/rate-card/reverse/': typeof AuthenticatedToolsRateCardReverseIndexRoute
   '/_authenticated/tools/reports/reports-scheduler/': typeof AuthenticatedToolsReportsReportsSchedulerIndexRoute
+  '/_authenticated/warehouses/$id/edit/': typeof AuthenticatedWarehousesIdEditIndexRoute
+  '/_authenticated/orders/first-mile/$id/edit/': typeof AuthenticatedOrdersFirstMileIdEditIndexRoute
   '/_authenticated/tools/reports/download-reports/instant-reports/': typeof AuthenticatedToolsReportsDownloadReportsInstantReportsIndexRoute
   '/_authenticated/tools/reports/download-reports/scheduled-reports/': typeof AuthenticatedToolsReportsDownloadReportsScheduledReportsIndexLazyRoute
 }
@@ -1354,7 +1499,7 @@ export interface FileRouteTypes {
     | ''
     | '/dashboard'
     | '/settings'
-    | '/auth/Login'
+    | '/auth/login'
     | '/dashboard/domestic'
     | '/dashboard/international'
     | '/orders/returns'
@@ -1364,14 +1509,17 @@ export interface FileRouteTypes {
     | '/home'
     | '/orders'
     | '/overview'
+    | '/profile'
     | '/rack'
     | '/tools'
+    | '/warehouses'
     | '/tools/reports/download-reports'
     | '/access-control/users'
     | '/ndr/cases'
     | '/ndr/reports'
     | '/orders/$id'
     | '/orders/create'
+    | '/orders/first-mile'
     | '/orders/track-order'
     | '/revenue-dashboard/invoice-and-tax'
     | '/revenue-dashboard/settings'
@@ -1384,8 +1532,7 @@ export interface FileRouteTypes {
     | '/settings/tax-configuration'
     | '/settings/users'
     | '/tools/activity-logs'
-    | '/warehouse/create'
-    | '/warehouse/list'
+    | '/warehouses/create'
     | '/access-control/roles/create'
     | '/access-control/users/create'
     | '/dashboard/domestic/courier'
@@ -1396,6 +1543,9 @@ export interface FileRouteTypes {
     | '/dashboard/domestic/rto'
     | '/dashboard/domestic/shipments'
     | '/dashboard/international/overview'
+    | '/orders/first-mile/$id'
+    | '/orders/first-mile/calculate-price'
+    | '/orders/first-mile/create'
     | '/revenue-dashboard/my-earnings/revenue-summary'
     | '/revenue-dashboard/my-earnings/settlements-and-payouts'
     | '/revenue-dashboard/reports/commission-breakdown'
@@ -1406,6 +1556,8 @@ export interface FileRouteTypes {
     | '/tools/rate-card/forward'
     | '/tools/rate-card/reverse'
     | '/tools/reports/reports-scheduler'
+    | '/warehouses/$id/edit'
+    | '/orders/first-mile/$id/edit'
     | '/tools/reports/download-reports/instant-reports'
     | '/tools/reports/download-reports/scheduled-reports'
   fileRoutesByTo: FileRoutesByTo
@@ -1414,7 +1566,7 @@ export interface FileRouteTypes {
     | ''
     | '/dashboard'
     | '/settings'
-    | '/auth/Login'
+    | '/auth/login'
     | '/dashboard/domestic'
     | '/dashboard/international'
     | '/orders/returns'
@@ -1424,14 +1576,17 @@ export interface FileRouteTypes {
     | '/home'
     | '/orders'
     | '/overview'
+    | '/profile'
     | '/rack'
     | '/tools'
+    | '/warehouses'
     | '/tools/reports/download-reports'
     | '/access-control/users'
     | '/ndr/cases'
     | '/ndr/reports'
     | '/orders/$id'
     | '/orders/create'
+    | '/orders/first-mile'
     | '/orders/track-order'
     | '/revenue-dashboard/invoice-and-tax'
     | '/revenue-dashboard/settings'
@@ -1444,8 +1599,7 @@ export interface FileRouteTypes {
     | '/settings/tax-configuration'
     | '/settings/users'
     | '/tools/activity-logs'
-    | '/warehouse/create'
-    | '/warehouse/list'
+    | '/warehouses/create'
     | '/access-control/roles/create'
     | '/access-control/users/create'
     | '/dashboard/domestic/courier'
@@ -1456,6 +1610,9 @@ export interface FileRouteTypes {
     | '/dashboard/domestic/rto'
     | '/dashboard/domestic/shipments'
     | '/dashboard/international/overview'
+    | '/orders/first-mile/$id'
+    | '/orders/first-mile/calculate-price'
+    | '/orders/first-mile/create'
     | '/revenue-dashboard/my-earnings/revenue-summary'
     | '/revenue-dashboard/my-earnings/settlements-and-payouts'
     | '/revenue-dashboard/reports/commission-breakdown'
@@ -1466,6 +1623,8 @@ export interface FileRouteTypes {
     | '/tools/rate-card/forward'
     | '/tools/rate-card/reverse'
     | '/tools/reports/reports-scheduler'
+    | '/warehouses/$id/edit'
+    | '/orders/first-mile/$id/edit'
     | '/tools/reports/download-reports/instant-reports'
     | '/tools/reports/download-reports/scheduled-reports'
   id:
@@ -1474,7 +1633,7 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/_authenticated/dashboard'
     | '/_authenticated/settings'
-    | '/auth/Login'
+    | '/auth/login'
     | '/_authenticated/dashboard/domestic'
     | '/_authenticated/dashboard/international'
     | '/_authenticated/orders/returns'
@@ -1484,14 +1643,17 @@ export interface FileRouteTypes {
     | '/_authenticated/home/'
     | '/_authenticated/orders/'
     | '/_authenticated/overview/'
+    | '/_authenticated/profile/'
     | '/_authenticated/rack/'
     | '/_authenticated/tools/'
+    | '/_authenticated/warehouses/'
     | '/_authenticated/tools/reports/download-reports'
     | '/_authenticated/access-control/users/'
     | '/_authenticated/ndr/cases/'
     | '/_authenticated/ndr/reports/'
     | '/_authenticated/orders/$id/'
     | '/_authenticated/orders/create/'
+    | '/_authenticated/orders/first-mile/'
     | '/_authenticated/orders/track-order/'
     | '/_authenticated/revenue-dashboard/invoice-and-tax/'
     | '/_authenticated/revenue-dashboard/settings/'
@@ -1504,8 +1666,7 @@ export interface FileRouteTypes {
     | '/_authenticated/settings/tax-configuration/'
     | '/_authenticated/settings/users/'
     | '/_authenticated/tools/activity-logs/'
-    | '/_authenticated/warehouse/create/'
-    | '/_authenticated/warehouse/list/'
+    | '/_authenticated/warehouses/create/'
     | '/_authenticated/access-control/roles/create/'
     | '/_authenticated/access-control/users/create/'
     | '/_authenticated/dashboard/domestic/courier/'
@@ -1516,6 +1677,9 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard/domestic/rto/'
     | '/_authenticated/dashboard/domestic/shipments/'
     | '/_authenticated/dashboard/international/overview/'
+    | '/_authenticated/orders/first-mile/$id/'
+    | '/_authenticated/orders/first-mile/calculate-price/'
+    | '/_authenticated/orders/first-mile/create/'
     | '/_authenticated/revenue-dashboard/my-earnings/revenue-summary/'
     | '/_authenticated/revenue-dashboard/my-earnings/settlements-and-payouts/'
     | '/_authenticated/revenue-dashboard/reports/commission-breakdown/'
@@ -1526,6 +1690,8 @@ export interface FileRouteTypes {
     | '/_authenticated/tools/rate-card/forward/'
     | '/_authenticated/tools/rate-card/reverse/'
     | '/_authenticated/tools/reports/reports-scheduler/'
+    | '/_authenticated/warehouses/$id/edit/'
+    | '/_authenticated/orders/first-mile/$id/edit/'
     | '/_authenticated/tools/reports/download-reports/instant-reports/'
     | '/_authenticated/tools/reports/download-reports/scheduled-reports/'
   fileRoutesById: FileRoutesById
@@ -1555,7 +1721,7 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/_authenticated",
-        "/auth/Login"
+        "/auth/login"
       ]
     },
     "/": {
@@ -1573,26 +1739,33 @@ export const routeTree = rootRoute
         "/_authenticated/home/",
         "/_authenticated/orders/",
         "/_authenticated/overview/",
+        "/_authenticated/profile/",
         "/_authenticated/rack/",
         "/_authenticated/tools/",
+        "/_authenticated/warehouses/",
         "/_authenticated/access-control/users/",
         "/_authenticated/ndr/cases/",
         "/_authenticated/ndr/reports/",
         "/_authenticated/orders/$id/",
         "/_authenticated/orders/create/",
+        "/_authenticated/orders/first-mile/",
         "/_authenticated/orders/track-order/",
         "/_authenticated/revenue-dashboard/invoice-and-tax/",
         "/_authenticated/revenue-dashboard/settings/",
         "/_authenticated/revenue-dashboard/support/",
         "/_authenticated/tools/activity-logs/",
-        "/_authenticated/warehouse/create/",
-        "/_authenticated/warehouse/list/",
+        "/_authenticated/warehouses/create/",
         "/_authenticated/access-control/roles/create/",
         "/_authenticated/access-control/users/create/",
+        "/_authenticated/orders/first-mile/$id/",
+        "/_authenticated/orders/first-mile/calculate-price/",
+        "/_authenticated/orders/first-mile/create/",
         "/_authenticated/revenue-dashboard/my-earnings/revenue-summary/",
         "/_authenticated/revenue-dashboard/my-earnings/settlements-and-payouts/",
         "/_authenticated/revenue-dashboard/reports/commission-breakdown/",
-        "/_authenticated/revenue-dashboard/reports/shipment-revenue/"
+        "/_authenticated/revenue-dashboard/reports/shipment-revenue/",
+        "/_authenticated/warehouses/$id/edit/",
+        "/_authenticated/orders/first-mile/$id/edit/"
       ]
     },
     "/_authenticated/dashboard": {
@@ -1616,8 +1789,8 @@ export const routeTree = rootRoute
         "/_authenticated/settings/users/"
       ]
     },
-    "/auth/Login": {
-      "filePath": "auth/Login.jsx"
+    "/auth/login": {
+      "filePath": "auth/login.jsx"
     },
     "/_authenticated/dashboard/domestic": {
       "filePath": "_authenticated/dashboard/domestic/route.jsx",
@@ -1680,12 +1853,20 @@ export const routeTree = rootRoute
       "filePath": "_authenticated/overview/index.jsx",
       "parent": "/_authenticated"
     },
+    "/_authenticated/profile/": {
+      "filePath": "_authenticated/profile/index.jsx",
+      "parent": "/_authenticated"
+    },
     "/_authenticated/rack/": {
       "filePath": "_authenticated/rack/index.jsx",
       "parent": "/_authenticated"
     },
     "/_authenticated/tools/": {
       "filePath": "_authenticated/tools/index.jsx",
+      "parent": "/_authenticated"
+    },
+    "/_authenticated/warehouses/": {
+      "filePath": "_authenticated/warehouses/index.jsx",
       "parent": "/_authenticated"
     },
     "/_authenticated/tools/reports/download-reports": {
@@ -1714,6 +1895,10 @@ export const routeTree = rootRoute
     },
     "/_authenticated/orders/create/": {
       "filePath": "_authenticated/orders/create/index.jsx",
+      "parent": "/_authenticated"
+    },
+    "/_authenticated/orders/first-mile/": {
+      "filePath": "_authenticated/orders/first-mile/index.jsx",
       "parent": "/_authenticated"
     },
     "/_authenticated/orders/track-order/": {
@@ -1764,12 +1949,8 @@ export const routeTree = rootRoute
       "filePath": "_authenticated/tools/activity-logs/index.jsx",
       "parent": "/_authenticated"
     },
-    "/_authenticated/warehouse/create/": {
-      "filePath": "_authenticated/warehouse/create/index.jsx",
-      "parent": "/_authenticated"
-    },
-    "/_authenticated/warehouse/list/": {
-      "filePath": "_authenticated/warehouse/list/index.jsx",
+    "/_authenticated/warehouses/create/": {
+      "filePath": "_authenticated/warehouses/create/index.jsx",
       "parent": "/_authenticated"
     },
     "/_authenticated/access-control/roles/create/": {
@@ -1812,6 +1993,18 @@ export const routeTree = rootRoute
       "filePath": "_authenticated/dashboard/international/overview/index.jsx",
       "parent": "/_authenticated/dashboard/international"
     },
+    "/_authenticated/orders/first-mile/$id/": {
+      "filePath": "_authenticated/orders/first-mile/$id/index.jsx",
+      "parent": "/_authenticated"
+    },
+    "/_authenticated/orders/first-mile/calculate-price/": {
+      "filePath": "_authenticated/orders/first-mile/calculate-price/index.jsx",
+      "parent": "/_authenticated"
+    },
+    "/_authenticated/orders/first-mile/create/": {
+      "filePath": "_authenticated/orders/first-mile/create/index.jsx",
+      "parent": "/_authenticated"
+    },
     "/_authenticated/revenue-dashboard/my-earnings/revenue-summary/": {
       "filePath": "_authenticated/revenue-dashboard/my-earnings/revenue-summary/index.jsx",
       "parent": "/_authenticated"
@@ -1851,6 +2044,14 @@ export const routeTree = rootRoute
     "/_authenticated/tools/reports/reports-scheduler/": {
       "filePath": "_authenticated/tools/reports/reports-scheduler/index.jsx",
       "parent": "/_authenticated/tools/reports"
+    },
+    "/_authenticated/warehouses/$id/edit/": {
+      "filePath": "_authenticated/warehouses/$id/edit/index.jsx",
+      "parent": "/_authenticated"
+    },
+    "/_authenticated/orders/first-mile/$id/edit/": {
+      "filePath": "_authenticated/orders/first-mile/$id/edit/index.jsx",
+      "parent": "/_authenticated"
     },
     "/_authenticated/tools/reports/download-reports/instant-reports/": {
       "filePath": "_authenticated/tools/reports/download-reports/instant-reports/index.jsx",

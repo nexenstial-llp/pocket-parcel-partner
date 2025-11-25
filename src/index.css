@@ -116,3 +116,32 @@ h6 {
   /* background-color: #6366f1 !important; */
   color: #fff !important;
 }
+
+/* For Chrome, Edge, Safari */
+.ant-table-body::-webkit-scrollbar,
+.ant-table-content::-webkit-scrollbar {
+  height: 6px;
+  background: transparent;
+}
+.ant-table-body::-webkit-scrollbar-thumb,
+.ant-table-content::-webkit-scrollbar-thumb {
+  background: #eaeaea;
+  border-radius: 999px;
+}
+
+/* For Firefox */
+.ant-table-body,
+.ant-table-content {
+  scrollbar-width: thin;
+  scrollbar-color: #eaeaea transparent;
+}
+
+/* Ensure Google Maps markers appear above Ant Design modals */
+.gm-style > div > div > div > div > div > div {
+  z-index: 10000 !important;
+}
+
+/* Alternative approach - target markers specifically */
+.gm-style > div > div > div > div > div > img {
+  z-index: 10000 !important;
+}

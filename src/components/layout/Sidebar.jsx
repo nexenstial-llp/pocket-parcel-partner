@@ -106,8 +106,8 @@ const sidebarData = [
         label: <Link to="/orders/create">Create Order</Link>,
       },
       {
-        key: "orders/qwqer/create/",
-        label: <Link to="/orders/qwqer/create/">Create Quick Order</Link>,
+        key: "/orders/first-mile",
+        label: <Link to="/orders/first-mile">First Mile (QWQER)</Link>,
       },
       {
         key: "/orders/returns",
