@@ -1,18 +1,13 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
-import { Button, Form, Input, Alert, Typography, Card } from "antd";
-import {
-  UserOutlined,
-  LockOutlined,
-  MailOutlined,
-  SafetyOutlined,
-} from "@ant-design/icons";
+import { Button, Form, Input, Alert, Typography } from "antd";
+import { LockOutlined, MailOutlined, SafetyOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import { Tabs } from "antd";
 import { message } from "antd";
 import axiosInstance from "@/utils/axiosInstance.util";
 import { useMutation } from "@tanstack/react-query";
 
-const { Title, Text, Link } = Typography;
+const { Title, Text } = Typography;
 
 const sendOtpApi = async (email) => {
   const response = await axiosInstance.post(
@@ -108,7 +103,7 @@ function LoginComponent() {
     setError("");
 
     try {
-      const response = await auth.auth.login(values.username, values.password);
+      const response = await auth.auth.login(values.email, values.password);
       console.log("Login successful:", response);
       // Navigate to the redirect URL using router navigation
       setTimeout(() => {
@@ -116,242 +111,222 @@ function LoginComponent() {
       }, 0);
     } catch (err) {
       console.error(err);
-      setError("Invalid username or password");
+      setError("Invalid email or password");
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        background: "linear-gradient(to top right, #f0a991, #1024dd)",
-      }}
-    >
-      <Card
-        style={{
-          width: "100%",
-          maxWidth: 448,
-          boxShadow: "0 10px 15px -3px rgb(0 0 0 / 0.1)",
-        }}
-      >
-        <Title level={2} style={{ textAlign: "center", marginBottom: 4 }}>
-          Sign In
-        </Title>
-        <Text
-          type="secondary"
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-tr from-[#f0a991] to-[#1024dd] p-4">
+      {/* <div className="w-full max-w-5xl backdrop-blur-xl bg-white/20   shadow-2xl rounded-xl overflow-hidden grid grid-cols-1 md:grid-cols-2"> */}
+      <div className="w-full max-w-5xl bg-[#db5730]   shadow-2xl rounded-xl overflow-hidden grid grid-cols-1 md:grid-cols-2">
+        {/* LEFT SIDE — IMAGE (hidden on small screens) */}
+        <div
+          className="hidden md:block bg-cover bg-center"
           style={{
-            display: "block",
-            textAlign: "center",
-            marginBottom: 24,
-            fontSize: 14,
+            backgroundImage: "url('/app_default_image.png')",
           }}
-        >
-          Welcome back! Please login to your account.
-        </Text>
+        ></div>
+        {/* RIGHT SIDE — LOGIN FORM */}
+        <div className="p-8 md:p-12 bg-white">
+          <Title level={2} style={{ textAlign: "center", marginBottom: 4 }}>
+            Sign In
+          </Title>
 
-        {error && (
-          <Alert
-            message={error}
-            type="error"
-            showIcon
-            style={{ marginBottom: 16 }}
-          />
-        )}
+          <Text
+            type="secondary"
+            style={{
+              display: "block",
+              textAlign: "center",
+              marginBottom: 24,
+              fontSize: 14,
+            }}
+          >
+            Welcome back! Please login to your account.
+          </Text>
 
-        <Tabs
-          centered
-          items={[
-            {
-              key: "password",
-              label: "Password",
-              children: (
-                <Form
-                  form={form}
-                  layout="vertical"
-                  onFinish={handleSubmit}
-                  requiredMark={false}
-                  disabled={isLoading}
-                >
-                  <Form.Item
-                    label="Username"
-                    name="username"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Please input your username!",
-                      },
-                    ]}
+          {error && (
+            <Alert
+              message={error}
+              type="error"
+              showIcon
+              style={{ marginBottom: 16 }}
+            />
+          )}
+
+          <Tabs
+            centered
+            items={[
+              {
+                key: "password",
+                label: "Password",
+                children: (
+                  <Form
+                    form={form}
+                    layout="vertical"
+                    onFinish={handleSubmit}
+                    requiredMark={false}
+                    disabled={isLoading}
                   >
-                    <Input
-                      prefix={<UserOutlined />}
-                      placeholder="Enter your username"
-                      size="large"
-                    />
-                  </Form.Item>
-
-                  <Form.Item
-                    label="Password"
-                    name="password"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Please input your password!",
-                      },
-                    ]}
-                  >
-                    <Input.Password
-                      prefix={<LockOutlined />}
-                      placeholder="Enter your password"
-                      size="large"
-                    />
-                  </Form.Item>
-
-                  <Form.Item style={{ marginBottom: 16 }}>
-                    <Button
-                      type="primary"
-                      htmlType="submit"
-                      loading={isLoading}
-                      block
-                      size="large"
+                    <Form.Item
+                      label="Email"
+                      name="email"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please input your email!",
+                        },
+                      ]}
                     >
-                      {isLoading ? "Signing in..." : "Sign In"}
-                    </Button>
-                  </Form.Item>
-                </Form>
-              ),
-            },
-            {
-              key: "otp",
-              label: "OTP",
-              children: (
-                <>
-                  {!otpSent ? (
-                    <Form
-                      name="otp-request"
-                      onFinish={handleSendOtp}
-                      layout="vertical"
-                      requiredMark={false}
+                      <Input
+                        prefix={<MailOutlined />}
+                        placeholder="Enter your email"
+                        size="large"
+                      />
+                    </Form.Item>
+
+                    <Form.Item
+                      label="Password"
+                      name="password"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please input your password!",
+                        },
+                      ]}
                     >
-                      <Form.Item
-                        name="email"
-                        label="Email"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Please enter your email",
-                          },
-                          {
-                            type: "email",
-                            message: "Please enter a valid email",
-                          },
-                        ]}
+                      <Input.Password
+                        prefix={<LockOutlined />}
+                        placeholder="Enter your password"
+                        size="large"
+                      />
+                    </Form.Item>
+
+                    <Form.Item style={{ marginBottom: 16 }}>
+                      <Button
+                        type="primary"
+                        htmlType="submit"
+                        loading={isLoading}
+                        block
+                        size="large"
                       >
-                        <Input
-                          prefix={<MailOutlined className="text-gray-400" />}
-                          placeholder="Enter your email"
-                          size="large"
-                          className="rounded-lg"
-                        />
-                      </Form.Item>
+                        {isLoading ? "Signing in..." : "Sign In"}
+                      </Button>
+                    </Form.Item>
+                  </Form>
+                ),
+              },
+              {
+                key: "otp",
+                label: "OTP",
+                children: (
+                  <>
+                    {!otpSent ? (
+                      <Form
+                        name="otp-request"
+                        onFinish={handleSendOtp}
+                        layout="vertical"
+                        requiredMark={false}
+                      >
+                        <Form.Item
+                          name="email"
+                          label="Email"
+                          rules={[
+                            {
+                              required: true,
+                              message: "Please enter your email",
+                            },
+                            { type: "email", message: "Enter a valid email" },
+                          ]}
+                        >
+                          <Input
+                            prefix={<MailOutlined className="text-gray-400" />}
+                            placeholder="Enter your email"
+                            size="large"
+                          />
+                        </Form.Item>
 
-                      <Form.Item>
                         <Button
                           type="primary"
                           htmlType="submit"
                           loading={isOtpSendPending}
                           size="large"
                           block
-                          className="rounded-lg h-12 bg-blue-600 hover:bg-blue-700"
                         >
                           Send OTP
                         </Button>
-                      </Form.Item>
-                    </Form>
-                  ) : (
-                    <div>
-                      <div className="mb-6 p-4 bg-blue-50 rounded-lg">
-                        <p className="text-sm text-blue-700">
-                          We&apos;ve sent a verification code to{" "}
-                          <strong>{emailForOtp}</strong>
-                        </p>
-                      </div>
+                      </Form>
+                    ) : (
+                      <div>
+                        <div className="mb-6 p-4 bg-blue-50 rounded-lg">
+                          <p className="text-sm text-blue-700">
+                            OTP sent to <strong>{emailForOtp}</strong>
+                          </p>
+                        </div>
 
-                      <Form
-                        name="otp-verify"
-                        onFinish={handleVerifyOtp}
-                        layout="vertical"
-                        requiredMark={false}
-                      >
-                        <Form.Item
-                          name="otp"
-                          label="Verification Code"
-                          rules={[
-                            { required: true, message: "Please enter the OTP" },
-                          ]}
+                        <Form
+                          name="otp-verify"
+                          onFinish={handleVerifyOtp}
+                          layout="vertical"
                         >
-                          <Input
-                            prefix={
-                              <SafetyOutlined className="text-gray-400" />
-                            }
-                            placeholder="Enter 6-digit code"
-                            size="large"
-                            maxLength={6}
-                            className="rounded-lg"
-                          />
-                        </Form.Item>
+                          <Form.Item
+                            name="otp"
+                            label="Verification Code"
+                            rules={[
+                              {
+                                required: true,
+                                message: "Please enter the OTP",
+                              },
+                            ]}
+                          >
+                            <Input
+                              prefix={
+                                <SafetyOutlined className="text-gray-400" />
+                              }
+                              placeholder="Enter 6-digit code"
+                              size="large"
+                              maxLength={6}
+                            />
+                          </Form.Item>
 
-                        <Form.Item>
                           <Button
                             type="primary"
                             htmlType="submit"
                             loading={loading}
                             size="large"
                             block
-                            className="rounded-lg h-12 bg-blue-600 hover:bg-blue-700"
                           >
                             Verify & Sign In
                           </Button>
-                        </Form.Item>
 
-                        <Button
-                          type="link"
-                          onClick={() => {
-                            setOtpSent(false);
-                            setEmailForOtp("");
-                          }}
-                          block
-                          className="text-gray-600"
-                        >
-                          Use a different email
-                        </Button>
-                      </Form>
-                    </div>
-                  )}
-                </>
-              ),
-            },
-          ]}
-        />
+                          <Button
+                            type="link"
+                            onClick={() => {
+                              setOtpSent(false);
+                              setEmailForOtp("");
+                            }}
+                            block
+                          >
+                            Use a different email
+                          </Button>
+                        </Form>
+                      </div>
+                    )}
+                  </>
+                ),
+              },
+            ]}
+          />
 
-        <Text
-          style={{
-            display: "block",
-            textAlign: "center",
-            fontSize: 14,
-            marginBottom: 16,
-          }}
-        >
-          Don&apos;t have an account?{" "}
-          <Link href="/auth/Register" strong>
-            Sign up
-          </Link>
-        </Text>
-      </Card>
+          {/* <Text className="block text-center text-sm mt-4">
+            Don&apos; t have an account?{" "}
+            <Link href="/auth/Register" strong>
+              Sign up
+            </Link>
+          </Text> */}
+        </div>
+      </div>
     </div>
   );
 }

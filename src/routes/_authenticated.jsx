@@ -39,7 +39,11 @@ export const Route = createFileRoute("/_authenticated")({
   ),
 });
 function RootComponent() {
-  const [collapsed, setCollapsed] = React.useState(true);
+  const stored = localStorage.getItem("sidebar_collapsed");
+  const initialCollapsed = stored === "true";
+
+  // console.log("sidebar_collapsed", sidebar_collapsed);
+  const [collapsed, setCollapsed] = React.useState(initialCollapsed);
   const [drawerVisible, setDrawerVisible] = React.useState(false);
 
   const screens = useBreakpoint();
@@ -56,7 +60,8 @@ function RootComponent() {
         />
         <div
           style={{ scrollbarWidth: "thin" }}
-          className="bg-linear-to-tr from-[#e8f3ff]  to-[#ffede8] w-full min-h-screen max-h-screen overflow-auto scroll-smooth"
+          className="bg-gray-100 w-full min-h-screen max-h-screen overflow-auto scroll-smooth"
+          // className="bg-linear-to-tr from-[#e8f3ff]  to-[#ffede8] w-full min-h-screen max-h-screen overflow-auto scroll-smooth"
         >
           <Navbar
             collapsed={collapsed}

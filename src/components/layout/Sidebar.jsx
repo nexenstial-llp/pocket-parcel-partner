@@ -320,7 +320,10 @@ const Sidebar = ({
       <div className="z-100">
         <Sider
           collapsed={collapsed}
-          onCollapse={setCollapsed}
+          onCollapse={(collapsed) => {
+            localStorage.setItem("sidebar_collapsed", collapsed);
+            setCollapsed(collapsed);
+          }}
           collapsible
           width={240}
           className="custom-scrollbar sidebar-container transition-all ease-in-out duration-300"
