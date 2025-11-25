@@ -134,8 +134,10 @@ const handleErrorMessage = async (error) => {
   // Check if there's a response from the server
   if (error.response?.data) {
     if (error?.status >= 500) {
-      return "Internal server error";
+      console.log("error", error.response.data.message);
+      return error.response.data.message || "Internal server error";
     }
+
     let responseData = error.response.data;
 
     // Decrypt response data if in production
