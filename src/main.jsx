@@ -38,26 +38,26 @@ root.render(
             // itemActiveBg: "#f4592b",
 
             collapsedWidth: "70px",
-            // darkItemBg: "#001529",
-            darkItemBg: "#2b358e",
+            darkItemBg: "#001529",
+            // darkItemBg: "#2b358e",
             darkItemHoverBg: "#f4592b",
             darkItemHoverColor: "#fff",
             darkItemSelectedBg: "#f4592b",
             darkItemSelectedColor: "#fff",
-            darkSubMenuItemBg: "#2b358e",
+            // darkSubMenuItemBg: "#2b358e",
             // darkSubMenuItemBg: "#001529",
 
             // Light
             itemHoverBg: "#f4592b",
             itemSelectedBg: "#f4592b",
             itemSelectedColor: "#fff",
-            // subMenuItemBg: "#001529",
+            subMenuItemBg: "#001529",
           },
           Button: {
             fontSize: "12px",
           },
           Layout: {
-            siderBg: "#2b358e",
+            // siderBg: "#2b358e",
           },
         },
       }}

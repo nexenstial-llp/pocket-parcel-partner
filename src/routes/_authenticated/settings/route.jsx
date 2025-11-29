@@ -24,6 +24,10 @@ const items = [
     label: <Link to={"/settings/bank-details"}>Bank Details</Link>,
     key: "/settings/bank-details",
   },
+  {
+    label: <Link to={"/settings/address-management"}>Address Management</Link>,
+    key: "/settings/address-management",
+  },
   // {
   //   label: <Link to={"/settings/invoice-templates"}>Invoice Templates</Link>,
   //   key: "/settings/invoice-templates",

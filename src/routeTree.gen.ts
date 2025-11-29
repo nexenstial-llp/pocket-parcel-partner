@@ -40,6 +40,7 @@ import { Route as AuthenticatedSettingsInvoiceTemplatesIndexImport } from './rou
 import { Route as AuthenticatedSettingsCompanyDetailsIndexImport } from './routes/_authenticated/settings/company-details/index'
 import { Route as AuthenticatedSettingsBankDetailsIndexImport } from './routes/_authenticated/settings/bank-details/index'
 import { Route as AuthenticatedSettingsApiSetupsIndexImport } from './routes/_authenticated/settings/api-setups/index'
+import { Route as AuthenticatedSettingsAddressManagementIndexImport } from './routes/_authenticated/settings/address-management/index'
 import { Route as AuthenticatedRevenueDashboardSupportIndexImport } from './routes/_authenticated/revenue-dashboard/support/index'
 import { Route as AuthenticatedRevenueDashboardSettingsIndexImport } from './routes/_authenticated/revenue-dashboard/settings/index'
 import { Route as AuthenticatedRevenueDashboardInvoiceAndTaxIndexImport } from './routes/_authenticated/revenue-dashboard/invoice-and-tax/index'
@@ -266,6 +267,13 @@ const AuthenticatedSettingsApiSetupsIndexRoute =
   AuthenticatedSettingsApiSetupsIndexImport.update({
     id: '/api-setups/',
     path: '/api-setups/',
+    getParentRoute: () => AuthenticatedSettingsRouteRoute,
+  } as any)
+
+const AuthenticatedSettingsAddressManagementIndexRoute =
+  AuthenticatedSettingsAddressManagementIndexImport.update({
+    id: '/address-management/',
+    path: '/address-management/',
     getParentRoute: () => AuthenticatedSettingsRouteRoute,
   } as any)
 
@@ -752,6 +760,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRevenueDashboardSupportIndexImport
       parentRoute: typeof AuthenticatedImport
     }
+    '/_authenticated/settings/address-management/': {
+      id: '/_authenticated/settings/address-management/'
+      path: '/address-management'
+      fullPath: '/settings/address-management'
+      preLoaderRoute: typeof AuthenticatedSettingsAddressManagementIndexImport
+      parentRoute: typeof AuthenticatedSettingsRouteImport
+    }
     '/_authenticated/settings/api-setups/': {
       id: '/_authenticated/settings/api-setups/'
       path: '/api-setups'
@@ -1076,6 +1091,7 @@ const AuthenticatedDashboardRouteRouteWithChildren =
   )
 
 interface AuthenticatedSettingsRouteRouteChildren {
+  AuthenticatedSettingsAddressManagementIndexRoute: typeof AuthenticatedSettingsAddressManagementIndexRoute
   AuthenticatedSettingsApiSetupsIndexRoute: typeof AuthenticatedSettingsApiSetupsIndexRoute
   AuthenticatedSettingsBankDetailsIndexRoute: typeof AuthenticatedSettingsBankDetailsIndexRoute
   AuthenticatedSettingsCompanyDetailsIndexRoute: typeof AuthenticatedSettingsCompanyDetailsIndexRoute
@@ -1087,6 +1103,8 @@ interface AuthenticatedSettingsRouteRouteChildren {
 
 const AuthenticatedSettingsRouteRouteChildren: AuthenticatedSettingsRouteRouteChildren =
   {
+    AuthenticatedSettingsAddressManagementIndexRoute:
+      AuthenticatedSettingsAddressManagementIndexRoute,
     AuthenticatedSettingsApiSetupsIndexRoute:
       AuthenticatedSettingsApiSetupsIndexRoute,
     AuthenticatedSettingsBankDetailsIndexRoute:
@@ -1317,6 +1335,7 @@ export interface FileRoutesByFullPath {
   '/revenue-dashboard/invoice-and-tax': typeof AuthenticatedRevenueDashboardInvoiceAndTaxIndexRoute
   '/revenue-dashboard/settings': typeof AuthenticatedRevenueDashboardSettingsIndexRoute
   '/revenue-dashboard/support': typeof AuthenticatedRevenueDashboardSupportIndexRoute
+  '/settings/address-management': typeof AuthenticatedSettingsAddressManagementIndexRoute
   '/settings/api-setups': typeof AuthenticatedSettingsApiSetupsIndexRoute
   '/settings/bank-details': typeof AuthenticatedSettingsBankDetailsIndexRoute
   '/settings/company-details': typeof AuthenticatedSettingsCompanyDetailsIndexRoute
@@ -1385,6 +1404,7 @@ export interface FileRoutesByTo {
   '/revenue-dashboard/invoice-and-tax': typeof AuthenticatedRevenueDashboardInvoiceAndTaxIndexRoute
   '/revenue-dashboard/settings': typeof AuthenticatedRevenueDashboardSettingsIndexRoute
   '/revenue-dashboard/support': typeof AuthenticatedRevenueDashboardSupportIndexRoute
+  '/settings/address-management': typeof AuthenticatedSettingsAddressManagementIndexRoute
   '/settings/api-setups': typeof AuthenticatedSettingsApiSetupsIndexRoute
   '/settings/bank-details': typeof AuthenticatedSettingsBankDetailsIndexRoute
   '/settings/company-details': typeof AuthenticatedSettingsCompanyDetailsIndexRoute
@@ -1454,6 +1474,7 @@ export interface FileRoutesById {
   '/_authenticated/revenue-dashboard/invoice-and-tax/': typeof AuthenticatedRevenueDashboardInvoiceAndTaxIndexRoute
   '/_authenticated/revenue-dashboard/settings/': typeof AuthenticatedRevenueDashboardSettingsIndexRoute
   '/_authenticated/revenue-dashboard/support/': typeof AuthenticatedRevenueDashboardSupportIndexRoute
+  '/_authenticated/settings/address-management/': typeof AuthenticatedSettingsAddressManagementIndexRoute
   '/_authenticated/settings/api-setups/': typeof AuthenticatedSettingsApiSetupsIndexRoute
   '/_authenticated/settings/bank-details/': typeof AuthenticatedSettingsBankDetailsIndexRoute
   '/_authenticated/settings/company-details/': typeof AuthenticatedSettingsCompanyDetailsIndexRoute
@@ -1524,6 +1545,7 @@ export interface FileRouteTypes {
     | '/revenue-dashboard/invoice-and-tax'
     | '/revenue-dashboard/settings'
     | '/revenue-dashboard/support'
+    | '/settings/address-management'
     | '/settings/api-setups'
     | '/settings/bank-details'
     | '/settings/company-details'
@@ -1591,6 +1613,7 @@ export interface FileRouteTypes {
     | '/revenue-dashboard/invoice-and-tax'
     | '/revenue-dashboard/settings'
     | '/revenue-dashboard/support'
+    | '/settings/address-management'
     | '/settings/api-setups'
     | '/settings/bank-details'
     | '/settings/company-details'
@@ -1658,6 +1681,7 @@ export interface FileRouteTypes {
     | '/_authenticated/revenue-dashboard/invoice-and-tax/'
     | '/_authenticated/revenue-dashboard/settings/'
     | '/_authenticated/revenue-dashboard/support/'
+    | '/_authenticated/settings/address-management/'
     | '/_authenticated/settings/api-setups/'
     | '/_authenticated/settings/bank-details/'
     | '/_authenticated/settings/company-details/'
@@ -1780,6 +1804,7 @@ export const routeTree = rootRoute
       "filePath": "_authenticated/settings/route.jsx",
       "parent": "/_authenticated",
       "children": [
+        "/_authenticated/settings/address-management/",
         "/_authenticated/settings/api-setups/",
         "/_authenticated/settings/bank-details/",
         "/_authenticated/settings/company-details/",
@@ -1916,6 +1941,10 @@ export const routeTree = rootRoute
     "/_authenticated/revenue-dashboard/support/": {
       "filePath": "_authenticated/revenue-dashboard/support/index.jsx",
       "parent": "/_authenticated"
+    },
+    "/_authenticated/settings/address-management/": {
+      "filePath": "_authenticated/settings/address-management/index.jsx",
+      "parent": "/_authenticated/settings"
     },
     "/_authenticated/settings/api-setups/": {
       "filePath": "_authenticated/settings/api-setups/index.jsx",
