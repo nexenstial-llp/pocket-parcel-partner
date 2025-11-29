@@ -16,14 +16,14 @@ const items = [
     label: <Link to={"/settings/company-details"}>Company Details</Link>,
     key: "/settings/company-details",
   },
-  {
-    label: <Link to={"/settings/pickup-locations"}>Pickup Locations</Link>,
-    key: "/settings/pickup-locations",
-  },
-  {
-    label: <Link to={"/settings/bank-details"}>Bank Details</Link>,
-    key: "/settings/bank-details",
-  },
+  // {
+  //   label: <Link to={"/settings/pickup-locations"}>Pickup Locations</Link>,
+  //   key: "/settings/pickup-locations",
+  // },
+  // {
+  //   label: <Link to={"/settings/bank-details"}>Bank Details</Link>,
+  //   key: "/settings/bank-details",
+  // },
   {
     label: <Link to={"/settings/address-management"}>Address Management</Link>,
     key: "/settings/address-management",
