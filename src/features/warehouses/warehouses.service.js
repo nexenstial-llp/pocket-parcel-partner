@@ -33,3 +33,29 @@ export const updateWarehouse = async ({ id, data }) => {
   const response = await axiosInstance.put(`/v1/admin/warehouses/${id}`, data);
   return response?.data?.data ?? null;
 };
+
+// Add location to the warehouse
+export const addLocationToWarehouse = async ({ id, data }) => {
+  const response = await axiosInstance.post(
+    `/v1/admin/warehouses/${id}/locations`,
+    data
+  );
+  return response?.data?.data ?? null;
+};
+
+// Update location
+export const updateLocation = async ({ id, data }) => {
+  const response = await axiosInstance.put(
+    `/v1/admin/warehouses/locations/${id}`,
+    data
+  );
+  return response?.data?.data ?? null;
+};
+
+// Delete location
+export const deleteLocation = async (id) => {
+  const response = await axiosInstance.delete(
+    `/v1/admin/warehouses/locations/${id}`
+  );
+  return response?.data?.data ?? null;
+};

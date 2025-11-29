@@ -34,7 +34,7 @@ function RouteComponent() {
   useEffect(() => {
     if (data) {
       const { capacity_info } = data;
-      const { total_area, storage_capacity } = JSON.parse(capacity_info || {});
+      const { total_area, storage_capacity } = capacity_info;
       form.setFieldValue("total_area", total_area);
       form.setFieldValue("storage_capacity", storage_capacity);
       form.setFieldsValue(data);

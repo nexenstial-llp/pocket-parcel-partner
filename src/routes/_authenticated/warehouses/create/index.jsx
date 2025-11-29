@@ -4,9 +4,9 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Button, Form, message } from "antd";
 import { useCreateWarehouse } from "@/features/warehouses/warehouses.query";
 import { applyZodErrorsToForm } from "@/utils/formError";
-import { createWarehouseSchema } from "@/features/warehouses/warehouses.schema";
 import { useQueryClient } from "@tanstack/react-query";
 import WarehouseForm from "@/components/pages/warehouses/WarehouseForm";
+import { createWarehouseSchema } from "@/features/warehouses/warehouses.schema";
 
 export const Route = createFileRoute("/_authenticated/warehouses/create/")({
   component: RouteComponent,
@@ -56,7 +56,7 @@ function RouteComponent() {
         contact_phone: values.contact_phone || "",
         contact_email: values.contact_email || "",
         warehouse_type: "DISTRIBUTION",
-        capacity_info: JSON.stringify(capacityObj),
+        capacity_info: capacityObj,
         operating_hours: values.operating_hours || "",
         locations,
       };

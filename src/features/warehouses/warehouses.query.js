@@ -1,9 +1,12 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import {
+  addLocationToWarehouse,
   createWarehouse,
+  deleteLocation,
   deleteWarehouse,
   fetchWarehouses,
   getWarehouseById,
+  updateLocation,
   updateWarehouse,
 } from "./warehouses.service";
 
@@ -43,6 +46,7 @@ export const useGetWarehouseById = (id) => {
     queryKey: ["warehouse", id],
     queryFn: () => getWarehouseById(id),
     retry: false,
+    enabled: !!id,
   });
 };
 
@@ -50,6 +54,40 @@ export const useGetWarehouseById = (id) => {
 export const useUpdateWarehouse = ({ onError, onSuccess, ...rest }) => {
   return useMutation({
     mutationFn: updateWarehouse,
+    onSuccess,
+    onError,
+    ...rest,
+  });
+};
+
+// Add locations to warehouse
+export const useAddLocationsToWarehouse = ({ onError, onSuccess, ...rest }) => {
+  return useMutation({
+    mutationFn: addLocationToWarehouse,
+    onSuccess,
+    onError,
+    ...rest,
+  });
+};
+
+// Update location
+export const useUpdateLocationInWarehouse = ({
+  onError,
+  onSuccess,
+  ...rest
+}) => {
+  return useMutation({
+    mutationFn: updateLocation,
+    onSuccess,
+    onError,
+    ...rest,
+  });
+};
+
+// Delete warehouse location
+export const useDeleteWarehouseLocation = ({ onError, onSuccess, ...rest }) => {
+  return useMutation({
+    mutationFn: deleteLocation,
     onSuccess,
     onError,
     ...rest,

@@ -21,7 +21,7 @@ const locationTypeSchema = z.enum([
 ]);
 
 // Warehouse location validation schema
-const warehouseLocationSchema = z.object({
+export const warehouseLocationSchema = z.object({
   location_name: z
     .string()
     .min(1, "Location name is required")
@@ -111,7 +111,7 @@ export const createWarehouseSchema = z.object({
     .max(500, "Warehouse image URL must be less than 500 characters")
     .optional(),
   warehouse_type: warehouseTypeSchema.default("MAIN"),
-  capacity_info: z.string().optional(),
+  capacity_info: z.object().optional(),
   operating_hours: z
     .string()
     .max(255, "Operating hours must be less than 255 characters")

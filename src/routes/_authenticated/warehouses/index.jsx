@@ -6,14 +6,12 @@ import {
   useDeleteWarehouse,
   useFetchWarehouse,
 } from "@/features/warehouses/warehouses.query";
-import { DeleteOutlined } from "@ant-design/icons";
 import { useQueryClient } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Tag } from "antd";
 import { message } from "antd";
 import { Modal } from "antd";
 import { Button, Table } from "antd";
-import { MdEdit } from "react-icons/md";
 import z from "zod";
 const searchSchema = z.object({
   page: z.coerce.number().int().min(1).default(1),
@@ -89,12 +87,16 @@ function RouteComponent() {
     {
       title: "Total Area",
       render: (_, record) =>
-        `${JSON.parse(record?.capacity_info || {})?.total_area} sqft`,
+        record?.capacity_info?.total_area
+          ? `${record?.capacity_info?.total_area} `
+          : "N/A",
     },
     {
       title: "Storage Capacity",
       render: (_, record) =>
-        `${JSON.parse(record?.capacity_info || {})?.storage_capacity} sqft`,
+        record?.capacity_info?.storage_capacity
+          ? `${record?.capacity_info?.storage_capacity} `
+          : "N/A",
     },
     {
       title: "Status",
@@ -113,13 +115,19 @@ function RouteComponent() {
           {record?.is_active && (
             <>
               <Link to={`/warehouses/${record.id}/edit`}>
-                <Button icon={<MdEdit />} type="link">
+                <Button size="small" type="link">
                   Edit
                 </Button>
               </Link>
+              <Link to={`${record.id}`}>
+                <Button size="small" type="link">
+                  View
+                </Button>
+              </Link>
               <Button
+                size="small"
+                type="primary"
                 onClick={() => handleDelete(record?.id)}
-                icon={<DeleteOutlined />}
                 danger
               >
                 Deactivate
