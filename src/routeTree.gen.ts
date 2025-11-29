@@ -15,7 +15,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { Route as rootRoute } from './routes/__root'
 import { Route as AuthenticatedImport } from './routes/_authenticated'
 import { Route as IndexImport } from './routes/index'
-import { Route as AuthLoginImport } from './routes/auth/login'
+import { Route as AuthLoginImport } from './routes/auth/Login'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings/route'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard/route'
 import { Route as AuthenticatedWarehousesIndexImport } from './routes/_authenticated/warehouses/index'
@@ -100,8 +100,8 @@ const IndexRoute = IndexImport.update({
 } as any)
 
 const AuthLoginRoute = AuthLoginImport.update({
-  id: '/auth/login',
-  path: '/auth/login',
+  id: '/auth/Login',
+  path: '/auth/Login',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -585,10 +585,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedSettingsRouteImport
       parentRoute: typeof AuthenticatedImport
     }
-    '/auth/login': {
-      id: '/auth/login'
-      path: '/auth/login'
-      fullPath: '/auth/login'
+    '/auth/Login': {
+      id: '/auth/Login'
+      path: '/auth/Login'
+      fullPath: '/auth/Login'
       preLoaderRoute: typeof AuthLoginImport
       parentRoute: typeof rootRoute
     }
@@ -1310,7 +1310,7 @@ export interface FileRoutesByFullPath {
   '': typeof AuthenticatedRouteWithChildren
   '/dashboard': typeof AuthenticatedDashboardRouteRouteWithChildren
   '/settings': typeof AuthenticatedSettingsRouteRouteWithChildren
-  '/auth/login': typeof AuthLoginRoute
+  '/auth/Login': typeof AuthLoginRoute
   '/dashboard/domestic': typeof AuthenticatedDashboardDomesticRouteRouteWithChildren
   '/dashboard/international': typeof AuthenticatedDashboardInternationalRouteRouteWithChildren
   '/orders/returns': typeof AuthenticatedOrdersReturnsRouteRoute
@@ -1379,7 +1379,7 @@ export interface FileRoutesByTo {
   '': typeof AuthenticatedRouteWithChildren
   '/dashboard': typeof AuthenticatedDashboardRouteRouteWithChildren
   '/settings': typeof AuthenticatedSettingsRouteRouteWithChildren
-  '/auth/login': typeof AuthLoginRoute
+  '/auth/Login': typeof AuthLoginRoute
   '/dashboard/domestic': typeof AuthenticatedDashboardDomesticRouteRouteWithChildren
   '/dashboard/international': typeof AuthenticatedDashboardInternationalRouteRouteWithChildren
   '/orders/returns': typeof AuthenticatedOrdersReturnsRouteRoute
@@ -1449,7 +1449,7 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRouteRouteWithChildren
   '/_authenticated/settings': typeof AuthenticatedSettingsRouteRouteWithChildren
-  '/auth/login': typeof AuthLoginRoute
+  '/auth/Login': typeof AuthLoginRoute
   '/_authenticated/dashboard/domestic': typeof AuthenticatedDashboardDomesticRouteRouteWithChildren
   '/_authenticated/dashboard/international': typeof AuthenticatedDashboardInternationalRouteRouteWithChildren
   '/_authenticated/orders/returns': typeof AuthenticatedOrdersReturnsRouteRoute
@@ -1520,7 +1520,7 @@ export interface FileRouteTypes {
     | ''
     | '/dashboard'
     | '/settings'
-    | '/auth/login'
+    | '/auth/Login'
     | '/dashboard/domestic'
     | '/dashboard/international'
     | '/orders/returns'
@@ -1588,7 +1588,7 @@ export interface FileRouteTypes {
     | ''
     | '/dashboard'
     | '/settings'
-    | '/auth/login'
+    | '/auth/Login'
     | '/dashboard/domestic'
     | '/dashboard/international'
     | '/orders/returns'
@@ -1656,7 +1656,7 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/_authenticated/dashboard'
     | '/_authenticated/settings'
-    | '/auth/login'
+    | '/auth/Login'
     | '/_authenticated/dashboard/domestic'
     | '/_authenticated/dashboard/international'
     | '/_authenticated/orders/returns'
@@ -1745,7 +1745,7 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/_authenticated",
-        "/auth/login"
+        "/auth/Login"
       ]
     },
     "/": {
@@ -1814,8 +1814,8 @@ export const routeTree = rootRoute
         "/_authenticated/settings/users/"
       ]
     },
-    "/auth/login": {
-      "filePath": "auth/login.jsx"
+    "/auth/Login": {
+      "filePath": "auth/Login.jsx"
     },
     "/_authenticated/dashboard/domestic": {
       "filePath": "_authenticated/dashboard/domestic/route.jsx",

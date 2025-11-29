@@ -1,49 +1,49 @@
-import { createFileRoute, redirect } from "@tanstack/react-router";
-import { Button, Form, Input, Alert, Typography } from "antd";
-import { LockOutlined, MailOutlined, SafetyOutlined } from "@ant-design/icons";
-import { useState } from "react";
-import { Tabs } from "antd";
-import { message } from "antd";
-import axiosInstance from "@/utils/axiosInstance.util";
-import { useMutation } from "@tanstack/react-query";
+import { createFileRoute, redirect } from '@tanstack/react-router'
+import { Button, Form, Input, Alert, Typography } from 'antd'
+import { LockOutlined, MailOutlined, SafetyOutlined } from '@ant-design/icons'
+import { useState } from 'react'
+import { Tabs } from 'antd'
+import { message } from 'antd'
+import axiosInstance from '@/utils/axiosInstance.util'
+import { useMutation } from '@tanstack/react-query'
 
-const { Title, Text } = Typography;
+const { Title, Text } = Typography
 
 const sendOtpApi = async (email) => {
   const response = await axiosInstance.post(
-    "/auth/email/send-otp",
+    '/auth/email/send-otp',
     { email },
     {
       skipAuth: true,
       suppressErrorToast: true,
-    }
-  );
-  return response.data;
-};
+    },
+  )
+  return response.data
+}
 
-export const Route = createFileRoute("/auth/login")({
+export const Route = createFileRoute('/auth/Login')({
   validateSearch: (search) => ({
-    redirect: search.redirect || "/",
+    redirect: search.redirect || '/',
   }),
   beforeLoad: ({ context, search }) => {
     // Redirect if already authenticated
     if (context.auth.isAuthenticated) {
-      throw redirect({ to: search.redirect });
+      throw redirect({ to: search.redirect })
     }
   },
   component: LoginComponent,
-});
+})
 
 function LoginComponent() {
-  const auth = Route.useRouteContext();
-  const { redirect } = Route.useSearch();
-  const navigate = Route.useNavigate();
-  const [form] = Form.useForm();
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [otpSent, setOtpSent] = useState(false);
-  const [emailForOtp, setEmailForOtp] = useState("");
+  const auth = Route.useRouteContext()
+  const { redirect } = Route.useSearch()
+  const navigate = Route.useNavigate()
+  const [form] = Form.useForm()
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [otpSent, setOtpSent] = useState(false)
+  const [emailForOtp, setEmailForOtp] = useState('')
 
   const {
     mutate: sendOtp,
@@ -52,70 +52,70 @@ function LoginComponent() {
   } = useMutation({
     mutationFn: sendOtpApi,
     onSuccess: (data) => {
-      console.log("OTP send response:", data);
-      setOtpSent(true);
-      setEmailForOtp(data.email);
-      message.success("OTP sent to your email!");
+      console.log('OTP send response:', data)
+      setOtpSent(true)
+      setEmailForOtp(data.email)
+      message.success('OTP sent to your email!')
     },
     onError: (error) => {
       console.log(
-        "error",
-        error?.response?.data?.message || "An unexpected error occurred"
-      );
+        'error',
+        error?.response?.data?.message || 'An unexpected error occurred',
+      )
       message.error(
-        error?.response?.data?.message || "An unexpected error occurred"
-      );
+        error?.response?.data?.message || 'An unexpected error occurred',
+      )
     },
     onSettled: () => {
-      setLoading(false);
+      setLoading(false)
     },
-  });
+  })
 
   const handleSendOtp = async (values) => {
-    sendOtp(values.email);
-  };
+    sendOtp(values.email)
+  }
 
   const handleVerifyOtp = async (values) => {
-    setLoading(true);
+    setLoading(true)
     try {
       const { error } = await auth.verifyOtp({
         email: emailForOtp,
         token: values.otp,
-        type: "email",
-      });
+        type: 'email',
+      })
 
       if (error) {
-        message.error(error.message);
+        message.error(error.message)
       } else {
-        message.success("Successfully logged in!");
-        setOtpSent(false);
+        message.success('Successfully logged in!')
+        setOtpSent(false)
       }
     } catch (error) {
-      console.log("error", error);
-      message.error("An unexpected error occurred");
+      console.log('error', error)
+      message.error('An unexpected error occurred')
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   const handleSubmit = async (values) => {
-    setIsLoading(true);
-    setError("");
+    setIsLoading(true)
+    setError('')
 
     try {
-      const response = await auth.auth.login(values.email, values.password);
-      console.log("Login successful:", response);
+      const response = await auth.auth.login(values.email, values.password)
+      console.log('Login successful:', response)
       // Navigate to the redirect URL using router navigation
       setTimeout(() => {
-        navigate({ to: redirect });
-      }, 0);
+        navigate({ to: redirect })
+      }, 0)
     } catch (err) {
-      console.error(err);
-      setError("Invalid email or password");
+      console.error(err)
+      setError('Invalid email or password')
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-tr from-[#f0a991] to-[#1024dd] p-4">
@@ -130,15 +130,15 @@ function LoginComponent() {
         ></div>
         {/* RIGHT SIDE — LOGIN FORM */}
         <div className="p-8 md:p-12 bg-white">
-          <Title level={2} style={{ textAlign: "center", marginBottom: 4 }}>
+          <Title level={2} style={{ textAlign: 'center', marginBottom: 4 }}>
             Sign In
           </Title>
 
           <Text
             type="secondary"
             style={{
-              display: "block",
-              textAlign: "center",
+              display: 'block',
+              textAlign: 'center',
               marginBottom: 24,
               fontSize: 14,
             }}
@@ -159,8 +159,8 @@ function LoginComponent() {
             centered
             items={[
               {
-                key: "password",
-                label: "Password",
+                key: 'password',
+                label: 'Password',
                 children: (
                   <Form
                     form={form}
@@ -175,7 +175,7 @@ function LoginComponent() {
                       rules={[
                         {
                           required: true,
-                          message: "Please input your email!",
+                          message: 'Please input your email!',
                         },
                       ]}
                     >
@@ -192,7 +192,7 @@ function LoginComponent() {
                       rules={[
                         {
                           required: true,
-                          message: "Please input your password!",
+                          message: 'Please input your password!',
                         },
                       ]}
                     >
@@ -211,15 +211,15 @@ function LoginComponent() {
                         block
                         size="large"
                       >
-                        {isLoading ? "Signing in..." : "Sign In"}
+                        {isLoading ? 'Signing in...' : 'Sign In'}
                       </Button>
                     </Form.Item>
                   </Form>
                 ),
               },
               {
-                key: "otp",
-                label: "OTP",
+                key: 'otp',
+                label: 'OTP',
                 children: (
                   <>
                     {!otpSent ? (
@@ -235,9 +235,9 @@ function LoginComponent() {
                           rules={[
                             {
                               required: true,
-                              message: "Please enter your email",
+                              message: 'Please enter your email',
                             },
-                            { type: "email", message: "Enter a valid email" },
+                            { type: 'email', message: 'Enter a valid email' },
                           ]}
                         >
                           <Input
@@ -276,7 +276,7 @@ function LoginComponent() {
                             rules={[
                               {
                                 required: true,
-                                message: "Please enter the OTP",
+                                message: 'Please enter the OTP',
                               },
                             ]}
                           >
@@ -303,8 +303,8 @@ function LoginComponent() {
                           <Button
                             type="link"
                             onClick={() => {
-                              setOtpSent(false);
-                              setEmailForOtp("");
+                              setOtpSent(false)
+                              setEmailForOtp('')
                             }}
                             block
                           >
@@ -328,5 +328,5 @@ function LoginComponent() {
         </div>
       </div>
     </div>
-  );
+  )
 }
