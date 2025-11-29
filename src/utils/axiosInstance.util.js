@@ -1,68 +1,68 @@
 import axios from "axios";
 import toast from "react-hot-toast";
 
-const ENV = import.meta.env.VITE_APP_ENV;
+// const ENV = import.meta.env.VITE_APP_ENV;
 const BASE_URL = import.meta.env.VITE_APP_BASE_URL;
-const API_AES_KEY = import.meta.env.VITE_APP_API_AES_ENCRYPTION_KEY;
-const IV_LENGTH = 16;
-const ALGORITHM = "AES-CBC";
+// const API_AES_KEY = import.meta.env.VITE_APP_API_AES_ENCRYPTION_KEY;
+// const IV_LENGTH = 16;
+// const ALGORITHM = "AES-CBC";
 
 // Helper function to convert hex to Uint8Array
-const hexToUint8Array = (hex) => {
-  return new Uint8Array(hex.match(/.{1,2}/g).map((byte) => parseInt(byte, 16)));
-};
+// const hexToUint8Array = (hex) => {
+//   return new Uint8Array(hex.match(/.{1,2}/g).map((byte) => parseInt(byte, 16)));
+// };
 
 // Helper function to convert Uint8Array to hex string
-const uint8ArrayToHex = (bytes) => {
-  return Array.from(bytes)
-    .map((b) => b.toString(16).padStart(2, "0"))
-    .join("");
-};
+// const uint8ArrayToHex = (bytes) => {
+//   return Array.from(bytes)
+//     .map((b) => b.toString(16).padStart(2, "0"))
+//     .join("");
+// };
 
 // Encrypt function using Web Crypto API
-const encrypt = async (text) => {
-  const iv = crypto.getRandomValues(new Uint8Array(IV_LENGTH));
-  const key = await crypto.subtle.importKey(
-    "raw",
-    hexToUint8Array(API_AES_KEY),
-    { name: ALGORITHM },
-    false,
-    ["encrypt"]
-  );
+// const encrypt = async (text) => {
+//   const iv = crypto.getRandomValues(new Uint8Array(IV_LENGTH));
+//   const key = await crypto.subtle.importKey(
+//     "raw",
+//     hexToUint8Array(API_AES_KEY),
+//     { name: ALGORITHM },
+//     false,
+//     ["encrypt"]
+//   );
 
-  const encodedText = new TextEncoder().encode(text);
-  const encryptedData = await crypto.subtle.encrypt(
-    { name: ALGORITHM, iv },
-    key,
-    encodedText
-  );
+//   const encodedText = new TextEncoder().encode(text);
+//   const encryptedData = await crypto.subtle.encrypt(
+//     { name: ALGORITHM, iv },
+//     key,
+//     encodedText
+//   );
 
-  const encryptedArray = new Uint8Array(encryptedData);
-  return `${uint8ArrayToHex(iv)}:${uint8ArrayToHex(encryptedArray)}`;
-};
+//   const encryptedArray = new Uint8Array(encryptedData);
+//   return `${uint8ArrayToHex(iv)}:${uint8ArrayToHex(encryptedArray)}`;
+// };
 
 // Decrypt function using Web Crypto API
-const decrypt = async (text) => {
-  const [ivHex, encryptedHex] = text.split(":");
-  const iv = hexToUint8Array(ivHex);
-  const encryptedData = hexToUint8Array(encryptedHex);
+// const decrypt = async (text) => {
+//   const [ivHex, encryptedHex] = text.split(":");
+//   const iv = hexToUint8Array(ivHex);
+//   const encryptedData = hexToUint8Array(encryptedHex);
 
-  const key = await crypto.subtle.importKey(
-    "raw",
-    hexToUint8Array(API_AES_KEY),
-    { name: ALGORITHM },
-    false,
-    ["decrypt"]
-  );
+//   const key = await crypto.subtle.importKey(
+//     "raw",
+//     hexToUint8Array(API_AES_KEY),
+//     { name: ALGORITHM },
+//     false,
+//     ["decrypt"]
+//   );
 
-  const decryptedData = await crypto.subtle.decrypt(
-    { name: ALGORITHM, iv },
-    key,
-    encryptedData
-  );
+//   const decryptedData = await crypto.subtle.decrypt(
+//     { name: ALGORITHM, iv },
+//     key,
+//     encryptedData
+//   );
 
-  return new TextDecoder().decode(decryptedData);
-};
+//   return new TextDecoder().decode(decryptedData);
+// };
 
 // Create axios instances
 const axiosInstance = axios.create({
@@ -83,21 +83,21 @@ const refreshAccessToken = async () => {
       refresh_token: refreshToken,
     };
 
-    if (ENV === "production") {
-      const content = await encrypt(JSON.stringify(request_body));
-      request_body = { itAm_Lfdwnk_sq: content };
-    }
+    // if (ENV === "production") {
+    //   const content = await encrypt(JSON.stringify(request_body));
+    //   request_body = { itAm_Lfdwnk_sq: content };
+    // }
 
     const response = await axios.post(
-      `${BASE_URL}/v1/auth/refresh-token`,
+      `${BASE_URL}/auth/refresh-token`,
       request_body
     );
 
     let response_data = response.data;
 
-    if (ENV === "production") {
-      response_data = JSON.parse(await decrypt(response_data.itAm_Lfdwnk_sq));
-    }
+    // if (ENV === "production") {
+    //   response_data = JSON.parse(await decrypt(response_data.itAm_Lfdwnk_sq));
+    // }
 
     const { access_token, refresh_token } = response_data.data;
 
@@ -134,14 +134,16 @@ const handleErrorMessage = async (error) => {
   // Check if there's a response from the server
   if (error.response?.data) {
     if (error?.status >= 500) {
-      return "Internal server error";
+      console.log("error", error.response.data.message);
+      return error.response.data.message || "Internal server error";
     }
+
     let responseData = error.response.data;
 
     // Decrypt response data if in production
-    if (ENV === "production" && responseData.itAm_Lfdwnk_sq) {
-      responseData = JSON.parse(await decrypt(responseData.itAm_Lfdwnk_sq));
-    }
+    // if (ENV === "production" && responseData.itAm_Lfdwnk_sq) {
+    //   responseData = JSON.parse(await decrypt(responseData.itAm_Lfdwnk_sq));
+    // }
 
     const { message, error: errorDetails } = responseData;
 
@@ -159,11 +161,11 @@ const handleErrorMessage = async (error) => {
         errorMessage = `Validation error: ${firstError.field} ${firstError.error}`;
       } else {
         // Fallback to general validation message
-        errorMessage = message || "Validation error";
+        errorMessage = message?.message || message || "Validation error";
       }
     } else {
       // For regular errors, use the message from the server
-      errorMessage = message || errorMessage;
+      errorMessage = message?.message || message || errorMessage;
     }
   } else if (error.message) {
     // If it's a network error or other axios error
@@ -177,13 +179,12 @@ const handleErrorMessage = async (error) => {
 axiosInstance.interceptors.request.use(
   async (config) => {
     const accessToken = localStorage.getItem("access_token");
-    const retailer_shop_id = localStorage.getItem("retailer_shop_id");
-
+    console.log("Axios Request - URL:", config.url);
     // Add Authorization header if not skipping authentication
     if (
       !config.skipAuth &&
       accessToken &&
-      !config.url?.includes("/auth/login")
+      !config.url?.includes("/auth/email/login")
     ) {
       config.headers.Authorization = `Bearer ${accessToken}`;
     }
@@ -191,14 +192,13 @@ axiosInstance.interceptors.request.use(
     // Add default query parameters
     config.params = {
       ...config.params, // Keep existing params if any
-      retailer_shop_id: retailer_shop_id || "", // Add retailer_shop_id (fallback to empty if not found)
     };
 
     // Encrypt data if in production
-    if (ENV === "production" && config.data) {
-      const encryptedData = await encrypt(JSON.stringify(config.data));
-      config.data = { itAm_Lfdwnk_sq: encryptedData };
-    }
+    // if (ENV === "production" && config.data) {
+    //   const encryptedData = await encrypt(JSON.stringify(config.data));
+    //   config.data = { itAm_Lfdwnk_sq: encryptedData };
+    // }
 
     return config;
   },
@@ -209,17 +209,27 @@ axiosInstance.interceptors.request.use(
 axiosInstance.interceptors.response.use(
   async (response) => {
     // Decrypt response data if in production
-    if (ENV === "production" && response.data?.itAm_Lfdwnk_sq) {
-      const decryptedData = await decrypt(response.data.itAm_Lfdwnk_sq);
-      response.data = JSON.parse(decryptedData);
-    }
+    // if (ENV === "production" && response.data?.itAm_Lfdwnk_sq) {
+    //   const decryptedData = await decrypt(response.data.itAm_Lfdwnk_sq);
+    //   response.data = JSON.parse(decryptedData);
+    // }
     return response;
   },
   async (error) => {
     const originalRequest = error.config;
+    // ** FIX: Skip refresh token logic for auth endpoints **
+    const isAuthEndpoint =
+      originalRequest.skipAuth ||
+      originalRequest.url?.includes("/auth/email/login") ||
+      originalRequest.url?.includes("/auth/register") ||
+      originalRequest.url?.includes("/auth/refresh-token");
 
     // Handle token refresh
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    if (
+      error.response?.status === 401 &&
+      !originalRequest._retry &&
+      !isAuthEndpoint
+    ) {
       originalRequest._retry = true;
 
       if (isRefreshing) {

@@ -1,13 +1,18 @@
 // src/routes/_authenticated.jsx
 import { createFileRoute, redirect, Outlet } from "@tanstack/react-router";
 import React from "react";
-import { TanStackRouterDevtools } from "@tanstack/router-devtools";
+import { TanStackRouterDevtoolsPanel } from "@tanstack/router-devtools";
 import Sidebar from "@/components/layout/Sidebar";
 import Navbar from "@/components/layout/Navbar";
 import NotFound from "@/components/layout/NotFoundPage";
 import ErrorPage from "@/components/layout/ErrorPage";
 // import { Spin } from "antd";
 import Loader from "@/components/layout/Loader";
+import { TanStackDevtools } from "@tanstack/react-devtools";
+import { ReactQueryDevtoolsPanel } from "@tanstack/react-query-devtools";
+import { Grid } from "antd";
+
+const { useBreakpoint } = Grid;
 
 export const Route = createFileRoute("/_authenticated")({
   // The beforeLoad hook runs before navigation completes and before the component renders.
@@ -34,27 +39,59 @@ export const Route = createFileRoute("/_authenticated")({
   ),
 });
 function RootComponent() {
-  const [collapsed, setCollapsed] = React.useState(true);
-  const { auth } = Route.useRouteContext();
+  const stored = localStorage.getItem("sidebar_collapsed");
+  const initialCollapsed = stored === "true";
+
+  // console.log("sidebar_collapsed", sidebar_collapsed);
+  const [collapsed, setCollapsed] = React.useState(initialCollapsed);
+  const [drawerVisible, setDrawerVisible] = React.useState(false);
+
+  const screens = useBreakpoint();
+  const isMobile = !screens.md; // md (>=768px) treated as desktop/tablet
   return (
     <React.Fragment>
       <div className="flex">
-        <Sidebar collapsed={collapsed} setCollapsed={setCollapsed} />
+        <Sidebar
+          collapsed={collapsed}
+          setCollapsed={setCollapsed}
+          drawerVisible={drawerVisible}
+          setDrawerVisible={setDrawerVisible}
+          isMobile={isMobile}
+        />
         <div
           style={{ scrollbarWidth: "thin" }}
-          className="bg-gradient-to-tr from-[#e8f3ff]    to-[#ffede8] w-full min-h-screen max-h-screen overflow-auto scroll-smooth"
+          className="bg-gray-100 w-full min-h-screen max-h-screen overflow-auto scroll-smooth"
+          // className="bg-linear-to-tr from-[#e8f3ff]  to-[#ffede8] w-full min-h-screen max-h-screen overflow-auto scroll-smooth"
         >
           <Navbar
-            auth={auth}
             collapsed={collapsed}
             setCollapsed={setCollapsed}
+            drawerVisible={drawerVisible}
+            setDrawerVisible={setDrawerVisible}
+            isMobile={isMobile}
           />
           <div className="pp-container">
             <Outlet />
           </div>
         </div>
       </div>
-      <TanStackRouterDevtools />
+
+      {import.meta.env.VITE_APP_ENV === "development" && (
+        <TanStackDevtools
+          plugins={[
+            {
+              name: "TanStack Query",
+              render: <ReactQueryDevtoolsPanel />,
+              defaultOpen: true,
+            },
+            {
+              name: "TanStack Router",
+              render: <TanStackRouterDevtoolsPanel />,
+              defaultOpen: false,
+            },
+          ]}
+        />
+      )}
     </React.Fragment>
   );
 }

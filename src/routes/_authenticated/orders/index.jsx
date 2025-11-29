@@ -73,11 +73,18 @@ function RouteComponent() {
       <ResponsiveCard
         size="small"
         extra={
-          <Link to="/orders/create">
-            <Button type="primary" size="small">
-              Create
-            </Button>
-          </Link>
+          <div className="flex gap-2">
+            <Link to="/orders/first-mile">
+              <Button type="primary" size="small">
+                View First Mile Orders
+              </Button>
+            </Link>
+            <Link to="/orders/create">
+              <Button type="primary" size="small">
+                Create
+              </Button>
+            </Link>
+          </div>
         }
         title="Orders"
       >

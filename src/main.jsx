@@ -1,7 +1,7 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+// import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "react-hot-toast";
 import { ConfigProvider } from "antd";
@@ -39,20 +39,25 @@ root.render(
 
             collapsedWidth: "70px",
             darkItemBg: "#001529",
+            // darkItemBg: "#2b358e",
             darkItemHoverBg: "#f4592b",
             darkItemHoverColor: "#fff",
             darkItemSelectedBg: "#f4592b",
             darkItemSelectedColor: "#fff",
-            darkSubMenuItemBg: "#001529",
+            // darkSubMenuItemBg: "#2b358e",
+            // darkSubMenuItemBg: "#001529",
 
             // Light
             itemHoverBg: "#f4592b",
             itemSelectedBg: "#f4592b",
             itemSelectedColor: "#fff",
-            // subMenuItemBg: "#001529",
+            subMenuItemBg: "#001529",
           },
           Button: {
             fontSize: "12px",
+          },
+          Layout: {
+            // siderBg: "#2b358e",
           },
         },
       }}
@@ -62,7 +67,6 @@ root.render(
           <InnerApp />
         </AuthProvider>
         <Toaster />
-        <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
     </ConfigProvider>
   </StrictMode>

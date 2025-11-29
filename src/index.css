@@ -36,13 +36,14 @@ h6 {
   scrollbar-width: thin;
 }
 
-/* @media only screen and (max-width: 767px) {
+@media only screen and (max-width: 768px) {
   .pp-container {
+    max-height: calc(100vh - 65px);
     margin: 0 auto;
-    max-height: 100%;
+    /* max-height: 100%; */
     max-width: 100%;
   }
-} */
+}
 
 /* Fix for submenu background color in collapsed mode */
 .sidebar-container
@@ -114,4 +115,33 @@ h6 {
   background-color: #2b358e !important;
   /* background-color: #6366f1 !important; */
   color: #fff !important;
+}
+
+/* For Chrome, Edge, Safari */
+.ant-table-body::-webkit-scrollbar,
+.ant-table-content::-webkit-scrollbar {
+  height: 6px;
+  background: transparent;
+}
+.ant-table-body::-webkit-scrollbar-thumb,
+.ant-table-content::-webkit-scrollbar-thumb {
+  background: #eaeaea;
+  border-radius: 999px;
+}
+
+/* For Firefox */
+.ant-table-body,
+.ant-table-content {
+  scrollbar-width: thin;
+  scrollbar-color: #eaeaea transparent;
+}
+
+/* Ensure Google Maps markers appear above Ant Design modals */
+.gm-style > div > div > div > div > div > div {
+  z-index: 10000 !important;
+}
+
+/* Alternative approach - target markers specifically */
+.gm-style > div > div > div > div > div > img {
+  z-index: 10000 !important;
 }

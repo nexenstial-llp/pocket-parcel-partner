@@ -114,6 +114,9 @@ const ForwardStepperForm = () => {
     console.log("Final Payload:", values);
   };
 
+  const pickup_lat = Form.useWatch("pickup_info.pickup_lat", form);
+  console.log(pickup_lat);
+
   return (
     <Form
       initialValues={{
