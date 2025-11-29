@@ -6,25 +6,17 @@ import {
   useDeleteWarehouse,
   useFetchWarehouse,
 } from "@/features/warehouses/warehouses.query";
+import { validatePagination } from "@/utils/validatePagination.util";
 import { useQueryClient } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Tag } from "antd";
 import { message } from "antd";
 import { Modal } from "antd";
 import { Button, Table } from "antd";
-import z from "zod";
-const searchSchema = z.object({
-  page: z.coerce.number().int().min(1).default(1),
-  limit: z.coerce.number().int().min(1).max(100).default(10),
-});
 
 export const Route = createFileRoute("/_authenticated/warehouses/")({
   component: RouteComponent,
-  validateSearch: (search) =>
-    searchSchema.parse({
-      page: search.page,
-      limit: search.limit,
-    }),
+  validateSearch: (search) => validatePagination(search),
 });
 
 function RouteComponent() {
@@ -88,20 +80,21 @@ function RouteComponent() {
       title: "Total Area",
       render: (_, record) =>
         record?.capacity_info?.total_area
-          ? `${record?.capacity_info?.total_area} `
+          ? `${record?.capacity_info?.total_area}`
           : "N/A",
     },
     {
       title: "Storage Capacity",
       render: (_, record) =>
         record?.capacity_info?.storage_capacity
-          ? `${record?.capacity_info?.storage_capacity} `
+          ? `${record?.capacity_info?.storage_capacity}`
           : "N/A",
     },
     {
       title: "Status",
       dataIndex: "is_active",
       key: "is_active",
+      fixed: "right",
       render: (status) => (
         <Tag className="uppercase" color={status ? "green" : "red"}>
           {status ? "Active" : "Inactive"}
@@ -110,6 +103,7 @@ function RouteComponent() {
     },
     {
       title: "Action",
+      fixed: "right",
       render: (_, record) => (
         <div className="flex gap-2">
           {record?.is_active && (
@@ -119,14 +113,13 @@ function RouteComponent() {
                   Edit
                 </Button>
               </Link>
-              <Link to={`${record.id}`}>
+              <Link to={`/warehouses/${record.id}`}>
                 <Button size="small" type="link">
                   View
                 </Button>
               </Link>
               <Button
                 size="small"
-                type="primary"
                 onClick={() => handleDelete(record?.id)}
                 danger
               >
@@ -165,6 +158,7 @@ function RouteComponent() {
           columns={columns}
           dataSource={data?.data || []}
           pagination={false}
+          scroll={{ x: "max-content" }}
         />
         <UrlPagination
           currentPage={page}
