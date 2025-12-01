@@ -1,126 +1,118 @@
-import { createFileRoute, redirect } from '@tanstack/react-router'
-import { Button, Form, Input, Alert, Typography } from 'antd'
-import { LockOutlined, MailOutlined, SafetyOutlined } from '@ant-design/icons'
-import { useState } from 'react'
-import { Tabs } from 'antd'
-import { message } from 'antd'
-import axiosInstance from '@/utils/axiosInstance.util'
-import { useMutation } from '@tanstack/react-query'
+import { createFileRoute, redirect } from "@tanstack/react-router";
+import { Button, Form, Input, Alert, Typography } from "antd";
+import { SafetyOutlined } from "@ant-design/icons";
+import { useState } from "react";
+import { Tabs } from "antd";
+import { message } from "antd";
+import { Space } from "antd";
+import { Select } from "antd";
+import { useSendMobileOtp } from "@/features/auth/auth.query";
+import EmailPasswordLoginForm from "@/features/auth/components/EmailPasswordLoginForm";
 
-const { Title, Text } = Typography
+const { Title, Text } = Typography;
 
-const sendOtpApi = async (email) => {
-  const response = await axiosInstance.post(
-    '/auth/email/send-otp',
-    { email },
-    {
-      skipAuth: true,
-      suppressErrorToast: true,
-    },
-  )
-  return response.data
-}
-
-export const Route = createFileRoute('/auth/Login')({
+export const Route = createFileRoute("/auth/login")({
   validateSearch: (search) => ({
-    redirect: search.redirect || '/',
+    redirect: search.redirect || "/",
   }),
   beforeLoad: ({ context, search }) => {
     // Redirect if already authenticated
     if (context.auth.isAuthenticated) {
-      throw redirect({ to: search.redirect })
+      throw redirect({ to: search.redirect });
     }
   },
   component: LoginComponent,
-})
+});
 
 function LoginComponent() {
-  const auth = Route.useRouteContext()
-  const { redirect } = Route.useSearch()
-  const navigate = Route.useNavigate()
-  const [form] = Form.useForm()
-  const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [otpSent, setOtpSent] = useState(false)
-  const [emailForOtp, setEmailForOtp] = useState('')
+  const auth = Route.useRouteContext();
+
+  const { redirect } = Route.useSearch();
+  const navigate = Route.useNavigate();
+  const [form] = Form.useForm();
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [otpSent, setOtpSent] = useState(false);
+  const [emailForOtp, setEmailForOtp] = useState("");
+  const [mobileOtpPayload, setMobileOtpPayload] = useState({
+    country_code: null,
+    phone_number: null,
+  });
 
   const {
     mutate: sendOtp,
     isPending: isOtpSendPending,
     // isSuccess: isOtpSendSuccess,
-  } = useMutation({
-    mutationFn: sendOtpApi,
+  } = useSendMobileOtp({
     onSuccess: (data) => {
-      console.log('OTP send response:', data)
-      setOtpSent(true)
-      setEmailForOtp(data.email)
-      message.success('OTP sent to your email!')
+      console.log("OTP send response:", data);
+      setOtpSent(true);
+      setEmailForOtp(data.email);
+      message.success("OTP sent to your email!");
     },
     onError: (error) => {
       console.log(
-        'error',
-        error?.response?.data?.message || 'An unexpected error occurred',
-      )
+        "error",
+        error?.response?.data?.message || "An unexpected error occurred"
+      );
       message.error(
-        error?.response?.data?.message || 'An unexpected error occurred',
-      )
+        error?.response?.data?.message || "An unexpected error occurred"
+      );
     },
     onSettled: () => {
-      setLoading(false)
+      setLoading(false);
     },
-  })
+  });
 
   const handleSendOtp = async (values) => {
-    sendOtp(values.email)
-  }
+    setMobileOtpPayload(values);
+    sendOtp(values);
+  };
 
   const handleVerifyOtp = async (values) => {
-    setLoading(true)
+    setLoading(true);
     try {
-      const { error } = await auth.verifyOtp({
-        email: emailForOtp,
-        token: values.otp,
-        type: 'email',
-      })
-
-      if (error) {
-        message.error(error.message)
-      } else {
-        message.success('Successfully logged in!')
-        setOtpSent(false)
-      }
-    } catch (error) {
-      console.log('error', error)
-      message.error('An unexpected error occurred')
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const handleSubmit = async (values) => {
-    setIsLoading(true)
-    setError('')
-
-    try {
-      const response = await auth.auth.login(values.email, values.password)
-      console.log('Login successful:', response)
+      await auth.auth.verifyMobileOtp({
+        country_code: mobileOtpPayload?.country_code,
+        phone_number: mobileOtpPayload?.phone_number,
+        otp_code: values?.otp_code,
+      });
       // Navigate to the redirect URL using router navigation
       setTimeout(() => {
-        navigate({ to: redirect })
-      }, 0)
-    } catch (err) {
-      console.error(err)
-      setError('Invalid email or password')
+        navigate({ to: redirect });
+      }, 0);
+    } catch (error) {
+      console.log("error", error);
+      message.error("An unexpected error occurred");
     } finally {
-      setIsLoading(false)
+      setLoading(false);
     }
-  }
+  };
+
+  const handleSubmit = async (values) => {
+    setIsLoading(true);
+    setError("");
+
+    try {
+      const response = await auth.auth.login(values.email, values.password);
+      console.log("Login successful:", response);
+      // Navigate to the redirect URL using router navigation
+      setTimeout(() => {
+        navigate({ to: redirect });
+      }, 0);
+    } catch (err) {
+      console.error(err);
+      setError("Invalid email or password");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-tr from-[#f0a991] to-[#1024dd] p-4">
+    <div className="min-h-screen flex items-center justify-center bg-linear-to-tr from-[#f0a991] to-[#1024dd] p-4">
       {/* <div className="w-full max-w-5xl backdrop-blur-xl bg-white/20   shadow-2xl rounded-xl overflow-hidden grid grid-cols-1 md:grid-cols-2"> */}
-      <div className="w-full max-w-5xl bg-[#db5730]   shadow-2xl rounded-xl overflow-hidden grid grid-cols-1 md:grid-cols-2">
+      <div className="w-full max-w-5xl bg-[#db5730]   shadow-2xl rounded-xl overflow-hidden grid grid-cols-1 md:grid-cols-2 min-h-[495px]">
         {/* LEFT SIDE — IMAGE (hidden on small screens) */}
         <div
           className="hidden md:block bg-cover bg-center"
@@ -130,15 +122,15 @@ function LoginComponent() {
         ></div>
         {/* RIGHT SIDE — LOGIN FORM */}
         <div className="p-8 md:p-12 bg-white">
-          <Title level={2} style={{ textAlign: 'center', marginBottom: 4 }}>
+          <Title level={2} style={{ textAlign: "center", marginBottom: 4 }}>
             Sign In
           </Title>
 
           <Text
             type="secondary"
             style={{
-              display: 'block',
-              textAlign: 'center',
+              display: "block",
+              textAlign: "center",
               marginBottom: 24,
               fontSize: 14,
             }}
@@ -159,67 +151,19 @@ function LoginComponent() {
             centered
             items={[
               {
-                key: 'password',
-                label: 'Password',
+                key: "password",
+                label: "Password",
                 children: (
-                  <Form
+                  <EmailPasswordLoginForm
                     form={form}
-                    layout="vertical"
-                    onFinish={handleSubmit}
-                    requiredMark={false}
-                    disabled={isLoading}
-                  >
-                    <Form.Item
-                      label="Email"
-                      name="email"
-                      rules={[
-                        {
-                          required: true,
-                          message: 'Please input your email!',
-                        },
-                      ]}
-                    >
-                      <Input
-                        prefix={<MailOutlined />}
-                        placeholder="Enter your email"
-                        size="large"
-                      />
-                    </Form.Item>
-
-                    <Form.Item
-                      label="Password"
-                      name="password"
-                      rules={[
-                        {
-                          required: true,
-                          message: 'Please input your password!',
-                        },
-                      ]}
-                    >
-                      <Input.Password
-                        prefix={<LockOutlined />}
-                        placeholder="Enter your password"
-                        size="large"
-                      />
-                    </Form.Item>
-
-                    <Form.Item style={{ marginBottom: 16 }}>
-                      <Button
-                        type="primary"
-                        htmlType="submit"
-                        loading={isLoading}
-                        block
-                        size="large"
-                      >
-                        {isLoading ? 'Signing in...' : 'Sign In'}
-                      </Button>
-                    </Form.Item>
-                  </Form>
+                    handleSubmit={handleSubmit}
+                    isLoading={isLoading}
+                  />
                 ),
               },
               {
-                key: 'otp',
-                label: 'OTP',
+                key: "otp",
+                label: "OTP",
                 children: (
                   <>
                     {!otpSent ? (
@@ -228,23 +172,47 @@ function LoginComponent() {
                         onFinish={handleSendOtp}
                         layout="vertical"
                         requiredMark={false}
+                        initialValues={{
+                          country_code: "91",
+                        }}
                       >
                         <Form.Item
-                          name="email"
-                          label="Email"
+                          name="phone_number"
+                          label="Phone Number"
                           rules={[
                             {
                               required: true,
-                              message: 'Please enter your email',
+                              message: "Please input your phone number!",
                             },
-                            { type: 'email', message: 'Enter a valid email' },
+                            {
+                              pattern: /^[0-9]{10}$/,
+                              message:
+                                "Please enter a valid 10-digit phone number",
+                            },
                           ]}
                         >
-                          <Input
-                            prefix={<MailOutlined className="text-gray-400" />}
-                            placeholder="Enter your email"
-                            size="large"
-                          />
+                          {/* Demo only, real usage should wrap as custom component */}
+                          <Space.Compact block>
+                            <Form.Item
+                              name="country_code"
+                              noStyle
+                              rules={[
+                                {
+                                  required: true,
+                                  message: "Please select a country code!",
+                                },
+                              ]}
+                            >
+                              <Select
+                                style={{ width: 70 }}
+                                options={[{ label: "+91", value: "91" }]}
+                              />
+                            </Form.Item>
+                            <Input
+                              style={{ width: "100%" }}
+                              placeholder="Enter phone number"
+                            />
+                          </Space.Compact>
                         </Form.Item>
 
                         <Button
@@ -271,12 +239,17 @@ function LoginComponent() {
                           layout="vertical"
                         >
                           <Form.Item
-                            name="otp"
+                            name="otp_code"
                             label="Verification Code"
                             rules={[
                               {
                                 required: true,
-                                message: 'Please enter the OTP',
+                                message: "Please enter the OTP",
+                              },
+                              {
+                                pattern: /^[0-9]{6}$/,
+                                message:
+                                  "Please enter a valid 6-digit verification code",
                               },
                             ]}
                           >
@@ -303,12 +276,12 @@ function LoginComponent() {
                           <Button
                             type="link"
                             onClick={() => {
-                              setOtpSent(false)
-                              setEmailForOtp('')
+                              setOtpSent(false);
+                              setEmailForOtp("");
                             }}
                             block
                           >
-                            Use a different email
+                            Use a different phone number
                           </Button>
                         </Form>
                       </div>
@@ -328,5 +301,5 @@ function LoginComponent() {
         </div>
       </div>
     </div>
-  )
+  );
 }

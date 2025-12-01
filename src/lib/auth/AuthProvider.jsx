@@ -9,6 +9,7 @@ import { AuthContext } from "./authContext.js";
 import {
   useEmailPasswordLogin,
   useLogout,
+  useVerifyMobileOtp,
 } from "@/features/auth/auth.query.js";
 import { message } from "antd";
 
@@ -68,6 +69,22 @@ export function AuthProvider({ children }) {
       router.invalidate();
     },
   });
+  // verify mobile otp
+  const verifyMobileOtpMutation = useVerifyMobileOtp({
+    onSuccess: (data) => {
+      const userData = data?.data;
+      console.log("data from verify mobile otp", data?.data);
+      localStorage.setItem(STORAGE_KEYS.ACCESS_TOKEN, userData.access_token);
+      localStorage.setItem(STORAGE_KEYS.REFRESH_TOKEN, userData.refresh_token);
+      // ✅ Extract and store only the user object, not the entire response
+      const userObject = userData.user || userData;
+      localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(userObject));
+
+      queryClient.setQueryData(authKeys.user, userObject);
+      router.invalidate();
+    },
+  });
+
   const logoutMutation = useLogout({
     onSuccess: async () => {
       message.success("Logout Successfully");
@@ -103,6 +120,18 @@ export function AuthProvider({ children }) {
       return loginMutation.mutateAsync({ email, password });
     },
     [loginMutation]
+  );
+
+  const verifyMobileOtp = useCallback(
+    async ({ country_code, phone_number, otp_code }) => {
+      console.log({ country_code, phone_number, otp_code });
+      return verifyMobileOtpMutation.mutateAsync({
+        country_code,
+        phone_number,
+        otp_code,
+      });
+    },
+    [verifyMobileOtpMutation]
   );
 
   const hasRole = useCallback(
@@ -158,8 +187,10 @@ export function AuthProvider({ children }) {
         user,
         login,
         logout,
-        isLoggingIn: loginMutation.isPending,
-        loginError: loginMutation.error,
+        verifyMobileOtp,
+        isLoggingIn:
+          loginMutation.isPending || verifyMobileOtpMutation.isPending,
+        loginError: loginMutation.error || verifyMobileOtpMutation.error,
         hasRole,
         hasAnyRole,
         hasPermission,
