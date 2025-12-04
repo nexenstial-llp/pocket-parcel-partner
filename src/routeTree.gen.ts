@@ -20,6 +20,7 @@ import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticat
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard/route'
 import { Route as AuthenticatedWarehousesIndexImport } from './routes/_authenticated/warehouses/index'
 import { Route as AuthenticatedToolsIndexImport } from './routes/_authenticated/tools/index'
+import { Route as AuthenticatedRevenueDashboardIndexImport } from './routes/_authenticated/revenue-dashboard/index'
 import { Route as AuthenticatedRackIndexImport } from './routes/_authenticated/rack/index'
 import { Route as AuthenticatedProfileIndexImport } from './routes/_authenticated/profile/index'
 import { Route as AuthenticatedOverviewIndexImport } from './routes/_authenticated/overview/index'
@@ -133,6 +134,13 @@ const AuthenticatedToolsIndexRoute = AuthenticatedToolsIndexImport.update({
   path: '/tools/',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+
+const AuthenticatedRevenueDashboardIndexRoute =
+  AuthenticatedRevenueDashboardIndexImport.update({
+    id: '/revenue-dashboard/',
+    path: '/revenue-dashboard/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 
 const AuthenticatedRackIndexRoute = AuthenticatedRackIndexImport.update({
   id: '/rack/',
@@ -675,6 +683,13 @@ declare module '@tanstack/react-router' {
       path: '/rack'
       fullPath: '/rack'
       preLoaderRoute: typeof AuthenticatedRackIndexImport
+      parentRoute: typeof AuthenticatedImport
+    }
+    '/_authenticated/revenue-dashboard/': {
+      id: '/_authenticated/revenue-dashboard/'
+      path: '/revenue-dashboard'
+      fullPath: '/revenue-dashboard'
+      preLoaderRoute: typeof AuthenticatedRevenueDashboardIndexImport
       parentRoute: typeof AuthenticatedImport
     }
     '/_authenticated/tools/': {
@@ -1227,6 +1242,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedOverviewIndexRoute: typeof AuthenticatedOverviewIndexRoute
   AuthenticatedProfileIndexRoute: typeof AuthenticatedProfileIndexRoute
   AuthenticatedRackIndexRoute: typeof AuthenticatedRackIndexRoute
+  AuthenticatedRevenueDashboardIndexRoute: typeof AuthenticatedRevenueDashboardIndexRoute
   AuthenticatedToolsIndexRoute: typeof AuthenticatedToolsIndexRoute
   AuthenticatedWarehousesIndexRoute: typeof AuthenticatedWarehousesIndexRoute
   AuthenticatedAccessControlUsersIndexRoute: typeof AuthenticatedAccessControlUsersIndexRoute
@@ -1271,6 +1287,8 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedOverviewIndexRoute: AuthenticatedOverviewIndexRoute,
   AuthenticatedProfileIndexRoute: AuthenticatedProfileIndexRoute,
   AuthenticatedRackIndexRoute: AuthenticatedRackIndexRoute,
+  AuthenticatedRevenueDashboardIndexRoute:
+    AuthenticatedRevenueDashboardIndexRoute,
   AuthenticatedToolsIndexRoute: AuthenticatedToolsIndexRoute,
   AuthenticatedWarehousesIndexRoute: AuthenticatedWarehousesIndexRoute,
   AuthenticatedAccessControlUsersIndexRoute:
@@ -1339,6 +1357,7 @@ export interface FileRoutesByFullPath {
   '/overview': typeof AuthenticatedOverviewIndexRoute
   '/profile': typeof AuthenticatedProfileIndexRoute
   '/rack': typeof AuthenticatedRackIndexRoute
+  '/revenue-dashboard': typeof AuthenticatedRevenueDashboardIndexRoute
   '/tools': typeof AuthenticatedToolsIndexRoute
   '/warehouses': typeof AuthenticatedWarehousesIndexRoute
   '/tools/reports/download-reports': typeof AuthenticatedToolsReportsDownloadReportsRouteRouteWithChildren
@@ -1409,6 +1428,7 @@ export interface FileRoutesByTo {
   '/overview': typeof AuthenticatedOverviewIndexRoute
   '/profile': typeof AuthenticatedProfileIndexRoute
   '/rack': typeof AuthenticatedRackIndexRoute
+  '/revenue-dashboard': typeof AuthenticatedRevenueDashboardIndexRoute
   '/tools': typeof AuthenticatedToolsIndexRoute
   '/warehouses': typeof AuthenticatedWarehousesIndexRoute
   '/tools/reports/download-reports': typeof AuthenticatedToolsReportsDownloadReportsRouteRouteWithChildren
@@ -1480,6 +1500,7 @@ export interface FileRoutesById {
   '/_authenticated/overview/': typeof AuthenticatedOverviewIndexRoute
   '/_authenticated/profile/': typeof AuthenticatedProfileIndexRoute
   '/_authenticated/rack/': typeof AuthenticatedRackIndexRoute
+  '/_authenticated/revenue-dashboard/': typeof AuthenticatedRevenueDashboardIndexRoute
   '/_authenticated/tools/': typeof AuthenticatedToolsIndexRoute
   '/_authenticated/warehouses/': typeof AuthenticatedWarehousesIndexRoute
   '/_authenticated/tools/reports/download-reports': typeof AuthenticatedToolsReportsDownloadReportsRouteRouteWithChildren
@@ -1552,6 +1573,7 @@ export interface FileRouteTypes {
     | '/overview'
     | '/profile'
     | '/rack'
+    | '/revenue-dashboard'
     | '/tools'
     | '/warehouses'
     | '/tools/reports/download-reports'
@@ -1621,6 +1643,7 @@ export interface FileRouteTypes {
     | '/overview'
     | '/profile'
     | '/rack'
+    | '/revenue-dashboard'
     | '/tools'
     | '/warehouses'
     | '/tools/reports/download-reports'
@@ -1690,6 +1713,7 @@ export interface FileRouteTypes {
     | '/_authenticated/overview/'
     | '/_authenticated/profile/'
     | '/_authenticated/rack/'
+    | '/_authenticated/revenue-dashboard/'
     | '/_authenticated/tools/'
     | '/_authenticated/warehouses/'
     | '/_authenticated/tools/reports/download-reports'
@@ -1788,6 +1812,7 @@ export const routeTree = rootRoute
         "/_authenticated/overview/",
         "/_authenticated/profile/",
         "/_authenticated/rack/",
+        "/_authenticated/revenue-dashboard/",
         "/_authenticated/tools/",
         "/_authenticated/warehouses/",
         "/_authenticated/access-control/users/",
@@ -1908,6 +1933,10 @@ export const routeTree = rootRoute
     },
     "/_authenticated/rack/": {
       "filePath": "_authenticated/rack/index.jsx",
+      "parent": "/_authenticated"
+    },
+    "/_authenticated/revenue-dashboard/": {
+      "filePath": "_authenticated/revenue-dashboard/index.jsx",
       "parent": "/_authenticated"
     },
     "/_authenticated/tools/": {
