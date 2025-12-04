@@ -30,7 +30,7 @@ const sidebarData = [
   {
     key: "revenue-dashboard",
     icon: <DollarCircleOutlined />,
-    label: <Link to={"revenue-dashboard"}>Revenue Dashboard</Link>,
+    label: <Link to={"/revenue-dashboard"}>Revenue Dashboard</Link>,
     // children: [
     //   // {
     //   //   key: "/revenue-dashboard/my-earnings/revenue-summary",
@@ -127,21 +127,21 @@ const sidebarData = [
       },
     ],
   },
-  {
-    key: "ndr",
-    label: "NDR",
-    icon: <TbTruckReturn />,
-    children: [
-      {
-        key: "/ndr/cases",
-        label: <Link to="/ndr/cases">Cases</Link>,
-      },
-      {
-        key: "/ndr/reports",
-        label: <Link to="/ndr/reports">Reports</Link>,
-      },
-    ],
-  },
+  // {
+  //   key: "ndr",
+  //   label: "NDR",
+  //   icon: <TbTruckReturn />,
+  //   children: [
+  //     {
+  //       key: "/ndr/cases",
+  //       label: <Link to="/ndr/cases">Cases</Link>,
+  //     },
+  //     {
+  //       key: "/ndr/reports",
+  //       label: <Link to="/ndr/reports">Reports</Link>,
+  //     },
+  //   ],
+  // },
   {
     key: "warehouses",
     icon: <TbBuildingWarehouse />,
