@@ -11,7 +11,6 @@ import {
   Button,
   Card,
   Checkbox,
-  Switch,
 } from "antd";
 import {
   MinusCircleOutlined,
@@ -23,9 +22,13 @@ import {
 import { fetchLocationFromPincode } from "@/features/orders/orders.service";
 import GoogleAddressPicker from "@/components/ui/GoogleAddressPicker";
 import { APIProvider } from "@vis.gl/react-google-maps";
+import dayjs from "dayjs";
+import PaginatedSelect from "@/components/ui/PaginatedSelect";
 const API_KEY = import.meta.env.VITE_APP_GOOGLE_API_KEY;
-const { TextArea } = Input;
-const { Option } = Select;
+const deliveryTypeOptions = [
+  { label: "Forward", value: "FORWARD" },
+  { label: "Reverse", value: "REVERSE" },
+];
 
 const mapping = {
   pickup_info: {
@@ -129,7 +132,12 @@ const ComprehensiveOrderForm = () => {
 
   return (
     <div className="w-full flex flex-col gap-3">
-      <Steps current={current} items={steps} className="mb-8" />
+      <Steps
+        onChange={(e) => setCurrent(e)}
+        current={current}
+        items={steps}
+        className="mb-8"
+      />
 
       <Form
         form={form}
@@ -202,7 +210,14 @@ const LocationStep = () => {
               name={["pickup_info", "pickup_time"]}
               label="Pickup Time"
             >
-              <DatePicker showTime style={{ width: "100%" }} />
+              <DatePicker
+                disabledDate={(current) =>
+                  current && current < dayjs().startOf("day")
+                }
+                showTime
+                style={{ width: "100%" }}
+                format={"DD-MM-YYYY HH:mm"}
+              />
             </Form.Item>
           </Col>
         </Row>
@@ -408,7 +423,7 @@ const ShipmentStep = () => {
     <div className="flex flex-col gap-6">
       <Card title="Shipment Details" size="small" className="shadow-sm">
         <Row gutter={16}>
-          <Col {...responsiveColSpan}>
+          {/* <Col {...responsiveColSpan}>
             <Form.Item
               name={["shipment_details", "order_id"]}
               label="Order ID"
@@ -416,8 +431,8 @@ const ShipmentStep = () => {
             >
               <Input placeholder="Order ID" />
             </Form.Item>
-          </Col>
-          <Col {...responsiveColSpan}>
+          </Col> */}
+          {/* <Col {...responsiveColSpan}>
             <Form.Item
               name={["shipment_details", "order_type"]}
               label="Order Type"
@@ -428,37 +443,34 @@ const ShipmentStep = () => {
                 <Option value="PREPAID">Prepaid</Option>
               </Select>
             </Form.Item>
-          </Col>
-          <Col {...responsiveColSpan}>
+          </Col> */}
+          {/* <Col {...responsiveColSpan}>
             <Form.Item
               name={["shipment_details", "cod_value"]}
               label="COD Value"
             >
               <InputNumber style={{ width: "100%" }} min={0} />
             </Form.Item>
-          </Col>
+          </Col> */}
           <Col {...responsiveColSpan}>
             <Form.Item
               name={["shipment_details", "delivery_type"]}
               label="Delivery Type"
               initialValue="FORWARD"
             >
-              <Select>
-                <Option value="FORWARD">Forward</Option>
-                <Option value="REVERSE">Reverse</Option>
-              </Select>
+              <Select options={deliveryTypeOptions} />
             </Form.Item>
           </Col>
 
-          <Col {...responsiveColSpan}>
+          {/* <Col {...responsiveColSpan}>
             <Form.Item
               name={["shipment_details", "invoice_number"]}
               label="Invoice Number"
             >
               <Input placeholder="Invoice No." />
             </Form.Item>
-          </Col>
-          <Col {...responsiveColSpan}>
+          </Col> */}
+          {/* <Col {...responsiveColSpan}>
             <Form.Item
               name={["shipment_details", "invoice_date"]}
               label="Invoice Date"
@@ -473,16 +485,23 @@ const ShipmentStep = () => {
             >
               <InputNumber style={{ width: "100%" }} min={0} />
             </Form.Item>
-          </Col>
+          </Col> */}
           <Col {...responsiveColSpan}>
             <Form.Item
               name={["shipment_details", "courier_partner"]}
-              label="Courier Partner ID"
+              label="Courier Partner"
             >
-              <Input placeholder="Partner ID" />
+              {/* <Input placeholder="Partner ID" /> */}
+              <PaginatedSelect
+                fetchUrl="/v1/admin/courier-partners"
+                placeholder="Select Partner"
+                queryKey="courier-partners"
+                valueField="id"
+                labelField="name"
+              />
             </Form.Item>
           </Col>
-          <Col {...responsiveColSpan}>
+          {/* <Col {...responsiveColSpan}>
             <Form.Item
               name={["shipment_details", "reference_number"]}
               label="Reference Number"
@@ -497,7 +516,7 @@ const ShipmentStep = () => {
             >
               <Input placeholder="Account Code" />
             </Form.Item>
-          </Col>
+          </Col> */}
         </Row>
 
         <Row gutter={16}>
@@ -676,14 +695,14 @@ const BillingStep = () => {
               <InputNumber style={{ width: "100%" }} min={0} />
             </Form.Item>
           </Col>
-          <Col {...responsiveColSpan}>
+          {/* <Col {...responsiveColSpan}>
             <Form.Item
               name={["gst_info", "place_of_supply"]}
               label="Place of Supply"
             >
               <Input placeholder="State/UT" />
             </Form.Item>
-          </Col>
+          </Col> */}
           <Col {...responsiveColSpan}>
             <Form.Item name={["gst_info", "hsn_code"]} label="HSN Code">
               <Input placeholder="HSN" />
@@ -725,7 +744,7 @@ const BillingStep = () => {
         </Row>
       </Card>
 
-      <Card title="Additional Information" size="small" className="shadow-sm">
+      {/* <Card title="Additional Information" size="small" className="shadow-sm">
         <Row gutter={16}>
           <Col {...responsiveColSpan}>
             <Form.Item name={["additional", "vendor_code"]} label="Vendor Code">
@@ -799,7 +818,7 @@ const BillingStep = () => {
             </Form.Item>
           </Col>
         </Row>
-      </Card>
+      </Card> */}
     </div>
   );
 };
