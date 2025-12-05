@@ -1,4 +1,5 @@
 import axiosInstance from "@/utils/axiosInstance.util";
+import axios from "axios";
 
 // Create first-mile order
 export const createQuickOrder = async (payload) => {
@@ -59,4 +60,19 @@ export const priceCalculate = async (data) => {
     data
   );
   return response?.data?.data ?? null;
+};
+
+export const fetchLocationFromPincode = async (pincode) => {
+  const response = await axios.get(
+    `https://api.postalpincode.in/pincode/${pincode}`
+  );
+
+  const info = response.data[0].PostOffice?.[0];
+
+  return {
+    city: info?.Name || "",
+    district: info?.District || "",
+    state: info?.State || "",
+    country: info?.Country || "India",
+  };
 };
