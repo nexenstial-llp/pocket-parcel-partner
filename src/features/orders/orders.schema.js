@@ -97,3 +97,98 @@ export const updateQuickOrderSchema = z.object({
   item_type_comment: z.string().max(255).optional(),
   description: z.string().optional(),
 });
+
+export const createComprehensiveOrderSchema = z.object({
+  pickup_info: z.object({
+    pickup_name: z.string().min(1, "Pickup name is required"),
+    pickup_phone: z
+      .string()
+      .min(10, "Phone number must be at least 10 digits")
+      .max(15, "Phone number must not exceed 15 digits"),
+    pickup_email: z
+      .string()
+      .email("Invalid email")
+      .optional()
+      .or(z.literal("")),
+    pickup_time: z.any().optional(), // Can be string or dayjs object
+    pickup_address: z.string().min(1, "Pickup address is required"),
+    pickup_landmark: z.string().optional(),
+    pickup_pincode: z.string().length(6, "Pincode must be 6 digits"),
+    pickup_city: z.string().min(1, "City is required"),
+    pickup_district: z.string().optional(),
+    pickup_state: z.string().min(1, "State is required"),
+    pickup_country: z.string().optional(),
+    pickup_lat: z.number().optional(),
+    pickup_long: z.number().optional(),
+  }),
+  drop_info: z.object({
+    drop_name: z.string().min(1, "Drop name is required"),
+    drop_phone: z
+      .string()
+      .min(10, "Phone number must be at least 10 digits")
+      .max(15, "Phone number must not exceed 15 digits"),
+    drop_email: z.string().email("Invalid email").optional().or(z.literal("")),
+    drop_address: z.string().min(1, "Drop address is required"),
+    drop_landmark: z.string().optional(),
+    drop_pincode: z.string().length(6, "Pincode must be 6 digits"),
+    drop_city: z.string().min(1, "City is required"),
+    drop_district: z.string().optional(),
+    drop_state: z.string().min(1, "State is required"),
+    drop_country: z.string().optional(),
+    drop_lat: z.number().optional(),
+    drop_long: z.number().optional(),
+  }),
+  shipment_details: z.object({
+    delivery_type: z.enum(["FORWARD", "REVERSE"]).default("FORWARD"),
+    courier_partner: z.string().optional(), // Can be ID or name
+    length: z.number().min(0).optional(),
+    breadth: z.number().min(0).optional(),
+    height: z.number().min(0).optional(),
+    weight: z.number().min(0, "Weight must be positive"),
+    items: z
+      .array(
+        z.object({
+          description: z.string().min(1, "Description is required"),
+          sku: z.string().optional(),
+          cat: z.string().optional(),
+          price: z.number().min(0, "Price must be positive"),
+          quantity: z.number().min(1, "Quantity must be at least 1"),
+          hs_code: z.string().optional(),
+          manufacture_country: z.string().optional(),
+        })
+      )
+      .optional(),
+  }),
+  gst_info: z
+    .object({
+      seller_gstin: z.string().optional(),
+      enterprise_gstin: z.string().optional(),
+      consignee_gstin: z.string().optional(),
+      taxable_value: z.number().optional(),
+      gst_total_tax: z.number().optional(),
+      hsn_code: z.string().optional(),
+      ewaybill_serial_number: z.string().optional(),
+      sgst_amount: z.number().optional(),
+      cgst_amount: z.number().optional(),
+      igst_amount: z.number().optional(),
+      is_seller_registered_under_gst: z.boolean().optional(),
+    })
+    .optional(),
+  additional: z
+    .object({
+      vendor_code: z.string().optional(),
+      order_date: z.any().optional(),
+      async: z.boolean().optional(),
+      label: z.boolean().optional(),
+      return_info: z
+        .object({
+          return_name: z.string().optional(),
+          return_phone: z.string().optional(),
+          return_address: z.string().optional(),
+          return_city: z.string().optional(),
+          return_pincode: z.string().optional(),
+        })
+        .optional(),
+    })
+    .optional(),
+});

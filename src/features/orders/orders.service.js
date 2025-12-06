@@ -76,3 +76,9 @@ export const fetchLocationFromPincode = async (pincode) => {
     country: info?.Country || "India",
   };
 };
+
+// Create Comprehensive Order
+export const createComprehensiveOrder = async (payload) => {
+  const response = await axiosInstance.post("/v1/orders/create", payload);
+  return response?.data?.data ?? null;
+};

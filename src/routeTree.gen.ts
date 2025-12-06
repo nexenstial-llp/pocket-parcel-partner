@@ -23,6 +23,7 @@ import { Route as AuthenticatedToolsIndexImport } from './routes/_authenticated/
 import { Route as AuthenticatedRevenueDashboardIndexImport } from './routes/_authenticated/revenue-dashboard/index'
 import { Route as AuthenticatedRackIndexImport } from './routes/_authenticated/rack/index'
 import { Route as AuthenticatedProfileIndexImport } from './routes/_authenticated/profile/index'
+import { Route as AuthenticatedPaymentIndexImport } from './routes/_authenticated/payment/index'
 import { Route as AuthenticatedOverviewIndexImport } from './routes/_authenticated/overview/index'
 import { Route as AuthenticatedOrdersIndexImport } from './routes/_authenticated/orders/index'
 import { Route as AuthenticatedHomeIndexImport } from './routes/_authenticated/home/index'
@@ -151,6 +152,12 @@ const AuthenticatedRackIndexRoute = AuthenticatedRackIndexImport.update({
 const AuthenticatedProfileIndexRoute = AuthenticatedProfileIndexImport.update({
   id: '/profile/',
   path: '/profile/',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+
+const AuthenticatedPaymentIndexRoute = AuthenticatedPaymentIndexImport.update({
+  id: '/payment/',
+  path: '/payment/',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
 
@@ -669,6 +676,13 @@ declare module '@tanstack/react-router' {
       path: '/overview'
       fullPath: '/overview'
       preLoaderRoute: typeof AuthenticatedOverviewIndexImport
+      parentRoute: typeof AuthenticatedImport
+    }
+    '/_authenticated/payment/': {
+      id: '/_authenticated/payment/'
+      path: '/payment'
+      fullPath: '/payment'
+      preLoaderRoute: typeof AuthenticatedPaymentIndexImport
       parentRoute: typeof AuthenticatedImport
     }
     '/_authenticated/profile/': {
@@ -1240,6 +1254,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedHomeIndexRoute: typeof AuthenticatedHomeIndexRoute
   AuthenticatedOrdersIndexRoute: typeof AuthenticatedOrdersIndexRoute
   AuthenticatedOverviewIndexRoute: typeof AuthenticatedOverviewIndexRoute
+  AuthenticatedPaymentIndexRoute: typeof AuthenticatedPaymentIndexRoute
   AuthenticatedProfileIndexRoute: typeof AuthenticatedProfileIndexRoute
   AuthenticatedRackIndexRoute: typeof AuthenticatedRackIndexRoute
   AuthenticatedRevenueDashboardIndexRoute: typeof AuthenticatedRevenueDashboardIndexRoute
@@ -1285,6 +1300,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedHomeIndexRoute: AuthenticatedHomeIndexRoute,
   AuthenticatedOrdersIndexRoute: AuthenticatedOrdersIndexRoute,
   AuthenticatedOverviewIndexRoute: AuthenticatedOverviewIndexRoute,
+  AuthenticatedPaymentIndexRoute: AuthenticatedPaymentIndexRoute,
   AuthenticatedProfileIndexRoute: AuthenticatedProfileIndexRoute,
   AuthenticatedRackIndexRoute: AuthenticatedRackIndexRoute,
   AuthenticatedRevenueDashboardIndexRoute:
@@ -1355,6 +1371,7 @@ export interface FileRoutesByFullPath {
   '/home': typeof AuthenticatedHomeIndexRoute
   '/orders': typeof AuthenticatedOrdersIndexRoute
   '/overview': typeof AuthenticatedOverviewIndexRoute
+  '/payment': typeof AuthenticatedPaymentIndexRoute
   '/profile': typeof AuthenticatedProfileIndexRoute
   '/rack': typeof AuthenticatedRackIndexRoute
   '/revenue-dashboard': typeof AuthenticatedRevenueDashboardIndexRoute
@@ -1426,6 +1443,7 @@ export interface FileRoutesByTo {
   '/home': typeof AuthenticatedHomeIndexRoute
   '/orders': typeof AuthenticatedOrdersIndexRoute
   '/overview': typeof AuthenticatedOverviewIndexRoute
+  '/payment': typeof AuthenticatedPaymentIndexRoute
   '/profile': typeof AuthenticatedProfileIndexRoute
   '/rack': typeof AuthenticatedRackIndexRoute
   '/revenue-dashboard': typeof AuthenticatedRevenueDashboardIndexRoute
@@ -1498,6 +1516,7 @@ export interface FileRoutesById {
   '/_authenticated/home/': typeof AuthenticatedHomeIndexRoute
   '/_authenticated/orders/': typeof AuthenticatedOrdersIndexRoute
   '/_authenticated/overview/': typeof AuthenticatedOverviewIndexRoute
+  '/_authenticated/payment/': typeof AuthenticatedPaymentIndexRoute
   '/_authenticated/profile/': typeof AuthenticatedProfileIndexRoute
   '/_authenticated/rack/': typeof AuthenticatedRackIndexRoute
   '/_authenticated/revenue-dashboard/': typeof AuthenticatedRevenueDashboardIndexRoute
@@ -1571,6 +1590,7 @@ export interface FileRouteTypes {
     | '/home'
     | '/orders'
     | '/overview'
+    | '/payment'
     | '/profile'
     | '/rack'
     | '/revenue-dashboard'
@@ -1641,6 +1661,7 @@ export interface FileRouteTypes {
     | '/home'
     | '/orders'
     | '/overview'
+    | '/payment'
     | '/profile'
     | '/rack'
     | '/revenue-dashboard'
@@ -1711,6 +1732,7 @@ export interface FileRouteTypes {
     | '/_authenticated/home/'
     | '/_authenticated/orders/'
     | '/_authenticated/overview/'
+    | '/_authenticated/payment/'
     | '/_authenticated/profile/'
     | '/_authenticated/rack/'
     | '/_authenticated/revenue-dashboard/'
@@ -1810,6 +1832,7 @@ export const routeTree = rootRoute
         "/_authenticated/home/",
         "/_authenticated/orders/",
         "/_authenticated/overview/",
+        "/_authenticated/payment/",
         "/_authenticated/profile/",
         "/_authenticated/rack/",
         "/_authenticated/revenue-dashboard/",
@@ -1925,6 +1948,10 @@ export const routeTree = rootRoute
     },
     "/_authenticated/overview/": {
       "filePath": "_authenticated/overview/index.jsx",
+      "parent": "/_authenticated"
+    },
+    "/_authenticated/payment/": {
+      "filePath": "_authenticated/payment/index.jsx",
       "parent": "/_authenticated"
     },
     "/_authenticated/profile/": {

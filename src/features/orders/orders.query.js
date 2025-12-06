@@ -1,6 +1,7 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import {
   cancelQwqerOrder,
+  createComprehensiveOrder,
   createQuickOrder,
   createReverseOrder,
   getAllQwqerOrders,
@@ -74,6 +75,19 @@ export const usePriceCalculate = ({ onError, onSuccess, ...rest }) => {
 export const useModifyQwqerOrder = ({ onError, onSuccess, ...rest }) => {
   return useMutation({
     mutationFn: modifyQwqerOrder,
+    onSuccess,
+    onError,
+    ...rest,
+  });
+};
+
+export const useCreateComprehensiveOrder = ({
+  onError,
+  onSuccess,
+  ...rest
+}) => {
+  return useMutation({
+    mutationFn: createComprehensiveOrder,
     onSuccess,
     onError,
     ...rest,

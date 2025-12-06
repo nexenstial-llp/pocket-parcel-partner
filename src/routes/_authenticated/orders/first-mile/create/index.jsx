@@ -1,6 +1,6 @@
 import PageLayout from "@/components/layout/PageLayout";
-import CreateQuickOrder from "@/components/pages/orders/quick/CreateQuickOrder";
 import ResponsiveCard from "@/components/ui/cards/ResponsiveCard";
+import CreateQuickOrder from "@/features/orders/components/first-mile/CreateQuickOrder";
 import { Link } from "@tanstack/react-router";
 import { createFileRoute } from "@tanstack/react-router";
 

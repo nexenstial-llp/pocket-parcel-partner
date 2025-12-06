@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "@tanstack/react-router";
 import {
   Form,
   Input,
@@ -24,6 +25,8 @@ import GoogleAddressPicker from "@/components/ui/GoogleAddressPicker";
 import { APIProvider } from "@vis.gl/react-google-maps";
 import dayjs from "dayjs";
 import PaginatedSelect from "@/components/ui/PaginatedSelect";
+import { useCreateComprehensiveOrder } from "@/features/orders/orders.query";
+import { message } from "antd";
 const API_KEY = import.meta.env.VITE_APP_GOOGLE_API_KEY;
 const deliveryTypeOptions = [
   { label: "Forward", value: "FORWARD" },
@@ -107,9 +110,43 @@ const ComprehensiveOrderForm = () => {
     setCurrent(current - 1);
   };
 
+  const navigate = useNavigate();
+
+  const { mutate: createOrder, isPending } = useCreateComprehensiveOrder({
+    onSuccess: (data) => {
+      message.success("Order created successfully!");
+      // Redirect to payment page with real order ID and amount
+      navigate({
+        to: "/payment",
+        search: {
+          orderId: data.order_id, // Assuming backend returns order_id
+          amount: data.amount || 0, // Assuming backend returns amount
+        },
+      });
+    },
+    onError: (error) => {
+      console.error("Order creation failed:", error);
+      message.error(error.message || "Failed to create order");
+    },
+  });
+
   const onFinish = (values) => {
     console.log("Received values of form:", values);
-    // Handle submission
+    try {
+      // 1. Validate data against schema (optional but recommended)
+      // const validatedData = createComprehensiveOrderSchema.parse(values);
+
+      // 2. Call API
+      createOrder(values);
+    } catch (error) {
+      if (error.name === "ZodError") {
+        // Handle validation errors if using Zod manually here
+        console.error("Validation error:", error.errors);
+        message.error("Please check your inputs.");
+      } else {
+        console.error("Submission error:", error);
+      }
+    }
   };
 
   const steps = [
@@ -155,7 +192,7 @@ const ComprehensiveOrderForm = () => {
       >
         <div className="mb-8">{steps[current]?.content}</div>
 
-        <div className="flex justify-end gap-4 sticky bottom-0 bg-white p-4 border-t border-gray-600 z-10 shadow-md -mx-6 -mb-6 rounded-b-lg">
+        <div className="flex justify-end gap-4 sticky bottom-0 bg-white p-4 border-t border-gray-600 z-10 shadow-md -mx-3 -mb-6 rounded-b-lg">
           {current > 0 && <Button onClick={() => prev()}>Previous</Button>}
           {current < steps.length - 1 && (
             <Button type="primary" onClick={() => next()}>
@@ -163,8 +200,8 @@ const ComprehensiveOrderForm = () => {
             </Button>
           )}
           {current === steps.length - 1 && (
-            <Button type="primary" htmlType="submit">
-              Create Order
+            <Button type="primary" htmlType="submit" loading={isPending}>
+              Create Order & Pay
             </Button>
           )}
         </div>
@@ -178,11 +215,11 @@ const LocationStep = () => {
   const form = Form.useFormInstance();
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       {/* PICKUP INFO */}
       <Card title="Pickup Information" size="small" className="shadow-sm">
         <Row gutter={16}>
-          <Col {...responsiveColSpan}>
+          <Col xs={24} sm={12} md={8}>
             <Form.Item
               name={["pickup_info", "pickup_name"]}
               label="Name"
@@ -191,7 +228,7 @@ const LocationStep = () => {
               <Input placeholder="Sender Name" />
             </Form.Item>
           </Col>
-          <Col {...responsiveColSpan}>
+          <Col xs={24} sm={12} md={8}>
             <Form.Item
               name={["pickup_info", "pickup_phone"]}
               label="Phone"
@@ -200,38 +237,24 @@ const LocationStep = () => {
               <Input placeholder="Sender Phone" />
             </Form.Item>
           </Col>
-          <Col {...responsiveColSpan}>
+          <Col xs={24} sm={12} md={8}>
             <Form.Item name={["pickup_info", "pickup_email"]} label="Email">
               <Input placeholder="Sender Email" />
-            </Form.Item>
-          </Col>
-          <Col {...responsiveColSpan}>
-            <Form.Item
-              name={["pickup_info", "pickup_time"]}
-              label="Pickup Time"
-            >
-              <DatePicker
-                disabledDate={(current) =>
-                  current && current < dayjs().startOf("day")
-                }
-                showTime
-                style={{ width: "100%" }}
-                format={"DD-MM-YYYY HH:mm"}
-              />
             </Form.Item>
           </Col>
         </Row>
 
         <Row gutter={16}>
-          <Col xs={12}>
+          <Col xs={24}>
             <Form.Item name={["pickup_info", "pickup_address"]} label="Address">
               <Input placeholder="Address" />
             </Form.Item>
           </Col>
-          <Col xs={12}>
+          <Col xs={24}>
             <Form.Item
               name={["pickup_info", "pickup_landmark"]}
               label="Landmark"
+              rules={[{ required: true }]}
             >
               <APIProvider apiKey={API_KEY} libraries={["places", "geocoding"]}>
                 <GoogleAddressPicker
@@ -255,7 +278,7 @@ const LocationStep = () => {
             </Form.Item>
           </Col>
 
-          <Col {...responsiveColSpan}>
+          <Col xs={24} sm={12} md={8}>
             <Form.Item
               name={["pickup_info", "pickup_pincode"]}
               label="Pincode"
@@ -271,7 +294,7 @@ const LocationStep = () => {
             </Form.Item>
           </Col>
 
-          <Col {...responsiveColSpan}>
+          <Col xs={24} sm={12} md={8}>
             <Form.Item
               name={["pickup_info", "pickup_city"]}
               label="City"
@@ -280,7 +303,7 @@ const LocationStep = () => {
               <Input placeholder="City" readOnly />
             </Form.Item>
           </Col>
-          <Col {...responsiveColSpan}>
+          <Col xs={24} sm={12} md={8}>
             <Form.Item
               name={["pickup_info", "pickup_district"]}
               label="District"
@@ -288,7 +311,7 @@ const LocationStep = () => {
               <Input placeholder="District" readOnly />
             </Form.Item>
           </Col>
-          <Col {...responsiveColSpan}>
+          <Col xs={24} sm={12} md={8}>
             <Form.Item
               name={["pickup_info", "pickup_state"]}
               label="State"
@@ -297,9 +320,24 @@ const LocationStep = () => {
               <Input placeholder="State" readOnly />
             </Form.Item>
           </Col>
-          <Col {...responsiveColSpan}>
+          <Col xs={24} sm={12} md={8}>
             <Form.Item name={["pickup_info", "pickup_country"]} label="Country">
-              <Input placeholder="Country Code" readOnly />
+              <Input placeholder="Country" readOnly />
+            </Form.Item>
+          </Col>
+          <Col xs={24} sm={12} md={8}>
+            <Form.Item
+              name={["pickup_info", "pickup_time"]}
+              label="Pickup Time"
+            >
+              <DatePicker
+                disabledDate={(current) =>
+                  current && current < dayjs().startOf("day")
+                }
+                showTime
+                style={{ width: "100%" }}
+                format={"DD-MM-YYYY HH:mm"}
+              />
             </Form.Item>
           </Col>
         </Row>
@@ -308,7 +346,7 @@ const LocationStep = () => {
       {/* DROP INFO */}
       <Card title="Drop Information" size="small" className="shadow-sm">
         <Row gutter={16}>
-          <Col {...responsiveColSpan}>
+          <Col xs={24} sm={12} md={8}>
             <Form.Item
               name={["drop_info", "drop_name"]}
               label="Name"
@@ -317,7 +355,7 @@ const LocationStep = () => {
               <Input placeholder="Receiver Name" />
             </Form.Item>
           </Col>
-          <Col {...responsiveColSpan}>
+          <Col xs={24} sm={12} md={8}>
             <Form.Item
               name={["drop_info", "drop_phone"]}
               label="Phone"
@@ -326,7 +364,7 @@ const LocationStep = () => {
               <Input placeholder="Receiver Phone" />
             </Form.Item>
           </Col>
-          <Col {...responsiveColSpan}>
+          <Col xs={24} sm={12} md={8}>
             <Form.Item name={["drop_info", "drop_email"]} label="Email">
               <Input placeholder="Receiver Email" />
             </Form.Item>
@@ -334,7 +372,7 @@ const LocationStep = () => {
         </Row>
 
         <Row gutter={16}>
-          <Col xs={12}>
+          <Col xs={24}>
             <Form.Item
               name={["drop_info", "drop_address"]}
               label="Address"
@@ -343,8 +381,12 @@ const LocationStep = () => {
               <Input placeholder="Address" />
             </Form.Item>
           </Col>
-          <Col xs={12}>
-            <Form.Item name={["drop_info", "drop_landmark"]} label="Landmark">
+          <Col xs={24}>
+            <Form.Item
+              rules={[{ required: true }]}
+              name={["drop_info", "drop_landmark"]}
+              label="Landmark"
+            >
               <APIProvider apiKey={API_KEY} libraries={["places", "geocoding"]}>
                 <GoogleAddressPicker
                   showMap={false}
@@ -367,7 +409,7 @@ const LocationStep = () => {
             </Form.Item>
           </Col>
 
-          <Col {...responsiveColSpan}>
+          <Col xs={24} sm={12} md={8}>
             <Form.Item
               name={["drop_info", "drop_pincode"]}
               label="Pincode"
@@ -383,7 +425,7 @@ const LocationStep = () => {
             </Form.Item>
           </Col>
 
-          <Col {...responsiveColSpan}>
+          <Col xs={24} sm={12} md={8}>
             <Form.Item
               name={["drop_info", "drop_city"]}
               label="City"
@@ -392,12 +434,12 @@ const LocationStep = () => {
               <Input placeholder="City" readOnly />
             </Form.Item>
           </Col>
-          <Col {...responsiveColSpan}>
+          <Col xs={24} sm={12} md={8}>
             <Form.Item name={["drop_info", "drop_district"]} label="District">
               <Input placeholder="District" readOnly />
             </Form.Item>
           </Col>
-          <Col {...responsiveColSpan}>
+          <Col xs={24} sm={12} md={8}>
             <Form.Item
               name={["drop_info", "drop_state"]}
               label="State"
@@ -406,9 +448,9 @@ const LocationStep = () => {
               <Input placeholder="State" readOnly />
             </Form.Item>
           </Col>
-          <Col {...responsiveColSpan}>
+          <Col xs={24} sm={12} md={8}>
             <Form.Item name={["drop_info", "drop_country"]} label="Country">
-              <Input placeholder="Country Code" readOnly />
+              <Input placeholder="Country" readOnly />
             </Form.Item>
           </Col>
         </Row>
@@ -423,35 +465,6 @@ const ShipmentStep = () => {
     <div className="flex flex-col gap-6">
       <Card title="Shipment Details" size="small" className="shadow-sm">
         <Row gutter={16}>
-          {/* <Col {...responsiveColSpan}>
-            <Form.Item
-              name={["shipment_details", "order_id"]}
-              label="Order ID"
-              rules={[{ required: true }]}
-            >
-              <Input placeholder="Order ID" />
-            </Form.Item>
-          </Col> */}
-          {/* <Col {...responsiveColSpan}>
-            <Form.Item
-              name={["shipment_details", "order_type"]}
-              label="Order Type"
-              initialValue="COD"
-            >
-              <Select>
-                <Option value="COD">COD</Option>
-                <Option value="PREPAID">Prepaid</Option>
-              </Select>
-            </Form.Item>
-          </Col> */}
-          {/* <Col {...responsiveColSpan}>
-            <Form.Item
-              name={["shipment_details", "cod_value"]}
-              label="COD Value"
-            >
-              <InputNumber style={{ width: "100%" }} min={0} />
-            </Form.Item>
-          </Col> */}
           <Col {...responsiveColSpan}>
             <Form.Item
               name={["shipment_details", "delivery_type"]}
@@ -462,36 +475,11 @@ const ShipmentStep = () => {
             </Form.Item>
           </Col>
 
-          {/* <Col {...responsiveColSpan}>
-            <Form.Item
-              name={["shipment_details", "invoice_number"]}
-              label="Invoice Number"
-            >
-              <Input placeholder="Invoice No." />
-            </Form.Item>
-          </Col> */}
-          {/* <Col {...responsiveColSpan}>
-            <Form.Item
-              name={["shipment_details", "invoice_date"]}
-              label="Invoice Date"
-            >
-              <DatePicker style={{ width: "100%" }} />
-            </Form.Item>
-          </Col>
-          <Col {...responsiveColSpan}>
-            <Form.Item
-              name={["shipment_details", "invoice_value"]}
-              label="Invoice Value"
-            >
-              <InputNumber style={{ width: "100%" }} min={0} />
-            </Form.Item>
-          </Col> */}
           <Col {...responsiveColSpan}>
             <Form.Item
               name={["shipment_details", "courier_partner"]}
               label="Courier Partner"
             >
-              {/* <Input placeholder="Partner ID" /> */}
               <PaginatedSelect
                 fetchUrl="/v1/admin/courier-partners"
                 placeholder="Select Partner"
@@ -501,52 +489,61 @@ const ShipmentStep = () => {
               />
             </Form.Item>
           </Col>
-          {/* <Col {...responsiveColSpan}>
-            <Form.Item
-              name={["shipment_details", "reference_number"]}
-              label="Reference Number"
-            >
-              <Input placeholder="Ref No." />
-            </Form.Item>
-          </Col>
-          <Col {...responsiveColSpan}>
-            <Form.Item
-              name={["shipment_details", "account_code"]}
-              label="Account Code"
-            >
-              <Input placeholder="Account Code" />
-            </Form.Item>
-          </Col> */}
         </Row>
 
         <Row gutter={16}>
           <Col {...responsiveColSpan}>
-            <Form.Item
-              name={["shipment_details", "length"]}
-              label="Length (cm)"
-            >
-              <InputNumber style={{ width: "100%" }} min={0} />
+            <Form.Item name={["shipment_details", "length"]} label="Length">
+              <InputNumber
+                style={{ width: "100%" }}
+                min={0}
+                addonAfter="cm"
+                controls={false}
+              />
+            </Form.Item>
+          </Col>
+          <Col {...responsiveColSpan}>
+            <Form.Item name={["shipment_details", "breadth"]} label="Breadth">
+              <InputNumber
+                style={{ width: "100%" }}
+                min={0}
+                addonAfter="cm"
+                controls={false}
+              />
+            </Form.Item>
+          </Col>
+          <Col {...responsiveColSpan}>
+            <Form.Item name={["shipment_details", "height"]} label="Height">
+              <InputNumber
+                style={{ width: "100%" }}
+                min={0}
+                addonAfter="cm"
+                controls={false}
+              />
+            </Form.Item>
+          </Col>
+          <Col {...responsiveColSpan}>
+            <Form.Item name={["shipment_details", "weight"]} label="Weight">
+              <InputNumber
+                style={{ width: "100%" }}
+                min={0}
+                addonAfter="g"
+                controls={false}
+              />
             </Form.Item>
           </Col>
           <Col {...responsiveColSpan}>
             <Form.Item
-              name={["shipment_details", "breadth"]}
-              label="Breadth (cm)"
+              name={["shipment_details", "volumetric_weight"]}
+              label="Volumetric Weight"
             >
-              <InputNumber style={{ width: "100%" }} min={0} />
-            </Form.Item>
-          </Col>
-          <Col {...responsiveColSpan}>
-            <Form.Item
-              name={["shipment_details", "height"]}
-              label="Height (cm)"
-            >
-              <InputNumber style={{ width: "100%" }} min={0} />
-            </Form.Item>
-          </Col>
-          <Col {...responsiveColSpan}>
-            <Form.Item name={["shipment_details", "weight"]} label="Weight (g)">
-              <InputNumber style={{ width: "100%" }} min={0} />
+              <InputNumber
+                disabled
+                style={{ width: "100%" }}
+                min={0}
+                addonAfter="g"
+                controls={false}
+              />
             </Form.Item>
           </Col>
         </Row>
@@ -743,82 +740,6 @@ const BillingStep = () => {
           </Col>
         </Row>
       </Card>
-
-      {/* <Card title="Additional Information" size="small" className="shadow-sm">
-        <Row gutter={16}>
-          <Col {...responsiveColSpan}>
-            <Form.Item name={["additional", "vendor_code"]} label="Vendor Code">
-              <Input placeholder="Vendor Code" />
-            </Form.Item>
-          </Col>
-          <Col {...responsiveColSpan}>
-            <Form.Item name={["additional", "order_date"]} label="Order Date">
-              <DatePicker showTime style={{ width: "100%" }} />
-            </Form.Item>
-          </Col>
-          <Col {...responsiveColSpan}>
-            <Form.Item
-              name={["additional", "async"]}
-              label="Async Processing"
-              valuePropName="checked"
-            >
-              <Switch />
-            </Form.Item>
-          </Col>
-          <Col {...responsiveColSpan}>
-            <Form.Item
-              name={["additional", "label"]}
-              label="Generate Label"
-              valuePropName="checked"
-            >
-              <Switch />
-            </Form.Item>
-          </Col>
-        </Row>
-
-        <Row gutter={16}>
-          <Col {...responsiveColSpan}>
-            <Form.Item
-              name={["additional", "return_info", "return_name"]}
-              label="Return Name"
-            >
-              <Input placeholder="Name" />
-            </Form.Item>
-          </Col>
-          <Col {...responsiveColSpan}>
-            <Form.Item
-              name={["additional", "return_info", "return_phone"]}
-              label="Return Phone"
-            >
-              <Input placeholder="Phone" />
-            </Form.Item>
-          </Col>
-          <Col xs={24}>
-            <Form.Item
-              name={["additional", "return_info", "return_address"]}
-              label="Return Address"
-            >
-              <TextArea rows={2} placeholder="Address" />
-            </Form.Item>
-          </Col>
-          <Col {...responsiveColSpan}>
-            <Form.Item
-              name={["additional", "return_info", "return_city"]}
-              label="City"
-            >
-              <Input placeholder="City" />
-            </Form.Item>
-          </Col>
-          <Col {...responsiveColSpan}>
-            <Form.Item
-              name={["additional", "return_info", "return_pincode"]}
-              label="Pincode"
-            >
-              <Input placeholder="Pincode" />
-            </Form.Item>
-          </Col>
-        </Row>
-      </Card> */}
     </div>
   );
 };
