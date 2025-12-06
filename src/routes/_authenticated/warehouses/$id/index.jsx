@@ -7,7 +7,7 @@ import { Link } from "@tanstack/react-router";
 import { createFileRoute, useParams } from "@tanstack/react-router";
 
 export const Route = createFileRoute(
-  "/_authenticated/warehouses/$id/edit/index copy"
+  "/_authenticated/warehouses/$id/"
 )({
   component: RouteComponent,
 });

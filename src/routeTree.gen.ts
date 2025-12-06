@@ -10,1063 +10,1420 @@
 
 import { createFileRoute } from '@tanstack/react-router'
 
-// Import Routes
+import { Route as rootRouteImport } from './routes/__root'
+import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
+import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthLoginRouteImport } from './routes/auth/login'
+import { Route as AuthenticatedSettingsRouteRouteImport } from './routes/_authenticated/settings/route'
+import { Route as AuthenticatedDashboardRouteRouteImport } from './routes/_authenticated/dashboard/route'
+import { Route as AuthenticatedWarehousesIndexRouteImport } from './routes/_authenticated/warehouses/index'
+import { Route as AuthenticatedToolsIndexRouteImport } from './routes/_authenticated/tools/index'
+import { Route as AuthenticatedRevenueDashboardIndexRouteImport } from './routes/_authenticated/revenue-dashboard/index'
+import { Route as AuthenticatedRackIndexRouteImport } from './routes/_authenticated/rack/index'
+import { Route as AuthenticatedProfileIndexRouteImport } from './routes/_authenticated/profile/index'
+import { Route as AuthenticatedPaymentIndexRouteImport } from './routes/_authenticated/payment/index'
+import { Route as AuthenticatedOverviewIndexRouteImport } from './routes/_authenticated/overview/index'
+import { Route as AuthenticatedOrdersIndexRouteImport } from './routes/_authenticated/orders/index'
+import { Route as AuthenticatedHomeIndexRouteImport } from './routes/_authenticated/home/index'
+import { Route as AuthenticatedToolsReportsRouteRouteImport } from './routes/_authenticated/tools/reports/route'
+import { Route as AuthenticatedToolsRateCardRouteRouteImport } from './routes/_authenticated/tools/rate-card/route'
+import { Route as AuthenticatedToolsRateCalculatorRouteRouteImport } from './routes/_authenticated/tools/rate-calculator/route'
+import { Route as AuthenticatedOrdersReturnsRouteRouteImport } from './routes/_authenticated/orders/returns/route'
+import { Route as AuthenticatedDashboardInternationalRouteRouteImport } from './routes/_authenticated/dashboard/international/route'
+import { Route as AuthenticatedDashboardDomesticRouteRouteImport } from './routes/_authenticated/dashboard/domestic/route'
+import { Route as AuthenticatedWarehousesCreateIndexRouteImport } from './routes/_authenticated/warehouses/create/index'
+import { Route as AuthenticatedWarehousesIdIndexRouteImport } from './routes/_authenticated/warehouses/$id/index'
+import { Route as AuthenticatedToolsActivityLogsIndexRouteImport } from './routes/_authenticated/tools/activity-logs/index'
+import { Route as AuthenticatedSettingsUsersIndexRouteImport } from './routes/_authenticated/settings/users/index'
+import { Route as AuthenticatedSettingsTaxConfigurationIndexRouteImport } from './routes/_authenticated/settings/tax-configuration/index'
+import { Route as AuthenticatedSettingsPickupLocationsIndexRouteImport } from './routes/_authenticated/settings/pickup-locations/index'
+import { Route as AuthenticatedSettingsInvoiceTemplatesIndexRouteImport } from './routes/_authenticated/settings/invoice-templates/index'
+import { Route as AuthenticatedSettingsCompanyDetailsIndexRouteImport } from './routes/_authenticated/settings/company-details/index'
+import { Route as AuthenticatedSettingsBankDetailsIndexRouteImport } from './routes/_authenticated/settings/bank-details/index'
+import { Route as AuthenticatedSettingsApiSetupsIndexRouteImport } from './routes/_authenticated/settings/api-setups/index'
+import { Route as AuthenticatedSettingsAddressManagementIndexRouteImport } from './routes/_authenticated/settings/address-management/index'
+import { Route as AuthenticatedRevenueDashboardSupportIndexRouteImport } from './routes/_authenticated/revenue-dashboard/support/index'
+import { Route as AuthenticatedRevenueDashboardSettingsIndexRouteImport } from './routes/_authenticated/revenue-dashboard/settings/index'
+import { Route as AuthenticatedRevenueDashboardInvoiceAndTaxIndexRouteImport } from './routes/_authenticated/revenue-dashboard/invoice-and-tax/index'
+import { Route as AuthenticatedOrdersTrackOrderIndexRouteImport } from './routes/_authenticated/orders/track-order/index'
+import { Route as AuthenticatedOrdersFirstMileIndexRouteImport } from './routes/_authenticated/orders/first-mile/index'
+import { Route as AuthenticatedOrdersCreateIndexRouteImport } from './routes/_authenticated/orders/create/index'
+import { Route as AuthenticatedOrdersIdIndexRouteImport } from './routes/_authenticated/orders/$id/index'
+import { Route as AuthenticatedNdrReportsIndexRouteImport } from './routes/_authenticated/ndr/reports/index'
+import { Route as AuthenticatedNdrCasesIndexRouteImport } from './routes/_authenticated/ndr/cases/index'
+import { Route as AuthenticatedAccessControlUsersIndexRouteImport } from './routes/_authenticated/access-control/users/index'
+import { Route as AuthenticatedToolsReportsDownloadReportsRouteRouteImport } from './routes/_authenticated/tools/reports/download-reports/route'
+import { Route as AuthenticatedWarehousesIdEditIndexRouteImport } from './routes/_authenticated/warehouses/$id/edit/index'
+import { Route as AuthenticatedToolsReportsReportsSchedulerIndexRouteImport } from './routes/_authenticated/tools/reports/reports-scheduler/index'
+import { Route as AuthenticatedToolsRateCardReverseIndexRouteImport } from './routes/_authenticated/tools/rate-card/reverse/index'
+import { Route as AuthenticatedToolsRateCardForwardIndexRouteImport } from './routes/_authenticated/tools/rate-card/forward/index'
+import { Route as AuthenticatedToolsRateCardDocumentIndexRouteImport } from './routes/_authenticated/tools/rate-card/document/index'
+import { Route as AuthenticatedToolsRateCalculatorInternationalIndexRouteImport } from './routes/_authenticated/tools/rate-calculator/international/index'
+import { Route as AuthenticatedToolsRateCalculatorDomesticIndexRouteImport } from './routes/_authenticated/tools/rate-calculator/domestic/index'
+import { Route as AuthenticatedRevenueDashboardReportsShipmentRevenueIndexRouteImport } from './routes/_authenticated/revenue-dashboard/reports/shipment-revenue/index'
+import { Route as AuthenticatedRevenueDashboardReportsCommissionBreakdownIndexRouteImport } from './routes/_authenticated/revenue-dashboard/reports/commission-breakdown/index'
+import { Route as AuthenticatedRevenueDashboardMyEarningsSettlementsAndPayoutsIndexRouteImport } from './routes/_authenticated/revenue-dashboard/my-earnings/settlements-and-payouts/index'
+import { Route as AuthenticatedRevenueDashboardMyEarningsRevenueSummaryIndexRouteImport } from './routes/_authenticated/revenue-dashboard/my-earnings/revenue-summary/index'
+import { Route as AuthenticatedOrdersFirstMileCreateIndexRouteImport } from './routes/_authenticated/orders/first-mile/create/index'
+import { Route as AuthenticatedOrdersFirstMileCalculatePriceIndexRouteImport } from './routes/_authenticated/orders/first-mile/calculate-price/index'
+import { Route as AuthenticatedOrdersFirstMileIdIndexRouteImport } from './routes/_authenticated/orders/first-mile/$id/index'
+import { Route as AuthenticatedDashboardInternationalOverviewIndexRouteImport } from './routes/_authenticated/dashboard/international/overview/index'
+import { Route as AuthenticatedDashboardDomesticShipmentsIndexRouteImport } from './routes/_authenticated/dashboard/domestic/shipments/index'
+import { Route as AuthenticatedDashboardDomesticRtoIndexRouteImport } from './routes/_authenticated/dashboard/domestic/rto/index'
+import { Route as AuthenticatedDashboardDomesticOverviewIndexRouteImport } from './routes/_authenticated/dashboard/domestic/overview/index'
+import { Route as AuthenticatedDashboardDomesticOrdersIndexRouteImport } from './routes/_authenticated/dashboard/domestic/orders/index'
+import { Route as AuthenticatedDashboardDomesticNdrIndexRouteImport } from './routes/_authenticated/dashboard/domestic/ndr/index'
+import { Route as AuthenticatedDashboardDomesticDelaysIndexRouteImport } from './routes/_authenticated/dashboard/domestic/delays/index'
+import { Route as AuthenticatedDashboardDomesticCourierIndexRouteImport } from './routes/_authenticated/dashboard/domestic/courier/index'
+import { Route as AuthenticatedAccessControlUsersCreateIndexRouteImport } from './routes/_authenticated/access-control/users/create/index'
+import { Route as AuthenticatedAccessControlRolesCreateIndexRouteImport } from './routes/_authenticated/access-control/roles/create/index'
+import { Route as AuthenticatedToolsReportsDownloadReportsInstantReportsIndexRouteImport } from './routes/_authenticated/tools/reports/download-reports/instant-reports/index'
+import { Route as AuthenticatedOrdersFirstMileIdEditIndexRouteImport } from './routes/_authenticated/orders/first-mile/$id/edit/index'
 
-import { Route as rootRoute } from './routes/__root'
-import { Route as AuthenticatedImport } from './routes/_authenticated'
-import { Route as IndexImport } from './routes/index'
-import { Route as AuthLoginImport } from './routes/auth/login'
-import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings/route'
-import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard/route'
-import { Route as AuthenticatedWarehousesIndexImport } from './routes/_authenticated/warehouses/index'
-import { Route as AuthenticatedToolsIndexImport } from './routes/_authenticated/tools/index'
-import { Route as AuthenticatedRevenueDashboardIndexImport } from './routes/_authenticated/revenue-dashboard/index'
-import { Route as AuthenticatedRackIndexImport } from './routes/_authenticated/rack/index'
-import { Route as AuthenticatedProfileIndexImport } from './routes/_authenticated/profile/index'
-import { Route as AuthenticatedPaymentIndexImport } from './routes/_authenticated/payment/index'
-import { Route as AuthenticatedOverviewIndexImport } from './routes/_authenticated/overview/index'
-import { Route as AuthenticatedOrdersIndexImport } from './routes/_authenticated/orders/index'
-import { Route as AuthenticatedHomeIndexImport } from './routes/_authenticated/home/index'
-import { Route as AuthenticatedToolsReportsRouteImport } from './routes/_authenticated/tools/reports/route'
-import { Route as AuthenticatedToolsRateCardRouteImport } from './routes/_authenticated/tools/rate-card/route'
-import { Route as AuthenticatedToolsRateCalculatorRouteImport } from './routes/_authenticated/tools/rate-calculator/route'
-import { Route as AuthenticatedOrdersReturnsRouteImport } from './routes/_authenticated/orders/returns/route'
-import { Route as AuthenticatedDashboardInternationalRouteImport } from './routes/_authenticated/dashboard/international/route'
-import { Route as AuthenticatedDashboardDomesticRouteImport } from './routes/_authenticated/dashboard/domestic/route'
-import { Route as AuthenticatedWarehousesCreateIndexImport } from './routes/_authenticated/warehouses/create/index'
-import { Route as AuthenticatedWarehousesIdIndexImport } from './routes/_authenticated/warehouses/$id/index'
-import { Route as AuthenticatedToolsActivityLogsIndexImport } from './routes/_authenticated/tools/activity-logs/index'
-import { Route as AuthenticatedSettingsUsersIndexImport } from './routes/_authenticated/settings/users/index'
-import { Route as AuthenticatedSettingsTaxConfigurationIndexImport } from './routes/_authenticated/settings/tax-configuration/index'
-import { Route as AuthenticatedSettingsPickupLocationsIndexImport } from './routes/_authenticated/settings/pickup-locations/index'
-import { Route as AuthenticatedSettingsInvoiceTemplatesIndexImport } from './routes/_authenticated/settings/invoice-templates/index'
-import { Route as AuthenticatedSettingsCompanyDetailsIndexImport } from './routes/_authenticated/settings/company-details/index'
-import { Route as AuthenticatedSettingsBankDetailsIndexImport } from './routes/_authenticated/settings/bank-details/index'
-import { Route as AuthenticatedSettingsApiSetupsIndexImport } from './routes/_authenticated/settings/api-setups/index'
-import { Route as AuthenticatedSettingsAddressManagementIndexImport } from './routes/_authenticated/settings/address-management/index'
-import { Route as AuthenticatedRevenueDashboardSupportIndexImport } from './routes/_authenticated/revenue-dashboard/support/index'
-import { Route as AuthenticatedRevenueDashboardSettingsIndexImport } from './routes/_authenticated/revenue-dashboard/settings/index'
-import { Route as AuthenticatedRevenueDashboardInvoiceAndTaxIndexImport } from './routes/_authenticated/revenue-dashboard/invoice-and-tax/index'
-import { Route as AuthenticatedOrdersTrackOrderIndexImport } from './routes/_authenticated/orders/track-order/index'
-import { Route as AuthenticatedOrdersFirstMileIndexImport } from './routes/_authenticated/orders/first-mile/index'
-import { Route as AuthenticatedOrdersCreateIndexImport } from './routes/_authenticated/orders/create/index'
-import { Route as AuthenticatedOrdersIdIndexImport } from './routes/_authenticated/orders/$id/index'
-import { Route as AuthenticatedNdrReportsIndexImport } from './routes/_authenticated/ndr/reports/index'
-import { Route as AuthenticatedNdrCasesIndexImport } from './routes/_authenticated/ndr/cases/index'
-import { Route as AuthenticatedAccessControlUsersIndexImport } from './routes/_authenticated/access-control/users/index'
-import { Route as AuthenticatedToolsReportsDownloadReportsRouteImport } from './routes/_authenticated/tools/reports/download-reports/route'
-import { Route as AuthenticatedWarehousesIdEditIndexImport } from './routes/_authenticated/warehouses/$id/edit/index'
-import { Route as AuthenticatedToolsReportsReportsSchedulerIndexImport } from './routes/_authenticated/tools/reports/reports-scheduler/index'
-import { Route as AuthenticatedToolsRateCardReverseIndexImport } from './routes/_authenticated/tools/rate-card/reverse/index'
-import { Route as AuthenticatedToolsRateCardForwardIndexImport } from './routes/_authenticated/tools/rate-card/forward/index'
-import { Route as AuthenticatedToolsRateCardDocumentIndexImport } from './routes/_authenticated/tools/rate-card/document/index'
-import { Route as AuthenticatedToolsRateCalculatorInternationalIndexImport } from './routes/_authenticated/tools/rate-calculator/international/index'
-import { Route as AuthenticatedToolsRateCalculatorDomesticIndexImport } from './routes/_authenticated/tools/rate-calculator/domestic/index'
-import { Route as AuthenticatedRevenueDashboardReportsShipmentRevenueIndexImport } from './routes/_authenticated/revenue-dashboard/reports/shipment-revenue/index'
-import { Route as AuthenticatedRevenueDashboardReportsCommissionBreakdownIndexImport } from './routes/_authenticated/revenue-dashboard/reports/commission-breakdown/index'
-import { Route as AuthenticatedRevenueDashboardMyEarningsSettlementsAndPayoutsIndexImport } from './routes/_authenticated/revenue-dashboard/my-earnings/settlements-and-payouts/index'
-import { Route as AuthenticatedRevenueDashboardMyEarningsRevenueSummaryIndexImport } from './routes/_authenticated/revenue-dashboard/my-earnings/revenue-summary/index'
-import { Route as AuthenticatedOrdersFirstMileCreateIndexImport } from './routes/_authenticated/orders/first-mile/create/index'
-import { Route as AuthenticatedOrdersFirstMileCalculatePriceIndexImport } from './routes/_authenticated/orders/first-mile/calculate-price/index'
-import { Route as AuthenticatedOrdersFirstMileIdIndexImport } from './routes/_authenticated/orders/first-mile/$id/index'
-import { Route as AuthenticatedDashboardInternationalOverviewIndexImport } from './routes/_authenticated/dashboard/international/overview/index'
-import { Route as AuthenticatedDashboardDomesticShipmentsIndexImport } from './routes/_authenticated/dashboard/domestic/shipments/index'
-import { Route as AuthenticatedDashboardDomesticRtoIndexImport } from './routes/_authenticated/dashboard/domestic/rto/index'
-import { Route as AuthenticatedDashboardDomesticOverviewIndexImport } from './routes/_authenticated/dashboard/domestic/overview/index'
-import { Route as AuthenticatedDashboardDomesticOrdersIndexImport } from './routes/_authenticated/dashboard/domestic/orders/index'
-import { Route as AuthenticatedDashboardDomesticNdrIndexImport } from './routes/_authenticated/dashboard/domestic/ndr/index'
-import { Route as AuthenticatedDashboardDomesticDelaysIndexImport } from './routes/_authenticated/dashboard/domestic/delays/index'
-import { Route as AuthenticatedDashboardDomesticCourierIndexImport } from './routes/_authenticated/dashboard/domestic/courier/index'
-import { Route as AuthenticatedAccessControlUsersCreateIndexImport } from './routes/_authenticated/access-control/users/create/index'
-import { Route as AuthenticatedAccessControlRolesCreateIndexImport } from './routes/_authenticated/access-control/roles/create/index'
-import { Route as AuthenticatedToolsReportsDownloadReportsInstantReportsIndexImport } from './routes/_authenticated/tools/reports/download-reports/instant-reports/index'
-import { Route as AuthenticatedOrdersFirstMileIdEditIndexImport } from './routes/_authenticated/orders/first-mile/$id/edit/index'
-
-// Create Virtual Routes
-
-const AuthenticatedToolsReportsDownloadReportsScheduledReportsIndexLazyImport =
+const AuthenticatedToolsReportsDownloadReportsScheduledReportsIndexLazyRouteImport =
   createFileRoute(
     '/_authenticated/tools/reports/download-reports/scheduled-reports/',
   )()
 
-// Create/Update Routes
-
-const AuthenticatedRoute = AuthenticatedImport.update({
+const AuthenticatedRoute = AuthenticatedRouteImport.update({
   id: '/_authenticated',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const IndexRoute = IndexImport.update({
+const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const AuthLoginRoute = AuthLoginImport.update({
+const AuthLoginRoute = AuthLoginRouteImport.update({
   id: '/auth/login',
   path: '/auth/login',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const AuthenticatedSettingsRouteRoute = AuthenticatedSettingsRouteImport.update(
-  {
+const AuthenticatedSettingsRouteRoute =
+  AuthenticatedSettingsRouteRouteImport.update({
     id: '/settings',
     path: '/settings',
     getParentRoute: () => AuthenticatedRoute,
-  } as any,
-)
-
+  } as any)
 const AuthenticatedDashboardRouteRoute =
-  AuthenticatedDashboardRouteImport.update({
+  AuthenticatedDashboardRouteRouteImport.update({
     id: '/dashboard',
     path: '/dashboard',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
-
 const AuthenticatedWarehousesIndexRoute =
-  AuthenticatedWarehousesIndexImport.update({
+  AuthenticatedWarehousesIndexRouteImport.update({
     id: '/warehouses/',
     path: '/warehouses/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
-
-const AuthenticatedToolsIndexRoute = AuthenticatedToolsIndexImport.update({
+const AuthenticatedToolsIndexRoute = AuthenticatedToolsIndexRouteImport.update({
   id: '/tools/',
   path: '/tools/',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
-
 const AuthenticatedRevenueDashboardIndexRoute =
-  AuthenticatedRevenueDashboardIndexImport.update({
+  AuthenticatedRevenueDashboardIndexRouteImport.update({
     id: '/revenue-dashboard/',
     path: '/revenue-dashboard/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
-
-const AuthenticatedRackIndexRoute = AuthenticatedRackIndexImport.update({
+const AuthenticatedRackIndexRoute = AuthenticatedRackIndexRouteImport.update({
   id: '/rack/',
   path: '/rack/',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
-
-const AuthenticatedProfileIndexRoute = AuthenticatedProfileIndexImport.update({
-  id: '/profile/',
-  path: '/profile/',
-  getParentRoute: () => AuthenticatedRoute,
-} as any)
-
-const AuthenticatedPaymentIndexRoute = AuthenticatedPaymentIndexImport.update({
-  id: '/payment/',
-  path: '/payment/',
-  getParentRoute: () => AuthenticatedRoute,
-} as any)
-
-const AuthenticatedOverviewIndexRoute = AuthenticatedOverviewIndexImport.update(
-  {
+const AuthenticatedProfileIndexRoute =
+  AuthenticatedProfileIndexRouteImport.update({
+    id: '/profile/',
+    path: '/profile/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedPaymentIndexRoute =
+  AuthenticatedPaymentIndexRouteImport.update({
+    id: '/payment/',
+    path: '/payment/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedOverviewIndexRoute =
+  AuthenticatedOverviewIndexRouteImport.update({
     id: '/overview/',
     path: '/overview/',
     getParentRoute: () => AuthenticatedRoute,
-  } as any,
-)
-
-const AuthenticatedOrdersIndexRoute = AuthenticatedOrdersIndexImport.update({
-  id: '/orders/',
-  path: '/orders/',
-  getParentRoute: () => AuthenticatedRoute,
-} as any)
-
-const AuthenticatedHomeIndexRoute = AuthenticatedHomeIndexImport.update({
+  } as any)
+const AuthenticatedOrdersIndexRoute =
+  AuthenticatedOrdersIndexRouteImport.update({
+    id: '/orders/',
+    path: '/orders/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedHomeIndexRoute = AuthenticatedHomeIndexRouteImport.update({
   id: '/home/',
   path: '/home/',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
-
 const AuthenticatedToolsReportsRouteRoute =
-  AuthenticatedToolsReportsRouteImport.update({
+  AuthenticatedToolsReportsRouteRouteImport.update({
     id: '/tools/reports',
     path: '/tools/reports',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
-
 const AuthenticatedToolsRateCardRouteRoute =
-  AuthenticatedToolsRateCardRouteImport.update({
+  AuthenticatedToolsRateCardRouteRouteImport.update({
     id: '/tools/rate-card',
     path: '/tools/rate-card',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
-
 const AuthenticatedToolsRateCalculatorRouteRoute =
-  AuthenticatedToolsRateCalculatorRouteImport.update({
+  AuthenticatedToolsRateCalculatorRouteRouteImport.update({
     id: '/tools/rate-calculator',
     path: '/tools/rate-calculator',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
-
 const AuthenticatedOrdersReturnsRouteRoute =
-  AuthenticatedOrdersReturnsRouteImport.update({
+  AuthenticatedOrdersReturnsRouteRouteImport.update({
     id: '/orders/returns',
     path: '/orders/returns',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
-
 const AuthenticatedDashboardInternationalRouteRoute =
-  AuthenticatedDashboardInternationalRouteImport.update({
+  AuthenticatedDashboardInternationalRouteRouteImport.update({
     id: '/international',
     path: '/international',
     getParentRoute: () => AuthenticatedDashboardRouteRoute,
   } as any)
-
 const AuthenticatedDashboardDomesticRouteRoute =
-  AuthenticatedDashboardDomesticRouteImport.update({
+  AuthenticatedDashboardDomesticRouteRouteImport.update({
     id: '/domestic',
     path: '/domestic',
     getParentRoute: () => AuthenticatedDashboardRouteRoute,
   } as any)
-
 const AuthenticatedWarehousesCreateIndexRoute =
-  AuthenticatedWarehousesCreateIndexImport.update({
+  AuthenticatedWarehousesCreateIndexRouteImport.update({
     id: '/warehouses/create/',
     path: '/warehouses/create/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
-
 const AuthenticatedWarehousesIdIndexRoute =
-  AuthenticatedWarehousesIdIndexImport.update({
+  AuthenticatedWarehousesIdIndexRouteImport.update({
     id: '/warehouses/$id/',
     path: '/warehouses/$id/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
-
 const AuthenticatedToolsActivityLogsIndexRoute =
-  AuthenticatedToolsActivityLogsIndexImport.update({
+  AuthenticatedToolsActivityLogsIndexRouteImport.update({
     id: '/tools/activity-logs/',
     path: '/tools/activity-logs/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
-
 const AuthenticatedSettingsUsersIndexRoute =
-  AuthenticatedSettingsUsersIndexImport.update({
+  AuthenticatedSettingsUsersIndexRouteImport.update({
     id: '/users/',
     path: '/users/',
     getParentRoute: () => AuthenticatedSettingsRouteRoute,
   } as any)
-
 const AuthenticatedSettingsTaxConfigurationIndexRoute =
-  AuthenticatedSettingsTaxConfigurationIndexImport.update({
+  AuthenticatedSettingsTaxConfigurationIndexRouteImport.update({
     id: '/tax-configuration/',
     path: '/tax-configuration/',
     getParentRoute: () => AuthenticatedSettingsRouteRoute,
   } as any)
-
 const AuthenticatedSettingsPickupLocationsIndexRoute =
-  AuthenticatedSettingsPickupLocationsIndexImport.update({
+  AuthenticatedSettingsPickupLocationsIndexRouteImport.update({
     id: '/pickup-locations/',
     path: '/pickup-locations/',
     getParentRoute: () => AuthenticatedSettingsRouteRoute,
   } as any)
-
 const AuthenticatedSettingsInvoiceTemplatesIndexRoute =
-  AuthenticatedSettingsInvoiceTemplatesIndexImport.update({
+  AuthenticatedSettingsInvoiceTemplatesIndexRouteImport.update({
     id: '/invoice-templates/',
     path: '/invoice-templates/',
     getParentRoute: () => AuthenticatedSettingsRouteRoute,
   } as any)
-
 const AuthenticatedSettingsCompanyDetailsIndexRoute =
-  AuthenticatedSettingsCompanyDetailsIndexImport.update({
+  AuthenticatedSettingsCompanyDetailsIndexRouteImport.update({
     id: '/company-details/',
     path: '/company-details/',
     getParentRoute: () => AuthenticatedSettingsRouteRoute,
   } as any)
-
 const AuthenticatedSettingsBankDetailsIndexRoute =
-  AuthenticatedSettingsBankDetailsIndexImport.update({
+  AuthenticatedSettingsBankDetailsIndexRouteImport.update({
     id: '/bank-details/',
     path: '/bank-details/',
     getParentRoute: () => AuthenticatedSettingsRouteRoute,
   } as any)
-
 const AuthenticatedSettingsApiSetupsIndexRoute =
-  AuthenticatedSettingsApiSetupsIndexImport.update({
+  AuthenticatedSettingsApiSetupsIndexRouteImport.update({
     id: '/api-setups/',
     path: '/api-setups/',
     getParentRoute: () => AuthenticatedSettingsRouteRoute,
   } as any)
-
 const AuthenticatedSettingsAddressManagementIndexRoute =
-  AuthenticatedSettingsAddressManagementIndexImport.update({
+  AuthenticatedSettingsAddressManagementIndexRouteImport.update({
     id: '/address-management/',
     path: '/address-management/',
     getParentRoute: () => AuthenticatedSettingsRouteRoute,
   } as any)
-
 const AuthenticatedRevenueDashboardSupportIndexRoute =
-  AuthenticatedRevenueDashboardSupportIndexImport.update({
+  AuthenticatedRevenueDashboardSupportIndexRouteImport.update({
     id: '/revenue-dashboard/support/',
     path: '/revenue-dashboard/support/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
-
 const AuthenticatedRevenueDashboardSettingsIndexRoute =
-  AuthenticatedRevenueDashboardSettingsIndexImport.update({
+  AuthenticatedRevenueDashboardSettingsIndexRouteImport.update({
     id: '/revenue-dashboard/settings/',
     path: '/revenue-dashboard/settings/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
-
 const AuthenticatedRevenueDashboardInvoiceAndTaxIndexRoute =
-  AuthenticatedRevenueDashboardInvoiceAndTaxIndexImport.update({
+  AuthenticatedRevenueDashboardInvoiceAndTaxIndexRouteImport.update({
     id: '/revenue-dashboard/invoice-and-tax/',
     path: '/revenue-dashboard/invoice-and-tax/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
-
 const AuthenticatedOrdersTrackOrderIndexRoute =
-  AuthenticatedOrdersTrackOrderIndexImport.update({
+  AuthenticatedOrdersTrackOrderIndexRouteImport.update({
     id: '/orders/track-order/',
     path: '/orders/track-order/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
-
 const AuthenticatedOrdersFirstMileIndexRoute =
-  AuthenticatedOrdersFirstMileIndexImport.update({
+  AuthenticatedOrdersFirstMileIndexRouteImport.update({
     id: '/orders/first-mile/',
     path: '/orders/first-mile/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
-
 const AuthenticatedOrdersCreateIndexRoute =
-  AuthenticatedOrdersCreateIndexImport.update({
+  AuthenticatedOrdersCreateIndexRouteImport.update({
     id: '/orders/create/',
     path: '/orders/create/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
-
-const AuthenticatedOrdersIdIndexRoute = AuthenticatedOrdersIdIndexImport.update(
-  {
+const AuthenticatedOrdersIdIndexRoute =
+  AuthenticatedOrdersIdIndexRouteImport.update({
     id: '/orders/$id/',
     path: '/orders/$id/',
     getParentRoute: () => AuthenticatedRoute,
-  } as any,
-)
-
+  } as any)
 const AuthenticatedNdrReportsIndexRoute =
-  AuthenticatedNdrReportsIndexImport.update({
+  AuthenticatedNdrReportsIndexRouteImport.update({
     id: '/ndr/reports/',
     path: '/ndr/reports/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
-
-const AuthenticatedNdrCasesIndexRoute = AuthenticatedNdrCasesIndexImport.update(
-  {
+const AuthenticatedNdrCasesIndexRoute =
+  AuthenticatedNdrCasesIndexRouteImport.update({
     id: '/ndr/cases/',
     path: '/ndr/cases/',
     getParentRoute: () => AuthenticatedRoute,
-  } as any,
-)
-
+  } as any)
 const AuthenticatedAccessControlUsersIndexRoute =
-  AuthenticatedAccessControlUsersIndexImport.update({
+  AuthenticatedAccessControlUsersIndexRouteImport.update({
     id: '/access-control/users/',
     path: '/access-control/users/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
-
 const AuthenticatedToolsReportsDownloadReportsRouteRoute =
-  AuthenticatedToolsReportsDownloadReportsRouteImport.update({
+  AuthenticatedToolsReportsDownloadReportsRouteRouteImport.update({
     id: '/download-reports',
     path: '/download-reports',
     getParentRoute: () => AuthenticatedToolsReportsRouteRoute,
   } as any)
-
 const AuthenticatedWarehousesIdEditIndexRoute =
-  AuthenticatedWarehousesIdEditIndexImport.update({
+  AuthenticatedWarehousesIdEditIndexRouteImport.update({
     id: '/warehouses/$id/edit/',
     path: '/warehouses/$id/edit/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
-
 const AuthenticatedToolsReportsReportsSchedulerIndexRoute =
-  AuthenticatedToolsReportsReportsSchedulerIndexImport.update({
+  AuthenticatedToolsReportsReportsSchedulerIndexRouteImport.update({
     id: '/reports-scheduler/',
     path: '/reports-scheduler/',
     getParentRoute: () => AuthenticatedToolsReportsRouteRoute,
   } as any)
-
 const AuthenticatedToolsRateCardReverseIndexRoute =
-  AuthenticatedToolsRateCardReverseIndexImport.update({
+  AuthenticatedToolsRateCardReverseIndexRouteImport.update({
     id: '/reverse/',
     path: '/reverse/',
     getParentRoute: () => AuthenticatedToolsRateCardRouteRoute,
   } as any)
-
 const AuthenticatedToolsRateCardForwardIndexRoute =
-  AuthenticatedToolsRateCardForwardIndexImport.update({
+  AuthenticatedToolsRateCardForwardIndexRouteImport.update({
     id: '/forward/',
     path: '/forward/',
     getParentRoute: () => AuthenticatedToolsRateCardRouteRoute,
   } as any)
-
 const AuthenticatedToolsRateCardDocumentIndexRoute =
-  AuthenticatedToolsRateCardDocumentIndexImport.update({
+  AuthenticatedToolsRateCardDocumentIndexRouteImport.update({
     id: '/document/',
     path: '/document/',
     getParentRoute: () => AuthenticatedToolsRateCardRouteRoute,
   } as any)
-
 const AuthenticatedToolsRateCalculatorInternationalIndexRoute =
-  AuthenticatedToolsRateCalculatorInternationalIndexImport.update({
+  AuthenticatedToolsRateCalculatorInternationalIndexRouteImport.update({
     id: '/international/',
     path: '/international/',
     getParentRoute: () => AuthenticatedToolsRateCalculatorRouteRoute,
   } as any)
-
 const AuthenticatedToolsRateCalculatorDomesticIndexRoute =
-  AuthenticatedToolsRateCalculatorDomesticIndexImport.update({
+  AuthenticatedToolsRateCalculatorDomesticIndexRouteImport.update({
     id: '/domestic/',
     path: '/domestic/',
     getParentRoute: () => AuthenticatedToolsRateCalculatorRouteRoute,
   } as any)
-
 const AuthenticatedRevenueDashboardReportsShipmentRevenueIndexRoute =
-  AuthenticatedRevenueDashboardReportsShipmentRevenueIndexImport.update({
+  AuthenticatedRevenueDashboardReportsShipmentRevenueIndexRouteImport.update({
     id: '/revenue-dashboard/reports/shipment-revenue/',
     path: '/revenue-dashboard/reports/shipment-revenue/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
-
 const AuthenticatedRevenueDashboardReportsCommissionBreakdownIndexRoute =
-  AuthenticatedRevenueDashboardReportsCommissionBreakdownIndexImport.update({
-    id: '/revenue-dashboard/reports/commission-breakdown/',
-    path: '/revenue-dashboard/reports/commission-breakdown/',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
-
+  AuthenticatedRevenueDashboardReportsCommissionBreakdownIndexRouteImport.update(
+    {
+      id: '/revenue-dashboard/reports/commission-breakdown/',
+      path: '/revenue-dashboard/reports/commission-breakdown/',
+      getParentRoute: () => AuthenticatedRoute,
+    } as any,
+  )
 const AuthenticatedRevenueDashboardMyEarningsSettlementsAndPayoutsIndexRoute =
-  AuthenticatedRevenueDashboardMyEarningsSettlementsAndPayoutsIndexImport.update(
+  AuthenticatedRevenueDashboardMyEarningsSettlementsAndPayoutsIndexRouteImport.update(
     {
       id: '/revenue-dashboard/my-earnings/settlements-and-payouts/',
       path: '/revenue-dashboard/my-earnings/settlements-and-payouts/',
       getParentRoute: () => AuthenticatedRoute,
     } as any,
   )
-
 const AuthenticatedRevenueDashboardMyEarningsRevenueSummaryIndexRoute =
-  AuthenticatedRevenueDashboardMyEarningsRevenueSummaryIndexImport.update({
+  AuthenticatedRevenueDashboardMyEarningsRevenueSummaryIndexRouteImport.update({
     id: '/revenue-dashboard/my-earnings/revenue-summary/',
     path: '/revenue-dashboard/my-earnings/revenue-summary/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
-
 const AuthenticatedOrdersFirstMileCreateIndexRoute =
-  AuthenticatedOrdersFirstMileCreateIndexImport.update({
+  AuthenticatedOrdersFirstMileCreateIndexRouteImport.update({
     id: '/orders/first-mile/create/',
     path: '/orders/first-mile/create/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
-
 const AuthenticatedOrdersFirstMileCalculatePriceIndexRoute =
-  AuthenticatedOrdersFirstMileCalculatePriceIndexImport.update({
+  AuthenticatedOrdersFirstMileCalculatePriceIndexRouteImport.update({
     id: '/orders/first-mile/calculate-price/',
     path: '/orders/first-mile/calculate-price/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
-
 const AuthenticatedOrdersFirstMileIdIndexRoute =
-  AuthenticatedOrdersFirstMileIdIndexImport.update({
+  AuthenticatedOrdersFirstMileIdIndexRouteImport.update({
     id: '/orders/first-mile/$id/',
     path: '/orders/first-mile/$id/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
-
 const AuthenticatedDashboardInternationalOverviewIndexRoute =
-  AuthenticatedDashboardInternationalOverviewIndexImport.update({
+  AuthenticatedDashboardInternationalOverviewIndexRouteImport.update({
     id: '/overview/',
     path: '/overview/',
     getParentRoute: () => AuthenticatedDashboardInternationalRouteRoute,
   } as any)
-
 const AuthenticatedDashboardDomesticShipmentsIndexRoute =
-  AuthenticatedDashboardDomesticShipmentsIndexImport.update({
+  AuthenticatedDashboardDomesticShipmentsIndexRouteImport.update({
     id: '/shipments/',
     path: '/shipments/',
     getParentRoute: () => AuthenticatedDashboardDomesticRouteRoute,
   } as any)
-
 const AuthenticatedDashboardDomesticRtoIndexRoute =
-  AuthenticatedDashboardDomesticRtoIndexImport.update({
+  AuthenticatedDashboardDomesticRtoIndexRouteImport.update({
     id: '/rto/',
     path: '/rto/',
     getParentRoute: () => AuthenticatedDashboardDomesticRouteRoute,
   } as any)
-
 const AuthenticatedDashboardDomesticOverviewIndexRoute =
-  AuthenticatedDashboardDomesticOverviewIndexImport.update({
+  AuthenticatedDashboardDomesticOverviewIndexRouteImport.update({
     id: '/overview/',
     path: '/overview/',
     getParentRoute: () => AuthenticatedDashboardDomesticRouteRoute,
   } as any)
-
 const AuthenticatedDashboardDomesticOrdersIndexRoute =
-  AuthenticatedDashboardDomesticOrdersIndexImport.update({
+  AuthenticatedDashboardDomesticOrdersIndexRouteImport.update({
     id: '/orders/',
     path: '/orders/',
     getParentRoute: () => AuthenticatedDashboardDomesticRouteRoute,
   } as any)
-
 const AuthenticatedDashboardDomesticNdrIndexRoute =
-  AuthenticatedDashboardDomesticNdrIndexImport.update({
+  AuthenticatedDashboardDomesticNdrIndexRouteImport.update({
     id: '/ndr/',
     path: '/ndr/',
     getParentRoute: () => AuthenticatedDashboardDomesticRouteRoute,
   } as any)
-
 const AuthenticatedDashboardDomesticDelaysIndexRoute =
-  AuthenticatedDashboardDomesticDelaysIndexImport.update({
+  AuthenticatedDashboardDomesticDelaysIndexRouteImport.update({
     id: '/delays/',
     path: '/delays/',
     getParentRoute: () => AuthenticatedDashboardDomesticRouteRoute,
   } as any)
-
 const AuthenticatedDashboardDomesticCourierIndexRoute =
-  AuthenticatedDashboardDomesticCourierIndexImport.update({
+  AuthenticatedDashboardDomesticCourierIndexRouteImport.update({
     id: '/courier/',
     path: '/courier/',
     getParentRoute: () => AuthenticatedDashboardDomesticRouteRoute,
   } as any)
-
 const AuthenticatedAccessControlUsersCreateIndexRoute =
-  AuthenticatedAccessControlUsersCreateIndexImport.update({
+  AuthenticatedAccessControlUsersCreateIndexRouteImport.update({
     id: '/access-control/users/create/',
     path: '/access-control/users/create/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
-
 const AuthenticatedAccessControlRolesCreateIndexRoute =
-  AuthenticatedAccessControlRolesCreateIndexImport.update({
+  AuthenticatedAccessControlRolesCreateIndexRouteImport.update({
     id: '/access-control/roles/create/',
     path: '/access-control/roles/create/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
-
 const AuthenticatedToolsReportsDownloadReportsScheduledReportsIndexLazyRoute =
-  AuthenticatedToolsReportsDownloadReportsScheduledReportsIndexLazyImport.update(
+  AuthenticatedToolsReportsDownloadReportsScheduledReportsIndexLazyRouteImport.update(
     {
       id: '/scheduled-reports/',
       path: '/scheduled-reports/',
       getParentRoute: () => AuthenticatedToolsReportsDownloadReportsRouteRoute,
     } as any,
   ).lazy(() =>
-    import(
-      './routes/_authenticated/tools/reports/download-reports/scheduled-reports/index.lazy'
-    ).then((d) => d.Route),
+    import('./routes/_authenticated/tools/reports/download-reports/scheduled-reports/index.lazy').then(
+      (d) => d.Route,
+    ),
   )
-
 const AuthenticatedToolsReportsDownloadReportsInstantReportsIndexRoute =
-  AuthenticatedToolsReportsDownloadReportsInstantReportsIndexImport.update({
-    id: '/instant-reports/',
-    path: '/instant-reports/',
-    getParentRoute: () => AuthenticatedToolsReportsDownloadReportsRouteRoute,
-  } as any)
-
+  AuthenticatedToolsReportsDownloadReportsInstantReportsIndexRouteImport.update(
+    {
+      id: '/instant-reports/',
+      path: '/instant-reports/',
+      getParentRoute: () => AuthenticatedToolsReportsDownloadReportsRouteRoute,
+    } as any,
+  )
 const AuthenticatedOrdersFirstMileIdEditIndexRoute =
-  AuthenticatedOrdersFirstMileIdEditIndexImport.update({
+  AuthenticatedOrdersFirstMileIdEditIndexRouteImport.update({
     id: '/orders/first-mile/$id/edit/',
     path: '/orders/first-mile/$id/edit/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 
-// Populate the FileRoutesByPath interface
+export interface FileRoutesByFullPath {
+  '/': typeof IndexRoute
+  '/dashboard': typeof AuthenticatedDashboardRouteRouteWithChildren
+  '/settings': typeof AuthenticatedSettingsRouteRouteWithChildren
+  '/auth/login': typeof AuthLoginRoute
+  '/dashboard/domestic': typeof AuthenticatedDashboardDomesticRouteRouteWithChildren
+  '/dashboard/international': typeof AuthenticatedDashboardInternationalRouteRouteWithChildren
+  '/orders/returns': typeof AuthenticatedOrdersReturnsRouteRoute
+  '/tools/rate-calculator': typeof AuthenticatedToolsRateCalculatorRouteRouteWithChildren
+  '/tools/rate-card': typeof AuthenticatedToolsRateCardRouteRouteWithChildren
+  '/tools/reports': typeof AuthenticatedToolsReportsRouteRouteWithChildren
+  '/home': typeof AuthenticatedHomeIndexRoute
+  '/orders': typeof AuthenticatedOrdersIndexRoute
+  '/overview': typeof AuthenticatedOverviewIndexRoute
+  '/payment': typeof AuthenticatedPaymentIndexRoute
+  '/profile': typeof AuthenticatedProfileIndexRoute
+  '/rack': typeof AuthenticatedRackIndexRoute
+  '/revenue-dashboard': typeof AuthenticatedRevenueDashboardIndexRoute
+  '/tools': typeof AuthenticatedToolsIndexRoute
+  '/warehouses': typeof AuthenticatedWarehousesIndexRoute
+  '/tools/reports/download-reports': typeof AuthenticatedToolsReportsDownloadReportsRouteRouteWithChildren
+  '/access-control/users': typeof AuthenticatedAccessControlUsersIndexRoute
+  '/ndr/cases': typeof AuthenticatedNdrCasesIndexRoute
+  '/ndr/reports': typeof AuthenticatedNdrReportsIndexRoute
+  '/orders/$id': typeof AuthenticatedOrdersIdIndexRoute
+  '/orders/create': typeof AuthenticatedOrdersCreateIndexRoute
+  '/orders/first-mile': typeof AuthenticatedOrdersFirstMileIndexRoute
+  '/orders/track-order': typeof AuthenticatedOrdersTrackOrderIndexRoute
+  '/revenue-dashboard/invoice-and-tax': typeof AuthenticatedRevenueDashboardInvoiceAndTaxIndexRoute
+  '/revenue-dashboard/settings': typeof AuthenticatedRevenueDashboardSettingsIndexRoute
+  '/revenue-dashboard/support': typeof AuthenticatedRevenueDashboardSupportIndexRoute
+  '/settings/address-management': typeof AuthenticatedSettingsAddressManagementIndexRoute
+  '/settings/api-setups': typeof AuthenticatedSettingsApiSetupsIndexRoute
+  '/settings/bank-details': typeof AuthenticatedSettingsBankDetailsIndexRoute
+  '/settings/company-details': typeof AuthenticatedSettingsCompanyDetailsIndexRoute
+  '/settings/invoice-templates': typeof AuthenticatedSettingsInvoiceTemplatesIndexRoute
+  '/settings/pickup-locations': typeof AuthenticatedSettingsPickupLocationsIndexRoute
+  '/settings/tax-configuration': typeof AuthenticatedSettingsTaxConfigurationIndexRoute
+  '/settings/users': typeof AuthenticatedSettingsUsersIndexRoute
+  '/tools/activity-logs': typeof AuthenticatedToolsActivityLogsIndexRoute
+  '/warehouses/$id': typeof AuthenticatedWarehousesIdIndexRoute
+  '/warehouses/create': typeof AuthenticatedWarehousesCreateIndexRoute
+  '/access-control/roles/create': typeof AuthenticatedAccessControlRolesCreateIndexRoute
+  '/access-control/users/create': typeof AuthenticatedAccessControlUsersCreateIndexRoute
+  '/dashboard/domestic/courier': typeof AuthenticatedDashboardDomesticCourierIndexRoute
+  '/dashboard/domestic/delays': typeof AuthenticatedDashboardDomesticDelaysIndexRoute
+  '/dashboard/domestic/ndr': typeof AuthenticatedDashboardDomesticNdrIndexRoute
+  '/dashboard/domestic/orders': typeof AuthenticatedDashboardDomesticOrdersIndexRoute
+  '/dashboard/domestic/overview': typeof AuthenticatedDashboardDomesticOverviewIndexRoute
+  '/dashboard/domestic/rto': typeof AuthenticatedDashboardDomesticRtoIndexRoute
+  '/dashboard/domestic/shipments': typeof AuthenticatedDashboardDomesticShipmentsIndexRoute
+  '/dashboard/international/overview': typeof AuthenticatedDashboardInternationalOverviewIndexRoute
+  '/orders/first-mile/$id': typeof AuthenticatedOrdersFirstMileIdIndexRoute
+  '/orders/first-mile/calculate-price': typeof AuthenticatedOrdersFirstMileCalculatePriceIndexRoute
+  '/orders/first-mile/create': typeof AuthenticatedOrdersFirstMileCreateIndexRoute
+  '/revenue-dashboard/my-earnings/revenue-summary': typeof AuthenticatedRevenueDashboardMyEarningsRevenueSummaryIndexRoute
+  '/revenue-dashboard/my-earnings/settlements-and-payouts': typeof AuthenticatedRevenueDashboardMyEarningsSettlementsAndPayoutsIndexRoute
+  '/revenue-dashboard/reports/commission-breakdown': typeof AuthenticatedRevenueDashboardReportsCommissionBreakdownIndexRoute
+  '/revenue-dashboard/reports/shipment-revenue': typeof AuthenticatedRevenueDashboardReportsShipmentRevenueIndexRoute
+  '/tools/rate-calculator/domestic': typeof AuthenticatedToolsRateCalculatorDomesticIndexRoute
+  '/tools/rate-calculator/international': typeof AuthenticatedToolsRateCalculatorInternationalIndexRoute
+  '/tools/rate-card/document': typeof AuthenticatedToolsRateCardDocumentIndexRoute
+  '/tools/rate-card/forward': typeof AuthenticatedToolsRateCardForwardIndexRoute
+  '/tools/rate-card/reverse': typeof AuthenticatedToolsRateCardReverseIndexRoute
+  '/tools/reports/reports-scheduler': typeof AuthenticatedToolsReportsReportsSchedulerIndexRoute
+  '/warehouses/$id/edit': typeof AuthenticatedWarehousesIdEditIndexRoute
+  '/orders/first-mile/$id/edit': typeof AuthenticatedOrdersFirstMileIdEditIndexRoute
+  '/tools/reports/download-reports/instant-reports': typeof AuthenticatedToolsReportsDownloadReportsInstantReportsIndexRoute
+  '/tools/reports/download-reports/scheduled-reports': typeof AuthenticatedToolsReportsDownloadReportsScheduledReportsIndexLazyRoute
+}
+export interface FileRoutesByTo {
+  '/': typeof IndexRoute
+  '/dashboard': typeof AuthenticatedDashboardRouteRouteWithChildren
+  '/settings': typeof AuthenticatedSettingsRouteRouteWithChildren
+  '/auth/login': typeof AuthLoginRoute
+  '/dashboard/domestic': typeof AuthenticatedDashboardDomesticRouteRouteWithChildren
+  '/dashboard/international': typeof AuthenticatedDashboardInternationalRouteRouteWithChildren
+  '/orders/returns': typeof AuthenticatedOrdersReturnsRouteRoute
+  '/tools/rate-calculator': typeof AuthenticatedToolsRateCalculatorRouteRouteWithChildren
+  '/tools/rate-card': typeof AuthenticatedToolsRateCardRouteRouteWithChildren
+  '/tools/reports': typeof AuthenticatedToolsReportsRouteRouteWithChildren
+  '/home': typeof AuthenticatedHomeIndexRoute
+  '/orders': typeof AuthenticatedOrdersIndexRoute
+  '/overview': typeof AuthenticatedOverviewIndexRoute
+  '/payment': typeof AuthenticatedPaymentIndexRoute
+  '/profile': typeof AuthenticatedProfileIndexRoute
+  '/rack': typeof AuthenticatedRackIndexRoute
+  '/revenue-dashboard': typeof AuthenticatedRevenueDashboardIndexRoute
+  '/tools': typeof AuthenticatedToolsIndexRoute
+  '/warehouses': typeof AuthenticatedWarehousesIndexRoute
+  '/tools/reports/download-reports': typeof AuthenticatedToolsReportsDownloadReportsRouteRouteWithChildren
+  '/access-control/users': typeof AuthenticatedAccessControlUsersIndexRoute
+  '/ndr/cases': typeof AuthenticatedNdrCasesIndexRoute
+  '/ndr/reports': typeof AuthenticatedNdrReportsIndexRoute
+  '/orders/$id': typeof AuthenticatedOrdersIdIndexRoute
+  '/orders/create': typeof AuthenticatedOrdersCreateIndexRoute
+  '/orders/first-mile': typeof AuthenticatedOrdersFirstMileIndexRoute
+  '/orders/track-order': typeof AuthenticatedOrdersTrackOrderIndexRoute
+  '/revenue-dashboard/invoice-and-tax': typeof AuthenticatedRevenueDashboardInvoiceAndTaxIndexRoute
+  '/revenue-dashboard/settings': typeof AuthenticatedRevenueDashboardSettingsIndexRoute
+  '/revenue-dashboard/support': typeof AuthenticatedRevenueDashboardSupportIndexRoute
+  '/settings/address-management': typeof AuthenticatedSettingsAddressManagementIndexRoute
+  '/settings/api-setups': typeof AuthenticatedSettingsApiSetupsIndexRoute
+  '/settings/bank-details': typeof AuthenticatedSettingsBankDetailsIndexRoute
+  '/settings/company-details': typeof AuthenticatedSettingsCompanyDetailsIndexRoute
+  '/settings/invoice-templates': typeof AuthenticatedSettingsInvoiceTemplatesIndexRoute
+  '/settings/pickup-locations': typeof AuthenticatedSettingsPickupLocationsIndexRoute
+  '/settings/tax-configuration': typeof AuthenticatedSettingsTaxConfigurationIndexRoute
+  '/settings/users': typeof AuthenticatedSettingsUsersIndexRoute
+  '/tools/activity-logs': typeof AuthenticatedToolsActivityLogsIndexRoute
+  '/warehouses/$id': typeof AuthenticatedWarehousesIdIndexRoute
+  '/warehouses/create': typeof AuthenticatedWarehousesCreateIndexRoute
+  '/access-control/roles/create': typeof AuthenticatedAccessControlRolesCreateIndexRoute
+  '/access-control/users/create': typeof AuthenticatedAccessControlUsersCreateIndexRoute
+  '/dashboard/domestic/courier': typeof AuthenticatedDashboardDomesticCourierIndexRoute
+  '/dashboard/domestic/delays': typeof AuthenticatedDashboardDomesticDelaysIndexRoute
+  '/dashboard/domestic/ndr': typeof AuthenticatedDashboardDomesticNdrIndexRoute
+  '/dashboard/domestic/orders': typeof AuthenticatedDashboardDomesticOrdersIndexRoute
+  '/dashboard/domestic/overview': typeof AuthenticatedDashboardDomesticOverviewIndexRoute
+  '/dashboard/domestic/rto': typeof AuthenticatedDashboardDomesticRtoIndexRoute
+  '/dashboard/domestic/shipments': typeof AuthenticatedDashboardDomesticShipmentsIndexRoute
+  '/dashboard/international/overview': typeof AuthenticatedDashboardInternationalOverviewIndexRoute
+  '/orders/first-mile/$id': typeof AuthenticatedOrdersFirstMileIdIndexRoute
+  '/orders/first-mile/calculate-price': typeof AuthenticatedOrdersFirstMileCalculatePriceIndexRoute
+  '/orders/first-mile/create': typeof AuthenticatedOrdersFirstMileCreateIndexRoute
+  '/revenue-dashboard/my-earnings/revenue-summary': typeof AuthenticatedRevenueDashboardMyEarningsRevenueSummaryIndexRoute
+  '/revenue-dashboard/my-earnings/settlements-and-payouts': typeof AuthenticatedRevenueDashboardMyEarningsSettlementsAndPayoutsIndexRoute
+  '/revenue-dashboard/reports/commission-breakdown': typeof AuthenticatedRevenueDashboardReportsCommissionBreakdownIndexRoute
+  '/revenue-dashboard/reports/shipment-revenue': typeof AuthenticatedRevenueDashboardReportsShipmentRevenueIndexRoute
+  '/tools/rate-calculator/domestic': typeof AuthenticatedToolsRateCalculatorDomesticIndexRoute
+  '/tools/rate-calculator/international': typeof AuthenticatedToolsRateCalculatorInternationalIndexRoute
+  '/tools/rate-card/document': typeof AuthenticatedToolsRateCardDocumentIndexRoute
+  '/tools/rate-card/forward': typeof AuthenticatedToolsRateCardForwardIndexRoute
+  '/tools/rate-card/reverse': typeof AuthenticatedToolsRateCardReverseIndexRoute
+  '/tools/reports/reports-scheduler': typeof AuthenticatedToolsReportsReportsSchedulerIndexRoute
+  '/warehouses/$id/edit': typeof AuthenticatedWarehousesIdEditIndexRoute
+  '/orders/first-mile/$id/edit': typeof AuthenticatedOrdersFirstMileIdEditIndexRoute
+  '/tools/reports/download-reports/instant-reports': typeof AuthenticatedToolsReportsDownloadReportsInstantReportsIndexRoute
+  '/tools/reports/download-reports/scheduled-reports': typeof AuthenticatedToolsReportsDownloadReportsScheduledReportsIndexLazyRoute
+}
+export interface FileRoutesById {
+  __root__: typeof rootRouteImport
+  '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteWithChildren
+  '/_authenticated/dashboard': typeof AuthenticatedDashboardRouteRouteWithChildren
+  '/_authenticated/settings': typeof AuthenticatedSettingsRouteRouteWithChildren
+  '/auth/login': typeof AuthLoginRoute
+  '/_authenticated/dashboard/domestic': typeof AuthenticatedDashboardDomesticRouteRouteWithChildren
+  '/_authenticated/dashboard/international': typeof AuthenticatedDashboardInternationalRouteRouteWithChildren
+  '/_authenticated/orders/returns': typeof AuthenticatedOrdersReturnsRouteRoute
+  '/_authenticated/tools/rate-calculator': typeof AuthenticatedToolsRateCalculatorRouteRouteWithChildren
+  '/_authenticated/tools/rate-card': typeof AuthenticatedToolsRateCardRouteRouteWithChildren
+  '/_authenticated/tools/reports': typeof AuthenticatedToolsReportsRouteRouteWithChildren
+  '/_authenticated/home/': typeof AuthenticatedHomeIndexRoute
+  '/_authenticated/orders/': typeof AuthenticatedOrdersIndexRoute
+  '/_authenticated/overview/': typeof AuthenticatedOverviewIndexRoute
+  '/_authenticated/payment/': typeof AuthenticatedPaymentIndexRoute
+  '/_authenticated/profile/': typeof AuthenticatedProfileIndexRoute
+  '/_authenticated/rack/': typeof AuthenticatedRackIndexRoute
+  '/_authenticated/revenue-dashboard/': typeof AuthenticatedRevenueDashboardIndexRoute
+  '/_authenticated/tools/': typeof AuthenticatedToolsIndexRoute
+  '/_authenticated/warehouses/': typeof AuthenticatedWarehousesIndexRoute
+  '/_authenticated/tools/reports/download-reports': typeof AuthenticatedToolsReportsDownloadReportsRouteRouteWithChildren
+  '/_authenticated/access-control/users/': typeof AuthenticatedAccessControlUsersIndexRoute
+  '/_authenticated/ndr/cases/': typeof AuthenticatedNdrCasesIndexRoute
+  '/_authenticated/ndr/reports/': typeof AuthenticatedNdrReportsIndexRoute
+  '/_authenticated/orders/$id/': typeof AuthenticatedOrdersIdIndexRoute
+  '/_authenticated/orders/create/': typeof AuthenticatedOrdersCreateIndexRoute
+  '/_authenticated/orders/first-mile/': typeof AuthenticatedOrdersFirstMileIndexRoute
+  '/_authenticated/orders/track-order/': typeof AuthenticatedOrdersTrackOrderIndexRoute
+  '/_authenticated/revenue-dashboard/invoice-and-tax/': typeof AuthenticatedRevenueDashboardInvoiceAndTaxIndexRoute
+  '/_authenticated/revenue-dashboard/settings/': typeof AuthenticatedRevenueDashboardSettingsIndexRoute
+  '/_authenticated/revenue-dashboard/support/': typeof AuthenticatedRevenueDashboardSupportIndexRoute
+  '/_authenticated/settings/address-management/': typeof AuthenticatedSettingsAddressManagementIndexRoute
+  '/_authenticated/settings/api-setups/': typeof AuthenticatedSettingsApiSetupsIndexRoute
+  '/_authenticated/settings/bank-details/': typeof AuthenticatedSettingsBankDetailsIndexRoute
+  '/_authenticated/settings/company-details/': typeof AuthenticatedSettingsCompanyDetailsIndexRoute
+  '/_authenticated/settings/invoice-templates/': typeof AuthenticatedSettingsInvoiceTemplatesIndexRoute
+  '/_authenticated/settings/pickup-locations/': typeof AuthenticatedSettingsPickupLocationsIndexRoute
+  '/_authenticated/settings/tax-configuration/': typeof AuthenticatedSettingsTaxConfigurationIndexRoute
+  '/_authenticated/settings/users/': typeof AuthenticatedSettingsUsersIndexRoute
+  '/_authenticated/tools/activity-logs/': typeof AuthenticatedToolsActivityLogsIndexRoute
+  '/_authenticated/warehouses/$id/': typeof AuthenticatedWarehousesIdIndexRoute
+  '/_authenticated/warehouses/create/': typeof AuthenticatedWarehousesCreateIndexRoute
+  '/_authenticated/access-control/roles/create/': typeof AuthenticatedAccessControlRolesCreateIndexRoute
+  '/_authenticated/access-control/users/create/': typeof AuthenticatedAccessControlUsersCreateIndexRoute
+  '/_authenticated/dashboard/domestic/courier/': typeof AuthenticatedDashboardDomesticCourierIndexRoute
+  '/_authenticated/dashboard/domestic/delays/': typeof AuthenticatedDashboardDomesticDelaysIndexRoute
+  '/_authenticated/dashboard/domestic/ndr/': typeof AuthenticatedDashboardDomesticNdrIndexRoute
+  '/_authenticated/dashboard/domestic/orders/': typeof AuthenticatedDashboardDomesticOrdersIndexRoute
+  '/_authenticated/dashboard/domestic/overview/': typeof AuthenticatedDashboardDomesticOverviewIndexRoute
+  '/_authenticated/dashboard/domestic/rto/': typeof AuthenticatedDashboardDomesticRtoIndexRoute
+  '/_authenticated/dashboard/domestic/shipments/': typeof AuthenticatedDashboardDomesticShipmentsIndexRoute
+  '/_authenticated/dashboard/international/overview/': typeof AuthenticatedDashboardInternationalOverviewIndexRoute
+  '/_authenticated/orders/first-mile/$id/': typeof AuthenticatedOrdersFirstMileIdIndexRoute
+  '/_authenticated/orders/first-mile/calculate-price/': typeof AuthenticatedOrdersFirstMileCalculatePriceIndexRoute
+  '/_authenticated/orders/first-mile/create/': typeof AuthenticatedOrdersFirstMileCreateIndexRoute
+  '/_authenticated/revenue-dashboard/my-earnings/revenue-summary/': typeof AuthenticatedRevenueDashboardMyEarningsRevenueSummaryIndexRoute
+  '/_authenticated/revenue-dashboard/my-earnings/settlements-and-payouts/': typeof AuthenticatedRevenueDashboardMyEarningsSettlementsAndPayoutsIndexRoute
+  '/_authenticated/revenue-dashboard/reports/commission-breakdown/': typeof AuthenticatedRevenueDashboardReportsCommissionBreakdownIndexRoute
+  '/_authenticated/revenue-dashboard/reports/shipment-revenue/': typeof AuthenticatedRevenueDashboardReportsShipmentRevenueIndexRoute
+  '/_authenticated/tools/rate-calculator/domestic/': typeof AuthenticatedToolsRateCalculatorDomesticIndexRoute
+  '/_authenticated/tools/rate-calculator/international/': typeof AuthenticatedToolsRateCalculatorInternationalIndexRoute
+  '/_authenticated/tools/rate-card/document/': typeof AuthenticatedToolsRateCardDocumentIndexRoute
+  '/_authenticated/tools/rate-card/forward/': typeof AuthenticatedToolsRateCardForwardIndexRoute
+  '/_authenticated/tools/rate-card/reverse/': typeof AuthenticatedToolsRateCardReverseIndexRoute
+  '/_authenticated/tools/reports/reports-scheduler/': typeof AuthenticatedToolsReportsReportsSchedulerIndexRoute
+  '/_authenticated/warehouses/$id/edit/': typeof AuthenticatedWarehousesIdEditIndexRoute
+  '/_authenticated/orders/first-mile/$id/edit/': typeof AuthenticatedOrdersFirstMileIdEditIndexRoute
+  '/_authenticated/tools/reports/download-reports/instant-reports/': typeof AuthenticatedToolsReportsDownloadReportsInstantReportsIndexRoute
+  '/_authenticated/tools/reports/download-reports/scheduled-reports/': typeof AuthenticatedToolsReportsDownloadReportsScheduledReportsIndexLazyRoute
+}
+export interface FileRouteTypes {
+  fileRoutesByFullPath: FileRoutesByFullPath
+  fullPaths:
+    | '/'
+    | '/dashboard'
+    | '/settings'
+    | '/auth/login'
+    | '/dashboard/domestic'
+    | '/dashboard/international'
+    | '/orders/returns'
+    | '/tools/rate-calculator'
+    | '/tools/rate-card'
+    | '/tools/reports'
+    | '/home'
+    | '/orders'
+    | '/overview'
+    | '/payment'
+    | '/profile'
+    | '/rack'
+    | '/revenue-dashboard'
+    | '/tools'
+    | '/warehouses'
+    | '/tools/reports/download-reports'
+    | '/access-control/users'
+    | '/ndr/cases'
+    | '/ndr/reports'
+    | '/orders/$id'
+    | '/orders/create'
+    | '/orders/first-mile'
+    | '/orders/track-order'
+    | '/revenue-dashboard/invoice-and-tax'
+    | '/revenue-dashboard/settings'
+    | '/revenue-dashboard/support'
+    | '/settings/address-management'
+    | '/settings/api-setups'
+    | '/settings/bank-details'
+    | '/settings/company-details'
+    | '/settings/invoice-templates'
+    | '/settings/pickup-locations'
+    | '/settings/tax-configuration'
+    | '/settings/users'
+    | '/tools/activity-logs'
+    | '/warehouses/$id'
+    | '/warehouses/create'
+    | '/access-control/roles/create'
+    | '/access-control/users/create'
+    | '/dashboard/domestic/courier'
+    | '/dashboard/domestic/delays'
+    | '/dashboard/domestic/ndr'
+    | '/dashboard/domestic/orders'
+    | '/dashboard/domestic/overview'
+    | '/dashboard/domestic/rto'
+    | '/dashboard/domestic/shipments'
+    | '/dashboard/international/overview'
+    | '/orders/first-mile/$id'
+    | '/orders/first-mile/calculate-price'
+    | '/orders/first-mile/create'
+    | '/revenue-dashboard/my-earnings/revenue-summary'
+    | '/revenue-dashboard/my-earnings/settlements-and-payouts'
+    | '/revenue-dashboard/reports/commission-breakdown'
+    | '/revenue-dashboard/reports/shipment-revenue'
+    | '/tools/rate-calculator/domestic'
+    | '/tools/rate-calculator/international'
+    | '/tools/rate-card/document'
+    | '/tools/rate-card/forward'
+    | '/tools/rate-card/reverse'
+    | '/tools/reports/reports-scheduler'
+    | '/warehouses/$id/edit'
+    | '/orders/first-mile/$id/edit'
+    | '/tools/reports/download-reports/instant-reports'
+    | '/tools/reports/download-reports/scheduled-reports'
+  fileRoutesByTo: FileRoutesByTo
+  to:
+    | '/'
+    | '/dashboard'
+    | '/settings'
+    | '/auth/login'
+    | '/dashboard/domestic'
+    | '/dashboard/international'
+    | '/orders/returns'
+    | '/tools/rate-calculator'
+    | '/tools/rate-card'
+    | '/tools/reports'
+    | '/home'
+    | '/orders'
+    | '/overview'
+    | '/payment'
+    | '/profile'
+    | '/rack'
+    | '/revenue-dashboard'
+    | '/tools'
+    | '/warehouses'
+    | '/tools/reports/download-reports'
+    | '/access-control/users'
+    | '/ndr/cases'
+    | '/ndr/reports'
+    | '/orders/$id'
+    | '/orders/create'
+    | '/orders/first-mile'
+    | '/orders/track-order'
+    | '/revenue-dashboard/invoice-and-tax'
+    | '/revenue-dashboard/settings'
+    | '/revenue-dashboard/support'
+    | '/settings/address-management'
+    | '/settings/api-setups'
+    | '/settings/bank-details'
+    | '/settings/company-details'
+    | '/settings/invoice-templates'
+    | '/settings/pickup-locations'
+    | '/settings/tax-configuration'
+    | '/settings/users'
+    | '/tools/activity-logs'
+    | '/warehouses/$id'
+    | '/warehouses/create'
+    | '/access-control/roles/create'
+    | '/access-control/users/create'
+    | '/dashboard/domestic/courier'
+    | '/dashboard/domestic/delays'
+    | '/dashboard/domestic/ndr'
+    | '/dashboard/domestic/orders'
+    | '/dashboard/domestic/overview'
+    | '/dashboard/domestic/rto'
+    | '/dashboard/domestic/shipments'
+    | '/dashboard/international/overview'
+    | '/orders/first-mile/$id'
+    | '/orders/first-mile/calculate-price'
+    | '/orders/first-mile/create'
+    | '/revenue-dashboard/my-earnings/revenue-summary'
+    | '/revenue-dashboard/my-earnings/settlements-and-payouts'
+    | '/revenue-dashboard/reports/commission-breakdown'
+    | '/revenue-dashboard/reports/shipment-revenue'
+    | '/tools/rate-calculator/domestic'
+    | '/tools/rate-calculator/international'
+    | '/tools/rate-card/document'
+    | '/tools/rate-card/forward'
+    | '/tools/rate-card/reverse'
+    | '/tools/reports/reports-scheduler'
+    | '/warehouses/$id/edit'
+    | '/orders/first-mile/$id/edit'
+    | '/tools/reports/download-reports/instant-reports'
+    | '/tools/reports/download-reports/scheduled-reports'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/_authenticated/dashboard'
+    | '/_authenticated/settings'
+    | '/auth/login'
+    | '/_authenticated/dashboard/domestic'
+    | '/_authenticated/dashboard/international'
+    | '/_authenticated/orders/returns'
+    | '/_authenticated/tools/rate-calculator'
+    | '/_authenticated/tools/rate-card'
+    | '/_authenticated/tools/reports'
+    | '/_authenticated/home/'
+    | '/_authenticated/orders/'
+    | '/_authenticated/overview/'
+    | '/_authenticated/payment/'
+    | '/_authenticated/profile/'
+    | '/_authenticated/rack/'
+    | '/_authenticated/revenue-dashboard/'
+    | '/_authenticated/tools/'
+    | '/_authenticated/warehouses/'
+    | '/_authenticated/tools/reports/download-reports'
+    | '/_authenticated/access-control/users/'
+    | '/_authenticated/ndr/cases/'
+    | '/_authenticated/ndr/reports/'
+    | '/_authenticated/orders/$id/'
+    | '/_authenticated/orders/create/'
+    | '/_authenticated/orders/first-mile/'
+    | '/_authenticated/orders/track-order/'
+    | '/_authenticated/revenue-dashboard/invoice-and-tax/'
+    | '/_authenticated/revenue-dashboard/settings/'
+    | '/_authenticated/revenue-dashboard/support/'
+    | '/_authenticated/settings/address-management/'
+    | '/_authenticated/settings/api-setups/'
+    | '/_authenticated/settings/bank-details/'
+    | '/_authenticated/settings/company-details/'
+    | '/_authenticated/settings/invoice-templates/'
+    | '/_authenticated/settings/pickup-locations/'
+    | '/_authenticated/settings/tax-configuration/'
+    | '/_authenticated/settings/users/'
+    | '/_authenticated/tools/activity-logs/'
+    | '/_authenticated/warehouses/$id/'
+    | '/_authenticated/warehouses/create/'
+    | '/_authenticated/access-control/roles/create/'
+    | '/_authenticated/access-control/users/create/'
+    | '/_authenticated/dashboard/domestic/courier/'
+    | '/_authenticated/dashboard/domestic/delays/'
+    | '/_authenticated/dashboard/domestic/ndr/'
+    | '/_authenticated/dashboard/domestic/orders/'
+    | '/_authenticated/dashboard/domestic/overview/'
+    | '/_authenticated/dashboard/domestic/rto/'
+    | '/_authenticated/dashboard/domestic/shipments/'
+    | '/_authenticated/dashboard/international/overview/'
+    | '/_authenticated/orders/first-mile/$id/'
+    | '/_authenticated/orders/first-mile/calculate-price/'
+    | '/_authenticated/orders/first-mile/create/'
+    | '/_authenticated/revenue-dashboard/my-earnings/revenue-summary/'
+    | '/_authenticated/revenue-dashboard/my-earnings/settlements-and-payouts/'
+    | '/_authenticated/revenue-dashboard/reports/commission-breakdown/'
+    | '/_authenticated/revenue-dashboard/reports/shipment-revenue/'
+    | '/_authenticated/tools/rate-calculator/domestic/'
+    | '/_authenticated/tools/rate-calculator/international/'
+    | '/_authenticated/tools/rate-card/document/'
+    | '/_authenticated/tools/rate-card/forward/'
+    | '/_authenticated/tools/rate-card/reverse/'
+    | '/_authenticated/tools/reports/reports-scheduler/'
+    | '/_authenticated/warehouses/$id/edit/'
+    | '/_authenticated/orders/first-mile/$id/edit/'
+    | '/_authenticated/tools/reports/download-reports/instant-reports/'
+    | '/_authenticated/tools/reports/download-reports/scheduled-reports/'
+  fileRoutesById: FileRoutesById
+}
+export interface RootRouteChildren {
+  IndexRoute: typeof IndexRoute
+  AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
+  AuthLoginRoute: typeof AuthLoginRoute
+}
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexImport
-      parentRoute: typeof rootRoute
-    }
     '/_authenticated': {
       id: '/_authenticated'
       path: ''
       fullPath: ''
-      preLoaderRoute: typeof AuthenticatedImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof AuthenticatedRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/dashboard': {
-      id: '/_authenticated/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof AuthenticatedDashboardRouteImport
-      parentRoute: typeof AuthenticatedImport
-    }
-    '/_authenticated/settings': {
-      id: '/_authenticated/settings'
-      path: '/settings'
-      fullPath: '/settings'
-      preLoaderRoute: typeof AuthenticatedSettingsRouteImport
-      parentRoute: typeof AuthenticatedImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/auth/login': {
       id: '/auth/login'
       path: '/auth/login'
       fullPath: '/auth/login'
-      preLoaderRoute: typeof AuthLoginImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof AuthLoginRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/dashboard/domestic': {
-      id: '/_authenticated/dashboard/domestic'
-      path: '/domestic'
-      fullPath: '/dashboard/domestic'
-      preLoaderRoute: typeof AuthenticatedDashboardDomesticRouteImport
-      parentRoute: typeof AuthenticatedDashboardRouteImport
+    '/_authenticated/settings': {
+      id: '/_authenticated/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof AuthenticatedSettingsRouteRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/dashboard/international': {
-      id: '/_authenticated/dashboard/international'
-      path: '/international'
-      fullPath: '/dashboard/international'
-      preLoaderRoute: typeof AuthenticatedDashboardInternationalRouteImport
-      parentRoute: typeof AuthenticatedDashboardRouteImport
-    }
-    '/_authenticated/orders/returns': {
-      id: '/_authenticated/orders/returns'
-      path: '/orders/returns'
-      fullPath: '/orders/returns'
-      preLoaderRoute: typeof AuthenticatedOrdersReturnsRouteImport
-      parentRoute: typeof AuthenticatedImport
-    }
-    '/_authenticated/tools/rate-calculator': {
-      id: '/_authenticated/tools/rate-calculator'
-      path: '/tools/rate-calculator'
-      fullPath: '/tools/rate-calculator'
-      preLoaderRoute: typeof AuthenticatedToolsRateCalculatorRouteImport
-      parentRoute: typeof AuthenticatedImport
-    }
-    '/_authenticated/tools/rate-card': {
-      id: '/_authenticated/tools/rate-card'
-      path: '/tools/rate-card'
-      fullPath: '/tools/rate-card'
-      preLoaderRoute: typeof AuthenticatedToolsRateCardRouteImport
-      parentRoute: typeof AuthenticatedImport
-    }
-    '/_authenticated/tools/reports': {
-      id: '/_authenticated/tools/reports'
-      path: '/tools/reports'
-      fullPath: '/tools/reports'
-      preLoaderRoute: typeof AuthenticatedToolsReportsRouteImport
-      parentRoute: typeof AuthenticatedImport
-    }
-    '/_authenticated/home/': {
-      id: '/_authenticated/home/'
-      path: '/home'
-      fullPath: '/home'
-      preLoaderRoute: typeof AuthenticatedHomeIndexImport
-      parentRoute: typeof AuthenticatedImport
-    }
-    '/_authenticated/orders/': {
-      id: '/_authenticated/orders/'
-      path: '/orders'
-      fullPath: '/orders'
-      preLoaderRoute: typeof AuthenticatedOrdersIndexImport
-      parentRoute: typeof AuthenticatedImport
-    }
-    '/_authenticated/overview/': {
-      id: '/_authenticated/overview/'
-      path: '/overview'
-      fullPath: '/overview'
-      preLoaderRoute: typeof AuthenticatedOverviewIndexImport
-      parentRoute: typeof AuthenticatedImport
-    }
-    '/_authenticated/payment/': {
-      id: '/_authenticated/payment/'
-      path: '/payment'
-      fullPath: '/payment'
-      preLoaderRoute: typeof AuthenticatedPaymentIndexImport
-      parentRoute: typeof AuthenticatedImport
-    }
-    '/_authenticated/profile/': {
-      id: '/_authenticated/profile/'
-      path: '/profile'
-      fullPath: '/profile'
-      preLoaderRoute: typeof AuthenticatedProfileIndexImport
-      parentRoute: typeof AuthenticatedImport
-    }
-    '/_authenticated/rack/': {
-      id: '/_authenticated/rack/'
-      path: '/rack'
-      fullPath: '/rack'
-      preLoaderRoute: typeof AuthenticatedRackIndexImport
-      parentRoute: typeof AuthenticatedImport
-    }
-    '/_authenticated/revenue-dashboard/': {
-      id: '/_authenticated/revenue-dashboard/'
-      path: '/revenue-dashboard'
-      fullPath: '/revenue-dashboard'
-      preLoaderRoute: typeof AuthenticatedRevenueDashboardIndexImport
-      parentRoute: typeof AuthenticatedImport
-    }
-    '/_authenticated/tools/': {
-      id: '/_authenticated/tools/'
-      path: '/tools'
-      fullPath: '/tools'
-      preLoaderRoute: typeof AuthenticatedToolsIndexImport
-      parentRoute: typeof AuthenticatedImport
+    '/_authenticated/dashboard': {
+      id: '/_authenticated/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AuthenticatedDashboardRouteRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/warehouses/': {
       id: '/_authenticated/warehouses/'
       path: '/warehouses'
       fullPath: '/warehouses'
-      preLoaderRoute: typeof AuthenticatedWarehousesIndexImport
-      parentRoute: typeof AuthenticatedImport
+      preLoaderRoute: typeof AuthenticatedWarehousesIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/tools/reports/download-reports': {
-      id: '/_authenticated/tools/reports/download-reports'
-      path: '/download-reports'
-      fullPath: '/tools/reports/download-reports'
-      preLoaderRoute: typeof AuthenticatedToolsReportsDownloadReportsRouteImport
-      parentRoute: typeof AuthenticatedToolsReportsRouteImport
+    '/_authenticated/tools/': {
+      id: '/_authenticated/tools/'
+      path: '/tools'
+      fullPath: '/tools'
+      preLoaderRoute: typeof AuthenticatedToolsIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/access-control/users/': {
-      id: '/_authenticated/access-control/users/'
-      path: '/access-control/users'
-      fullPath: '/access-control/users'
-      preLoaderRoute: typeof AuthenticatedAccessControlUsersIndexImport
-      parentRoute: typeof AuthenticatedImport
+    '/_authenticated/revenue-dashboard/': {
+      id: '/_authenticated/revenue-dashboard/'
+      path: '/revenue-dashboard'
+      fullPath: '/revenue-dashboard'
+      preLoaderRoute: typeof AuthenticatedRevenueDashboardIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/ndr/cases/': {
-      id: '/_authenticated/ndr/cases/'
-      path: '/ndr/cases'
-      fullPath: '/ndr/cases'
-      preLoaderRoute: typeof AuthenticatedNdrCasesIndexImport
-      parentRoute: typeof AuthenticatedImport
+    '/_authenticated/rack/': {
+      id: '/_authenticated/rack/'
+      path: '/rack'
+      fullPath: '/rack'
+      preLoaderRoute: typeof AuthenticatedRackIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/ndr/reports/': {
-      id: '/_authenticated/ndr/reports/'
-      path: '/ndr/reports'
-      fullPath: '/ndr/reports'
-      preLoaderRoute: typeof AuthenticatedNdrReportsIndexImport
-      parentRoute: typeof AuthenticatedImport
+    '/_authenticated/profile/': {
+      id: '/_authenticated/profile/'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof AuthenticatedProfileIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/orders/$id/': {
-      id: '/_authenticated/orders/$id/'
-      path: '/orders/$id'
-      fullPath: '/orders/$id'
-      preLoaderRoute: typeof AuthenticatedOrdersIdIndexImport
-      parentRoute: typeof AuthenticatedImport
+    '/_authenticated/payment/': {
+      id: '/_authenticated/payment/'
+      path: '/payment'
+      fullPath: '/payment'
+      preLoaderRoute: typeof AuthenticatedPaymentIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/orders/create/': {
-      id: '/_authenticated/orders/create/'
-      path: '/orders/create'
-      fullPath: '/orders/create'
-      preLoaderRoute: typeof AuthenticatedOrdersCreateIndexImport
-      parentRoute: typeof AuthenticatedImport
+    '/_authenticated/overview/': {
+      id: '/_authenticated/overview/'
+      path: '/overview'
+      fullPath: '/overview'
+      preLoaderRoute: typeof AuthenticatedOverviewIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/orders/first-mile/': {
-      id: '/_authenticated/orders/first-mile/'
-      path: '/orders/first-mile'
-      fullPath: '/orders/first-mile'
-      preLoaderRoute: typeof AuthenticatedOrdersFirstMileIndexImport
-      parentRoute: typeof AuthenticatedImport
+    '/_authenticated/orders/': {
+      id: '/_authenticated/orders/'
+      path: '/orders'
+      fullPath: '/orders'
+      preLoaderRoute: typeof AuthenticatedOrdersIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/orders/track-order/': {
-      id: '/_authenticated/orders/track-order/'
-      path: '/orders/track-order'
-      fullPath: '/orders/track-order'
-      preLoaderRoute: typeof AuthenticatedOrdersTrackOrderIndexImport
-      parentRoute: typeof AuthenticatedImport
+    '/_authenticated/home/': {
+      id: '/_authenticated/home/'
+      path: '/home'
+      fullPath: '/home'
+      preLoaderRoute: typeof AuthenticatedHomeIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/revenue-dashboard/invoice-and-tax/': {
-      id: '/_authenticated/revenue-dashboard/invoice-and-tax/'
-      path: '/revenue-dashboard/invoice-and-tax'
-      fullPath: '/revenue-dashboard/invoice-and-tax'
-      preLoaderRoute: typeof AuthenticatedRevenueDashboardInvoiceAndTaxIndexImport
-      parentRoute: typeof AuthenticatedImport
+    '/_authenticated/tools/reports': {
+      id: '/_authenticated/tools/reports'
+      path: '/tools/reports'
+      fullPath: '/tools/reports'
+      preLoaderRoute: typeof AuthenticatedToolsReportsRouteRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/revenue-dashboard/settings/': {
-      id: '/_authenticated/revenue-dashboard/settings/'
-      path: '/revenue-dashboard/settings'
-      fullPath: '/revenue-dashboard/settings'
-      preLoaderRoute: typeof AuthenticatedRevenueDashboardSettingsIndexImport
-      parentRoute: typeof AuthenticatedImport
+    '/_authenticated/tools/rate-card': {
+      id: '/_authenticated/tools/rate-card'
+      path: '/tools/rate-card'
+      fullPath: '/tools/rate-card'
+      preLoaderRoute: typeof AuthenticatedToolsRateCardRouteRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/revenue-dashboard/support/': {
-      id: '/_authenticated/revenue-dashboard/support/'
-      path: '/revenue-dashboard/support'
-      fullPath: '/revenue-dashboard/support'
-      preLoaderRoute: typeof AuthenticatedRevenueDashboardSupportIndexImport
-      parentRoute: typeof AuthenticatedImport
+    '/_authenticated/tools/rate-calculator': {
+      id: '/_authenticated/tools/rate-calculator'
+      path: '/tools/rate-calculator'
+      fullPath: '/tools/rate-calculator'
+      preLoaderRoute: typeof AuthenticatedToolsRateCalculatorRouteRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/settings/address-management/': {
-      id: '/_authenticated/settings/address-management/'
-      path: '/address-management'
-      fullPath: '/settings/address-management'
-      preLoaderRoute: typeof AuthenticatedSettingsAddressManagementIndexImport
-      parentRoute: typeof AuthenticatedSettingsRouteImport
+    '/_authenticated/orders/returns': {
+      id: '/_authenticated/orders/returns'
+      path: '/orders/returns'
+      fullPath: '/orders/returns'
+      preLoaderRoute: typeof AuthenticatedOrdersReturnsRouteRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/settings/api-setups/': {
-      id: '/_authenticated/settings/api-setups/'
-      path: '/api-setups'
-      fullPath: '/settings/api-setups'
-      preLoaderRoute: typeof AuthenticatedSettingsApiSetupsIndexImport
-      parentRoute: typeof AuthenticatedSettingsRouteImport
+    '/_authenticated/dashboard/international': {
+      id: '/_authenticated/dashboard/international'
+      path: '/international'
+      fullPath: '/dashboard/international'
+      preLoaderRoute: typeof AuthenticatedDashboardInternationalRouteRouteImport
+      parentRoute: typeof AuthenticatedDashboardRouteRoute
     }
-    '/_authenticated/settings/bank-details/': {
-      id: '/_authenticated/settings/bank-details/'
-      path: '/bank-details'
-      fullPath: '/settings/bank-details'
-      preLoaderRoute: typeof AuthenticatedSettingsBankDetailsIndexImport
-      parentRoute: typeof AuthenticatedSettingsRouteImport
-    }
-    '/_authenticated/settings/company-details/': {
-      id: '/_authenticated/settings/company-details/'
-      path: '/company-details'
-      fullPath: '/settings/company-details'
-      preLoaderRoute: typeof AuthenticatedSettingsCompanyDetailsIndexImport
-      parentRoute: typeof AuthenticatedSettingsRouteImport
-    }
-    '/_authenticated/settings/invoice-templates/': {
-      id: '/_authenticated/settings/invoice-templates/'
-      path: '/invoice-templates'
-      fullPath: '/settings/invoice-templates'
-      preLoaderRoute: typeof AuthenticatedSettingsInvoiceTemplatesIndexImport
-      parentRoute: typeof AuthenticatedSettingsRouteImport
-    }
-    '/_authenticated/settings/pickup-locations/': {
-      id: '/_authenticated/settings/pickup-locations/'
-      path: '/pickup-locations'
-      fullPath: '/settings/pickup-locations'
-      preLoaderRoute: typeof AuthenticatedSettingsPickupLocationsIndexImport
-      parentRoute: typeof AuthenticatedSettingsRouteImport
-    }
-    '/_authenticated/settings/tax-configuration/': {
-      id: '/_authenticated/settings/tax-configuration/'
-      path: '/tax-configuration'
-      fullPath: '/settings/tax-configuration'
-      preLoaderRoute: typeof AuthenticatedSettingsTaxConfigurationIndexImport
-      parentRoute: typeof AuthenticatedSettingsRouteImport
-    }
-    '/_authenticated/settings/users/': {
-      id: '/_authenticated/settings/users/'
-      path: '/users'
-      fullPath: '/settings/users'
-      preLoaderRoute: typeof AuthenticatedSettingsUsersIndexImport
-      parentRoute: typeof AuthenticatedSettingsRouteImport
-    }
-    '/_authenticated/tools/activity-logs/': {
-      id: '/_authenticated/tools/activity-logs/'
-      path: '/tools/activity-logs'
-      fullPath: '/tools/activity-logs'
-      preLoaderRoute: typeof AuthenticatedToolsActivityLogsIndexImport
-      parentRoute: typeof AuthenticatedImport
-    }
-    '/_authenticated/warehouses/$id/': {
-      id: '/_authenticated/warehouses/$id/'
-      path: '/warehouses/$id'
-      fullPath: '/warehouses/$id'
-      preLoaderRoute: typeof AuthenticatedWarehousesIdIndexImport
-      parentRoute: typeof AuthenticatedImport
+    '/_authenticated/dashboard/domestic': {
+      id: '/_authenticated/dashboard/domestic'
+      path: '/domestic'
+      fullPath: '/dashboard/domestic'
+      preLoaderRoute: typeof AuthenticatedDashboardDomesticRouteRouteImport
+      parentRoute: typeof AuthenticatedDashboardRouteRoute
     }
     '/_authenticated/warehouses/create/': {
       id: '/_authenticated/warehouses/create/'
       path: '/warehouses/create'
       fullPath: '/warehouses/create'
-      preLoaderRoute: typeof AuthenticatedWarehousesCreateIndexImport
-      parentRoute: typeof AuthenticatedImport
+      preLoaderRoute: typeof AuthenticatedWarehousesCreateIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/access-control/roles/create/': {
-      id: '/_authenticated/access-control/roles/create/'
-      path: '/access-control/roles/create'
-      fullPath: '/access-control/roles/create'
-      preLoaderRoute: typeof AuthenticatedAccessControlRolesCreateIndexImport
-      parentRoute: typeof AuthenticatedImport
+    '/_authenticated/warehouses/$id/': {
+      id: '/_authenticated/warehouses/$id/'
+      path: '/warehouses/$id'
+      fullPath: '/warehouses/$id'
+      preLoaderRoute: typeof AuthenticatedWarehousesIdIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/access-control/users/create/': {
-      id: '/_authenticated/access-control/users/create/'
-      path: '/access-control/users/create'
-      fullPath: '/access-control/users/create'
-      preLoaderRoute: typeof AuthenticatedAccessControlUsersCreateIndexImport
-      parentRoute: typeof AuthenticatedImport
+    '/_authenticated/tools/activity-logs/': {
+      id: '/_authenticated/tools/activity-logs/'
+      path: '/tools/activity-logs'
+      fullPath: '/tools/activity-logs'
+      preLoaderRoute: typeof AuthenticatedToolsActivityLogsIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/dashboard/domestic/courier/': {
-      id: '/_authenticated/dashboard/domestic/courier/'
-      path: '/courier'
-      fullPath: '/dashboard/domestic/courier'
-      preLoaderRoute: typeof AuthenticatedDashboardDomesticCourierIndexImport
-      parentRoute: typeof AuthenticatedDashboardDomesticRouteImport
+    '/_authenticated/settings/users/': {
+      id: '/_authenticated/settings/users/'
+      path: '/users'
+      fullPath: '/settings/users'
+      preLoaderRoute: typeof AuthenticatedSettingsUsersIndexRouteImport
+      parentRoute: typeof AuthenticatedSettingsRouteRoute
     }
-    '/_authenticated/dashboard/domestic/delays/': {
-      id: '/_authenticated/dashboard/domestic/delays/'
-      path: '/delays'
-      fullPath: '/dashboard/domestic/delays'
-      preLoaderRoute: typeof AuthenticatedDashboardDomesticDelaysIndexImport
-      parentRoute: typeof AuthenticatedDashboardDomesticRouteImport
+    '/_authenticated/settings/tax-configuration/': {
+      id: '/_authenticated/settings/tax-configuration/'
+      path: '/tax-configuration'
+      fullPath: '/settings/tax-configuration'
+      preLoaderRoute: typeof AuthenticatedSettingsTaxConfigurationIndexRouteImport
+      parentRoute: typeof AuthenticatedSettingsRouteRoute
     }
-    '/_authenticated/dashboard/domestic/ndr/': {
-      id: '/_authenticated/dashboard/domestic/ndr/'
-      path: '/ndr'
-      fullPath: '/dashboard/domestic/ndr'
-      preLoaderRoute: typeof AuthenticatedDashboardDomesticNdrIndexImport
-      parentRoute: typeof AuthenticatedDashboardDomesticRouteImport
+    '/_authenticated/settings/pickup-locations/': {
+      id: '/_authenticated/settings/pickup-locations/'
+      path: '/pickup-locations'
+      fullPath: '/settings/pickup-locations'
+      preLoaderRoute: typeof AuthenticatedSettingsPickupLocationsIndexRouteImport
+      parentRoute: typeof AuthenticatedSettingsRouteRoute
     }
-    '/_authenticated/dashboard/domestic/orders/': {
-      id: '/_authenticated/dashboard/domestic/orders/'
-      path: '/orders'
-      fullPath: '/dashboard/domestic/orders'
-      preLoaderRoute: typeof AuthenticatedDashboardDomesticOrdersIndexImport
-      parentRoute: typeof AuthenticatedDashboardDomesticRouteImport
+    '/_authenticated/settings/invoice-templates/': {
+      id: '/_authenticated/settings/invoice-templates/'
+      path: '/invoice-templates'
+      fullPath: '/settings/invoice-templates'
+      preLoaderRoute: typeof AuthenticatedSettingsInvoiceTemplatesIndexRouteImport
+      parentRoute: typeof AuthenticatedSettingsRouteRoute
     }
-    '/_authenticated/dashboard/domestic/overview/': {
-      id: '/_authenticated/dashboard/domestic/overview/'
-      path: '/overview'
-      fullPath: '/dashboard/domestic/overview'
-      preLoaderRoute: typeof AuthenticatedDashboardDomesticOverviewIndexImport
-      parentRoute: typeof AuthenticatedDashboardDomesticRouteImport
+    '/_authenticated/settings/company-details/': {
+      id: '/_authenticated/settings/company-details/'
+      path: '/company-details'
+      fullPath: '/settings/company-details'
+      preLoaderRoute: typeof AuthenticatedSettingsCompanyDetailsIndexRouteImport
+      parentRoute: typeof AuthenticatedSettingsRouteRoute
     }
-    '/_authenticated/dashboard/domestic/rto/': {
-      id: '/_authenticated/dashboard/domestic/rto/'
-      path: '/rto'
-      fullPath: '/dashboard/domestic/rto'
-      preLoaderRoute: typeof AuthenticatedDashboardDomesticRtoIndexImport
-      parentRoute: typeof AuthenticatedDashboardDomesticRouteImport
+    '/_authenticated/settings/bank-details/': {
+      id: '/_authenticated/settings/bank-details/'
+      path: '/bank-details'
+      fullPath: '/settings/bank-details'
+      preLoaderRoute: typeof AuthenticatedSettingsBankDetailsIndexRouteImport
+      parentRoute: typeof AuthenticatedSettingsRouteRoute
     }
-    '/_authenticated/dashboard/domestic/shipments/': {
-      id: '/_authenticated/dashboard/domestic/shipments/'
-      path: '/shipments'
-      fullPath: '/dashboard/domestic/shipments'
-      preLoaderRoute: typeof AuthenticatedDashboardDomesticShipmentsIndexImport
-      parentRoute: typeof AuthenticatedDashboardDomesticRouteImport
+    '/_authenticated/settings/api-setups/': {
+      id: '/_authenticated/settings/api-setups/'
+      path: '/api-setups'
+      fullPath: '/settings/api-setups'
+      preLoaderRoute: typeof AuthenticatedSettingsApiSetupsIndexRouteImport
+      parentRoute: typeof AuthenticatedSettingsRouteRoute
     }
-    '/_authenticated/dashboard/international/overview/': {
-      id: '/_authenticated/dashboard/international/overview/'
-      path: '/overview'
-      fullPath: '/dashboard/international/overview'
-      preLoaderRoute: typeof AuthenticatedDashboardInternationalOverviewIndexImport
-      parentRoute: typeof AuthenticatedDashboardInternationalRouteImport
+    '/_authenticated/settings/address-management/': {
+      id: '/_authenticated/settings/address-management/'
+      path: '/address-management'
+      fullPath: '/settings/address-management'
+      preLoaderRoute: typeof AuthenticatedSettingsAddressManagementIndexRouteImport
+      parentRoute: typeof AuthenticatedSettingsRouteRoute
     }
-    '/_authenticated/orders/first-mile/$id/': {
-      id: '/_authenticated/orders/first-mile/$id/'
-      path: '/orders/first-mile/$id'
-      fullPath: '/orders/first-mile/$id'
-      preLoaderRoute: typeof AuthenticatedOrdersFirstMileIdIndexImport
-      parentRoute: typeof AuthenticatedImport
+    '/_authenticated/revenue-dashboard/support/': {
+      id: '/_authenticated/revenue-dashboard/support/'
+      path: '/revenue-dashboard/support'
+      fullPath: '/revenue-dashboard/support'
+      preLoaderRoute: typeof AuthenticatedRevenueDashboardSupportIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/orders/first-mile/calculate-price/': {
-      id: '/_authenticated/orders/first-mile/calculate-price/'
-      path: '/orders/first-mile/calculate-price'
-      fullPath: '/orders/first-mile/calculate-price'
-      preLoaderRoute: typeof AuthenticatedOrdersFirstMileCalculatePriceIndexImport
-      parentRoute: typeof AuthenticatedImport
+    '/_authenticated/revenue-dashboard/settings/': {
+      id: '/_authenticated/revenue-dashboard/settings/'
+      path: '/revenue-dashboard/settings'
+      fullPath: '/revenue-dashboard/settings'
+      preLoaderRoute: typeof AuthenticatedRevenueDashboardSettingsIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/orders/first-mile/create/': {
-      id: '/_authenticated/orders/first-mile/create/'
-      path: '/orders/first-mile/create'
-      fullPath: '/orders/first-mile/create'
-      preLoaderRoute: typeof AuthenticatedOrdersFirstMileCreateIndexImport
-      parentRoute: typeof AuthenticatedImport
+    '/_authenticated/revenue-dashboard/invoice-and-tax/': {
+      id: '/_authenticated/revenue-dashboard/invoice-and-tax/'
+      path: '/revenue-dashboard/invoice-and-tax'
+      fullPath: '/revenue-dashboard/invoice-and-tax'
+      preLoaderRoute: typeof AuthenticatedRevenueDashboardInvoiceAndTaxIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/revenue-dashboard/my-earnings/revenue-summary/': {
-      id: '/_authenticated/revenue-dashboard/my-earnings/revenue-summary/'
-      path: '/revenue-dashboard/my-earnings/revenue-summary'
-      fullPath: '/revenue-dashboard/my-earnings/revenue-summary'
-      preLoaderRoute: typeof AuthenticatedRevenueDashboardMyEarningsRevenueSummaryIndexImport
-      parentRoute: typeof AuthenticatedImport
+    '/_authenticated/orders/track-order/': {
+      id: '/_authenticated/orders/track-order/'
+      path: '/orders/track-order'
+      fullPath: '/orders/track-order'
+      preLoaderRoute: typeof AuthenticatedOrdersTrackOrderIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/revenue-dashboard/my-earnings/settlements-and-payouts/': {
-      id: '/_authenticated/revenue-dashboard/my-earnings/settlements-and-payouts/'
-      path: '/revenue-dashboard/my-earnings/settlements-and-payouts'
-      fullPath: '/revenue-dashboard/my-earnings/settlements-and-payouts'
-      preLoaderRoute: typeof AuthenticatedRevenueDashboardMyEarningsSettlementsAndPayoutsIndexImport
-      parentRoute: typeof AuthenticatedImport
+    '/_authenticated/orders/first-mile/': {
+      id: '/_authenticated/orders/first-mile/'
+      path: '/orders/first-mile'
+      fullPath: '/orders/first-mile'
+      preLoaderRoute: typeof AuthenticatedOrdersFirstMileIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/revenue-dashboard/reports/commission-breakdown/': {
-      id: '/_authenticated/revenue-dashboard/reports/commission-breakdown/'
-      path: '/revenue-dashboard/reports/commission-breakdown'
-      fullPath: '/revenue-dashboard/reports/commission-breakdown'
-      preLoaderRoute: typeof AuthenticatedRevenueDashboardReportsCommissionBreakdownIndexImport
-      parentRoute: typeof AuthenticatedImport
+    '/_authenticated/orders/create/': {
+      id: '/_authenticated/orders/create/'
+      path: '/orders/create'
+      fullPath: '/orders/create'
+      preLoaderRoute: typeof AuthenticatedOrdersCreateIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/revenue-dashboard/reports/shipment-revenue/': {
-      id: '/_authenticated/revenue-dashboard/reports/shipment-revenue/'
-      path: '/revenue-dashboard/reports/shipment-revenue'
-      fullPath: '/revenue-dashboard/reports/shipment-revenue'
-      preLoaderRoute: typeof AuthenticatedRevenueDashboardReportsShipmentRevenueIndexImport
-      parentRoute: typeof AuthenticatedImport
+    '/_authenticated/orders/$id/': {
+      id: '/_authenticated/orders/$id/'
+      path: '/orders/$id'
+      fullPath: '/orders/$id'
+      preLoaderRoute: typeof AuthenticatedOrdersIdIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/tools/rate-calculator/domestic/': {
-      id: '/_authenticated/tools/rate-calculator/domestic/'
-      path: '/domestic'
-      fullPath: '/tools/rate-calculator/domestic'
-      preLoaderRoute: typeof AuthenticatedToolsRateCalculatorDomesticIndexImport
-      parentRoute: typeof AuthenticatedToolsRateCalculatorRouteImport
+    '/_authenticated/ndr/reports/': {
+      id: '/_authenticated/ndr/reports/'
+      path: '/ndr/reports'
+      fullPath: '/ndr/reports'
+      preLoaderRoute: typeof AuthenticatedNdrReportsIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/tools/rate-calculator/international/': {
-      id: '/_authenticated/tools/rate-calculator/international/'
-      path: '/international'
-      fullPath: '/tools/rate-calculator/international'
-      preLoaderRoute: typeof AuthenticatedToolsRateCalculatorInternationalIndexImport
-      parentRoute: typeof AuthenticatedToolsRateCalculatorRouteImport
+    '/_authenticated/ndr/cases/': {
+      id: '/_authenticated/ndr/cases/'
+      path: '/ndr/cases'
+      fullPath: '/ndr/cases'
+      preLoaderRoute: typeof AuthenticatedNdrCasesIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/tools/rate-card/document/': {
-      id: '/_authenticated/tools/rate-card/document/'
-      path: '/document'
-      fullPath: '/tools/rate-card/document'
-      preLoaderRoute: typeof AuthenticatedToolsRateCardDocumentIndexImport
-      parentRoute: typeof AuthenticatedToolsRateCardRouteImport
+    '/_authenticated/access-control/users/': {
+      id: '/_authenticated/access-control/users/'
+      path: '/access-control/users'
+      fullPath: '/access-control/users'
+      preLoaderRoute: typeof AuthenticatedAccessControlUsersIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/tools/rate-card/forward/': {
-      id: '/_authenticated/tools/rate-card/forward/'
-      path: '/forward'
-      fullPath: '/tools/rate-card/forward'
-      preLoaderRoute: typeof AuthenticatedToolsRateCardForwardIndexImport
-      parentRoute: typeof AuthenticatedToolsRateCardRouteImport
-    }
-    '/_authenticated/tools/rate-card/reverse/': {
-      id: '/_authenticated/tools/rate-card/reverse/'
-      path: '/reverse'
-      fullPath: '/tools/rate-card/reverse'
-      preLoaderRoute: typeof AuthenticatedToolsRateCardReverseIndexImport
-      parentRoute: typeof AuthenticatedToolsRateCardRouteImport
-    }
-    '/_authenticated/tools/reports/reports-scheduler/': {
-      id: '/_authenticated/tools/reports/reports-scheduler/'
-      path: '/reports-scheduler'
-      fullPath: '/tools/reports/reports-scheduler'
-      preLoaderRoute: typeof AuthenticatedToolsReportsReportsSchedulerIndexImport
-      parentRoute: typeof AuthenticatedToolsReportsRouteImport
+    '/_authenticated/tools/reports/download-reports': {
+      id: '/_authenticated/tools/reports/download-reports'
+      path: '/download-reports'
+      fullPath: '/tools/reports/download-reports'
+      preLoaderRoute: typeof AuthenticatedToolsReportsDownloadReportsRouteRouteImport
+      parentRoute: typeof AuthenticatedToolsReportsRouteRoute
     }
     '/_authenticated/warehouses/$id/edit/': {
       id: '/_authenticated/warehouses/$id/edit/'
       path: '/warehouses/$id/edit'
       fullPath: '/warehouses/$id/edit'
-      preLoaderRoute: typeof AuthenticatedWarehousesIdEditIndexImport
-      parentRoute: typeof AuthenticatedImport
+      preLoaderRoute: typeof AuthenticatedWarehousesIdEditIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/orders/first-mile/$id/edit/': {
-      id: '/_authenticated/orders/first-mile/$id/edit/'
-      path: '/orders/first-mile/$id/edit'
-      fullPath: '/orders/first-mile/$id/edit'
-      preLoaderRoute: typeof AuthenticatedOrdersFirstMileIdEditIndexImport
-      parentRoute: typeof AuthenticatedImport
+    '/_authenticated/tools/reports/reports-scheduler/': {
+      id: '/_authenticated/tools/reports/reports-scheduler/'
+      path: '/reports-scheduler'
+      fullPath: '/tools/reports/reports-scheduler'
+      preLoaderRoute: typeof AuthenticatedToolsReportsReportsSchedulerIndexRouteImport
+      parentRoute: typeof AuthenticatedToolsReportsRouteRoute
     }
-    '/_authenticated/tools/reports/download-reports/instant-reports/': {
-      id: '/_authenticated/tools/reports/download-reports/instant-reports/'
-      path: '/instant-reports'
-      fullPath: '/tools/reports/download-reports/instant-reports'
-      preLoaderRoute: typeof AuthenticatedToolsReportsDownloadReportsInstantReportsIndexImport
-      parentRoute: typeof AuthenticatedToolsReportsDownloadReportsRouteImport
+    '/_authenticated/tools/rate-card/reverse/': {
+      id: '/_authenticated/tools/rate-card/reverse/'
+      path: '/reverse'
+      fullPath: '/tools/rate-card/reverse'
+      preLoaderRoute: typeof AuthenticatedToolsRateCardReverseIndexRouteImport
+      parentRoute: typeof AuthenticatedToolsRateCardRouteRoute
+    }
+    '/_authenticated/tools/rate-card/forward/': {
+      id: '/_authenticated/tools/rate-card/forward/'
+      path: '/forward'
+      fullPath: '/tools/rate-card/forward'
+      preLoaderRoute: typeof AuthenticatedToolsRateCardForwardIndexRouteImport
+      parentRoute: typeof AuthenticatedToolsRateCardRouteRoute
+    }
+    '/_authenticated/tools/rate-card/document/': {
+      id: '/_authenticated/tools/rate-card/document/'
+      path: '/document'
+      fullPath: '/tools/rate-card/document'
+      preLoaderRoute: typeof AuthenticatedToolsRateCardDocumentIndexRouteImport
+      parentRoute: typeof AuthenticatedToolsRateCardRouteRoute
+    }
+    '/_authenticated/tools/rate-calculator/international/': {
+      id: '/_authenticated/tools/rate-calculator/international/'
+      path: '/international'
+      fullPath: '/tools/rate-calculator/international'
+      preLoaderRoute: typeof AuthenticatedToolsRateCalculatorInternationalIndexRouteImport
+      parentRoute: typeof AuthenticatedToolsRateCalculatorRouteRoute
+    }
+    '/_authenticated/tools/rate-calculator/domestic/': {
+      id: '/_authenticated/tools/rate-calculator/domestic/'
+      path: '/domestic'
+      fullPath: '/tools/rate-calculator/domestic'
+      preLoaderRoute: typeof AuthenticatedToolsRateCalculatorDomesticIndexRouteImport
+      parentRoute: typeof AuthenticatedToolsRateCalculatorRouteRoute
+    }
+    '/_authenticated/revenue-dashboard/reports/shipment-revenue/': {
+      id: '/_authenticated/revenue-dashboard/reports/shipment-revenue/'
+      path: '/revenue-dashboard/reports/shipment-revenue'
+      fullPath: '/revenue-dashboard/reports/shipment-revenue'
+      preLoaderRoute: typeof AuthenticatedRevenueDashboardReportsShipmentRevenueIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/revenue-dashboard/reports/commission-breakdown/': {
+      id: '/_authenticated/revenue-dashboard/reports/commission-breakdown/'
+      path: '/revenue-dashboard/reports/commission-breakdown'
+      fullPath: '/revenue-dashboard/reports/commission-breakdown'
+      preLoaderRoute: typeof AuthenticatedRevenueDashboardReportsCommissionBreakdownIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/revenue-dashboard/my-earnings/settlements-and-payouts/': {
+      id: '/_authenticated/revenue-dashboard/my-earnings/settlements-and-payouts/'
+      path: '/revenue-dashboard/my-earnings/settlements-and-payouts'
+      fullPath: '/revenue-dashboard/my-earnings/settlements-and-payouts'
+      preLoaderRoute: typeof AuthenticatedRevenueDashboardMyEarningsSettlementsAndPayoutsIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/revenue-dashboard/my-earnings/revenue-summary/': {
+      id: '/_authenticated/revenue-dashboard/my-earnings/revenue-summary/'
+      path: '/revenue-dashboard/my-earnings/revenue-summary'
+      fullPath: '/revenue-dashboard/my-earnings/revenue-summary'
+      preLoaderRoute: typeof AuthenticatedRevenueDashboardMyEarningsRevenueSummaryIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/orders/first-mile/create/': {
+      id: '/_authenticated/orders/first-mile/create/'
+      path: '/orders/first-mile/create'
+      fullPath: '/orders/first-mile/create'
+      preLoaderRoute: typeof AuthenticatedOrdersFirstMileCreateIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/orders/first-mile/calculate-price/': {
+      id: '/_authenticated/orders/first-mile/calculate-price/'
+      path: '/orders/first-mile/calculate-price'
+      fullPath: '/orders/first-mile/calculate-price'
+      preLoaderRoute: typeof AuthenticatedOrdersFirstMileCalculatePriceIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/orders/first-mile/$id/': {
+      id: '/_authenticated/orders/first-mile/$id/'
+      path: '/orders/first-mile/$id'
+      fullPath: '/orders/first-mile/$id'
+      preLoaderRoute: typeof AuthenticatedOrdersFirstMileIdIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/dashboard/international/overview/': {
+      id: '/_authenticated/dashboard/international/overview/'
+      path: '/overview'
+      fullPath: '/dashboard/international/overview'
+      preLoaderRoute: typeof AuthenticatedDashboardInternationalOverviewIndexRouteImport
+      parentRoute: typeof AuthenticatedDashboardInternationalRouteRoute
+    }
+    '/_authenticated/dashboard/domestic/shipments/': {
+      id: '/_authenticated/dashboard/domestic/shipments/'
+      path: '/shipments'
+      fullPath: '/dashboard/domestic/shipments'
+      preLoaderRoute: typeof AuthenticatedDashboardDomesticShipmentsIndexRouteImport
+      parentRoute: typeof AuthenticatedDashboardDomesticRouteRoute
+    }
+    '/_authenticated/dashboard/domestic/rto/': {
+      id: '/_authenticated/dashboard/domestic/rto/'
+      path: '/rto'
+      fullPath: '/dashboard/domestic/rto'
+      preLoaderRoute: typeof AuthenticatedDashboardDomesticRtoIndexRouteImport
+      parentRoute: typeof AuthenticatedDashboardDomesticRouteRoute
+    }
+    '/_authenticated/dashboard/domestic/overview/': {
+      id: '/_authenticated/dashboard/domestic/overview/'
+      path: '/overview'
+      fullPath: '/dashboard/domestic/overview'
+      preLoaderRoute: typeof AuthenticatedDashboardDomesticOverviewIndexRouteImport
+      parentRoute: typeof AuthenticatedDashboardDomesticRouteRoute
+    }
+    '/_authenticated/dashboard/domestic/orders/': {
+      id: '/_authenticated/dashboard/domestic/orders/'
+      path: '/orders'
+      fullPath: '/dashboard/domestic/orders'
+      preLoaderRoute: typeof AuthenticatedDashboardDomesticOrdersIndexRouteImport
+      parentRoute: typeof AuthenticatedDashboardDomesticRouteRoute
+    }
+    '/_authenticated/dashboard/domestic/ndr/': {
+      id: '/_authenticated/dashboard/domestic/ndr/'
+      path: '/ndr'
+      fullPath: '/dashboard/domestic/ndr'
+      preLoaderRoute: typeof AuthenticatedDashboardDomesticNdrIndexRouteImport
+      parentRoute: typeof AuthenticatedDashboardDomesticRouteRoute
+    }
+    '/_authenticated/dashboard/domestic/delays/': {
+      id: '/_authenticated/dashboard/domestic/delays/'
+      path: '/delays'
+      fullPath: '/dashboard/domestic/delays'
+      preLoaderRoute: typeof AuthenticatedDashboardDomesticDelaysIndexRouteImport
+      parentRoute: typeof AuthenticatedDashboardDomesticRouteRoute
+    }
+    '/_authenticated/dashboard/domestic/courier/': {
+      id: '/_authenticated/dashboard/domestic/courier/'
+      path: '/courier'
+      fullPath: '/dashboard/domestic/courier'
+      preLoaderRoute: typeof AuthenticatedDashboardDomesticCourierIndexRouteImport
+      parentRoute: typeof AuthenticatedDashboardDomesticRouteRoute
+    }
+    '/_authenticated/access-control/users/create/': {
+      id: '/_authenticated/access-control/users/create/'
+      path: '/access-control/users/create'
+      fullPath: '/access-control/users/create'
+      preLoaderRoute: typeof AuthenticatedAccessControlUsersCreateIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/access-control/roles/create/': {
+      id: '/_authenticated/access-control/roles/create/'
+      path: '/access-control/roles/create'
+      fullPath: '/access-control/roles/create'
+      preLoaderRoute: typeof AuthenticatedAccessControlRolesCreateIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/tools/reports/download-reports/scheduled-reports/': {
       id: '/_authenticated/tools/reports/download-reports/scheduled-reports/'
       path: '/scheduled-reports'
       fullPath: '/tools/reports/download-reports/scheduled-reports'
-      preLoaderRoute: typeof AuthenticatedToolsReportsDownloadReportsScheduledReportsIndexLazyImport
-      parentRoute: typeof AuthenticatedToolsReportsDownloadReportsRouteImport
+      preLoaderRoute: typeof AuthenticatedToolsReportsDownloadReportsScheduledReportsIndexLazyRouteImport
+      parentRoute: typeof AuthenticatedToolsReportsDownloadReportsRouteRoute
+    }
+    '/_authenticated/tools/reports/download-reports/instant-reports/': {
+      id: '/_authenticated/tools/reports/download-reports/instant-reports/'
+      path: '/instant-reports'
+      fullPath: '/tools/reports/download-reports/instant-reports'
+      preLoaderRoute: typeof AuthenticatedToolsReportsDownloadReportsInstantReportsIndexRouteImport
+      parentRoute: typeof AuthenticatedToolsReportsDownloadReportsRouteRoute
+    }
+    '/_authenticated/orders/first-mile/$id/edit/': {
+      id: '/_authenticated/orders/first-mile/$id/edit/'
+      path: '/orders/first-mile/$id/edit'
+      fullPath: '/orders/first-mile/$id/edit'
+      preLoaderRoute: typeof AuthenticatedOrdersFirstMileIdEditIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
   }
 }
-
-// Create and export the route tree
 
 interface AuthenticatedDashboardDomesticRouteRouteChildren {
   AuthenticatedDashboardDomesticCourierIndexRoute: typeof AuthenticatedDashboardDomesticCourierIndexRoute
@@ -1356,824 +1713,11 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
   AuthenticatedRouteChildren,
 )
 
-export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '': typeof AuthenticatedRouteWithChildren
-  '/dashboard': typeof AuthenticatedDashboardRouteRouteWithChildren
-  '/settings': typeof AuthenticatedSettingsRouteRouteWithChildren
-  '/auth/login': typeof AuthLoginRoute
-  '/dashboard/domestic': typeof AuthenticatedDashboardDomesticRouteRouteWithChildren
-  '/dashboard/international': typeof AuthenticatedDashboardInternationalRouteRouteWithChildren
-  '/orders/returns': typeof AuthenticatedOrdersReturnsRouteRoute
-  '/tools/rate-calculator': typeof AuthenticatedToolsRateCalculatorRouteRouteWithChildren
-  '/tools/rate-card': typeof AuthenticatedToolsRateCardRouteRouteWithChildren
-  '/tools/reports': typeof AuthenticatedToolsReportsRouteRouteWithChildren
-  '/home': typeof AuthenticatedHomeIndexRoute
-  '/orders': typeof AuthenticatedOrdersIndexRoute
-  '/overview': typeof AuthenticatedOverviewIndexRoute
-  '/payment': typeof AuthenticatedPaymentIndexRoute
-  '/profile': typeof AuthenticatedProfileIndexRoute
-  '/rack': typeof AuthenticatedRackIndexRoute
-  '/revenue-dashboard': typeof AuthenticatedRevenueDashboardIndexRoute
-  '/tools': typeof AuthenticatedToolsIndexRoute
-  '/warehouses': typeof AuthenticatedWarehousesIndexRoute
-  '/tools/reports/download-reports': typeof AuthenticatedToolsReportsDownloadReportsRouteRouteWithChildren
-  '/access-control/users': typeof AuthenticatedAccessControlUsersIndexRoute
-  '/ndr/cases': typeof AuthenticatedNdrCasesIndexRoute
-  '/ndr/reports': typeof AuthenticatedNdrReportsIndexRoute
-  '/orders/$id': typeof AuthenticatedOrdersIdIndexRoute
-  '/orders/create': typeof AuthenticatedOrdersCreateIndexRoute
-  '/orders/first-mile': typeof AuthenticatedOrdersFirstMileIndexRoute
-  '/orders/track-order': typeof AuthenticatedOrdersTrackOrderIndexRoute
-  '/revenue-dashboard/invoice-and-tax': typeof AuthenticatedRevenueDashboardInvoiceAndTaxIndexRoute
-  '/revenue-dashboard/settings': typeof AuthenticatedRevenueDashboardSettingsIndexRoute
-  '/revenue-dashboard/support': typeof AuthenticatedRevenueDashboardSupportIndexRoute
-  '/settings/address-management': typeof AuthenticatedSettingsAddressManagementIndexRoute
-  '/settings/api-setups': typeof AuthenticatedSettingsApiSetupsIndexRoute
-  '/settings/bank-details': typeof AuthenticatedSettingsBankDetailsIndexRoute
-  '/settings/company-details': typeof AuthenticatedSettingsCompanyDetailsIndexRoute
-  '/settings/invoice-templates': typeof AuthenticatedSettingsInvoiceTemplatesIndexRoute
-  '/settings/pickup-locations': typeof AuthenticatedSettingsPickupLocationsIndexRoute
-  '/settings/tax-configuration': typeof AuthenticatedSettingsTaxConfigurationIndexRoute
-  '/settings/users': typeof AuthenticatedSettingsUsersIndexRoute
-  '/tools/activity-logs': typeof AuthenticatedToolsActivityLogsIndexRoute
-  '/warehouses/$id': typeof AuthenticatedWarehousesIdIndexRoute
-  '/warehouses/create': typeof AuthenticatedWarehousesCreateIndexRoute
-  '/access-control/roles/create': typeof AuthenticatedAccessControlRolesCreateIndexRoute
-  '/access-control/users/create': typeof AuthenticatedAccessControlUsersCreateIndexRoute
-  '/dashboard/domestic/courier': typeof AuthenticatedDashboardDomesticCourierIndexRoute
-  '/dashboard/domestic/delays': typeof AuthenticatedDashboardDomesticDelaysIndexRoute
-  '/dashboard/domestic/ndr': typeof AuthenticatedDashboardDomesticNdrIndexRoute
-  '/dashboard/domestic/orders': typeof AuthenticatedDashboardDomesticOrdersIndexRoute
-  '/dashboard/domestic/overview': typeof AuthenticatedDashboardDomesticOverviewIndexRoute
-  '/dashboard/domestic/rto': typeof AuthenticatedDashboardDomesticRtoIndexRoute
-  '/dashboard/domestic/shipments': typeof AuthenticatedDashboardDomesticShipmentsIndexRoute
-  '/dashboard/international/overview': typeof AuthenticatedDashboardInternationalOverviewIndexRoute
-  '/orders/first-mile/$id': typeof AuthenticatedOrdersFirstMileIdIndexRoute
-  '/orders/first-mile/calculate-price': typeof AuthenticatedOrdersFirstMileCalculatePriceIndexRoute
-  '/orders/first-mile/create': typeof AuthenticatedOrdersFirstMileCreateIndexRoute
-  '/revenue-dashboard/my-earnings/revenue-summary': typeof AuthenticatedRevenueDashboardMyEarningsRevenueSummaryIndexRoute
-  '/revenue-dashboard/my-earnings/settlements-and-payouts': typeof AuthenticatedRevenueDashboardMyEarningsSettlementsAndPayoutsIndexRoute
-  '/revenue-dashboard/reports/commission-breakdown': typeof AuthenticatedRevenueDashboardReportsCommissionBreakdownIndexRoute
-  '/revenue-dashboard/reports/shipment-revenue': typeof AuthenticatedRevenueDashboardReportsShipmentRevenueIndexRoute
-  '/tools/rate-calculator/domestic': typeof AuthenticatedToolsRateCalculatorDomesticIndexRoute
-  '/tools/rate-calculator/international': typeof AuthenticatedToolsRateCalculatorInternationalIndexRoute
-  '/tools/rate-card/document': typeof AuthenticatedToolsRateCardDocumentIndexRoute
-  '/tools/rate-card/forward': typeof AuthenticatedToolsRateCardForwardIndexRoute
-  '/tools/rate-card/reverse': typeof AuthenticatedToolsRateCardReverseIndexRoute
-  '/tools/reports/reports-scheduler': typeof AuthenticatedToolsReportsReportsSchedulerIndexRoute
-  '/warehouses/$id/edit': typeof AuthenticatedWarehousesIdEditIndexRoute
-  '/orders/first-mile/$id/edit': typeof AuthenticatedOrdersFirstMileIdEditIndexRoute
-  '/tools/reports/download-reports/instant-reports': typeof AuthenticatedToolsReportsDownloadReportsInstantReportsIndexRoute
-  '/tools/reports/download-reports/scheduled-reports': typeof AuthenticatedToolsReportsDownloadReportsScheduledReportsIndexLazyRoute
-}
-
-export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '': typeof AuthenticatedRouteWithChildren
-  '/dashboard': typeof AuthenticatedDashboardRouteRouteWithChildren
-  '/settings': typeof AuthenticatedSettingsRouteRouteWithChildren
-  '/auth/login': typeof AuthLoginRoute
-  '/dashboard/domestic': typeof AuthenticatedDashboardDomesticRouteRouteWithChildren
-  '/dashboard/international': typeof AuthenticatedDashboardInternationalRouteRouteWithChildren
-  '/orders/returns': typeof AuthenticatedOrdersReturnsRouteRoute
-  '/tools/rate-calculator': typeof AuthenticatedToolsRateCalculatorRouteRouteWithChildren
-  '/tools/rate-card': typeof AuthenticatedToolsRateCardRouteRouteWithChildren
-  '/tools/reports': typeof AuthenticatedToolsReportsRouteRouteWithChildren
-  '/home': typeof AuthenticatedHomeIndexRoute
-  '/orders': typeof AuthenticatedOrdersIndexRoute
-  '/overview': typeof AuthenticatedOverviewIndexRoute
-  '/payment': typeof AuthenticatedPaymentIndexRoute
-  '/profile': typeof AuthenticatedProfileIndexRoute
-  '/rack': typeof AuthenticatedRackIndexRoute
-  '/revenue-dashboard': typeof AuthenticatedRevenueDashboardIndexRoute
-  '/tools': typeof AuthenticatedToolsIndexRoute
-  '/warehouses': typeof AuthenticatedWarehousesIndexRoute
-  '/tools/reports/download-reports': typeof AuthenticatedToolsReportsDownloadReportsRouteRouteWithChildren
-  '/access-control/users': typeof AuthenticatedAccessControlUsersIndexRoute
-  '/ndr/cases': typeof AuthenticatedNdrCasesIndexRoute
-  '/ndr/reports': typeof AuthenticatedNdrReportsIndexRoute
-  '/orders/$id': typeof AuthenticatedOrdersIdIndexRoute
-  '/orders/create': typeof AuthenticatedOrdersCreateIndexRoute
-  '/orders/first-mile': typeof AuthenticatedOrdersFirstMileIndexRoute
-  '/orders/track-order': typeof AuthenticatedOrdersTrackOrderIndexRoute
-  '/revenue-dashboard/invoice-and-tax': typeof AuthenticatedRevenueDashboardInvoiceAndTaxIndexRoute
-  '/revenue-dashboard/settings': typeof AuthenticatedRevenueDashboardSettingsIndexRoute
-  '/revenue-dashboard/support': typeof AuthenticatedRevenueDashboardSupportIndexRoute
-  '/settings/address-management': typeof AuthenticatedSettingsAddressManagementIndexRoute
-  '/settings/api-setups': typeof AuthenticatedSettingsApiSetupsIndexRoute
-  '/settings/bank-details': typeof AuthenticatedSettingsBankDetailsIndexRoute
-  '/settings/company-details': typeof AuthenticatedSettingsCompanyDetailsIndexRoute
-  '/settings/invoice-templates': typeof AuthenticatedSettingsInvoiceTemplatesIndexRoute
-  '/settings/pickup-locations': typeof AuthenticatedSettingsPickupLocationsIndexRoute
-  '/settings/tax-configuration': typeof AuthenticatedSettingsTaxConfigurationIndexRoute
-  '/settings/users': typeof AuthenticatedSettingsUsersIndexRoute
-  '/tools/activity-logs': typeof AuthenticatedToolsActivityLogsIndexRoute
-  '/warehouses/$id': typeof AuthenticatedWarehousesIdIndexRoute
-  '/warehouses/create': typeof AuthenticatedWarehousesCreateIndexRoute
-  '/access-control/roles/create': typeof AuthenticatedAccessControlRolesCreateIndexRoute
-  '/access-control/users/create': typeof AuthenticatedAccessControlUsersCreateIndexRoute
-  '/dashboard/domestic/courier': typeof AuthenticatedDashboardDomesticCourierIndexRoute
-  '/dashboard/domestic/delays': typeof AuthenticatedDashboardDomesticDelaysIndexRoute
-  '/dashboard/domestic/ndr': typeof AuthenticatedDashboardDomesticNdrIndexRoute
-  '/dashboard/domestic/orders': typeof AuthenticatedDashboardDomesticOrdersIndexRoute
-  '/dashboard/domestic/overview': typeof AuthenticatedDashboardDomesticOverviewIndexRoute
-  '/dashboard/domestic/rto': typeof AuthenticatedDashboardDomesticRtoIndexRoute
-  '/dashboard/domestic/shipments': typeof AuthenticatedDashboardDomesticShipmentsIndexRoute
-  '/dashboard/international/overview': typeof AuthenticatedDashboardInternationalOverviewIndexRoute
-  '/orders/first-mile/$id': typeof AuthenticatedOrdersFirstMileIdIndexRoute
-  '/orders/first-mile/calculate-price': typeof AuthenticatedOrdersFirstMileCalculatePriceIndexRoute
-  '/orders/first-mile/create': typeof AuthenticatedOrdersFirstMileCreateIndexRoute
-  '/revenue-dashboard/my-earnings/revenue-summary': typeof AuthenticatedRevenueDashboardMyEarningsRevenueSummaryIndexRoute
-  '/revenue-dashboard/my-earnings/settlements-and-payouts': typeof AuthenticatedRevenueDashboardMyEarningsSettlementsAndPayoutsIndexRoute
-  '/revenue-dashboard/reports/commission-breakdown': typeof AuthenticatedRevenueDashboardReportsCommissionBreakdownIndexRoute
-  '/revenue-dashboard/reports/shipment-revenue': typeof AuthenticatedRevenueDashboardReportsShipmentRevenueIndexRoute
-  '/tools/rate-calculator/domestic': typeof AuthenticatedToolsRateCalculatorDomesticIndexRoute
-  '/tools/rate-calculator/international': typeof AuthenticatedToolsRateCalculatorInternationalIndexRoute
-  '/tools/rate-card/document': typeof AuthenticatedToolsRateCardDocumentIndexRoute
-  '/tools/rate-card/forward': typeof AuthenticatedToolsRateCardForwardIndexRoute
-  '/tools/rate-card/reverse': typeof AuthenticatedToolsRateCardReverseIndexRoute
-  '/tools/reports/reports-scheduler': typeof AuthenticatedToolsReportsReportsSchedulerIndexRoute
-  '/warehouses/$id/edit': typeof AuthenticatedWarehousesIdEditIndexRoute
-  '/orders/first-mile/$id/edit': typeof AuthenticatedOrdersFirstMileIdEditIndexRoute
-  '/tools/reports/download-reports/instant-reports': typeof AuthenticatedToolsReportsDownloadReportsInstantReportsIndexRoute
-  '/tools/reports/download-reports/scheduled-reports': typeof AuthenticatedToolsReportsDownloadReportsScheduledReportsIndexLazyRoute
-}
-
-export interface FileRoutesById {
-  __root__: typeof rootRoute
-  '/': typeof IndexRoute
-  '/_authenticated': typeof AuthenticatedRouteWithChildren
-  '/_authenticated/dashboard': typeof AuthenticatedDashboardRouteRouteWithChildren
-  '/_authenticated/settings': typeof AuthenticatedSettingsRouteRouteWithChildren
-  '/auth/login': typeof AuthLoginRoute
-  '/_authenticated/dashboard/domestic': typeof AuthenticatedDashboardDomesticRouteRouteWithChildren
-  '/_authenticated/dashboard/international': typeof AuthenticatedDashboardInternationalRouteRouteWithChildren
-  '/_authenticated/orders/returns': typeof AuthenticatedOrdersReturnsRouteRoute
-  '/_authenticated/tools/rate-calculator': typeof AuthenticatedToolsRateCalculatorRouteRouteWithChildren
-  '/_authenticated/tools/rate-card': typeof AuthenticatedToolsRateCardRouteRouteWithChildren
-  '/_authenticated/tools/reports': typeof AuthenticatedToolsReportsRouteRouteWithChildren
-  '/_authenticated/home/': typeof AuthenticatedHomeIndexRoute
-  '/_authenticated/orders/': typeof AuthenticatedOrdersIndexRoute
-  '/_authenticated/overview/': typeof AuthenticatedOverviewIndexRoute
-  '/_authenticated/payment/': typeof AuthenticatedPaymentIndexRoute
-  '/_authenticated/profile/': typeof AuthenticatedProfileIndexRoute
-  '/_authenticated/rack/': typeof AuthenticatedRackIndexRoute
-  '/_authenticated/revenue-dashboard/': typeof AuthenticatedRevenueDashboardIndexRoute
-  '/_authenticated/tools/': typeof AuthenticatedToolsIndexRoute
-  '/_authenticated/warehouses/': typeof AuthenticatedWarehousesIndexRoute
-  '/_authenticated/tools/reports/download-reports': typeof AuthenticatedToolsReportsDownloadReportsRouteRouteWithChildren
-  '/_authenticated/access-control/users/': typeof AuthenticatedAccessControlUsersIndexRoute
-  '/_authenticated/ndr/cases/': typeof AuthenticatedNdrCasesIndexRoute
-  '/_authenticated/ndr/reports/': typeof AuthenticatedNdrReportsIndexRoute
-  '/_authenticated/orders/$id/': typeof AuthenticatedOrdersIdIndexRoute
-  '/_authenticated/orders/create/': typeof AuthenticatedOrdersCreateIndexRoute
-  '/_authenticated/orders/first-mile/': typeof AuthenticatedOrdersFirstMileIndexRoute
-  '/_authenticated/orders/track-order/': typeof AuthenticatedOrdersTrackOrderIndexRoute
-  '/_authenticated/revenue-dashboard/invoice-and-tax/': typeof AuthenticatedRevenueDashboardInvoiceAndTaxIndexRoute
-  '/_authenticated/revenue-dashboard/settings/': typeof AuthenticatedRevenueDashboardSettingsIndexRoute
-  '/_authenticated/revenue-dashboard/support/': typeof AuthenticatedRevenueDashboardSupportIndexRoute
-  '/_authenticated/settings/address-management/': typeof AuthenticatedSettingsAddressManagementIndexRoute
-  '/_authenticated/settings/api-setups/': typeof AuthenticatedSettingsApiSetupsIndexRoute
-  '/_authenticated/settings/bank-details/': typeof AuthenticatedSettingsBankDetailsIndexRoute
-  '/_authenticated/settings/company-details/': typeof AuthenticatedSettingsCompanyDetailsIndexRoute
-  '/_authenticated/settings/invoice-templates/': typeof AuthenticatedSettingsInvoiceTemplatesIndexRoute
-  '/_authenticated/settings/pickup-locations/': typeof AuthenticatedSettingsPickupLocationsIndexRoute
-  '/_authenticated/settings/tax-configuration/': typeof AuthenticatedSettingsTaxConfigurationIndexRoute
-  '/_authenticated/settings/users/': typeof AuthenticatedSettingsUsersIndexRoute
-  '/_authenticated/tools/activity-logs/': typeof AuthenticatedToolsActivityLogsIndexRoute
-  '/_authenticated/warehouses/$id/': typeof AuthenticatedWarehousesIdIndexRoute
-  '/_authenticated/warehouses/create/': typeof AuthenticatedWarehousesCreateIndexRoute
-  '/_authenticated/access-control/roles/create/': typeof AuthenticatedAccessControlRolesCreateIndexRoute
-  '/_authenticated/access-control/users/create/': typeof AuthenticatedAccessControlUsersCreateIndexRoute
-  '/_authenticated/dashboard/domestic/courier/': typeof AuthenticatedDashboardDomesticCourierIndexRoute
-  '/_authenticated/dashboard/domestic/delays/': typeof AuthenticatedDashboardDomesticDelaysIndexRoute
-  '/_authenticated/dashboard/domestic/ndr/': typeof AuthenticatedDashboardDomesticNdrIndexRoute
-  '/_authenticated/dashboard/domestic/orders/': typeof AuthenticatedDashboardDomesticOrdersIndexRoute
-  '/_authenticated/dashboard/domestic/overview/': typeof AuthenticatedDashboardDomesticOverviewIndexRoute
-  '/_authenticated/dashboard/domestic/rto/': typeof AuthenticatedDashboardDomesticRtoIndexRoute
-  '/_authenticated/dashboard/domestic/shipments/': typeof AuthenticatedDashboardDomesticShipmentsIndexRoute
-  '/_authenticated/dashboard/international/overview/': typeof AuthenticatedDashboardInternationalOverviewIndexRoute
-  '/_authenticated/orders/first-mile/$id/': typeof AuthenticatedOrdersFirstMileIdIndexRoute
-  '/_authenticated/orders/first-mile/calculate-price/': typeof AuthenticatedOrdersFirstMileCalculatePriceIndexRoute
-  '/_authenticated/orders/first-mile/create/': typeof AuthenticatedOrdersFirstMileCreateIndexRoute
-  '/_authenticated/revenue-dashboard/my-earnings/revenue-summary/': typeof AuthenticatedRevenueDashboardMyEarningsRevenueSummaryIndexRoute
-  '/_authenticated/revenue-dashboard/my-earnings/settlements-and-payouts/': typeof AuthenticatedRevenueDashboardMyEarningsSettlementsAndPayoutsIndexRoute
-  '/_authenticated/revenue-dashboard/reports/commission-breakdown/': typeof AuthenticatedRevenueDashboardReportsCommissionBreakdownIndexRoute
-  '/_authenticated/revenue-dashboard/reports/shipment-revenue/': typeof AuthenticatedRevenueDashboardReportsShipmentRevenueIndexRoute
-  '/_authenticated/tools/rate-calculator/domestic/': typeof AuthenticatedToolsRateCalculatorDomesticIndexRoute
-  '/_authenticated/tools/rate-calculator/international/': typeof AuthenticatedToolsRateCalculatorInternationalIndexRoute
-  '/_authenticated/tools/rate-card/document/': typeof AuthenticatedToolsRateCardDocumentIndexRoute
-  '/_authenticated/tools/rate-card/forward/': typeof AuthenticatedToolsRateCardForwardIndexRoute
-  '/_authenticated/tools/rate-card/reverse/': typeof AuthenticatedToolsRateCardReverseIndexRoute
-  '/_authenticated/tools/reports/reports-scheduler/': typeof AuthenticatedToolsReportsReportsSchedulerIndexRoute
-  '/_authenticated/warehouses/$id/edit/': typeof AuthenticatedWarehousesIdEditIndexRoute
-  '/_authenticated/orders/first-mile/$id/edit/': typeof AuthenticatedOrdersFirstMileIdEditIndexRoute
-  '/_authenticated/tools/reports/download-reports/instant-reports/': typeof AuthenticatedToolsReportsDownloadReportsInstantReportsIndexRoute
-  '/_authenticated/tools/reports/download-reports/scheduled-reports/': typeof AuthenticatedToolsReportsDownloadReportsScheduledReportsIndexLazyRoute
-}
-
-export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | '/'
-    | ''
-    | '/dashboard'
-    | '/settings'
-    | '/auth/login'
-    | '/dashboard/domestic'
-    | '/dashboard/international'
-    | '/orders/returns'
-    | '/tools/rate-calculator'
-    | '/tools/rate-card'
-    | '/tools/reports'
-    | '/home'
-    | '/orders'
-    | '/overview'
-    | '/payment'
-    | '/profile'
-    | '/rack'
-    | '/revenue-dashboard'
-    | '/tools'
-    | '/warehouses'
-    | '/tools/reports/download-reports'
-    | '/access-control/users'
-    | '/ndr/cases'
-    | '/ndr/reports'
-    | '/orders/$id'
-    | '/orders/create'
-    | '/orders/first-mile'
-    | '/orders/track-order'
-    | '/revenue-dashboard/invoice-and-tax'
-    | '/revenue-dashboard/settings'
-    | '/revenue-dashboard/support'
-    | '/settings/address-management'
-    | '/settings/api-setups'
-    | '/settings/bank-details'
-    | '/settings/company-details'
-    | '/settings/invoice-templates'
-    | '/settings/pickup-locations'
-    | '/settings/tax-configuration'
-    | '/settings/users'
-    | '/tools/activity-logs'
-    | '/warehouses/$id'
-    | '/warehouses/create'
-    | '/access-control/roles/create'
-    | '/access-control/users/create'
-    | '/dashboard/domestic/courier'
-    | '/dashboard/domestic/delays'
-    | '/dashboard/domestic/ndr'
-    | '/dashboard/domestic/orders'
-    | '/dashboard/domestic/overview'
-    | '/dashboard/domestic/rto'
-    | '/dashboard/domestic/shipments'
-    | '/dashboard/international/overview'
-    | '/orders/first-mile/$id'
-    | '/orders/first-mile/calculate-price'
-    | '/orders/first-mile/create'
-    | '/revenue-dashboard/my-earnings/revenue-summary'
-    | '/revenue-dashboard/my-earnings/settlements-and-payouts'
-    | '/revenue-dashboard/reports/commission-breakdown'
-    | '/revenue-dashboard/reports/shipment-revenue'
-    | '/tools/rate-calculator/domestic'
-    | '/tools/rate-calculator/international'
-    | '/tools/rate-card/document'
-    | '/tools/rate-card/forward'
-    | '/tools/rate-card/reverse'
-    | '/tools/reports/reports-scheduler'
-    | '/warehouses/$id/edit'
-    | '/orders/first-mile/$id/edit'
-    | '/tools/reports/download-reports/instant-reports'
-    | '/tools/reports/download-reports/scheduled-reports'
-  fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/'
-    | ''
-    | '/dashboard'
-    | '/settings'
-    | '/auth/login'
-    | '/dashboard/domestic'
-    | '/dashboard/international'
-    | '/orders/returns'
-    | '/tools/rate-calculator'
-    | '/tools/rate-card'
-    | '/tools/reports'
-    | '/home'
-    | '/orders'
-    | '/overview'
-    | '/payment'
-    | '/profile'
-    | '/rack'
-    | '/revenue-dashboard'
-    | '/tools'
-    | '/warehouses'
-    | '/tools/reports/download-reports'
-    | '/access-control/users'
-    | '/ndr/cases'
-    | '/ndr/reports'
-    | '/orders/$id'
-    | '/orders/create'
-    | '/orders/first-mile'
-    | '/orders/track-order'
-    | '/revenue-dashboard/invoice-and-tax'
-    | '/revenue-dashboard/settings'
-    | '/revenue-dashboard/support'
-    | '/settings/address-management'
-    | '/settings/api-setups'
-    | '/settings/bank-details'
-    | '/settings/company-details'
-    | '/settings/invoice-templates'
-    | '/settings/pickup-locations'
-    | '/settings/tax-configuration'
-    | '/settings/users'
-    | '/tools/activity-logs'
-    | '/warehouses/$id'
-    | '/warehouses/create'
-    | '/access-control/roles/create'
-    | '/access-control/users/create'
-    | '/dashboard/domestic/courier'
-    | '/dashboard/domestic/delays'
-    | '/dashboard/domestic/ndr'
-    | '/dashboard/domestic/orders'
-    | '/dashboard/domestic/overview'
-    | '/dashboard/domestic/rto'
-    | '/dashboard/domestic/shipments'
-    | '/dashboard/international/overview'
-    | '/orders/first-mile/$id'
-    | '/orders/first-mile/calculate-price'
-    | '/orders/first-mile/create'
-    | '/revenue-dashboard/my-earnings/revenue-summary'
-    | '/revenue-dashboard/my-earnings/settlements-and-payouts'
-    | '/revenue-dashboard/reports/commission-breakdown'
-    | '/revenue-dashboard/reports/shipment-revenue'
-    | '/tools/rate-calculator/domestic'
-    | '/tools/rate-calculator/international'
-    | '/tools/rate-card/document'
-    | '/tools/rate-card/forward'
-    | '/tools/rate-card/reverse'
-    | '/tools/reports/reports-scheduler'
-    | '/warehouses/$id/edit'
-    | '/orders/first-mile/$id/edit'
-    | '/tools/reports/download-reports/instant-reports'
-    | '/tools/reports/download-reports/scheduled-reports'
-  id:
-    | '__root__'
-    | '/'
-    | '/_authenticated'
-    | '/_authenticated/dashboard'
-    | '/_authenticated/settings'
-    | '/auth/login'
-    | '/_authenticated/dashboard/domestic'
-    | '/_authenticated/dashboard/international'
-    | '/_authenticated/orders/returns'
-    | '/_authenticated/tools/rate-calculator'
-    | '/_authenticated/tools/rate-card'
-    | '/_authenticated/tools/reports'
-    | '/_authenticated/home/'
-    | '/_authenticated/orders/'
-    | '/_authenticated/overview/'
-    | '/_authenticated/payment/'
-    | '/_authenticated/profile/'
-    | '/_authenticated/rack/'
-    | '/_authenticated/revenue-dashboard/'
-    | '/_authenticated/tools/'
-    | '/_authenticated/warehouses/'
-    | '/_authenticated/tools/reports/download-reports'
-    | '/_authenticated/access-control/users/'
-    | '/_authenticated/ndr/cases/'
-    | '/_authenticated/ndr/reports/'
-    | '/_authenticated/orders/$id/'
-    | '/_authenticated/orders/create/'
-    | '/_authenticated/orders/first-mile/'
-    | '/_authenticated/orders/track-order/'
-    | '/_authenticated/revenue-dashboard/invoice-and-tax/'
-    | '/_authenticated/revenue-dashboard/settings/'
-    | '/_authenticated/revenue-dashboard/support/'
-    | '/_authenticated/settings/address-management/'
-    | '/_authenticated/settings/api-setups/'
-    | '/_authenticated/settings/bank-details/'
-    | '/_authenticated/settings/company-details/'
-    | '/_authenticated/settings/invoice-templates/'
-    | '/_authenticated/settings/pickup-locations/'
-    | '/_authenticated/settings/tax-configuration/'
-    | '/_authenticated/settings/users/'
-    | '/_authenticated/tools/activity-logs/'
-    | '/_authenticated/warehouses/$id/'
-    | '/_authenticated/warehouses/create/'
-    | '/_authenticated/access-control/roles/create/'
-    | '/_authenticated/access-control/users/create/'
-    | '/_authenticated/dashboard/domestic/courier/'
-    | '/_authenticated/dashboard/domestic/delays/'
-    | '/_authenticated/dashboard/domestic/ndr/'
-    | '/_authenticated/dashboard/domestic/orders/'
-    | '/_authenticated/dashboard/domestic/overview/'
-    | '/_authenticated/dashboard/domestic/rto/'
-    | '/_authenticated/dashboard/domestic/shipments/'
-    | '/_authenticated/dashboard/international/overview/'
-    | '/_authenticated/orders/first-mile/$id/'
-    | '/_authenticated/orders/first-mile/calculate-price/'
-    | '/_authenticated/orders/first-mile/create/'
-    | '/_authenticated/revenue-dashboard/my-earnings/revenue-summary/'
-    | '/_authenticated/revenue-dashboard/my-earnings/settlements-and-payouts/'
-    | '/_authenticated/revenue-dashboard/reports/commission-breakdown/'
-    | '/_authenticated/revenue-dashboard/reports/shipment-revenue/'
-    | '/_authenticated/tools/rate-calculator/domestic/'
-    | '/_authenticated/tools/rate-calculator/international/'
-    | '/_authenticated/tools/rate-card/document/'
-    | '/_authenticated/tools/rate-card/forward/'
-    | '/_authenticated/tools/rate-card/reverse/'
-    | '/_authenticated/tools/reports/reports-scheduler/'
-    | '/_authenticated/warehouses/$id/edit/'
-    | '/_authenticated/orders/first-mile/$id/edit/'
-    | '/_authenticated/tools/reports/download-reports/instant-reports/'
-    | '/_authenticated/tools/reports/download-reports/scheduled-reports/'
-  fileRoutesById: FileRoutesById
-}
-
-export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
-  AuthLoginRoute: typeof AuthLoginRoute
-}
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   AuthLoginRoute: AuthLoginRoute,
 }
-
-export const routeTree = rootRoute
+export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-/* ROUTE_MANIFEST_START
-{
-  "routes": {
-    "__root__": {
-      "filePath": "__root.jsx",
-      "children": [
-        "/",
-        "/_authenticated",
-        "/auth/login"
-      ]
-    },
-    "/": {
-      "filePath": "index.jsx"
-    },
-    "/_authenticated": {
-      "filePath": "_authenticated.jsx",
-      "children": [
-        "/_authenticated/dashboard",
-        "/_authenticated/settings",
-        "/_authenticated/orders/returns",
-        "/_authenticated/tools/rate-calculator",
-        "/_authenticated/tools/rate-card",
-        "/_authenticated/tools/reports",
-        "/_authenticated/home/",
-        "/_authenticated/orders/",
-        "/_authenticated/overview/",
-        "/_authenticated/payment/",
-        "/_authenticated/profile/",
-        "/_authenticated/rack/",
-        "/_authenticated/revenue-dashboard/",
-        "/_authenticated/tools/",
-        "/_authenticated/warehouses/",
-        "/_authenticated/access-control/users/",
-        "/_authenticated/ndr/cases/",
-        "/_authenticated/ndr/reports/",
-        "/_authenticated/orders/$id/",
-        "/_authenticated/orders/create/",
-        "/_authenticated/orders/first-mile/",
-        "/_authenticated/orders/track-order/",
-        "/_authenticated/revenue-dashboard/invoice-and-tax/",
-        "/_authenticated/revenue-dashboard/settings/",
-        "/_authenticated/revenue-dashboard/support/",
-        "/_authenticated/tools/activity-logs/",
-        "/_authenticated/warehouses/$id/",
-        "/_authenticated/warehouses/create/",
-        "/_authenticated/access-control/roles/create/",
-        "/_authenticated/access-control/users/create/",
-        "/_authenticated/orders/first-mile/$id/",
-        "/_authenticated/orders/first-mile/calculate-price/",
-        "/_authenticated/orders/first-mile/create/",
-        "/_authenticated/revenue-dashboard/my-earnings/revenue-summary/",
-        "/_authenticated/revenue-dashboard/my-earnings/settlements-and-payouts/",
-        "/_authenticated/revenue-dashboard/reports/commission-breakdown/",
-        "/_authenticated/revenue-dashboard/reports/shipment-revenue/",
-        "/_authenticated/warehouses/$id/edit/",
-        "/_authenticated/orders/first-mile/$id/edit/"
-      ]
-    },
-    "/_authenticated/dashboard": {
-      "filePath": "_authenticated/dashboard/route.jsx",
-      "parent": "/_authenticated",
-      "children": [
-        "/_authenticated/dashboard/domestic",
-        "/_authenticated/dashboard/international"
-      ]
-    },
-    "/_authenticated/settings": {
-      "filePath": "_authenticated/settings/route.jsx",
-      "parent": "/_authenticated",
-      "children": [
-        "/_authenticated/settings/address-management/",
-        "/_authenticated/settings/api-setups/",
-        "/_authenticated/settings/bank-details/",
-        "/_authenticated/settings/company-details/",
-        "/_authenticated/settings/invoice-templates/",
-        "/_authenticated/settings/pickup-locations/",
-        "/_authenticated/settings/tax-configuration/",
-        "/_authenticated/settings/users/"
-      ]
-    },
-    "/auth/login": {
-      "filePath": "auth/login.jsx"
-    },
-    "/_authenticated/dashboard/domestic": {
-      "filePath": "_authenticated/dashboard/domestic/route.jsx",
-      "parent": "/_authenticated/dashboard",
-      "children": [
-        "/_authenticated/dashboard/domestic/courier/",
-        "/_authenticated/dashboard/domestic/delays/",
-        "/_authenticated/dashboard/domestic/ndr/",
-        "/_authenticated/dashboard/domestic/orders/",
-        "/_authenticated/dashboard/domestic/overview/",
-        "/_authenticated/dashboard/domestic/rto/",
-        "/_authenticated/dashboard/domestic/shipments/"
-      ]
-    },
-    "/_authenticated/dashboard/international": {
-      "filePath": "_authenticated/dashboard/international/route.jsx",
-      "parent": "/_authenticated/dashboard",
-      "children": [
-        "/_authenticated/dashboard/international/overview/"
-      ]
-    },
-    "/_authenticated/orders/returns": {
-      "filePath": "_authenticated/orders/returns/route.jsx",
-      "parent": "/_authenticated"
-    },
-    "/_authenticated/tools/rate-calculator": {
-      "filePath": "_authenticated/tools/rate-calculator/route.jsx",
-      "parent": "/_authenticated",
-      "children": [
-        "/_authenticated/tools/rate-calculator/domestic/",
-        "/_authenticated/tools/rate-calculator/international/"
-      ]
-    },
-    "/_authenticated/tools/rate-card": {
-      "filePath": "_authenticated/tools/rate-card/route.jsx",
-      "parent": "/_authenticated",
-      "children": [
-        "/_authenticated/tools/rate-card/document/",
-        "/_authenticated/tools/rate-card/forward/",
-        "/_authenticated/tools/rate-card/reverse/"
-      ]
-    },
-    "/_authenticated/tools/reports": {
-      "filePath": "_authenticated/tools/reports/route.jsx",
-      "parent": "/_authenticated",
-      "children": [
-        "/_authenticated/tools/reports/download-reports",
-        "/_authenticated/tools/reports/reports-scheduler/"
-      ]
-    },
-    "/_authenticated/home/": {
-      "filePath": "_authenticated/home/index.jsx",
-      "parent": "/_authenticated"
-    },
-    "/_authenticated/orders/": {
-      "filePath": "_authenticated/orders/index.jsx",
-      "parent": "/_authenticated"
-    },
-    "/_authenticated/overview/": {
-      "filePath": "_authenticated/overview/index.jsx",
-      "parent": "/_authenticated"
-    },
-    "/_authenticated/payment/": {
-      "filePath": "_authenticated/payment/index.jsx",
-      "parent": "/_authenticated"
-    },
-    "/_authenticated/profile/": {
-      "filePath": "_authenticated/profile/index.jsx",
-      "parent": "/_authenticated"
-    },
-    "/_authenticated/rack/": {
-      "filePath": "_authenticated/rack/index.jsx",
-      "parent": "/_authenticated"
-    },
-    "/_authenticated/revenue-dashboard/": {
-      "filePath": "_authenticated/revenue-dashboard/index.jsx",
-      "parent": "/_authenticated"
-    },
-    "/_authenticated/tools/": {
-      "filePath": "_authenticated/tools/index.jsx",
-      "parent": "/_authenticated"
-    },
-    "/_authenticated/warehouses/": {
-      "filePath": "_authenticated/warehouses/index.jsx",
-      "parent": "/_authenticated"
-    },
-    "/_authenticated/tools/reports/download-reports": {
-      "filePath": "_authenticated/tools/reports/download-reports/route.jsx",
-      "parent": "/_authenticated/tools/reports",
-      "children": [
-        "/_authenticated/tools/reports/download-reports/instant-reports/",
-        "/_authenticated/tools/reports/download-reports/scheduled-reports/"
-      ]
-    },
-    "/_authenticated/access-control/users/": {
-      "filePath": "_authenticated/access-control/users/index.jsx",
-      "parent": "/_authenticated"
-    },
-    "/_authenticated/ndr/cases/": {
-      "filePath": "_authenticated/ndr/cases/index.jsx",
-      "parent": "/_authenticated"
-    },
-    "/_authenticated/ndr/reports/": {
-      "filePath": "_authenticated/ndr/reports/index.jsx",
-      "parent": "/_authenticated"
-    },
-    "/_authenticated/orders/$id/": {
-      "filePath": "_authenticated/orders/$id/index.jsx",
-      "parent": "/_authenticated"
-    },
-    "/_authenticated/orders/create/": {
-      "filePath": "_authenticated/orders/create/index.jsx",
-      "parent": "/_authenticated"
-    },
-    "/_authenticated/orders/first-mile/": {
-      "filePath": "_authenticated/orders/first-mile/index.jsx",
-      "parent": "/_authenticated"
-    },
-    "/_authenticated/orders/track-order/": {
-      "filePath": "_authenticated/orders/track-order/index.jsx",
-      "parent": "/_authenticated"
-    },
-    "/_authenticated/revenue-dashboard/invoice-and-tax/": {
-      "filePath": "_authenticated/revenue-dashboard/invoice-and-tax/index.jsx",
-      "parent": "/_authenticated"
-    },
-    "/_authenticated/revenue-dashboard/settings/": {
-      "filePath": "_authenticated/revenue-dashboard/settings/index.jsx",
-      "parent": "/_authenticated"
-    },
-    "/_authenticated/revenue-dashboard/support/": {
-      "filePath": "_authenticated/revenue-dashboard/support/index.jsx",
-      "parent": "/_authenticated"
-    },
-    "/_authenticated/settings/address-management/": {
-      "filePath": "_authenticated/settings/address-management/index.jsx",
-      "parent": "/_authenticated/settings"
-    },
-    "/_authenticated/settings/api-setups/": {
-      "filePath": "_authenticated/settings/api-setups/index.jsx",
-      "parent": "/_authenticated/settings"
-    },
-    "/_authenticated/settings/bank-details/": {
-      "filePath": "_authenticated/settings/bank-details/index.jsx",
-      "parent": "/_authenticated/settings"
-    },
-    "/_authenticated/settings/company-details/": {
-      "filePath": "_authenticated/settings/company-details/index.jsx",
-      "parent": "/_authenticated/settings"
-    },
-    "/_authenticated/settings/invoice-templates/": {
-      "filePath": "_authenticated/settings/invoice-templates/index.jsx",
-      "parent": "/_authenticated/settings"
-    },
-    "/_authenticated/settings/pickup-locations/": {
-      "filePath": "_authenticated/settings/pickup-locations/index.jsx",
-      "parent": "/_authenticated/settings"
-    },
-    "/_authenticated/settings/tax-configuration/": {
-      "filePath": "_authenticated/settings/tax-configuration/index.jsx",
-      "parent": "/_authenticated/settings"
-    },
-    "/_authenticated/settings/users/": {
-      "filePath": "_authenticated/settings/users/index.jsx",
-      "parent": "/_authenticated/settings"
-    },
-    "/_authenticated/tools/activity-logs/": {
-      "filePath": "_authenticated/tools/activity-logs/index.jsx",
-      "parent": "/_authenticated"
-    },
-    "/_authenticated/warehouses/$id/": {
-      "filePath": "_authenticated/warehouses/$id/index.jsx",
-      "parent": "/_authenticated"
-    },
-    "/_authenticated/warehouses/create/": {
-      "filePath": "_authenticated/warehouses/create/index.jsx",
-      "parent": "/_authenticated"
-    },
-    "/_authenticated/access-control/roles/create/": {
-      "filePath": "_authenticated/access-control/roles/create/index.jsx",
-      "parent": "/_authenticated"
-    },
-    "/_authenticated/access-control/users/create/": {
-      "filePath": "_authenticated/access-control/users/create/index.jsx",
-      "parent": "/_authenticated"
-    },
-    "/_authenticated/dashboard/domestic/courier/": {
-      "filePath": "_authenticated/dashboard/domestic/courier/index.jsx",
-      "parent": "/_authenticated/dashboard/domestic"
-    },
-    "/_authenticated/dashboard/domestic/delays/": {
-      "filePath": "_authenticated/dashboard/domestic/delays/index.jsx",
-      "parent": "/_authenticated/dashboard/domestic"
-    },
-    "/_authenticated/dashboard/domestic/ndr/": {
-      "filePath": "_authenticated/dashboard/domestic/ndr/index.jsx",
-      "parent": "/_authenticated/dashboard/domestic"
-    },
-    "/_authenticated/dashboard/domestic/orders/": {
-      "filePath": "_authenticated/dashboard/domestic/orders/index.jsx",
-      "parent": "/_authenticated/dashboard/domestic"
-    },
-    "/_authenticated/dashboard/domestic/overview/": {
-      "filePath": "_authenticated/dashboard/domestic/overview/index.jsx",
-      "parent": "/_authenticated/dashboard/domestic"
-    },
-    "/_authenticated/dashboard/domestic/rto/": {
-      "filePath": "_authenticated/dashboard/domestic/rto/index.jsx",
-      "parent": "/_authenticated/dashboard/domestic"
-    },
-    "/_authenticated/dashboard/domestic/shipments/": {
-      "filePath": "_authenticated/dashboard/domestic/shipments/index.jsx",
-      "parent": "/_authenticated/dashboard/domestic"
-    },
-    "/_authenticated/dashboard/international/overview/": {
-      "filePath": "_authenticated/dashboard/international/overview/index.jsx",
-      "parent": "/_authenticated/dashboard/international"
-    },
-    "/_authenticated/orders/first-mile/$id/": {
-      "filePath": "_authenticated/orders/first-mile/$id/index.jsx",
-      "parent": "/_authenticated"
-    },
-    "/_authenticated/orders/first-mile/calculate-price/": {
-      "filePath": "_authenticated/orders/first-mile/calculate-price/index.jsx",
-      "parent": "/_authenticated"
-    },
-    "/_authenticated/orders/first-mile/create/": {
-      "filePath": "_authenticated/orders/first-mile/create/index.jsx",
-      "parent": "/_authenticated"
-    },
-    "/_authenticated/revenue-dashboard/my-earnings/revenue-summary/": {
-      "filePath": "_authenticated/revenue-dashboard/my-earnings/revenue-summary/index.jsx",
-      "parent": "/_authenticated"
-    },
-    "/_authenticated/revenue-dashboard/my-earnings/settlements-and-payouts/": {
-      "filePath": "_authenticated/revenue-dashboard/my-earnings/settlements-and-payouts/index.jsx",
-      "parent": "/_authenticated"
-    },
-    "/_authenticated/revenue-dashboard/reports/commission-breakdown/": {
-      "filePath": "_authenticated/revenue-dashboard/reports/commission-breakdown/index.jsx",
-      "parent": "/_authenticated"
-    },
-    "/_authenticated/revenue-dashboard/reports/shipment-revenue/": {
-      "filePath": "_authenticated/revenue-dashboard/reports/shipment-revenue/index.jsx",
-      "parent": "/_authenticated"
-    },
-    "/_authenticated/tools/rate-calculator/domestic/": {
-      "filePath": "_authenticated/tools/rate-calculator/domestic/index.jsx",
-      "parent": "/_authenticated/tools/rate-calculator"
-    },
-    "/_authenticated/tools/rate-calculator/international/": {
-      "filePath": "_authenticated/tools/rate-calculator/international/index.jsx",
-      "parent": "/_authenticated/tools/rate-calculator"
-    },
-    "/_authenticated/tools/rate-card/document/": {
-      "filePath": "_authenticated/tools/rate-card/document/index.jsx",
-      "parent": "/_authenticated/tools/rate-card"
-    },
-    "/_authenticated/tools/rate-card/forward/": {
-      "filePath": "_authenticated/tools/rate-card/forward/index.jsx",
-      "parent": "/_authenticated/tools/rate-card"
-    },
-    "/_authenticated/tools/rate-card/reverse/": {
-      "filePath": "_authenticated/tools/rate-card/reverse/index.jsx",
-      "parent": "/_authenticated/tools/rate-card"
-    },
-    "/_authenticated/tools/reports/reports-scheduler/": {
-      "filePath": "_authenticated/tools/reports/reports-scheduler/index.jsx",
-      "parent": "/_authenticated/tools/reports"
-    },
-    "/_authenticated/warehouses/$id/edit/": {
-      "filePath": "_authenticated/warehouses/$id/edit/index.jsx",
-      "parent": "/_authenticated"
-    },
-    "/_authenticated/orders/first-mile/$id/edit/": {
-      "filePath": "_authenticated/orders/first-mile/$id/edit/index.jsx",
-      "parent": "/_authenticated"
-    },
-    "/_authenticated/tools/reports/download-reports/instant-reports/": {
-      "filePath": "_authenticated/tools/reports/download-reports/instant-reports/index.jsx",
-      "parent": "/_authenticated/tools/reports/download-reports"
-    },
-    "/_authenticated/tools/reports/download-reports/scheduled-reports/": {
-      "filePath": "_authenticated/tools/reports/download-reports/scheduled-reports/index.lazy.jsx",
-      "parent": "/_authenticated/tools/reports/download-reports"
-    }
-  }
-}
-ROUTE_MANIFEST_END */
