@@ -12,6 +12,7 @@ import {
   Button,
   Card,
   Checkbox,
+  message,
 } from "antd";
 import {
   MinusCircleOutlined,
@@ -26,7 +27,8 @@ import { APIProvider } from "@vis.gl/react-google-maps";
 import dayjs from "dayjs";
 import PaginatedSelect from "@/components/ui/PaginatedSelect";
 import { useCreateComprehensiveOrder } from "@/features/orders/orders.query";
-import { message } from "antd";
+import { UPLOAD_TYPES } from "@/features/upload/upload.service";
+import AWSUpload from "@/components/ui/AWSUpload";
 const API_KEY = import.meta.env.VITE_APP_GOOGLE_API_KEY;
 const deliveryTypeOptions = [
   { label: "Forward", value: "FORWARD" },
@@ -181,10 +183,6 @@ const ComprehensiveOrderForm = () => {
         layout="vertical"
         onFinish={onFinish}
         initialValues={{
-          additional: {
-            async: true,
-            label: true,
-          },
           gst_info: {
             is_seller_registered_under_gst: false,
           },
@@ -617,6 +615,16 @@ const ShipmentStep = () => {
                         label="Mfg Country"
                       >
                         <Input placeholder="Country" />
+                      </Form.Item>
+                    </Col>
+                    {/* Upload images */}
+                    <Col>
+                      <Form.Item name="images" className="mb-0">
+                        <AWSUpload
+                          uploadType={UPLOAD_TYPES.GENERAL}
+                          multiple
+                          maxCount={6}
+                        />
                       </Form.Item>
                     </Col>
                   </Row>
