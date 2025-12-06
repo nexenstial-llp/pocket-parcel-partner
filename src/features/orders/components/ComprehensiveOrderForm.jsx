@@ -532,20 +532,6 @@ const ShipmentStep = () => {
               />
             </Form.Item>
           </Col>
-          <Col {...responsiveColSpan}>
-            <Form.Item
-              name={["shipment_details", "volumetric_weight"]}
-              label="Volumetric Weight"
-            >
-              <InputNumber
-                disabled
-                style={{ width: "100%" }}
-                min={0}
-                addonAfter="g"
-                controls={false}
-              />
-            </Form.Item>
-          </Col>
         </Row>
       </Card>
 
