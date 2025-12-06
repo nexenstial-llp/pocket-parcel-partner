@@ -79,7 +79,6 @@ export const sendMobileOtpApi = async (data) => {
     "/v1/auth/mobile/send-verification-otp",
     {
       ...data,
-      is_admin: true,
     },
     {
       skipAuth: true,
