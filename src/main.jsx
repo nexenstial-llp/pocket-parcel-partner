@@ -47,6 +47,8 @@ root.render(
             // darkSubMenuItemBg: "#2b358e",
             // darkSubMenuItemBg: "#001529",
 
+            itemHeight: 30,
+
             // Light
             itemHoverBg: "#f4592b",
             itemSelectedBg: "#f4592b",
