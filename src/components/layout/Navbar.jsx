@@ -56,12 +56,8 @@ const Navbar = ({ setDrawerVisible, isMobile }) => {
           <div className={`pr-2`}>
             <Button icon={<IoIosNotifications size={25} />} type="text" />
           </div> */}
-          <div className={`${isMobile && "hidden"} cursor-pointer `}>
-            <Dropdown
-              trigger={"click"}
-              menu={{ items, onClick }}
-              className=" border border-gray-100 p-2 rounded-2xl"
-            >
+          <div className={`${isMobile && "hidden"} cursor-pointer`}>
+            <Dropdown trigger={"click"} menu={{ items, onClick }}>
               <Space className="">
                 <Avatar icon={<FaUser />} />{" "}
                 <p className="truncate capitalize max-w-[100px]">
