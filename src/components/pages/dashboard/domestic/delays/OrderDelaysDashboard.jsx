@@ -374,6 +374,7 @@ const OrderDelaysDashboard = () => {
           >
             <Table
               columns={zoneColumns.filter((col) => !col.render)}
+              // eslint-disable-next-line no-unused-vars
               dataSource={zoneData.map(({ sla, ...rest }) => rest)}
               pagination={false}
               size="small"

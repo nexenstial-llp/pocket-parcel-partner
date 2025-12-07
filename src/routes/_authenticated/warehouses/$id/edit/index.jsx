@@ -39,7 +39,7 @@ function RouteComponent() {
       form.setFieldValue("storage_capacity", storage_capacity);
       form.setFieldsValue(data);
     }
-  }, [data]);
+  }, [data, form]);
 
   const { mutate, isPending } = useUpdateWarehouse({
     onSuccess: async () => {

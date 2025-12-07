@@ -1,6 +1,5 @@
 import { useNavigate } from "@tanstack/react-router";
 import { Radio } from "antd";
-import React from "react";
 
 const Index = () => {
   const navigate = useNavigate();

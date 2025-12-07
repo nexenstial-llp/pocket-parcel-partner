@@ -32,10 +32,10 @@ const ShipmentDetails = ({
   const deliveryPincode = watch("delivery_pincode");
   useEffect(() => {
     setPickupPincode(pickupPincode);
-  }, [pickupPincode]);
+  }, [pickupPincode, setPickupPincode]);
   useEffect(() => {
     setDeliveryPincode(deliveryPincode);
-  }, [deliveryPincode]);
+  }, [deliveryPincode, setDeliveryPincode]);
   let actualWeight = watch("actual_weight");
   const volumes =
     (Number(watch("length")) || 0) *

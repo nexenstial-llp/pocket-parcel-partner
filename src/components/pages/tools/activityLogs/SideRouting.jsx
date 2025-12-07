@@ -1,38 +1,7 @@
 import { Link, useSearch } from "@tanstack/react-router";
-import React from "react";
 import { Route } from "@/routes/_authenticated/tools/activity-logs";
+
 const menuItems = [
-  {
-    title: "ORDERS",
-    items: [
-      "Bulk Order Import",
-      "Bulk Courier Assign",
-      "Bulk Courier Reassign",
-      "Bulk Pickup Schedule",
-      "Bulk Invoice Download",
-      "Bulk Label Download",
-      "Bulk LM Label Download (International)",
-      "Bulk Manifest Download",
-      "Bulk NDR Escalation",
-      "Bulk Weight Discrepancy",
-      "Bulk Order Data Download",
-      "Bulk Return",
-      "Bulk Exchange",
-      "Channel Synced Orders",
-      "Weight Insights Update",
-    ],
-  },
-  {
-    title: "CATALOG",
-    items: [
-      "Channel Catalog Import",
-      "Master Catalog Import",
-      "ONDC Catalog Import",
-      "ONDC Catalog Download",
-    ],
-  },
-];
-const menuItems1 = [
   {
     title: "ORDERS",
     items: [
@@ -76,7 +45,7 @@ const SideRouting = () => {
       className="w-64 h-screen bg-white border-r border-gray-200 overflow-y-auto"
     >
       <div className="p-4">
-        {menuItems1.map((section, index) => (
+        {menuItems.map((section, index) => (
           <div key={index} className="mb-6">
             <h2 className="text-sm font-semibold text-gray-500 mb-2">
               {section.title}
@@ -86,7 +55,11 @@ const SideRouting = () => {
                 <li key={itemIndex}>
                   <Link
                     search={{ type: item.key }}
-                    className={`block px-4 py-2 text-sm rounded-lg transition-colors ${search.type === item.key ? "text-purple-600 bg-purple-50" : "text-gray-700"}`}
+                    className={`block px-4 py-2 text-sm rounded-lg transition-colors ${
+                      search.type === item.key
+                        ? "text-purple-600 bg-purple-50"
+                        : "text-gray-700"
+                    }`}
                   >
                     {item.label}
                   </Link>

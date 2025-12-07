@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+/* eslint-disable react/prop-types */
+import { useState } from "react";
 import { Button, Modal } from "antd";
 import InputTag from "@/components/ui/formFields/InputTag";
 import { useForm } from "react-hook-form";
@@ -24,7 +25,7 @@ const userSchema = z.object({
     .email({ message: "Email is not valid" }),
   user_role: z.string({ required_error: "User role is required" }),
 });
-const UserModal = ({ data, setData }) => {
+const UserModal = ({ setData }) => {
   const {
     register,
     control,

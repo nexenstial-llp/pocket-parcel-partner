@@ -1,8 +1,8 @@
+/* eslint-disable react/prop-types */
 import InputTag from "@/components/ui/formFields/InputTag";
 import SelectTag from "@/components/ui/selectTag/SelectTag";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, Drawer, Form, Tabs } from "antd";
-import React from "react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { LuDownload } from "react-icons/lu";
@@ -192,12 +192,7 @@ const scheduleSchema = z.object({
 });
 
 const ScheduleReportsDrawer = ({ onClose, open, setData }) => {
-  const {
-    handleSubmit,
-    control,
-    watch,
-    formState: { errors },
-  } = useForm({
+  const { handleSubmit, control, watch } = useForm({
     resolver: zodResolver(scheduleSchema),
     defaultValues: {
       medium: undefined,
@@ -225,12 +220,12 @@ const ScheduleReportsDrawer = ({ onClose, open, setData }) => {
         data?.medium === "all"
           ? `${data?.emailId} ${data?.whatsAppNumber} ${data?.webhookToken} ${data?.webhookURL}`
           : data?.medium === "whatsapp"
-            ? data?.whatsAppNumber
-            : data?.medium === "email"
-              ? data?.emailId
-              : data?.medium === "webhook"
-                ? data?.webhookURL
-                : "",
+          ? data?.whatsAppNumber
+          : data?.medium === "email"
+          ? data?.emailId
+          : data?.medium === "webhook"
+          ? data?.webhookURL
+          : "",
       frequency: data?.frequency,
     };
     setData((prev) => [...prev, formData]);

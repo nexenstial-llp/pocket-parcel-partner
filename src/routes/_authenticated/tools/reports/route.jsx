@@ -1,31 +1,25 @@
-import {
-  createFileRoute,
-  Link,
-  Outlet,
-  useNavigate,
-} from '@tanstack/react-router'
-import { Button } from 'antd'
-import { FaFileDownload, FaCalendarAlt } from 'react-icons/fa'
-import { RiCalendarScheduleLine } from 'react-icons/ri'
+import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
+import { Button } from "antd";
+import { FaFileDownload } from "react-icons/fa";
+import { RiCalendarScheduleLine } from "react-icons/ri";
 
 const tabLinks = [
   {
-    label: 'Download Reports',
-    to: '/tools/reports/download-reports',
+    label: "Download Reports",
+    to: "/tools/reports/download-reports",
     icon: <FaFileDownload />,
   },
   {
-    label: 'Reports Schedular',
-    to: '/tools/reports/reports-scheduler',
+    label: "Reports Schedular",
+    to: "/tools/reports/reports-scheduler",
     icon: <RiCalendarScheduleLine />,
   },
-]
-export const Route = createFileRoute('/_authenticated/tools/reports')({
+];
+export const Route = createFileRoute("/_authenticated/tools/reports")({
   component: RouteComponent,
-})
+});
 
 function RouteComponent() {
-  const navigate = useNavigate()
   return (
     <div className="p-6 mx-auto">
       <div className="mb-6">
@@ -43,16 +37,20 @@ function RouteComponent() {
                 <Button
                   icon={item?.icon}
                   size="large"
-                  className={`${isActive ? 'border-2 border-indigo-400 text-indigo-500 ' : ''} delay-150 `}
+                  className={`${
+                    isActive
+                      ? "border-2 border-indigo-400 text-indigo-500 "
+                      : ""
+                  } delay-150 `}
                 >
                   <span>{item?.label}</span>
                 </Button>
-              )
+              );
             }}
           </Link>
         ))}
       </div>
       <Outlet />
     </div>
-  )
+  );
 }

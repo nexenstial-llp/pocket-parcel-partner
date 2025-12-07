@@ -1,4 +1,3 @@
-import React from "react";
 import { MdLocationOn } from "react-icons/md";
 import deliveryTruck from "@/assets/deliveryTruck.svg";
 import { Card } from "antd";

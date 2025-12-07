@@ -38,7 +38,7 @@ export default function GoogleAddressInput({
 
       onChange?.(formattedAddress);
     });
-  }, []);
+  }, [onChange, onSelectAddress]);
 
   return (
     <Input

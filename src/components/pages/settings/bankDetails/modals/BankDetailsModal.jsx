@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Button, Modal } from "antd";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -38,10 +38,8 @@ const bankDetailsSchema = z
 
 const BankDetailsModal = () => {
   const {
-    register,
     handleSubmit,
     control,
-    watch,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(bankDetailsSchema),
@@ -157,15 +155,15 @@ const BankDetailsModal = () => {
                 useForm={true}
               />
               <small className="text-gray-700 text-xs leading-3">
-                We'll use these email IDs to update you on COD remittances from
-                Delhivery to your bank account.
+                We&apos;ll use these email IDs to update you on COD remittances
+                from Delhivery to your bank account.
               </small>
             </div>
           </div>
           <div className="bg-gray-100 rounded-md flex items-center gap-2 p-3">
             <span className="text-xs">
-              An OTP will be sent to the owner's registered email ID to confirm
-              any updates made
+              An OTP will be sent to the owner&apos;s registered email ID to
+              confirm any updates made
             </span>
             <div className="flex">
               <Button type="default" className="mr-2" onClick={handleCancel}>

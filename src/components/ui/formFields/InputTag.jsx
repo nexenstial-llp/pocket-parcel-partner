@@ -1,5 +1,5 @@
+/* eslint-disable react/prop-types */
 import { Input, Form } from "antd";
-import React from "react";
 import { Controller } from "react-hook-form";
 
 const InputTag = ({

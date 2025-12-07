@@ -1,4 +1,4 @@
-import React from "react";
+/* eslint-disable react/prop-types */
 import { MdLocationOn } from "react-icons/md";
 import deliveryTruck from "@/assets/deliveryTruck.svg";
 import { useQuery } from "@tanstack/react-query";
@@ -83,7 +83,7 @@ const PickupLocation = ({ pickupPincode, deliveryPincode }) => {
           />
         </div>
 
-        <div className="bg-indigo-500 min-h-[150px] w-[1px] self-center"></div>
+        <div className="bg-indigo-500 min-h-[150px] w-px self-center"></div>
 
         {/* Delivery Location */}
         <div className="flex flex-col gap-2 items-center">

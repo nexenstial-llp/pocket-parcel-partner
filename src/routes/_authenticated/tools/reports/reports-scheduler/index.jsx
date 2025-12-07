@@ -5,7 +5,7 @@ import {
   useNavigate,
   useSearch,
 } from "@tanstack/react-router";
-import { Button, Drawer, Select, Switch, Tabs } from "antd";
+import { Button, Select, Switch } from "antd";
 import { useEffect, useState } from "react";
 
 const columns = [
@@ -77,7 +77,12 @@ function RouteComponent() {
   };
   useEffect(() => {
     setFilters(searchParams);
-  }, [searchParams?.dateRange, searchParams?.module, searchParams?.reportType]);
+  }, [
+    searchParams?.dateRange,
+    searchParams?.module,
+    searchParams?.reportType,
+    searchParams,
+  ]);
   useEffect(() => {
     const updatedParams = {};
     if (!searchParams?.dateRange) {
@@ -90,7 +95,7 @@ function RouteComponent() {
       updatedParams.reportType = "allTypes";
     }
     navigate({ search: { ...searchParams, ...updatedParams } });
-  }, []);
+  }, [searchParams, navigate]);
   const showDrawer = () => {
     setOpen(true);
   };

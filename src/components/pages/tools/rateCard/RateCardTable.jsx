@@ -1,5 +1,5 @@
+/* eslint-disable react/prop-types */
 import { Table } from "antd";
-import React from "react";
 import { FaTruckFast } from "react-icons/fa6";
 import { PiAirplaneTiltFill } from "react-icons/pi";
 import { IoMdDocument } from "react-icons/io";

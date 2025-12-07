@@ -123,7 +123,15 @@ const PaginatedSelect = ({
         nextPage: hasMore ? pageParam + 1 : undefined,
       };
     },
-    [fetchUrl, pageSize, searchText, defaultParams, sort_by, sort_order]
+    [
+      fetchUrl,
+      pageSize,
+      searchText,
+      defaultParams,
+      sort_by,
+      sort_order,
+      dataPoint,
+    ]
   );
 
   const debouncedSetSearchText = useCallback(

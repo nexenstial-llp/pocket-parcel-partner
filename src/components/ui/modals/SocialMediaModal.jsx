@@ -1,5 +1,5 @@
-import { Input, Modal } from "antd";
-import React from "react";
+/* eslint-disable react/prop-types */
+import { Modal } from "antd";
 import InputTag from "../formFields/InputTag";
 import {
   FaInstagram,
@@ -14,7 +14,7 @@ const SocialMediaModal = ({ isModalOpen, handleOk, handleCancel }) => {
       onCancel={handleCancel}
       //   footer={[]}
     >
-      <h4 className="text-lg mb-3">Add Store's Social Media Handle</h4>
+      <h4 className="text-lg mb-3">Add Store&apos;s Social Media Handle</h4>
       <div className="flex flex-col gap-4">
         <div className="">
           <h5 className="flex gap-2 items-center text-lg">

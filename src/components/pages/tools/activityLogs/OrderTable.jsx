@@ -1,4 +1,3 @@
-import React from "react";
 import ResponsiveTable from "@/components/ui/tables/ResponsiveTable";
 const columns = [
   {

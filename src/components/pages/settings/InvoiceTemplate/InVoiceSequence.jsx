@@ -5,13 +5,11 @@ import { BsEye } from "react-icons/bs";
 import InputTag from "@/components/ui/formFields/InputTag";
 import { Button } from "antd";
 const InvoiceSequence = () => {
-  const [channel, setChannel] = useState("");
   const [startingNumber, setStartingNumber] = useState("");
   const [pattern, setPattern] = useState("");
   const handleSubmit = (e) => {
     e.preventDefault();
     // Handle form submission
-    console.log({ channel, startingNumber, pattern });
   };
   return (
     <>
@@ -35,7 +33,7 @@ const InvoiceSequence = () => {
                 placeholder="e.g. 7"
               />
               <p className="text-sm text-muted-foreground">
-                Leave empty if you want to start from '0'
+                Leave empty if you want to start from &apos;0&apos;
               </p>
             </div>
             <div className="space-y-2">
