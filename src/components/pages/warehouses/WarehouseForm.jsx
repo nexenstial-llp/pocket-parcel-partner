@@ -20,6 +20,7 @@ const WarehouseForm = ({
 }) => {
   return (
     <Form
+      size="small"
       disabled={isPending}
       onFinish={handleSubmit}
       name={formName}

@@ -187,6 +187,7 @@ const ComprehensiveOrderForm = () => {
             is_seller_registered_under_gst: false,
           },
         }}
+        size="small"
       >
         <div className="mb-8">{steps[current]?.content}</div>
 

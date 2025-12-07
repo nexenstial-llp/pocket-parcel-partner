@@ -210,12 +210,12 @@ const PaginatedSelect = ({
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          padding: "5px 10px",
+          padding: "2px 10px",
           cursor: disabled ? "default" : "pointer",
           backgroundColor: "#f5f5f5",
           border: "1px solid #d9d9d9",
           borderRadius: "4px",
-          fontSize: "14px",
+          fontSize: "12px",
           width: "100%",
         }}
       >

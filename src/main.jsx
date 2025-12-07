@@ -59,6 +59,41 @@ root.render(
           Layout: {
             // siderBg: "#2b358e",
           },
+          Form: {
+            verticalLabelPadding: "0 0 1px",
+            itemMarginBottom: 8,
+            labelFontSize: 13,
+          },
+          Input: {
+            controlHeightSM: 26,
+          },
+          Select: {
+            controlHeightSM: 26,
+          },
+          InputNumber: {
+            controlHeightSM: 26,
+          },
+          InputPassword: {
+            controlHeightSM: 26,
+          },
+          InputSearch: {
+            controlHeightSM: 26,
+          },
+          InputTextArea: {
+            controlHeightSM: 26,
+          },
+          InputRange: {
+            controlHeightSM: 26,
+          },
+          DatePicker: {
+            controlHeightSM: 26,
+          },
+          TimePicker: {
+            controlHeightSM: 26,
+          },
+          Calendar: {
+            controlHeightSM: 26,
+          },
         },
       }}
     >

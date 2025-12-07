@@ -83,36 +83,32 @@ function RouteComponent() {
         { title: "Create Warehouse" },
       ]}
     >
-      <ResponsiveCard
-        actions={[
-          <div key={"submit"} className="flex justify-end gap-2 px-2">
-            <Button
-              disabled={isPending}
-              htmlType="button"
-              onClick={() => {
-                form.resetFields();
-              }}
-            >
-              Clear All
-            </Button>
-            <Button
-              loading={isPending}
-              type="primary"
-              htmlType="submit"
-              form="create-warehouse"
-            >
-              Submit
-            </Button>
-          </div>,
-        ]}
-        title="Create Warehouse"
-      >
+      <ResponsiveCard title="Create Warehouse">
         <WarehouseForm
           form={form}
           handleSubmit={handleSubmit}
           isPending={isPending}
           formName="create-warehouse"
         />
+        <div className="flex justify-end gap-4 fixed bottom-0 left-0 right-0 bg-white p-4 border-t border-gray-200 z-50 shadow-lg">
+          <Button
+            disabled={isPending}
+            htmlType="button"
+            onClick={() => {
+              form.resetFields();
+            }}
+          >
+            Clear All
+          </Button>
+          <Button
+            loading={isPending}
+            type="primary"
+            htmlType="submit"
+            form="create-warehouse"
+          >
+            Submit
+          </Button>
+        </div>
       </ResponsiveCard>
     </PageLayout>
   );

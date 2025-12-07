@@ -516,6 +516,7 @@ export default function CreateQuickOrder() {
       />
 
       <Form
+        size="small"
         layout="vertical"
         form={form}
         onFinish={handleFinish}
