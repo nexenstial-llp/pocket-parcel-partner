@@ -1,7 +1,4 @@
 /* eslint-disable react/prop-types */
-import { FaWallet } from "react-icons/fa";
-import { IoReload } from "react-icons/io5";
-import { IoIosNotifications } from "react-icons/io";
 import { FaUser } from "react-icons/fa";
 import { Avatar, Button, Dropdown } from "antd";
 import { DownOutlined, MenuFoldOutlined } from "@ant-design/icons";
@@ -50,7 +47,7 @@ const Navbar = ({ setDrawerVisible, isMobile }) => {
         </div>
 
         <div className=" flex gap-2 items-center ml-auto">
-          <div className="px-3 text-gray-600 flex items-center gap-1">
+          {/* <div className="px-3 text-gray-600 flex items-center gap-1">
             <FaWallet /> ₹100 <IoReload />
           </div>
           <div className={`pr-2 ${isMobile && "hidden"}`}>
@@ -58,9 +55,13 @@ const Navbar = ({ setDrawerVisible, isMobile }) => {
           </div>
           <div className={`pr-2`}>
             <Button icon={<IoIosNotifications size={25} />} type="text" />
-          </div>
-          <div className={`${isMobile && "hidden"} cursor-pointer`}>
-            <Dropdown trigger={"click"} menu={{ items, onClick }}>
+          </div> */}
+          <div className={`${isMobile && "hidden"} cursor-pointer `}>
+            <Dropdown
+              trigger={"click"}
+              menu={{ items, onClick }}
+              className=" border border-gray-100 p-2 rounded-2xl"
+            >
               <Space className="">
                 <Avatar icon={<FaUser />} />{" "}
                 <p className="truncate capitalize max-w-[100px]">

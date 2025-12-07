@@ -1,6 +1,4 @@
-import { PermissionGuard } from "@/components/auth/PermissionGuard";
 import PageLayout from "@/components/layout/PageLayout";
-import ManageRolesDrawer from "@/components/pages/access-control/roles/ManageRolesDrawer";
 import ResponsiveCard from "@/components/ui/cards/ResponsiveCard";
 import { UserAddOutlined } from "@ant-design/icons";
 import { createFileRoute, Link } from "@tanstack/react-router";
@@ -63,16 +61,19 @@ function RouteComponent() {
                 Add New User
               </Button>
             </Link>
-            <ManageRolesDrawer />
-            <PermissionGuard roles={["admin"]} permissions={["create"]}>
+            <Link to="/access-control/roles/create">
+              <Button>Add New Role</Button>
+            </Link>
+            {/* <ManageRolesDrawer /> */}
+            {/* <PermissionGuard roles={["admin"]} permissions={["create"]}>
               <Button type="primary" danger>
                 Admin Only Button
               </Button>
-            </PermissionGuard>
+            </PermissionGuard> */}
           </div>
         }
       >
-        <Table columns={columns} dataSource={[]} />
+        <Table size="small" bordered columns={columns} dataSource={[]} />
       </ResponsiveCard>
     </PageLayout>
   );
