@@ -13,7 +13,7 @@ function RouteComponent() {
   return (
     <>
       <FilterSection />
-      <ResponsiveCard title="Courier">
+      <ResponsiveCard title="Carrier">
         <Empty description="No data for selected filter, please change filter" />
       </ResponsiveCard>
     </>

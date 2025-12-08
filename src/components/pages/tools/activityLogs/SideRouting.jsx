@@ -6,8 +6,8 @@ const menuItems = [
     title: "ORDERS",
     items: [
       { key: "bulk-order-import", label: "Bulk Order Import" },
-      { key: "bulk-courier-assign", label: "Bulk Courier Assign" },
-      { key: "bulk-courier-reassign", label: "Bulk Courier Reassign" },
+      { key: "bulk-Carrier-assign", label: "Bulk Carrier Assign" },
+      { key: "bulk-Carrier-reassign", label: "Bulk Carrier Reassign" },
       { key: "bulk-pickup-schedule", label: "Bulk Pickup Schedule" },
       { key: "bulk-invoice-download", label: "Bulk Invoice Download" },
       { key: "bulk-label-download", label: "Bulk Label Download" },

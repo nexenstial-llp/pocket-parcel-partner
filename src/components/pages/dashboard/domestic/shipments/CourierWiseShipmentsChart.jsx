@@ -13,7 +13,7 @@ const CourierWiseShipmentsChart = () => {
         title={
           <div className="flex items-center">
             <span className="text-lg font-semibold text-gray-700">
-              Courier wise Shipments
+              Carrier wise Shipments
             </span>
             <DefaultExtraContent />
           </div>

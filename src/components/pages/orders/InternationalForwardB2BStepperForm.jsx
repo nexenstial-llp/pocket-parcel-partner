@@ -390,7 +390,7 @@ const InternationalForwardB2BStepperForm = () => {
           </Form.Item>
           <Form.Item
             name={["shipment_details", "courier_partner"]}
-            label="Courier Partner"
+            label="Carrier Partner"
           >
             <Input />
           </Form.Item>
@@ -655,7 +655,7 @@ const InternationalForwardB2BStepperForm = () => {
       ),
     },
     {
-      title: "Courier Custom Fields",
+      title: "Carrier Custom Fields",
       content: (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4">
           {/* Put custom fields here if any */}

@@ -266,7 +266,7 @@ const ReverseShipmentStepperForm = () => {
             </Form.Item>
             <Form.Item
               name={["shipment_details", "courier_partner"]}
-              label="Courier Partner"
+              label="Carrier Partner"
             >
               <Input />
             </Form.Item>

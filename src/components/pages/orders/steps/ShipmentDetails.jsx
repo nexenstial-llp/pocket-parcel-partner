@@ -88,7 +88,7 @@ const ShipmentDetails = () => {
 
         <DynamicFormField
           name={["shipment_details", "courier_partner"]}
-          label="Courier Partner"
+          label="Carrier Partner"
           componentType="input"
           required={true}
         />

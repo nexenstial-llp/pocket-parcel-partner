@@ -89,7 +89,7 @@ function RouteComponent() {
       <div className="grid grid-cols-12 gap-4">
         <ResponsiveCard
           shadow
-          title="Couriers Split"
+          title="Carriers Split"
           size="small"
           extra={<span className="text-[12px]">Last 30 days</span>}
           styles={cardStyle}
@@ -159,7 +159,7 @@ function RouteComponent() {
         </ResponsiveCard>
         <ResponsiveCard
           shadow
-          title="Shipment Overview by Courier"
+          title="Shipment Overview by Carrier"
           size="small"
           styles={cardStyle}
           className="col-span-12"

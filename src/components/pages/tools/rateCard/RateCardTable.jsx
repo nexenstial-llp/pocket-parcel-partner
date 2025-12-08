@@ -5,7 +5,7 @@ import { PiAirplaneTiltFill } from "react-icons/pi";
 import { IoMdDocument } from "react-icons/io";
 const columns = [
   {
-    title: "Couriers",
+    title: "Carrier",
     dataIndex: "courier_name",
     key: "courier_name",
   },

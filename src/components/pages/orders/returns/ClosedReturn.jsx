@@ -99,8 +99,8 @@ const ClosedReturn = () => {
                 value: "RTO-Delivered-Reschedule-Requested",
               },
               {
-                label: "CourierPartnerTrackingDataMissing",
-                value: "CourierPartnerTrackingDataMissing",
+                label: "Carrier Partner Tracking Data Missing",
+                value: "Carrier Partner Tracking Data Missing",
               },
               { label: "Expired", value: "Expired" },
               { label: "Aged", value: "Aged" },

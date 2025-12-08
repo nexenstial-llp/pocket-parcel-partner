@@ -76,7 +76,7 @@ export default function RTODashboard() {
         </ResponsiveCard>
       </div>
 
-      {/* Top RTO Tables By City, Pincode, Customer, Courier */}
+      {/* Top RTO Tables By City, Pincode, Customer, Carrier */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <ResponsiveCard
           title="Top RTO - Customer"
@@ -121,7 +121,7 @@ export default function RTODashboard() {
           </div>
         </ResponsiveCard>
         <ResponsiveCard
-          title="Top RTO - Courier"
+          title="Top RTO - Carrier"
           extra="Last 30 days"
           className="min-h-80 flex flex-col"
         >

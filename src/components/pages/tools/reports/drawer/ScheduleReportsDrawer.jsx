@@ -150,7 +150,7 @@ const reportItems = [
     key: "weightDiscrepancyReport",
     label: "Weight Discrepancy Report",
     description:
-      "This report gives information about shipments with weight disputes raised by courier partners",
+      "This report gives information about shipments with weight disputes raised by Carrier partners",
     insights: "Total Disputed Amount, % of Dispute closed",
     logic: "Weight Dispute raised within selected date range",
   },

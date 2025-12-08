@@ -9,7 +9,7 @@ const TermsAndConditions = () => {
           Freight charges (GST inclusive) are based on the higher dead/dry or
           volumetric weight. RTO (return to origin) shipment will be charged
           differently from the forward delivery rate. <br /> Note: The standard
-          courier RTO charge will also apply to their additional weight courier
+          Carrier RTO charge will also apply to their additional weight Carrier
           type.
         </li>
         <li>
@@ -17,7 +17,7 @@ const TermsAndConditions = () => {
           be taken while calculating the COD fee.
         </li>
         <li>
-          Volumetric weight is calculated as LxBxH/5000 for most couriers except
+          Volumetric weight is calculated as LxBxH/5000 for most Carriers except
           Aramex. It is LxBxH/6000 for Aramex. Measurements (length, breadth,
           height) should be in centimeters.
         </li>

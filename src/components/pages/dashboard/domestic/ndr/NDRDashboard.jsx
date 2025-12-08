@@ -259,9 +259,9 @@ export default function NDRDashboard() {
         </ResponsiveCard>
       </div>
 
-      {/* Success by Courier chart */}
+      {/* Success by Carrier chart */}
       <ResponsiveCard
-        title="Success by Courier"
+        title="Success by Carrier"
         extra={<DefaultExtraContent />}
         className=""
       >
