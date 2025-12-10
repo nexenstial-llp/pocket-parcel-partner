@@ -1,11 +1,17 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import {
+  calculatePrice,
   cancelQwqerOrder,
+  checkServiceability,
   createComprehensiveOrder,
   createQuickOrder,
   createReverseOrder,
   getAllQwqerOrders,
+  getDomesticRecommendation,
+  getOrderById,
+  getOrders,
   getQwqerOrderById,
+  makeOrderPacked,
   modifyQwqerOrder,
   priceCalculate,
 } from "./orders.service.js";
@@ -88,6 +94,70 @@ export const useCreateComprehensiveOrder = ({
 }) => {
   return useMutation({
     mutationFn: createComprehensiveOrder,
+    onSuccess,
+    onError,
+    ...rest,
+  });
+};
+// Check comprehensive serviceability
+export const useCheckServiceability = ({ onError, onSuccess, ...rest }) => {
+  return useMutation({
+    mutationFn: checkServiceability,
+    retry: false,
+    onSuccess,
+    onError,
+    ...rest,
+  });
+};
+
+// Calculate Price
+export const useCalculatePriceOfOrder = ({ onError, onSuccess, ...rest }) => {
+  return useMutation({
+    mutationFn: calculatePrice,
+    retry: false,
+    onSuccess,
+    onError,
+    ...rest,
+  });
+};
+
+// Get Orders
+export const useGetOrders = ({ page, limit }) => {
+  return useQuery({
+    queryKey: ["orders", { page, limit }],
+    queryFn: () => getOrders({ page, limit }),
+  });
+};
+
+// Get Order by Id
+export const useGetOrderById = (id) => {
+  return useQuery({
+    queryKey: ["order", id],
+    queryFn: () => getOrderById(id),
+    enabled: !!id,
+  });
+};
+
+// Pack Order
+export const usePackOrder = ({ onError, onSuccess, ...rest }) => {
+  return useMutation({
+    mutationFn: makeOrderPacked,
+    retry: false,
+    onSuccess,
+    onError,
+    ...rest,
+  });
+};
+
+// Get domestic recommendation
+export const useGetDomesticRecommendation = ({
+  onError,
+  onSuccess,
+  ...rest
+}) => {
+  return useMutation({
+    mutationFn: getDomesticRecommendation,
+    retry: false,
     onSuccess,
     onError,
     ...rest,

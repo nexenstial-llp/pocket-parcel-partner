@@ -98,6 +98,21 @@ export const updateQuickOrderSchema = z.object({
   description: z.string().optional(),
 });
 
+export const calculatePriceSchema = z.object({
+  from_latitude: z.number().min(-90).max(90, "Invalid from latitude"),
+  from_longitude: z.number().min(-180).max(180, "Invalid from longitude"),
+  to_latitude: z.number().min(-90).max(90, "Invalid to latitude"),
+  to_longitude: z.number().min(-180).max(180, "Invalid to longitude"),
+  weight: z.number().positive("Weight must be positive"),
+  date_time: z
+    .string()
+    .regex(
+      /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}$/,
+      "Invalid date_time format. Expected: YYYY-MM-DD HH:mm"
+    ),
+  promo_code: z.string().optional().default(""),
+});
+
 export const createComprehensiveOrderSchema = z.object({
   pickup_info: z.object({
     pickup_name: z.string().min(1, "Pickup name is required"),
@@ -191,4 +206,204 @@ export const createComprehensiveOrderSchema = z.object({
         .optional(),
     })
     .optional(),
+});
+
+// Serviceability Check Schema - Single pincode pair
+const serviceabilityPairSchema = z.object({
+  pickup_pincode: z
+    .string()
+    .min(6)
+    .max(6)
+    .regex(/^\d{6}$/, "Invalid pickup pincode (must be 6 digits)"),
+  drop_pincode: z
+    .string()
+    .min(6)
+    .max(6)
+    .regex(/^\d{6}$/, "Invalid drop pincode (must be 6 digits)"),
+});
+
+// Serviceability Check Schema - Accepts array of pincode pairs (1-100)
+export const serviceabilityCheckSchema = z
+  .array(serviceabilityPairSchema)
+  .min(1, "At least one pincode pair is required")
+  .max(100, "Maximum 100 pincode pairs allowed per request");
+
+// ClickPost Order Creation Schema
+const pickupInfoSchema = z.object({
+  pickup_name: z.string().min(1).max(100),
+  pickup_phone: z.string().min(10).max(15),
+  email: z.email().nullable(),
+  pickup_address: z.string().min(1).max(500),
+  pickup_house_number: z.string().max(50).optional(), // House/Building number for QWQER
+  pickup_city: z.string().min(1).max(100),
+  pickup_state: z.string().min(1).max(100),
+  pickup_pincode: z.string().regex(/^\d{6}$/),
+  pickup_country: z.string().min(1).max(100).default("India"),
+  pickup_lat: z.number().min(-90).max(90),
+  pickup_long: z.number().min(-180).max(180),
+  pickup_time: z.string().optional(),
+  pickup_landmark: z.string().max(255).optional(),
+  pickup_district: z.string().max(100).optional(),
+  pickup_organisation: z.string().max(100).optional(),
+  pickup_address_type: z.enum(["RESIDENTIAL", "COMMERCIAL"]).optional(),
+  tin: z.string().optional(),
+});
+
+const dropInfoSchema = z.object({
+  drop_name: z.string().min(1).max(100),
+  drop_phone: z.string().min(10).max(15),
+  drop_address: z.string().min(1).max(500),
+  drop_city: z.string().min(1).max(100),
+  drop_state: z.string().min(1).max(100),
+  drop_pincode: z.string().regex(/^\d{6}$/),
+  drop_country: z.string().min(1).max(100).default("India"),
+  drop_email: z.string().email().optional(),
+  drop_lat: z.number().optional(),
+  drop_long: z.number().optional(),
+  drop_landmark: z.string().max(255).optional(),
+  drop_district: z.string().max(100).optional(),
+  drop_organisation: z.string().max(100).optional(),
+  drop_address_type: z.enum(["RESIDENTIAL", "COMMERCIAL"]).optional(),
+  drop_start_time: z.string().optional(),
+  drop_end_time: z.string().optional(),
+  drop_vendor_code: z.string().optional(),
+  location_type: z.string().optional(),
+  location_value: z.string().optional(),
+});
+
+const shipmentDetailsSchema = z.object({
+  order_type: z.enum(["COD", "PREPAID", "EXCHANGE", "PICKUP"]),
+  delivery_type: z.enum(["FORWARD", "REVERSE", "EXCHANGE"]),
+  payment_id: z.string().min(1), // Cashfree payment transaction ID
+  invoice_value: z.number().positive(),
+  invoice_date: z.string(),
+  category_id: z.string().uuid(), // UUID reference to Category table
+  item_ids: z.array(z.string().uuid()).min(1), // Array of Item UUIDs from catalog
+  weight: z.number().positive(), // Total weight in kg
+  length: z.number().positive(), // Carton length in cm
+  breadth: z.number().positive(), // Carton breadth in cm
+  height: z.number().positive(), // Carton height in cm
+  cod_value: z.number().min(0).optional(),
+  reference_number: z.string().optional(),
+  cp_id: z.string().uuid().optional(), // Reference to CourierPartner table
+  courier_partner_id: z.uuid().optional(),
+  clickpost_courier_id: z.number().int().optional(),
+  account_code: z.string().optional(),
+  courier_partner: z.number().int().optional(),
+});
+
+const returnInfoSchema = z.object({
+  pincode: z.string().regex(/^\d{6}$/),
+  address: z.string().min(1).max(500),
+  state: z.string().min(1).max(100),
+  phone: z.string().min(10).max(15),
+  name: z.string().min(1).max(100),
+  city: z.string().min(1).max(100),
+  country: z.string().min(1).max(100),
+  lat: z.number().optional(),
+  long: z.number().optional(),
+  district: z.string().max(100).optional(),
+  landmark: z.string().max(255).optional(),
+  email: z.string().email().optional(),
+});
+
+const userDefinedFieldSchema = z.object({
+  name: z.string(),
+  type: z.string(),
+  value: z.string(),
+});
+
+const additionalSchema = z.object({
+  return_info: returnInfoSchema.optional(),
+  special_instructions: z.string().max(1000).optional(),
+  enable_whatsapp: z.boolean().optional(),
+  is_fragile: z.boolean().optional(),
+  is_dangerous: z.boolean().optional(),
+  gst_number: z.string().optional(),
+  channel_name: z.string().optional(),
+  order_date: z.string().optional(),
+  label: z.boolean().optional(),
+  async: z.boolean().optional(),
+  zone: z.string().optional(),
+  max_edd: z.number().int().optional(),
+  min_edd: z.number().int().optional(),
+  invoice_base_64: z.string().optional(),
+  is_multi_seller: z.boolean().optional(),
+  vendor_code: z.string().optional(),
+  store_code: z.string().optional(),
+  user_defined_field_array: z.array(userDefinedFieldSchema).optional(),
+  estimated_delivery_date: z.string().optional(),
+});
+
+const gstInfoSchema = z.object({
+  seller_gstin: z.string().optional(),
+  taxable_value: z.number().optional(),
+  ewaybill_serial_number: z.string().optional(),
+  is_seller_registered_under_gst: z.boolean().optional(),
+  sgst_tax_rate: z.number().optional(),
+  place_of_supply: z.string().optional(),
+  gst_discount: z.number().optional(),
+  hsn_code: z.string().optional(),
+  sgst_amount: z.number().optional(),
+  enterprise_gstin: z.string().optional(),
+  gst_total_tax: z.number().optional(),
+  igst_amount: z.number().optional(),
+  cgst_amount: z.number().optional(),
+  gst_tax_base: z.number().optional(),
+  consignee_gstin: z.string().optional(),
+  igst_tax_rate: z.number().optional(),
+  invoice_reference: z.string().optional(),
+  cgst_tax_rate: z.number().optional(),
+  invoice_number: z.string().optional(),
+  invoice_date: z.string().optional(),
+  invoice_value: z.number().optional(),
+  seller_name: z.string().optional(),
+  seller_address: z.string().optional(),
+  seller_state: z.string().optional(),
+  seller_pincode: z.string().optional(),
+});
+export const createOrderSchema = z.object({
+  pickup_info: pickupInfoSchema,
+  drop_info: dropInfoSchema,
+  shipment_details: shipmentDetailsSchema,
+  additional: additionalSchema.optional(),
+  gst_info: gstInfoSchema.optional(),
+});
+
+export const calculatePriceOfOrderSchema = z.object({
+  length: z.number().positive(),
+  breadth: z.number().positive(),
+  height: z.number().positive(),
+  weight: z.number().positive(),
+  from_latitude: z.number().min(-90).max(90),
+  from_longitude: z.number().min(-180).max(180),
+  courier_partner: z.string().optional(),
+  is_cod: z.boolean().default(false),
+  insurance_opted: z.boolean().default(false),
+  to_pincode: z.string().regex(/^\d{6}$/),
+});
+
+export const orderRecommendationSchema = z.object({
+  pickup_pincode: z
+    .string()
+    .min(6)
+    .max(6)
+    .regex(/^\d{6}$/, "Invalid pickup pincode"),
+  drop_pincode: z
+    .string()
+    .min(6)
+    .max(6)
+    .regex(/^\d{6}$/, "Invalid drop pincode"),
+  weight: z.union([z.string(), z.number()]),
+  length: z.union([z.string(), z.number()]),
+  breadth: z.union([z.string(), z.number()]),
+  height: z.union([z.string(), z.number()]),
+  delivery_type: z.enum(["FORWARD", "RVP"]),
+  order_type: z.enum(["PREPAID", "COD"]),
+  // Optional fields
+  item: z.union([z.string(), z.number()]).optional(),
+  invoice_value: z.number().optional().default(0),
+  additional: z.any().optional(),
+  item_count: z.number().int().min(1).optional(),
+  reference_number: z.string().min(1).max(50).optional(), // Optional - will be auto-generated if not provided
 });

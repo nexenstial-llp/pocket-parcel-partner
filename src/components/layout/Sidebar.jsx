@@ -22,84 +22,84 @@ const sidebarData = [
     icon: <HiHome />,
     label: <Link to="/home">Home</Link>,
   },
-  {
-    key: "dashboard",
-    icon: <AiOutlinePieChart />,
-    label: <Link to="/dashboard/domestic/overview">Dashboard</Link>,
-  },
-  {
-    key: "revenue-dashboard",
-    icon: <DollarCircleOutlined />,
-    label: <Link to={"/revenue-dashboard"}>Revenue Dashboard</Link>,
-    // children: [
-    //   // {
-    //   //   key: "/revenue-dashboard/my-earnings/revenue-summary",
-    //   //   label: (
-    //   //     <Link to="/revenue-dashboard/my-earnings/revenue-summary">
-    //   //       Revenue Summary
-    //   //     </Link>
-    //   //   ),
-    //   // },
-    //   // {
-    //   //   key: "/revenue-dashboard/my-earnings",
-    //   //   label: "My Earnings",
-    //   //   children: [
-    //   //     {
-    //   //       key: "/revenue-dashboard/my-earnings/revenue-summary",
-    //   //       label: (
-    //   //         <Link to="/revenue-dashboard/my-earnings/revenue-summary">
-    //   //           Revenue Summary
-    //   //         </Link>
-    //   //       ),
-    //   //     },
-    //   //     {
-    //   //       key: "/revenue-dashboard/my-earnings/settlements-and-payouts",
-    //   //       label: (
-    //   //         <Link to="/revenue-dashboard/my-earnings/settlements-and-payouts">
-    //   //           Settlements & Payouts
-    //   //         </Link>
-    //   //       ),
-    //   //     },
-    //   //   ],
-    //   // },
-    //   // {
-    //   //   key: "/revenue-dashboard/reports",
-    //   //   label: "Reports",
-    //   //   children: [
-    //   //     {
-    //   //       key: "/revenue-dashboard/reports/shipment-revenue",
-    //   //       label: (
-    //   //         <Link to="/revenue-dashboard/reports/shipment-revenue">
-    //   //           Shipment Revenue
-    //   //         </Link>
-    //   //       ),
-    //   //     },
-    //   //     {
-    //   //       key: "/revenue-dashboard/reports/commission-breakdown",
-    //   //       label: (
-    //   //         <Link to="/revenue-dashboard/reports/commission-breakdown">
-    //   //           Commission Breakdown
-    //   //         </Link>
-    //   //       ),
-    //   //     },
-    //   //   ],
-    //   // },
-    //   // {
-    //   //   key: "/revenue-dashboard/invoice-and-tax",
-    //   //   label: (
-    //   //     <Link to="/revenue-dashboard/invoice-and-tax">Invoices & Tax</Link>
-    //   //   ),
-    //   // },
-    //   // {
-    //   //   key: "/revenue-dashboard/support",
-    //   //   label: <Link to="/revenue-dashboard/support">Support</Link>,
-    //   // },
-    //   // {
-    //   //   key: "/revenue-dashboard/settings",
-    //   //   label: <Link to="/revenue-dashboard/settings">Settings</Link>,
-    //   // },
-    // ],
-  },
+  // {
+  //   key: "dashboard",
+  //   icon: <AiOutlinePieChart />,
+  //   label: <Link to="/dashboard/domestic/overview">Dashboard</Link>,
+  // },
+  // {
+  //   key: "revenue-dashboard",
+  //   icon: <DollarCircleOutlined />,
+  //   label: <Link to={"/revenue-dashboard"}>Revenue Dashboard</Link>,
+  //   // children: [
+  //   //   // {
+  //   //   //   key: "/revenue-dashboard/my-earnings/revenue-summary",
+  //   //   //   label: (
+  //   //   //     <Link to="/revenue-dashboard/my-earnings/revenue-summary">
+  //   //   //       Revenue Summary
+  //   //   //     </Link>
+  //   //   //   ),
+  //   //   // },
+  //   //   // {
+  //   //   //   key: "/revenue-dashboard/my-earnings",
+  //   //   //   label: "My Earnings",
+  //   //   //   children: [
+  //   //   //     {
+  //   //   //       key: "/revenue-dashboard/my-earnings/revenue-summary",
+  //   //   //       label: (
+  //   //   //         <Link to="/revenue-dashboard/my-earnings/revenue-summary">
+  //   //   //           Revenue Summary
+  //   //   //         </Link>
+  //   //   //       ),
+  //   //   //     },
+  //   //   //     {
+  //   //   //       key: "/revenue-dashboard/my-earnings/settlements-and-payouts",
+  //   //   //       label: (
+  //   //   //         <Link to="/revenue-dashboard/my-earnings/settlements-and-payouts">
+  //   //   //           Settlements & Payouts
+  //   //   //         </Link>
+  //   //   //       ),
+  //   //   //     },
+  //   //   //   ],
+  //   //   // },
+  //   //   // {
+  //   //   //   key: "/revenue-dashboard/reports",
+  //   //   //   label: "Reports",
+  //   //   //   children: [
+  //   //   //     {
+  //   //   //       key: "/revenue-dashboard/reports/shipment-revenue",
+  //   //   //       label: (
+  //   //   //         <Link to="/revenue-dashboard/reports/shipment-revenue">
+  //   //   //           Shipment Revenue
+  //   //   //         </Link>
+  //   //   //       ),
+  //   //   //     },
+  //   //   //     {
+  //   //   //       key: "/revenue-dashboard/reports/commission-breakdown",
+  //   //   //       label: (
+  //   //   //         <Link to="/revenue-dashboard/reports/commission-breakdown">
+  //   //   //           Commission Breakdown
+  //   //   //         </Link>
+  //   //   //       ),
+  //   //   //     },
+  //   //   //   ],
+  //   //   // },
+  //   //   // {
+  //   //   //   key: "/revenue-dashboard/invoice-and-tax",
+  //   //   //   label: (
+  //   //   //     <Link to="/revenue-dashboard/invoice-and-tax">Invoices & Tax</Link>
+  //   //   //   ),
+  //   //   // },
+  //   //   // {
+  //   //   //   key: "/revenue-dashboard/support",
+  //   //   //   label: <Link to="/revenue-dashboard/support">Support</Link>,
+  //   //   // },
+  //   //   // {
+  //   //   //   key: "/revenue-dashboard/settings",
+  //   //   //   label: <Link to="/revenue-dashboard/settings">Settings</Link>,
+  //   //   // },
+  //   // ],
+  // },
   {
     key: "orders",
     icon: <AiTwotoneContainer />,
@@ -117,10 +117,10 @@ const sidebarData = [
         key: "/orders/first-mile",
         label: <Link to="/orders/first-mile">First Mile (QWQER)</Link>,
       },
-      {
-        key: "/orders/returns",
-        label: <Link to="/orders/returns">Returns</Link>,
-      },
+      // {
+      //   key: "/orders/returns",
+      //   label: <Link to="/orders/returns">Returns</Link>,
+      // },
       {
         key: "/orders/track-order",
         label: <Link to="/orders/track-order">Track Order</Link>,
@@ -227,7 +227,7 @@ const sidebarData = [
   {
     key: "settings",
     icon: <IoSettingsOutline />,
-    label: <Link to="/settings/company-details">Settings</Link>,
+    label: <Link to="/settings/address-management">Settings</Link>,
   },
 ];
 

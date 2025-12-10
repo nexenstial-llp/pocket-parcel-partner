@@ -12,10 +12,10 @@ export const Route = createFileRoute("/_authenticated/settings")({
   component: RouteComponent,
 });
 const items = [
-  {
-    label: <Link to={"/settings/company-details"}>Company Details</Link>,
-    key: "/settings/company-details",
-  },
+  // {
+  //   label: <Link to={"/settings/company-details"}>Company Details</Link>,
+  //   key: "/settings/company-details",
+  // },
   // {
   //   label: <Link to={"/settings/pickup-locations"}>Pickup Locations</Link>,
   //   key: "/settings/pickup-locations",

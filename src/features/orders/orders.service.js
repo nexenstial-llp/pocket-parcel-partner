@@ -82,3 +82,51 @@ export const createComprehensiveOrder = async (payload) => {
   const response = await axiosInstance.post("/v1/orders/create", payload);
   return response?.data?.data ?? null;
 };
+
+// Check comprehensive serviceability
+export const checkServiceability = async (data) => {
+  const response = await axiosInstance.post(
+    "/v1/orders/serviceability/check",
+    data
+  );
+  return response?.data?.data ?? null;
+};
+
+// Calculate Price
+export const calculatePrice = async (data) => {
+  const response = await axiosInstance.post("/v1/orders/calculate-price", data);
+  return response?.data?.data ?? null;
+};
+
+// Get Orders
+export const getOrders = async () => {
+  const response = await axiosInstance.get("/v1/orders");
+  return response?.data?.data ?? null;
+};
+
+// Get Order by Id
+export const getOrderById = async (id) => {
+  const response = await axiosInstance.get(`/v1/orders/${id}`);
+  return response?.data?.data ?? null;
+};
+
+// Packed
+export const makeOrderPacked = async (id) => {
+  const response = await axiosInstance.patch(`/v1/orders/${id}/packed`);
+  return response?.data?.data ?? null;
+};
+
+// Get domestic recommendation
+export const getDomesticRecommendation = async (data) => {
+  const response = await axiosInstance.post(
+    "/v1/orders/domestic/recommendation",
+    data
+  );
+  return response?.data?.data ?? null;
+};
+
+// Cancel Order
+export const cancelOrder = async (id) => {
+  const response = await axiosInstance.patch(`/v1/orders/${id}/cancel`);
+  return response?.data?.data ?? null;
+};

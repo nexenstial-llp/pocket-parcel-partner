@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import {
   createPaymentSession,
   verifyPayment,
@@ -12,10 +12,11 @@ export const useCreatePaymentSession = (options = {}) => {
   });
 };
 
-export const useVerifyPayment = (options = {}) => {
-  return useMutation({
-    mutationFn: verifyPayment,
-    ...options,
+export const useVerifyPayment = (orderId) => {
+  return useQuery({
+    queryFn: verifyPayment,
+    queryKey: ["verify-payment", orderId],
+    enabled: !!orderId,
   });
 };
 

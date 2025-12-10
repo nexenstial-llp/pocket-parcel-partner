@@ -1,60 +1,88 @@
 import PageLayout from "@/components/layout/PageLayout";
 import ResponsiveCard from "@/components/ui/cards/ResponsiveCard";
-import SearchPanelCard from "@/components/ui/cards/SearchPanelCard";
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { Button, DatePicker, Select, Table } from "antd";
+import ErrorFallback from "@/components/ui/ErrorFallback";
+import ResponsiveTable from "@/components/ui/tables/ResponsiveTable";
+import { useGetOrders } from "@/features/orders/orders.query";
+import { getSerialNumber } from "@/utils/serialNumber.util";
+import { validatePagination } from "@/utils/validatePagination.util";
+import { createFileRoute, Link, useSearch } from "@tanstack/react-router";
+import { Tag } from "antd";
+import { Button } from "antd";
 
 export const Route = createFileRoute("/_authenticated/orders/")({
   component: RouteComponent,
+  validateSearch: validatePagination,
 });
 
-const columns = [
-  {
-    title: "Reference Number",
-    dataIndex: "reference_number",
-    key: "reference_number",
-  },
-  {
-    title: "AWB",
-    dataIndex: "awb",
-    key: "awb",
-  },
-  {
-    title: "Order ID",
-    dataIndex: "order_id",
-    key: "order_id",
-  },
-  {
-    title: "Carrier",
-    dataIndex: "carrier",
-    key: "carrier",
-  },
-  {
-    title: "Created At",
-    dataIndex: "createdAt",
-    key: "createdAt",
-  },
-  {
-    title: "Pick Date",
-    dataIndex: "pick_date",
-    key: "pick_date",
-  },
-  {
-    title: "Order Status",
-    dataIndex: "order_status",
-    key: "order_status",
-  },
-  {
-    title: "Action",
-    dataIndex: "action",
-    key: "action",
-  },
-];
-
 function RouteComponent() {
+  const { page, limit } = useSearch({ strict: false });
+  const { data, isLoading, isError, error } = useGetOrders({ page, limit });
+  const columns = [
+    {
+      title: "S. No",
+      render: (_, record, index) => getSerialNumber({ page, limit, index }),
+    },
+    {
+      title: "Reference Number",
+      dataIndex: "reference_number",
+      key: "reference_number",
+    },
+    {
+      title: "Order Number",
+      dataIndex: "order_number",
+      key: "order_number",
+    },
+    {
+      title: "Order Type",
+      dataIndex: "order_type",
+      key: "order_type",
+    },
+    {
+      title: "Total Amount",
+      dataIndex: "total_amount",
+      key: "total_amount",
+    },
+    {
+      title: "Payment Mode",
+      dataIndex: "payment_mode",
+      key: "payment_mode",
+    },
+    {
+      title: "Order Status",
+      dataIndex: "order_status",
+      key: "order_status",
+      render: (text) => {
+        return (
+          <Tag color={text === "CONFIRMED" ? "green" : "blue"}>{text}</Tag>
+        );
+      },
+      fixed: "right",
+    },
+    {
+      title: "Payment Status",
+      dataIndex: "payment_status",
+      key: "payment_status",
+      render: (text) => {
+        return <Tag color={text === "PAID" ? "green" : "blue"}>{text}</Tag>;
+      },
+      fixed: "right",
+    },
+
+    {
+      title: "Action",
+      dataIndex: "action",
+      key: "action",
+      render: (_, record) => <Link to={`/orders/${record.id}`}>View</Link>,
+      fixed: "right",
+    },
+  ];
+
+  if (isError) {
+    return <ErrorFallback error={error} />;
+  }
   return (
     <PageLayout items={[{ title: "Home", href: "/home" }, { title: "Orders" }]}>
-      <SearchPanelCard
+      {/* <SearchPanelCard
         searchTypeOptions={[
           { label: "AWB", value: "AWB" },
           { label: "Order ID", value: "order_id" },
@@ -69,27 +97,20 @@ function RouteComponent() {
             Generate Report
           </Button>,
         ]}
-      />
+      /> */}
       <ResponsiveCard
         size="small"
         extra={
-          <div className="flex gap-2">
-            <Link to="/orders/first-mile">
-              <Button type="primary" size="small">
-                View First Mile Orders
-              </Button>
-            </Link>
-            <Link to="/orders/create">
-              <Button type="primary" size="small">
-                Create
-              </Button>
-            </Link>
-          </div>
+          <Link to="/orders/create">
+            <Button type="primary" size="small">
+              Create
+            </Button>
+          </Link>
         }
         title="Orders"
       >
         <div className="flex flex-col gap-2">
-          <div className="flex gap-2 items-center overflow-x-auto">
+          {/* <div className="flex gap-2 items-center overflow-x-auto">
             <Select
               style={{ minWidth: 150 }}
               options={[
@@ -109,7 +130,6 @@ function RouteComponent() {
               placeholder="Order Status"
               allowClear
             />
-            {/* Delivery Type */}
             <Select
               options={[
                 { label: "FORWARD", value: "FORWARD" },
@@ -118,10 +138,14 @@ function RouteComponent() {
               placeholder="Delivery Type"
               allowClear
             />
-            {/* Created Date */}
             <DatePicker.RangePicker placeholder={"Created Date"} />
-          </div>
-          <Table bordered size="small" columns={columns} />
+          </div> */}
+          <ResponsiveTable
+            size={"small"}
+            loading={isLoading}
+            columns={columns}
+            dataSource={data?.orders}
+          />
         </div>
       </ResponsiveCard>
     </PageLayout>

@@ -6,7 +6,7 @@ export const createPaymentSession = async (data) => {
 };
 
 export const verifyPayment = async (orderId) => {
-  const response = await axiosInstance.post(`/v1/payments/status/${orderId}`);
+  const response = await axiosInstance.get(`/v1/payments/status/${orderId}`);
   return response?.data?.data ?? null;
 };
 
