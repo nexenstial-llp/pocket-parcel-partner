@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 import { Modal, Form, Button } from "antd";
+import { APIProvider } from "@vis.gl/react-google-maps";
 import AddressFormItems from "./AddressFormItems";
 import {
   useGetAddressesById,
@@ -15,6 +16,7 @@ import { useEffect } from "react";
 export default function EditAddressModal({ modalData, onClose }) {
   const queryClient = useQueryClient();
   const [form] = Form.useForm();
+  const API_KEY = import.meta.env.VITE_APP_GOOGLE_API_KEY;
 
   const { data, isLoading, isError, error } = useGetAddressesById(
     modalData?.id
@@ -62,24 +64,26 @@ export default function EditAddressModal({ modalData, onClose }) {
       width={{ xs: "90%", sm: "70%", md: "60%" }}
       loading={isLoading}
     >
-      <Form
-        disabled={isPending}
-        layout="vertical"
-        form={form}
-        onFinish={handleFinish}
-      >
-        <AddressFormItems />
-        {/* Buttons */}
-        <div className="flex justify-end gap-3 mt-6">
-          <Button htmlType="reset" danger onClick={onClose}>
-            Cancel
-          </Button>
+      <APIProvider apiKey={API_KEY} libraries={["places", "geocoding"]}>
+        <Form
+          disabled={isPending}
+          layout="vertical"
+          form={form}
+          onFinish={handleFinish}
+        >
+          <AddressFormItems />
+          {/* Buttons */}
+          <div className="flex justify-end gap-3 mt-6">
+            <Button htmlType="reset" danger onClick={onClose}>
+              Cancel
+            </Button>
 
-          <Button loading={isPending} type="primary" htmlType="submit">
-            Update Address
-          </Button>
-        </div>
-      </Form>
+            <Button loading={isPending} type="primary" htmlType="submit">
+              Update Address
+            </Button>
+          </div>
+        </Form>
+      </APIProvider>
     </Modal>
   );
 }

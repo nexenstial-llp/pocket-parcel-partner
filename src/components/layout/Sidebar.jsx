@@ -6,10 +6,9 @@ import POCKET_PARCEL_DESKTOP from "../../assets/Pocket_Parcel_Desktop.svg";
 import POCKET_PARCEL_MOBILE from "../../assets/Pocket_Parcel_Mobile.png";
 
 //icons
-import { AiOutlinePieChart, AiTwotoneContainer } from "react-icons/ai";
+import { AiTwotoneContainer } from "react-icons/ai";
 import { HiHome } from "react-icons/hi";
 import { TbBuildingWarehouse } from "react-icons/tb";
-import { DollarCircleOutlined } from "@ant-design/icons";
 import { IoSettingsOutline } from "react-icons/io5";
 import { BiCabinet } from "react-icons/bi";
 import { Drawer } from "antd";

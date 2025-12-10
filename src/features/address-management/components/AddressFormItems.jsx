@@ -1,7 +1,10 @@
 import { Form, Input, Select, Switch } from "antd";
+import GoogleAddressPicker from "@/components/ui/GoogleAddressPicker";
 
 const { Option } = Select;
 const AddressFormItems = () => {
+  const form = Form.useFormInstance();
+
   return (
     <div>
       {/* Label & Name */}
@@ -79,9 +82,31 @@ const AddressFormItems = () => {
         </Form.Item>
 
         <Form.Item label="Landmark" name="landmark">
-          <Input placeholder="Nearby location" />
+          <GoogleAddressPicker
+            showMap={false}
+            onLocationSelect={(loc) => {
+              form.setFieldsValue({
+                latitude: loc.lat,
+                longitude: loc.lng,
+                landmark: loc.address,
+                pincode: loc.pincode,
+                city: loc.city,
+                state: loc.state,
+                country: loc.country,
+              });
+            }}
+          />
         </Form.Item>
       </div>
+
+      {/* Hidden Lat/Long fields to store values */}
+      <Form.Item name="latitude" hidden>
+        <Input />
+      </Form.Item>
+      <Form.Item name="longitude" hidden>
+        <Input />
+      </Form.Item>
+
       {/* Address Type & Default */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Form.Item

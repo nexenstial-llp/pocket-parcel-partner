@@ -11,52 +11,59 @@ import { CompassOutlined, EnvironmentOutlined } from "@ant-design/icons";
 
 const defaultCenter = { lat: 12.8538995, lng: 77.6635309 };
 
-async function fetchPincodeFallback(lat, lng) {
-  try {
-    const res = await fetch(
-      `https://api.bigdatacloud.net/data/reverse-geocode?latitude=${lat}&longitude=${lng}&localityLanguage=en`
-    );
-    const data = await res.json();
-    console.log("data", data);
-
-    return {
-      pincode: data.postcode || "",
-      city: data.locality || "",
-      state: data.principalSubdivision || "",
-      country: data.countryName || "",
-      // district: data.principalSubdivision || "",
-    };
-  } catch {
-    return {};
-  }
-}
-
-const extractAddressComponents = (components) => {
+const extractAddressComponents = (results) => {
   let pincode = "";
   let city = "";
   let state = "";
   let country = "";
   let district = "";
+  let sublocality = "";
+  let neighborhood = "";
 
-  if (!components) return { pincode, city, state, country };
-  components.forEach((component) => {
-    const types = component.types;
-    if (types.includes("postal_code")) {
-      pincode = component.long_name;
-    }
-    if (types.includes("locality")) {
-      city = component.long_name;
-    }
-    if (types.includes("administrative_area_level_3")) {
-      district = component.long_name;
-    }
-    if (types.includes("administrative_area_level_1")) {
-      state = component.long_name;
-    }
-    if (types.includes("country")) {
-      country = component.long_name;
-    }
+  if (!results || results.length === 0)
+    return { pincode, city, state, country, district };
+
+  // Iterate over all results to find the most granular details
+  // Google returns results from most precise to least precise
+  // We want to fill gaps in the precise result with data from broader results
+  results.forEach((result) => {
+    const components = result.address_components;
+    components.forEach((component) => {
+      const types = component.types;
+      if (!pincode && types.includes("postal_code")) {
+        pincode = component.long_name;
+      }
+      if (!city && types.includes("locality")) {
+        city = component.long_name;
+      }
+      if (
+        !city &&
+        !sublocality &&
+        (types.includes("sublocality") || types.includes("sublocality_level_1"))
+      ) {
+        sublocality = component.long_name;
+      }
+      if (!city && !neighborhood && types.includes("neighborhood")) {
+        neighborhood = component.long_name;
+      }
+      if (!district && types.includes("administrative_area_level_3")) {
+        district = component.long_name;
+      }
+      if (!state && types.includes("administrative_area_level_1")) {
+        state = component.long_name;
+      }
+      if (!country && types.includes("country")) {
+        country = component.long_name;
+      }
+    });
   });
+
+  // Smart Fallback for City
+  // If locality is missing, use sublocality, then neighborhood, then district
+  if (!city) {
+    city = sublocality || neighborhood || district;
+  }
+
   console.log({ pincode, city, state, country, district });
   return { pincode, city, state, country, district };
 };
@@ -117,25 +124,13 @@ export default function GoogleAddressPicker({
       setLoading(true);
       geocoderRef.current.geocode({ location: latLng }, (results, status) => {
         setLoading(false);
-        if (status === "OK" && results[0]) {
+        if (status === "OK" && results && results.length > 0) {
           const address = results[0].formatted_address;
-          const googleDetails = extractAddressComponents(
-            results[0].address_components
-          );
-          console.log("googleDetails", googleDetails);
+          // Pass ALL results to extraction logic to find missing fields (pincode, city)
+          // that might be present in broader scope results (like result[1] or result[2])
+          const googleDetails = extractAddressComponents(results);
 
-          if (googleDetails.pincode == "") {
-            // fallback API for missing postal code
-            fetchPincodeFallback(latLng.lat, latLng.lng).then((fallback) => {
-              const merged = {
-                ...googleDetails,
-                ...fallback, // fallback fills missing pincode
-              };
-              updateLocation(latLng, address, merged);
-            });
-          } else {
-            updateLocation(latLng, address, googleDetails);
-          }
+          updateLocation(latLng, address, googleDetails);
         } else {
           message.error("Could not determine address for this location.");
         }
@@ -154,7 +149,7 @@ export default function GoogleAddressPicker({
 
     autocomplete.addListener("place_changed", () => {
       const place = autocomplete.getPlace();
-
+      console.log("place", place);
       if (!place.geometry || !place.geometry.location) return;
 
       const newLoc = {
@@ -163,12 +158,19 @@ export default function GoogleAddressPicker({
       };
 
       const address = place.formatted_address || "";
-      const details = extractAddressComponents(place.address_components);
+      // Autocomplete returns a single place result with detailed components
+      // Wrap in array to match the signature of extractAddressComponents which usually takes generic geocode results
+      const details = extractAddressComponents([place]);
 
-      updateLocation(newLoc, address, details);
+      // If pincode is missing from Autocomplete result, try fetching via lat/long (Reverse Geocoding)
+      if (!details.pincode) {
+        handleReverseGeocode(newLoc);
+      } else {
+        updateLocation(newLoc, address, details);
+      }
       map?.panTo(newLoc);
     });
-  }, [places, map, updateLocation]);
+  }, [places, map, updateLocation, handleReverseGeocode]);
 
   const handleCurrentLocation = () => {
     if (!navigator.geolocation) {
