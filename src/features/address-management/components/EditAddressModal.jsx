@@ -37,8 +37,13 @@ export default function EditAddressModal({ modalData, onClose }) {
   });
 
   const handleFinish = (values) => {
+    const payload = {
+      ...values,
+      latitude: Number(values?.latitude),
+      longitude: Number(values?.longitude),
+    };
     handleFormSubmission({
-      values,
+      values: payload,
       schema: updateAddressSchema,
       onSubmit: (parsedData) => mutate({ id: modalData?.id, data: parsedData }),
       form,

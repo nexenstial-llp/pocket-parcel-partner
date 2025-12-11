@@ -44,6 +44,23 @@ const AddressFormItems = () => {
       <Form.Item label="Address Line 2" name="address_line2">
         <Input placeholder="Apartment, floor, etc." />
       </Form.Item>
+
+      <Form.Item label="Landmark" name="landmark">
+        <GoogleAddressPicker
+          showMap={false}
+          onLocationSelect={(loc) => {
+            form.setFieldsValue({
+              latitude: loc.lat,
+              longitude: loc.lng,
+              landmark: loc.address,
+              pincode: loc.pincode,
+              city: loc.city,
+              state: loc.state,
+              country: loc.country,
+            });
+          }}
+        />
+      </Form.Item>
       {/* City, State, Pincode */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <Form.Item
@@ -79,23 +96,6 @@ const AddressFormItems = () => {
           rules={[{ required: true, message: "Country is required" }]}
         >
           <Input placeholder="Country" />
-        </Form.Item>
-
-        <Form.Item label="Landmark" name="landmark">
-          <GoogleAddressPicker
-            showMap={false}
-            onLocationSelect={(loc) => {
-              form.setFieldsValue({
-                latitude: loc.lat,
-                longitude: loc.lng,
-                landmark: loc.address,
-                pincode: loc.pincode,
-                city: loc.city,
-                state: loc.state,
-                country: loc.country,
-              });
-            }}
-          />
         </Form.Item>
       </div>
 
