@@ -84,14 +84,16 @@ const NewOrderForm = () => {
 
   // Order Data
   const [totalData, setTotalData] = useState({});
+  console.log("totalData", totalData);
+
   const [recommendationData, setRecommendationData] = useState(null);
   const [carrierPartnerData, setCarrierPartnerData] = useState(null);
-
+  console.log("carrierPartnerData", carrierPartnerData);
   const [CashFreeOfferId, setCashFreeOfferId] = useState(null);
   const [paymentSessionId, setPaymentSessionId] = useState(null);
-  console.log("recommendationData", recommendationData);
-  console.log("totalData", totalData);
-  console.log("carrierPartnerData", carrierPartnerData);
+  // console.log("recommendationData", recommendationData);
+  // console.log("totalData", totalData);
+  // console.log("carrierPartnerData", carrierPartnerData);
 
   // Calculate Price
   const { mutate: calculatePriceOfOrder, isPending: calculatePricePending } =
@@ -594,8 +596,7 @@ const NewOrderForm = () => {
 
       const cleanedTotalData = removeNullValues(totalData);
       setCashFreeOfferId(sessionData?.payment_order?.cf_order_id);
-      if (!paymentSessionId) {
-        // Handle the case where paymentSessionId is not set
+      if (!sessionData?.payment_order?.cf_order_id) {
         message.error("Payment session not initiated. Please try again.");
         return;
       }
@@ -620,13 +621,12 @@ const NewOrderForm = () => {
           invoice_value: summaryData.total_charge,
           invoice_date: dayjs().format("DD-MM-YYYY"),
           cp_id: cleanedTotalData?.shipment_details?.courier_partner,
-          courier_partner: String(carrierPartnerData?.carrier_partner),
+          courier_partner: carrierPartnerData?.carrier_partner,
           account_code: carrierPartnerData?.account_code,
           category_id: cleanedTotalData?.shipment_details?.category_id,
           item_ids: cleanedTotalData?.shipment_details?.item_ids,
         },
       };
-      console.log("Payload:", payload);
       // 1. Validate data against schema (optional but recommended)
       const validatedData = createOrderSchema.parse(payload);
       // 2. Call API
@@ -636,14 +636,12 @@ const NewOrderForm = () => {
 
       if (error.name === "ZodError") {
         // Handle validation errors if using Zod manually here
-        console.error("Validation error:", error.errors);
         message.error("Please check your inputs.");
       } else {
         console.error("Submission error:", error);
       }
     }
   };
-  console.log("current", current);
   return (
     <div className="w-full flex flex-col gap-3">
       <Steps

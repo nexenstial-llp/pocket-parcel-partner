@@ -110,16 +110,17 @@ function LoginComponent() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-linear-to-tr from-[#f0a991] to-[#1024dd] p-4">
-      {/* <div className="w-full max-w-5xl backdrop-blur-xl bg-white/20   shadow-2xl rounded-xl overflow-hidden grid grid-cols-1 md:grid-cols-2"> */}
-      <div className="w-full max-w-5xl bg-[#db5730]   shadow-2xl rounded-xl overflow-hidden grid grid-cols-1 md:grid-cols-2 min-h-[495px]">
+    <div className="min-h-screen flex items-center justify-center bg-linear-to-tr from-gray-50 to-gray-100 p-4">
+      {/* <div className="min-h-screen flex items-center justify-center bg-linear-to-tr from-[#f0a991] to-[#1024dd] p-4"> */}
+      <div className="w-full max-w-5xl bg-[#db5730]   shadow-2xl rounded-4xl overflow-hidden grid grid-cols-1 md:grid-cols-2 min-h-[495px]">
         {/* LEFT SIDE — IMAGE (hidden on small screens) */}
-        <div
-          className="hidden md:block bg-cover bg-center"
-          style={{
-            backgroundImage: "url('/app_default_image.png')",
-          }}
-        ></div>
+        <div className="hidden md:flex items-center justify-center p-4">
+          <img
+            src="/app_default_image.png"
+            alt="App preview"
+            className="max-w-[70%] h-auto object-contain mx-auto"
+          />
+        </div>
         {/* RIGHT SIDE — LOGIN FORM */}
         <div className="p-8 md:p-12 bg-white">
           <Title level={2} style={{ textAlign: "center", marginBottom: 4 }}>

@@ -42,12 +42,14 @@ const AddressSelectorModal = ({ open, onCancel, onSelect, title }) => {
       >
         <div className="flex gap-2 mb-4">
           <Input
+            size="small"
             prefix={<SearchOutlined />}
             placeholder="Search by label, name, city, or phone..."
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
           />
           <Button
+            size="small"
             type="primary"
             icon={<PlusOutlined />}
             onClick={() => setIsAddModalOpen(true)}
@@ -59,7 +61,8 @@ const AddressSelectorModal = ({ open, onCancel, onSelect, title }) => {
         <List
           loading={isLoading}
           dataSource={filteredAddresses}
-          pagination={{ pageSize: 5 }}
+          size="small"
+          pagination={{ pageSize: 5, size: "small" }}
           renderItem={(item) => (
             <List.Item
               className="hover:bg-slate-50 cursor-pointer transition-colors border border-gray-100 mb-2 rounded-lg p-3"
@@ -84,15 +87,15 @@ const AddressSelectorModal = ({ open, onCancel, onSelect, title }) => {
                   </Space>
                 }
                 description={
-                  <div className="text-xs text-gray-500 flex flex-col gap-1">
+                  <div className="text-xs text-gray-500 flex flex-col">
                     <Text>
                       {item.full_name} | {item.phone_number}
                     </Text>
-                    <Text>
+                    <p>
                       {item.address_line1},{" "}
                       {item.address_line2 ? item.address_line2 + ", " : ""}
                       {item.city}, {item.state} - {item.pincode}
-                    </Text>
+                    </p>
                   </div>
                 }
               />

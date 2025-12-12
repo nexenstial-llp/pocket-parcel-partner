@@ -273,8 +273,7 @@ const ComprehensiveOrderForm = () => {
 
       const cleanedTotalData = removeNullValues(totalData);
       setCashFreeOfferId(sessionData?.payment_order?.cf_order_id);
-      if (!paymentSessionId) {
-        // Handle the case where paymentSessionId is not set
+      if (!sessionData?.payment_order?.cf_order_id) {
         message.error("Payment session not initiated. Please try again.");
         return;
       }

@@ -47,7 +47,7 @@ const EmailPasswordLoginForm = ({ form, handleSubmit, isLoading }) => {
         />
       </Form.Item>
 
-      <Form.Item style={{ marginBottom: 16 }}>
+      <Form.Item style={{ marginTop: 30 }}>
         <Button
           type="primary"
           htmlType="submit"

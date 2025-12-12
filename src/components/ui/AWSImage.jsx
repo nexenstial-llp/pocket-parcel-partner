@@ -52,7 +52,7 @@ const AWSImage = ({
           "flex items-center justify-center bg-gray-50 rounded animate-pulse",
           className
         )}
-        style={{ width, height: height || "100%", minHeight: 100 }}
+        style={{ width, height: height || "100%", minHeight: 50 }}
       >
         <LoadingOutlined className="text-gray-400 text-xl" />
       </div>
@@ -68,7 +68,7 @@ const AWSImage = ({
           "flex items-center justify-center bg-gray-100 rounded text-gray-400 border border-gray-200",
           className
         )}
-        style={{ width, height: height || "100%", minHeight: 100 }}
+        style={{ width, height: height || "100%", minHeight: 50 }}
       >
         <FileImageOutlined className="text-2xl" />
       </div>
