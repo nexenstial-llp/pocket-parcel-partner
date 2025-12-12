@@ -10,7 +10,7 @@ export default function CourierPartnerSelector({ data, value, onChange }) {
   console.log("preferenceArray", preferenceArray);
   return (
     <div className="space-y-4">
-      <h3 className="text-lg font-semibold mb-2">Select Courier Partner</h3>
+      <h3 className="text-lg font-semibold mb-2">Select Carrier Partner</h3>
 
       <Radio.Group
         value={value}

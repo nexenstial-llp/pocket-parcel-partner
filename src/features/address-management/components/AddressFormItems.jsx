@@ -30,7 +30,7 @@ const AddressFormItems = () => {
           name="phone_number"
           rules={[{ required: true, message: "Phone number is required" }]}
         >
-          <Input placeholder="9876543210" />
+          <Input placeholder="Please enter phone number" />
         </Form.Item>
       </div>
       {/* Address Lines */}

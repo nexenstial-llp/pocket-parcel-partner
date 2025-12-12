@@ -92,7 +92,7 @@ function ServiceableCourierPartners() {
 
   const columns = [
     {
-      title: "Courier Partner",
+      title: "Carrier Partner",
       dataIndex: "name",
       key: "name",
     },
@@ -281,9 +281,9 @@ function ServiceableCourierPartners() {
           </div>
         </Card>
 
-        {/* Courier Partners Section */}
+        {/* Carrier Partners Section */}
         <div className="flex-1 mt-3">
-          <h4>Serviceable Courier Partners</h4>
+          <h4>Serviceable Carrier Partners</h4>
           <div className="mb-4">
             <Tabs activeKey={activeTab} items={items} onChange={setActiveTab} />
           </div>

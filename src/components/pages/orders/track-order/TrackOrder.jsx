@@ -29,11 +29,9 @@ const TrackOrder = () => {
       await new Promise((resolve) => setTimeout(resolve, 1500));
       // Mock data with timeline
       setOrderData({
-        orderId:
-          values.searchType === "orderId" ? values.searchValue : "ORD123456",
-        awb: values.searchType === "awb" ? values.searchValue : "AWB789654",
-        mobile:
-          values.searchType === "mobile" ? values.searchValue : "9876543210",
+        orderId: values.searchType === "orderId" ? values.searchValue : "",
+        awb: values.searchType === "awb" ? values.searchValue : "",
+        mobile: values.searchType === "mobile" ? values.searchValue : "",
         status: "Out for Delivery",
         expectedDate: "2025-03-01",
         pickupAddress: "Indiranagar, Maharashtra",

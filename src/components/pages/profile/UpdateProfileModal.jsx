@@ -110,7 +110,7 @@ function UpdateProfileModal({ visible, onClose }) {
               { max: 15, message: "Maximum 15 digits" },
             ]}
           >
-            <Input placeholder="9876543210" />
+            <Input placeholder="Please enter phone number" />
           </Form.Item>
         </div>
 

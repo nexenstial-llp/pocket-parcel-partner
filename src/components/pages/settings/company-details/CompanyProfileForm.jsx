@@ -213,7 +213,7 @@ const CompanyProfileForm = () => {
                       label="Contact Number"
                       rules={[{ required: true }]}
                     >
-                      <Input placeholder="+91 9876543210" />
+                      <Input placeholder="+91 Please enter phone number" />
                     </Form.Item>
                   </Col>
 

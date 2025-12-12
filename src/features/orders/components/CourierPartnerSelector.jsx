@@ -1,59 +1,89 @@
 /* eslint-disable react/prop-types */
 import { Card, Radio } from "antd";
 import AWSImage from "@/components/ui/AWSImage";
+import { List } from "react-window";
 
 export default function CourierPartnerSelector({ data, value, onChange }) {
-  console.log("data", data);
-
   const preferenceArray =
     data?.recommendations?.result?.[0]?.preference_array || [];
-  console.log("preferenceArray", preferenceArray);
+
+  // Row Renderer for react-window
+  const Row = ({ index, style }) => {
+    const item = preferenceArray[index];
+    const isSelected = value === item?.account_code;
+
+    return (
+      <div style={{ ...style, paddingBottom: "10px" }}>
+        <Card
+          size="small"
+          className={`cursor-pointer border border-gray-200 hover:shadow-md transition h-full ${
+            isSelected ? "border-blue-500! bg-blue-50/10" : ""
+          }`}
+          onClick={() => onChange(item?.account_code)}
+        >
+          <div className="flex items-center gap-4">
+            <div className="size-12 shrink-0 flex items-center justify-center bg-gray-50 rounded p-1">
+              {item?.courier_partner?.logo ? (
+                <AWSImage
+                  s3Key={item?.courier_partner.logo}
+                  className="w-full h-full object-contain"
+                />
+              ) : (
+                <span className="text-xs text-gray-400">No Logo</span>
+              )}
+            </div>
+
+            <div className="flex-1 min-w-0">
+              <div className="flex justify-between items-start">
+                <div>
+                  <p className="font-semibold text-gray-800 text-base truncate">
+                    {item?.courier_name}
+                  </p>
+                  <p className="text-xs text-gray-500">{item?.account_code}</p>
+                </div>
+                <Radio
+                  checked={isSelected}
+                  onChange={() => onChange(item?.account_code)}
+                  value={item?.account_code}
+                />
+              </div>
+
+              {item?.shipping_charge ? (
+                <p className="mt-1 text-blue-600 font-bold text-sm">
+                  ₹{item?.shipping_charge}
+                </p>
+              ) : (
+                <p className="text-gray-400 text-xs">(No rate available)</p>
+              )}
+            </div>
+          </div>
+        </Card>
+      </div>
+    );
+  };
+
   return (
     <div className="space-y-4">
-      <h3 className="text-lg font-semibold mb-2">Select Courier Partner</h3>
+      <h3 className="text-lg font-semibold mb-2">Select Carrier Partner</h3>
 
-      <Radio.Group
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        className="w-full"
-      >
-        <div className="flex flex-col gap-2">
-          {preferenceArray.map((item) => (
-            <Card
-              key={item.account_id}
-              className={`cursor-pointer border hover:shadow-md transition ${
-                value === item.account_code ? "border-blue-500!" : ""
-              }`}
-              onClick={() => onChange(item.account_code)}
-            >
-              <div className="flex items-center gap-4">
-                <div className="size-16">
-                  {item.courier_partner?.logo && (
-                    <AWSImage s3Key={item.courier_partner.logo} />
-                  )}
-                </div>
-
-                <div className="flex-1">
-                  <p className="font-medium text-gray-800 text-lg">
-                    {item.courier_name}
-                  </p>
-                  <p className="text-sm text-gray-500">{item.account_code}</p>
-
-                  {item.shipping_charge ? (
-                    <p className="mt-1 text-blue-600 font-semibold">
-                      ₹{item.shipping_charge}
-                    </p>
-                  ) : (
-                    <p className="text-gray-400 text-sm">(No rate available)</p>
-                  )}
-                </div>
-
-                <Radio value={item.account_code} />
-              </div>
-            </Card>
-          ))}
-        </div>
-      </Radio.Group>
+      <div className="w-full rounded-lg">
+        {preferenceArray?.length > 0 ? (
+          <List
+            rowComponent={Row}
+            rowCount={preferenceArray?.length}
+            rowHeight={105}
+            rowProps={{
+              style: {
+                padding: "8px",
+              },
+            }}
+          />
+        ) : (
+          <div className="text-center p-8 text-gray-500">
+            No carrier partners available
+          </div>
+        )}
+      </div>
     </div>
   );
 }

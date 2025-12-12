@@ -37,6 +37,8 @@ import {
 } from "@/features/payment/payment.service";
 import { useNavigate } from "@tanstack/react-router";
 import dayjs from "dayjs";
+import { FaShippingFast } from "react-icons/fa";
+import { RiBillLine } from "react-icons/ri";
 let cashfree;
 
 const initializeCashfree = async () => {
@@ -70,9 +72,10 @@ const NewOrderForm = () => {
   const height = Form.useWatch(["shipment_details", "height"], form);
   const weight = Form.useWatch(["shipment_details", "weight"], form);
 
-  const volumetricWeight = (length * breadth * height) / 5000;
+  const volumetricWeight = (length * breadth * height) / 5000 || 0;
 
-  const finalWeight = weight > volumetricWeight ? weight : volumetricWeight;
+  const finalWeight =
+    weight > volumetricWeight ? weight : volumetricWeight || 0;
   // State for Address Selection
   const [pickupAddress, setPickupAddress] = useState(null);
   const [dropAddress, setDropAddress] = useState(null);
@@ -208,7 +211,7 @@ const NewOrderForm = () => {
         const payload = {
           from_latitude: Number(totalData?.pickup_info?.pickup_lat),
           from_longitude: Number(totalData?.pickup_info?.pickup_long),
-          courier_partner: carrierPartnerData?.carrier_partner,
+          courier_partner: String(carrierPartnerData?.carrier_partner),
           is_cod: totalData?.shipment_details?.is_cod,
           insurance_opted: totalData?.shipment_details?.insurance_opted,
           to_pincode: totalData?.drop_info?.drop_pincode,
@@ -482,6 +485,7 @@ const NewOrderForm = () => {
     // Placeholder for Carrier Partner Step (to be implemented/reused)
     {
       title: "Carrier Partner",
+      icon: <FaShippingFast />,
       content: (
         <CourierPartnerSelector
           data={recommendationData}
@@ -494,7 +498,6 @@ const NewOrderForm = () => {
             const selected = preferenceArray.find(
               (item) => item.account_code === accountCode
             );
-
             setCarrierPartnerData({
               carrier_partner: selected?.cp_id,
               account_code: selected?.account_code,
@@ -506,6 +509,7 @@ const NewOrderForm = () => {
     // Summary
     {
       title: "Summary",
+      icon: <RiBillLine />,
       content: <SummaryStep summaryData={summaryData} />,
     },
   ];
@@ -616,7 +620,7 @@ const NewOrderForm = () => {
           invoice_value: summaryData.total_charge,
           invoice_date: dayjs().format("DD-MM-YYYY"),
           cp_id: cleanedTotalData?.shipment_details?.courier_partner,
-          courier_partner: carrierPartnerData?.carrier_partner,
+          courier_partner: String(carrierPartnerData?.carrier_partner),
           account_code: carrierPartnerData?.account_code,
           category_id: cleanedTotalData?.shipment_details?.category_id,
           item_ids: cleanedTotalData?.shipment_details?.item_ids,
@@ -642,13 +646,19 @@ const NewOrderForm = () => {
   console.log("current", current);
   return (
     <div className="w-full flex flex-col gap-3">
-      <Steps current={current} items={steps} className="mb-8" size="small" />
+      <Steps
+        onChange={(e) => setCurrent(e)}
+        current={current}
+        items={steps}
+        className="mb-8"
+        size="small"
+      />
 
       <Form onFinish={onFinish} form={form} layout="vertical">
         <div className="mb-8">{steps[current]?.content}</div>
 
         {/* Navigation Buttons */}
-        <div className="flex justify-end gap-4 sticky bottom-0 bg-white p-4 border-t border-gray-300 z-10 shadow-md rounded-b-lg">
+        <div className="flex justify-end gap-4 -mx-3 -mb-8 sticky bottom-0 bg-white p-4 border-t border-gray-300 z-10 shadow-md rounded-b-lg">
           {current > 0 && (
             <ResponsiveButton onClick={prev}>Previous</ResponsiveButton>
           )}
