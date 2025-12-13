@@ -160,3 +160,27 @@ h6 {
 .ant-input-affix-wrapper input::placeholder {
   font-size: 12px !important;
 }
+
+/* Login placeholder size */
+.login .ant-input::placeholder,
+.login .ant-input-textarea::placeholder {
+  font-size: 14px !important;
+}
+
+.login-button {
+  background-color: #ee8229;
+  height: 50px;
+  border-radius: 30px;
+  margin-top: 20px;
+}
+
+.login-button:hover {
+  background-color: #e86c07 !important;
+}
+
+@media (max-width: 768px) {
+  .login-button {
+    margin-top: 15px;
+    height: 40px;
+  }
+}

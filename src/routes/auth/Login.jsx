@@ -2,10 +2,7 @@ import { createFileRoute, redirect } from "@tanstack/react-router";
 import { Button, Form, Input, Alert, Typography } from "antd";
 import { SafetyOutlined } from "@ant-design/icons";
 import { useState } from "react";
-import { Tabs } from "antd";
-import { message } from "antd";
-import { Space } from "antd";
-import { Select } from "antd";
+import { Tabs, message, Space, Select } from "antd";
 import { useSendMobileOtp } from "@/features/auth/auth.query";
 import EmailPasswordLoginForm from "@/features/auth/components/EmailPasswordLoginForm";
 
@@ -112,7 +109,7 @@ function LoginComponent() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-linear-to-tr from-gray-50 to-gray-100 p-4">
       {/* <div className="min-h-screen flex items-center justify-center bg-linear-to-tr from-[#f0a991] to-[#1024dd] p-4"> */}
-      <div className="w-full max-w-5xl bg-[#db5730]   shadow-2xl rounded-4xl overflow-hidden grid grid-cols-1 md:grid-cols-2 min-h-[495px]">
+      <div className="w-full max-w-4xl bg-[#ffedd9] shadow-2xl rounded-4xl overflow-hidden grid grid-cols-1 md:grid-cols-2 min-h-[495px]">
         {/* LEFT SIDE — IMAGE (hidden on small screens) */}
         <div className="hidden md:flex items-center justify-center p-4">
           <img
@@ -122,7 +119,7 @@ function LoginComponent() {
           />
         </div>
         {/* RIGHT SIDE — LOGIN FORM */}
-        <div className="p-8 md:p-12 bg-white">
+        <div className="p-8 md:p-10 bg-white">
           <Title level={2} style={{ textAlign: "center", marginBottom: 4 }}>
             Sign In
           </Title>
@@ -132,7 +129,7 @@ function LoginComponent() {
             style={{
               display: "block",
               textAlign: "center",
-              marginBottom: 24,
+              marginBottom: 16,
               fontSize: 14,
             }}
           >
@@ -149,6 +146,7 @@ function LoginComponent() {
           )}
 
           <Tabs
+            className="login"
             centered
             items={[
               {
@@ -169,6 +167,7 @@ function LoginComponent() {
                   <>
                     {!otpSent ? (
                       <Form
+                        size="large"
                         name="otp-request"
                         onFinish={handleSendOtp}
                         layout="vertical"
@@ -217,6 +216,7 @@ function LoginComponent() {
                         </Form.Item>
 
                         <Button
+                          className="login-button"
                           type="primary"
                           htmlType="submit"
                           loading={isOtpSendPending}
@@ -238,6 +238,7 @@ function LoginComponent() {
                           name="otp-verify"
                           onFinish={handleVerifyOtp}
                           layout="vertical"
+                          size="large"
                         >
                           <Form.Item
                             name="otp_code"
@@ -259,7 +260,6 @@ function LoginComponent() {
                                 <SafetyOutlined className="text-gray-400" />
                               }
                               placeholder="Enter 6-digit code"
-                              size="large"
                               maxLength={6}
                             />
                           </Form.Item>
@@ -268,8 +268,8 @@ function LoginComponent() {
                             type="primary"
                             htmlType="submit"
                             loading={loading}
-                            size="large"
                             block
+                            className="login-button"
                           >
                             Verify & Sign In
                           </Button>
@@ -280,7 +280,11 @@ function LoginComponent() {
                               setOtpSent(false);
                               setEmailForOtp("");
                             }}
+                            size="small"
                             block
+                            style={{
+                              marginTop: "0.5rem",
+                            }}
                           >
                             Use a different phone number
                           </Button>

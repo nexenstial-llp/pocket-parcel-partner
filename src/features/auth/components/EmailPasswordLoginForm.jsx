@@ -7,6 +7,8 @@ import { Button } from "antd";
 const EmailPasswordLoginForm = ({ form, handleSubmit, isLoading }) => {
   return (
     <Form
+      size="large"
+      className="login"
       form={form}
       layout="vertical"
       onFinish={handleSubmit}
@@ -23,11 +25,7 @@ const EmailPasswordLoginForm = ({ form, handleSubmit, isLoading }) => {
           },
         ]}
       >
-        <Input
-          prefix={<MailOutlined />}
-          placeholder="Enter your email"
-          size="large"
-        />
+        <Input prefix={<MailOutlined />} placeholder="Enter your email" />
       </Form.Item>
 
       <Form.Item
@@ -43,17 +41,16 @@ const EmailPasswordLoginForm = ({ form, handleSubmit, isLoading }) => {
         <Input.Password
           prefix={<LockOutlined />}
           placeholder="Enter your password"
-          size="large"
         />
       </Form.Item>
 
-      <Form.Item style={{ marginTop: 30 }}>
+      <Form.Item>
         <Button
+          className="login-button"
           type="primary"
           htmlType="submit"
           loading={isLoading}
           block
-          size="large"
         >
           {isLoading ? "Signing in..." : "Sign In"}
         </Button>
