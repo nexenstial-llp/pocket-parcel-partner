@@ -51,7 +51,7 @@ function RouteComponent() {
           <Menu
             mode="inline"
             items={items}
-            className="!border-none"
+            className="border-none!"
             selectedKeys={[pathname]}
             key={"key"}
           />

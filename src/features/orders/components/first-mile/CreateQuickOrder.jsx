@@ -18,7 +18,7 @@ import {
   usePriceCalculate,
 } from "@/features/orders/orders.query";
 import { createQuickOrderSchema } from "@/features/orders/orders.schema";
-import { applyZodErrorsToForm } from "@/utils/formError";
+import { applyZodErrorsToForm } from "@/utils/formError.util";
 import { useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { APIProvider } from "@vis.gl/react-google-maps";

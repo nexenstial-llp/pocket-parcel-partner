@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useChangePassword } from "@/features/users/users.query";
 import { changePasswordSchema } from "@/features/users/users.schema";
-import { applyZodErrorsToForm } from "@/utils/formError";
+import { applyZodErrorsToForm } from "@/utils/formError.util";
 import { Modal, Form, Input, Button, message } from "antd";
 import { memo } from "react";
 

@@ -107,11 +107,18 @@ export const createWarehouseSchema = z.object({
     .optional(),
   warehouse_image: z
     .string()
-    .url("Invalid warehouse image URL format")
-    .max(500, "Warehouse image URL must be less than 500 characters")
+    .max(500, "Warehouse image path must be less than 500 characters")
     .optional(),
   warehouse_type: warehouseTypeSchema.default("MAIN"),
-  capacity_info: z.object().optional(),
+  capacity_info: z
+    .object({
+      total_area: z.string().optional(),
+      storage_capacity: z.string().optional(),
+      dock_doors: z.number().optional(),
+      loading_bays: z.number().optional(),
+      parking_spaces: z.number().optional(),
+    })
+    .optional(),
   operating_hours: z
     .string()
     .max(255, "Operating hours must be less than 255 characters")
@@ -120,4 +127,56 @@ export const createWarehouseSchema = z.object({
     .array(warehouseLocationSchema)
     .min(1, "At least one location is required")
     .max(10, "Maximum 10 locations allowed per warehouse"),
+});
+
+// Update warehouse validation schema
+export const updateWarehouseSchema = z.object({
+  name: z
+    .string()
+    .min(1, "Warehouse name is required")
+    .max(100, "Warehouse name must be less than 100 characters")
+    .optional(),
+  code: z
+    .string()
+    .min(1, "Warehouse code is required")
+    .max(20, "Warehouse code must be less than 20 characters")
+    .regex(
+      /^[A-Z0-9-_]+$/,
+      "Warehouse code must contain only uppercase letters, numbers, hyphens, and underscores"
+    )
+    .optional(),
+  description: z.string().optional(),
+  contact_person: z
+    .string()
+    .min(1, "Contact person is required")
+    .max(100, "Contact person must be less than 100 characters")
+    .optional(),
+  contact_phone: z
+    .string()
+    .min(10, "Contact phone must be at least 10 digits")
+    .max(15, "Contact phone must be less than 15 digits")
+    .optional(),
+  contact_email: z
+    .email("Invalid email format")
+    .max(255, "Contact email must be less than 255 characters")
+    .optional(),
+  warehouse_image: z
+    .string()
+    .max(500, "Warehouse image path must be less than 500 characters")
+    .optional(),
+  is_active: z.boolean().optional(),
+  warehouse_type: warehouseTypeSchema.optional(),
+  capacity_info: z
+    .object({
+      total_area: z.string().optional(),
+      storage_capacity: z.string().optional(),
+      dock_doors: z.number().optional(),
+      loading_bays: z.number().optional(),
+      parking_spaces: z.number().optional(),
+    })
+    .optional(),
+  operating_hours: z
+    .string()
+    .max(255, "Operating hours must be less than 255 characters")
+    .optional(),
 });

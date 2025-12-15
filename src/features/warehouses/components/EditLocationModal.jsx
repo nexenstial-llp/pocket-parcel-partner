@@ -69,6 +69,7 @@ export default function EditLocationModal({
           })
         }
         className="mt-4"
+        disabled={updateLocation.isPending}
       >
         <LocationFormItems form={form} />
 
@@ -79,7 +80,7 @@ export default function EditLocationModal({
           <Button
             icon={<ReloadOutlined />}
             onClick={() => form.setFieldsValue(initialData)}
-            disabled={updateLocation.isLoading}
+            disabled={updateLocation.isPending}
           >
             Revert
           </Button>
@@ -87,7 +88,7 @@ export default function EditLocationModal({
             type="primary"
             htmlType="submit"
             icon={<SaveOutlined />}
-            loading={updateLocation.isLoading}
+            loading={updateLocation.isPending}
             className="bg-indigo-600 hover:bg-indigo-500 shadow-md"
           >
             Update Location

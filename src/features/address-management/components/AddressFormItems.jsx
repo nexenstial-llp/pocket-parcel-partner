@@ -92,7 +92,6 @@ const AddressFormItems = () => {
         <Form.Item
           label="Country"
           name="country"
-          initialValue="India"
           rules={[{ required: true, message: "Country is required" }]}
         >
           <Input placeholder="Country" />

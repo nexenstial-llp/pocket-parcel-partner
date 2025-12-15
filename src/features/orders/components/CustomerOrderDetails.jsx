@@ -10,36 +10,61 @@ export default function CustomerOrderDetails({ order }) {
 
   return (
     <div className="flex flex-col gap-4">
-      {/* ORDER SUMMARY */}
-      <Descriptions bordered column={1} size="small">
-        <Descriptions.Item label="Order Number">
-          {order?.order_number}
-        </Descriptions.Item>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* ORDER SUMMARY */}
+        <Descriptions bordered column={1} size="small">
+          <Descriptions.Item label="Order Number">
+            {order?.order_number}
+          </Descriptions.Item>
 
-        <Descriptions.Item label="Payment Status">
-          <Tag color={order?.payment_status === "PAID" ? "green" : "red"}>
-            {order?.payment_status}
-          </Tag>
-        </Descriptions.Item>
+          <Descriptions.Item label="Payment Status">
+            <Tag color={order?.payment_status === "PAID" ? "green" : "red"}>
+              {order?.payment_status}
+            </Tag>
+          </Descriptions.Item>
 
-        <Descriptions.Item label="Order Status">
-          <Tag color="blue">{order?.order_status}</Tag>
-        </Descriptions.Item>
-        <Descriptions.Item label="Lifecycle Status">
-          <Tag color="blue">{order?.lifecycle_status}</Tag>
-        </Descriptions.Item>
+          <Descriptions.Item label="Order Status">
+            <Tag color="blue">{order?.order_status}</Tag>
+          </Descriptions.Item>
+          <Descriptions.Item label="Lifecycle Status">
+            <Tag color="blue">{order?.lifecycle_status}</Tag>
+          </Descriptions.Item>
 
-        <Descriptions.Item label="Total Amount">
-          ₹{order?.total_amount}
-        </Descriptions.Item>
+          <Descriptions.Item label="Total Amount">
+            ₹{order?.total_amount}
+          </Descriptions.Item>
 
-        <Descriptions.Item label="Package Details">
-          {order?.length} × {order?.breadth} × {order?.height} cm
-          <br />
-          Weight: {order?.weight} kg
-        </Descriptions.Item>
-      </Descriptions>
-
+          <Descriptions.Item label="Package Details">
+            {order?.length} × {order?.breadth} × {order?.height} cm
+            <br />
+            Weight: {order?.weight} kg
+          </Descriptions.Item>
+        </Descriptions>
+        {/* STATUS TIMELINE */}
+        <Card title="Latest Status">
+          <Timeline
+            items={[
+              {
+                color: "blue",
+                children: (
+                  <>
+                    <p className="font-medium">{latestStatus?.to_status}</p>
+                    <p className="text-sm text-gray-500">
+                      {latestStatus?.notes}
+                    </p>
+                    <p className="text-xs text-gray-500 mt-1">
+                      <span className="mr-2 font-bold">
+                        {moment(latestStatus?.created_at).format("DD-MM-YYYY")}
+                      </span>
+                      {moment(latestStatus?.created_at).fromNow()}
+                    </p>
+                  </>
+                ),
+              },
+            ]}
+          />
+        </Card>
+      </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* PICKUP ADDRESS */}
         <Card title="Pickup Address">
@@ -78,29 +103,6 @@ export default function CustomerOrderDetails({ order }) {
           </Descriptions>
         </Card>
       </div>
-
-      {/* STATUS TIMELINE */}
-      <Card title="Latest Status">
-        <Timeline
-          items={[
-            {
-              color: "blue",
-              children: (
-                <>
-                  <p className="font-medium">{latestStatus?.to_status}</p>
-                  <p className="text-sm text-gray-500">{latestStatus?.notes}</p>
-                  <p className="text-xs text-gray-500 mt-1">
-                    <span className="mr-2 font-bold">
-                      {moment(latestStatus?.created_at).format("DD-MM-YYYY")}
-                    </span>
-                    {moment(latestStatus?.created_at).fromNow()}
-                  </p>
-                </>
-              ),
-            },
-          ]}
-        />
-      </Card>
     </div>
   );
 }

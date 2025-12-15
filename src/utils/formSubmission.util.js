@@ -1,4 +1,6 @@
 import { message } from "antd";
+
+import { removeNullValues } from "./objects.utils";
 import { applyZodErrorsToForm } from "./formError.util";
 
 /**
@@ -17,20 +19,18 @@ export const handleFormSubmission = async ({
   form,
   messages = {},
 }) => {
-  console.log("schema", schema);
-
   try {
+    // Remove null values from the form values
+    const cleanedValues = removeNullValues(values);
+
     // Validate with Zod schema
-    const parsedData = schema.parse(values);
+    const parsedData = schema.parse(cleanedValues);
 
     // Call the submission function
     await onSubmit(parsedData);
   } catch (err) {
-    console.log("parsed", err);
     if (err.name === "ZodError") {
       applyZodErrorsToForm(form, err);
-      console.log(err);
-      message.error(messages.zodError || "Fix the errors and try again.");
     } else {
       message.error(
         messages.genericError || err?.message || "Something went wrong"

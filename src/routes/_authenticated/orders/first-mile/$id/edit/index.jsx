@@ -7,7 +7,7 @@ import {
   useModifyQwqerOrder,
 } from "@/features/orders/orders.query";
 import { updateQuickOrderSchema } from "@/features/orders/orders.schema";
-import { applyZodErrorsToForm } from "@/utils/formError";
+import { applyZodErrorsToForm } from "@/utils/formError.util";
 import {
   createFileRoute,
   useNavigate,

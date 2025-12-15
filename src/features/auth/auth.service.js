@@ -11,7 +11,7 @@ export const login = async ({ username, password }) => {
 
 export const emailPasswordLogin = async ({ email, password }) => {
   const response = await axiosInstance.post(
-    "/v1/auth/email/login",
+    "/v1/transit-warehouse/auth/login",
     {
       email,
       password,
@@ -25,12 +25,14 @@ export const emailPasswordLogin = async ({ email, password }) => {
 };
 // Auth method
 export const authMe = async () => {
-  const response = await axiosInstance.get("/v1/auth/me");
+  const response = await axiosInstance.get("/v1/mobile/auth/me");
   return response.data;
 };
 
 export const logout = async () => {
-  const response = await axiosInstance.post("/v1/auth/logout");
+  const response = await axiosInstance.post(
+    "/v1/transit-warehouse/auth/logout"
+  );
   return response.data;
 };
 

@@ -179,7 +179,6 @@ const handleErrorMessage = async (error) => {
 axiosInstance.interceptors.request.use(
   async (config) => {
     const accessToken = localStorage.getItem("access_token");
-    console.log("Axios Request - URL:", config.url);
     // Add Authorization header if not skipping authentication
     if (
       !config.skipAuth &&

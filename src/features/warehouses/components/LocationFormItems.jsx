@@ -5,7 +5,8 @@ import {
   InfoCircleOutlined,
   BuildOutlined,
 } from "@ant-design/icons";
-import SelectLocationModal from "@/components/ui/maps/SelectLocationModal";
+import GoogleAddressPicker from "@/components/ui/GoogleAddressPicker";
+
 const { TextArea } = Input;
 const LOCATION_TYPES = [
   { value: "MAIN", label: "Main Hub" },
@@ -14,15 +15,36 @@ const LOCATION_TYPES = [
   { value: "STORAGE", label: "Storage Unit" },
   { value: "OUTPOST", label: "Remote Outpost" },
 ];
-const LocationFormItems = ({ form }) => {
+
+/**
+ * Reusable form items for a Location.
+ * @param {Object} props
+ * @param {import("antd").FormInstance} props.form - Antd form instance
+ * @param {Array<string|number>} [props.namePath] - Path for Form.Item `name` prop (relative to current context, e.g. Form.List item index)
+ * @param {Array<string|number>} [props.absolutePath] - Full absolute path for direct form updates (e.g. ['locations', 0])
+ * @param {Object} [props.restField] - Rest props from Form.List field (key, etc.)
+ */
+const LocationFormItems = ({
+  form,
+  namePath = [],
+  absolutePath,
+  restField,
+}) => {
+  // Use absolutePath if provided, otherwise fallback to namePath (for root forms)
+  const writePath = absolutePath !== undefined ? absolutePath : namePath;
+
+  // Helper to resolve field name based on namePath
+  const getName = (name) => (namePath.length > 0 ? [...namePath, name] : name);
+
   return (
     <div>
       {/* --- SECTION 1: PRIMARY DETAILS --- */}
       <Row gutter={16}>
         <Col xs={24} md={14}>
           <Form.Item
+            {...restField}
             label="Location Name"
-            name="location_name"
+            name={getName("location_name")}
             rules={[{ required: true }]}
             className="mb-0"
           >
@@ -34,8 +56,9 @@ const LocationFormItems = ({ form }) => {
         </Col>
         <Col xs={24} md={10}>
           <Form.Item
+            {...restField}
             label="Type"
-            name="location_type"
+            name={getName("location_type")}
             initialValue="MAIN"
             className="mb-0"
           >
@@ -47,39 +70,71 @@ const LocationFormItems = ({ form }) => {
       <Row gutter={24}>
         {/* --- LEFT COLUMN: Address & Geo --- */}
         <Col xs={24} md={14}>
-          <div className="mb-2 flex items-center gap-2 text-xs font-semibold text-gray-500 uppercase tracking-wide">
+          <div className="mb-2 flex items-center gap-2 text-xs font-semibold text-gray-500 uppercase tracking-wide mt-2">
             <EnvironmentOutlined /> Address Details
           </div>
 
           <Form.Item
-            name="address_line1"
+            {...restField}
+            name={getName("address_line1")}
             rules={[{ required: true }]}
             className="mb-3"
           >
             <Input placeholder="Address Line 1" />
           </Form.Item>
 
-          <Form.Item name="address_line2" className="mb-3">
+          <Form.Item
+            {...restField}
+            name={getName("address_line2")}
+            className="mb-3"
+          >
             <Input placeholder="Address Line 2 (Optional)" />
+          </Form.Item>
+
+          <Form.Item {...restField} label="Landmark" name={getName("landmark")}>
+            <GoogleAddressPicker
+              showMap={false}
+              onLocationSelect={(loc) => {
+                const updates = {
+                  latitude: loc.lat,
+                  longitude: loc.lng,
+                  landmark: loc.address,
+                  pincode: loc.pincode,
+                  city: loc.city,
+                  state: loc.state,
+                  country: loc.country,
+                };
+
+                // Construct nested object to update exact path
+                const deepUpdates = writePath.reduceRight(
+                  (acc, key) => ({ [key]: acc }),
+                  updates
+                );
+
+                form.setFieldsValue(deepUpdates);
+              }}
+            />
           </Form.Item>
 
           <Row gutter={12}>
             <Col span={12}>
               <Form.Item
-                name="city"
-                rules={[{ required: true }]}
-                className="mb-3"
-              >
-                <Input placeholder="City" />
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item
-                name="pincode"
+                {...restField}
+                name={getName("pincode")}
                 rules={[{ required: true }]}
                 className="mb-3"
               >
                 <Input placeholder="Pincode" maxLength={6} />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                {...restField}
+                name={getName("city")}
+                rules={[{ required: true }]}
+                className="mb-3"
+              >
+                <Input placeholder="City" />
               </Form.Item>
             </Col>
           </Row>
@@ -87,7 +142,8 @@ const LocationFormItems = ({ form }) => {
           <Row gutter={12}>
             <Col span={12}>
               <Form.Item
-                name="state"
+                {...restField}
+                name={getName("state")}
                 rules={[{ required: true }]}
                 className="mb-3"
               >
@@ -95,22 +151,24 @@ const LocationFormItems = ({ form }) => {
               </Form.Item>
             </Col>
             <Col span={12}>
-              <Form.Item name="country" initialValue="India" className="mb-3">
+              <Form.Item
+                {...restField}
+                name={getName("country")}
+                className="mb-3"
+              >
                 <Input placeholder="Country" />
               </Form.Item>
             </Col>
           </Row>
 
-          <Form.Item name="landmark" className="mb-4">
-            <Input
-              prefix={<EnvironmentOutlined className="text-gray-400" />}
-              placeholder="Nearby Landmark"
-            />
-          </Form.Item>
-
           <Row gutter={12}>
-            <Col span={8}>
-              <Form.Item name="latitude" className="mb-0">
+            <Col span={12}>
+              <Form.Item
+                {...restField}
+                hidden
+                name={getName("latitude")}
+                className="mb-0"
+              >
                 <InputNumber
                   className="w-full!"
                   placeholder="Lat"
@@ -118,8 +176,13 @@ const LocationFormItems = ({ form }) => {
                 />
               </Form.Item>
             </Col>
-            <Col span={8}>
-              <Form.Item name="longitude" className="mb-0">
+            <Col span={12}>
+              <Form.Item
+                {...restField}
+                hidden
+                name={getName("longitude")}
+                className="mb-0"
+              >
                 <InputNumber
                   className="w-full!"
                   placeholder="Long"
@@ -127,22 +190,12 @@ const LocationFormItems = ({ form }) => {
                 />
               </Form.Item>
             </Col>
-            <Col span={8}>
-              <SelectLocationModal
-                label="Pick on Map"
-                form={form}
-                latitude="latitude"
-                longitude="longitude"
-                size="small"
-                type="link"
-              />
-            </Col>
           </Row>
         </Col>
 
         {/* --- RIGHT COLUMN: Meta & Flags --- */}
         <Col xs={24} md={10}>
-          <div className="mb-2 flex items-center gap-2 text-xs font-semibold text-gray-500 uppercase tracking-wide">
+          <div className="mb-2 flex items-center gap-2 text-xs font-semibold text-gray-500 uppercase tracking-wide mt-2">
             <InfoCircleOutlined /> Properties
           </div>
 
@@ -150,7 +203,8 @@ const LocationFormItems = ({ form }) => {
             <Row gutter={[16, 16]}>
               <Col span={12}>
                 <Form.Item
-                  name="area_size"
+                  {...restField}
+                  name={getName("area_size")}
                   label={
                     <span className="text-xs text-gray-500">Area Size</span>
                   }
@@ -161,7 +215,8 @@ const LocationFormItems = ({ form }) => {
               </Col>
               <Col span={12}>
                 <Form.Item
-                  name="floor_info"
+                  {...restField}
+                  name={getName("floor_info")}
                   label={<span className="text-xs text-gray-500">Floor</span>}
                   className="mb-0!"
                 >
@@ -170,7 +225,8 @@ const LocationFormItems = ({ form }) => {
               </Col>
               <Col span={24}>
                 <Form.Item
-                  name="special_features"
+                  {...restField}
+                  name={getName("special_features")}
                   label={
                     <span className="text-xs text-gray-500">Features</span>
                   }
@@ -193,14 +249,20 @@ const LocationFormItems = ({ form }) => {
           <div className="flex flex-col gap-2">
             <div className="flex items-center justify-between p-2 border rounded bg-white">
               <span className="text-sm text-gray-600">Primary Location</span>
-              <Form.Item name="is_primary" valuePropName="checked" noStyle>
+              <Form.Item
+                {...restField}
+                name={getName("is_primary")}
+                valuePropName="checked"
+                noStyle
+              >
                 <Switch size="small" />
               </Form.Item>
             </div>
             <div className="flex items-center justify-between p-2 border rounded bg-white">
               <span className="text-sm text-gray-600">Active Status</span>
               <Form.Item
-                name="is_active"
+                {...restField}
+                name={getName("is_active")}
                 valuePropName="checked"
                 initialValue={true}
                 noStyle

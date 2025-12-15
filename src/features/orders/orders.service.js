@@ -3,13 +3,13 @@ import axios from "axios";
 
 // Create first-mile order
 export const createQuickOrder = async (payload) => {
-  console.log({ payload });
-  return await axiosInstance.post("/v1/orders/qwqer/order-create", payload);
+  const response = await axiosInstance.post("/v1/qwqer/order-create", payload);
+  return response?.data?.data ?? null;
 };
 
 // Get all qwqer orders
 export const getAllQwqerOrders = async ({ page, limit }) => {
-  const response = await axiosInstance.get("/v1/orders/qwqer/list", {
+  const response = await axiosInstance.get("/v1/qwqer/list", {
     params: {
       page,
       limit,
@@ -20,34 +20,26 @@ export const getAllQwqerOrders = async ({ page, limit }) => {
 
 // Get by Id
 export const getQwqerOrderById = async (id) => {
-  const response = await axiosInstance.get(
-    `/v1/orders/qwqer/order-details/${id}`
-  );
+  const response = await axiosInstance.get(`/v1/qwqer/order-details/${id}`);
   return response?.data?.data ?? null;
 };
 
 // Cancel Order
 export const cancelQwqerOrder = async (data) => {
-  const response = await axiosInstance.post(
-    `/v1/orders/qwqer/order-cancel`,
-    data
-  );
+  const response = await axiosInstance.post(`/v1/qwqer/order-cancel`, data);
   return response?.data?.data ?? null;
 };
 
 // Modify order
 export const modifyQwqerOrder = async (data) => {
-  const response = await axiosInstance.post(
-    `/v1/orders/qwqer/modify-order`,
-    data
-  );
+  const response = await axiosInstance.post(`/v1/qwqer/modify-order`, data);
   return response?.data?.data ?? null;
 };
 
 // create reverse order
 export const createReverseOrder = async (data) => {
   const response = await axiosInstance.post(
-    "/v1/orders/qwqer/create-reverse-order",
+    "/v1/qwqer/create-reverse-order",
     data
   );
   return response?.data?.data ?? null;
@@ -55,10 +47,7 @@ export const createReverseOrder = async (data) => {
 
 // price-calculate
 export const priceCalculate = async (data) => {
-  const response = await axiosInstance.post(
-    "/v1/orders/qwqer/price-calculate",
-    data
-  );
+  const response = await axiosInstance.post("/v1/qwqer/price-calculate", data);
   return response?.data?.data ?? null;
 };
 
@@ -79,14 +68,17 @@ export const fetchLocationFromPincode = async (pincode) => {
 
 // Create Comprehensive Order
 export const createComprehensiveOrder = async (payload) => {
-  const response = await axiosInstance.post("/v1/orders/create", payload);
+  const response = await axiosInstance.post(
+    "/v1/transit-warehouse/orders/create",
+    payload
+  );
   return response?.data?.data ?? null;
 };
 
 // Check comprehensive serviceability
 export const checkServiceability = async (data) => {
   const response = await axiosInstance.post(
-    "/v1/orders/serviceability/check",
+    "/v1/transit-warehouse/orders/serviceability/check",
     data
   );
   return response?.data?.data ?? null;
@@ -94,32 +86,39 @@ export const checkServiceability = async (data) => {
 
 // Calculate Price
 export const calculatePrice = async (data) => {
-  const response = await axiosInstance.post("/v1/orders/calculate-price", data);
+  const response = await axiosInstance.post(
+    "/v1/transit-warehouse/orders/calculate-price",
+    data
+  );
   return response?.data?.data ?? null;
 };
 
 // Get Orders
 export const getOrders = async () => {
-  const response = await axiosInstance.get("/v1/orders");
+  const response = await axiosInstance.get("/v1/transit-warehouse/orders");
   return response?.data?.data ?? null;
 };
 
 // Get Order by Id
 export const getOrderById = async (id) => {
-  const response = await axiosInstance.get(`/v1/orders/${id}`);
+  const response = await axiosInstance.get(
+    `/v1/transit-warehouse/orders/${id}`
+  );
   return response?.data?.data ?? null;
 };
 
 // Packed
 export const makeOrderPacked = async (id) => {
-  const response = await axiosInstance.patch(`/v1/orders/${id}/packed`);
+  const response = await axiosInstance.patch(
+    `/v1/transit-warehouse/orders/${id}/packed`
+  );
   return response?.data?.data ?? null;
 };
 
 // Get domestic recommendation
 export const getDomesticRecommendation = async (data) => {
   const response = await axiosInstance.post(
-    "/v1/orders/domestic/recommendation",
+    "/v1/transit-warehouse/orders/domestic/recommendation",
     data
   );
   return response?.data?.data ?? null;
@@ -127,6 +126,8 @@ export const getDomesticRecommendation = async (data) => {
 
 // Cancel Order
 export const cancelOrder = async (id) => {
-  const response = await axiosInstance.patch(`/v1/orders/${id}/cancel`);
+  const response = await axiosInstance.patch(
+    `/v1/transit-warehouse/orders/${id}/cancel`
+  );
   return response?.data?.data ?? null;
 };

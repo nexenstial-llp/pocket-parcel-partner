@@ -28,7 +28,7 @@ async function fetchCurrentUser() {
   if (!token) return null;
 
   try {
-    const response = await axiosInstance.get("/users/me");
+    const response = await axiosInstance.get("mobile/users/me");
     return response?.data?.data ?? null;
   } catch (error) {
     Object.values(STORAGE_KEYS).forEach((key) => localStorage.removeItem(key));
@@ -56,9 +56,14 @@ export function AuthProvider({ children }) {
       localStorage.removeItem(STORAGE_KEYS.USER);
     }
   }, [user]);
-
+  const ACCEPTED_ROLES = ["WAREHOUSE_ADMIN"];
   const loginMutation = useEmailPasswordLogin({
     onSuccess: (userData) => {
+      if (!ACCEPTED_ROLES.includes(userData?.user?.role)) {
+        message.error("You are not registered as admin");
+        router.navigate({ to: "/auth/login" });
+        return;
+      }
       localStorage.setItem(STORAGE_KEYS.ACCESS_TOKEN, userData.access_token);
       localStorage.setItem(STORAGE_KEYS.REFRESH_TOKEN, userData.refresh_token);
       // ✅ Extract and store only the user object, not the entire response

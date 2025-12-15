@@ -6,6 +6,9 @@ import { useQueryClient } from "@tanstack/react-query";
 import { handleFormSubmission } from "@/utils/formSubmission.util";
 import LocationFormItems from "./LocationFormItems";
 import { warehouseLocationSchema } from "../warehouses.schema";
+import { APIProvider } from "@vis.gl/react-google-maps";
+
+const API_KEY = import.meta.env.VITE_APP_GOOGLE_API_KEY;
 
 export default function AddLocationModal({ open, onClose, warehouseId }) {
   const [form] = Form.useForm();
@@ -36,41 +39,43 @@ export default function AddLocationModal({ open, onClose, warehouseId }) {
       className="rounded-lg overflow-hidden"
       maskClosable={false}
     >
-      <Form
-        layout="vertical"
-        form={form}
-        size="middle" // Compact inputs
-        onFinish={(values) =>
-          handleFormSubmission({
-            values,
-            schema: warehouseLocationSchema,
-            form,
-            onSubmit: (parsedData) =>
-              createLocation.mutate({ id: warehouseId, data: parsedData }),
-          })
-        }
-        className="mt-4"
-      >
-        <LocationFormItems form={form} />
+      <APIProvider apiKey={API_KEY} libraries={["places", "geocoding"]}>
+        <Form
+          layout="vertical"
+          form={form}
+          size="middle" // Compact inputs
+          onFinish={(values) =>
+            handleFormSubmission({
+              values,
+              schema: warehouseLocationSchema,
+              form,
+              onSubmit: (parsedData) =>
+                createLocation.mutate({ id: warehouseId, data: parsedData }),
+            })
+          }
+          className="mt-4"
+        >
+          <LocationFormItems form={form} namePath={[]} absolutePath={[]} />
 
-        <Divider className="my-4" />
+          <Divider className="my-4" />
 
-        {/* --- FOOTER ACTIONS --- */}
-        <div className="flex justify-end gap-3">
-          <Button icon={<UndoOutlined />} onClick={() => form.resetFields()}>
-            Reset
-          </Button>
-          <Button
-            type="primary"
-            htmlType="submit"
-            icon={<SaveOutlined />}
-            loading={createLocation.isLoading}
-            className="bg-blue-600 hover:bg-blue-500"
-          >
-            Save Location
-          </Button>
-        </div>
-      </Form>
+          {/* --- FOOTER ACTIONS --- */}
+          <div className="flex justify-end gap-3">
+            <Button icon={<UndoOutlined />} onClick={() => form.resetFields()}>
+              Reset
+            </Button>
+            <Button
+              type="primary"
+              htmlType="submit"
+              icon={<SaveOutlined />}
+              loading={createLocation.isLoading}
+              className="bg-blue-600 hover:bg-blue-500"
+            >
+              Save Location
+            </Button>
+          </div>
+        </Form>
+      </APIProvider>
     </Modal>
   );
 }

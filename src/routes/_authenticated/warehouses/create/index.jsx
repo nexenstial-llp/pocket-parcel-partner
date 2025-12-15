@@ -3,9 +3,9 @@ import ResponsiveCard from "@/components/ui/cards/ResponsiveCard";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Button, Form, message } from "antd";
 import { useCreateWarehouse } from "@/features/warehouses/warehouses.query";
-import { applyZodErrorsToForm } from "@/utils/formError";
+import { applyZodErrorsToForm } from "@/utils/formError.util";
 import { useQueryClient } from "@tanstack/react-query";
-import WarehouseForm from "@/components/pages/warehouses/WarehouseForm";
+import WarehouseForm from "@/features/warehouses/components/WarehouseForm";
 import { createWarehouseSchema } from "@/features/warehouses/warehouses.schema";
 
 export const Route = createFileRoute("/_authenticated/warehouses/create/")({
@@ -60,6 +60,8 @@ function RouteComponent() {
         operating_hours: values.operating_hours || "",
         locations,
       };
+
+      console.log(payload);
 
       // Validate using Zod schema
       const parsedData = createWarehouseSchema.parse(payload);

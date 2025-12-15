@@ -3,7 +3,7 @@ import { Form, Input, Select, DatePicker, Button, InputNumber } from "antd";
 import dayjs from "dayjs";
 import { useCreateQuickOrder } from "@/features/orders/orders.query";
 import { createQuickOrderSchema } from "@/features/orders/orders.schema";
-import { applyZodErrorsToForm } from "@/utils/formError";
+import { applyZodErrorsToForm } from "@/utils/formError.util";
 import { message } from "antd";
 import { useNavigate } from "@tanstack/react-router";
 import SelectLocationModal from "@/components/ui/maps/SelectLocationModal";

@@ -46,6 +46,7 @@ import { Route as AuthenticatedSettingsAddressManagementIndexRouteImport } from 
 import { Route as AuthenticatedRevenueDashboardSupportIndexRouteImport } from './routes/_authenticated/revenue-dashboard/support/index'
 import { Route as AuthenticatedRevenueDashboardSettingsIndexRouteImport } from './routes/_authenticated/revenue-dashboard/settings/index'
 import { Route as AuthenticatedRevenueDashboardInvoiceAndTaxIndexRouteImport } from './routes/_authenticated/revenue-dashboard/invoice-and-tax/index'
+import { Route as AuthenticatedRackCreateIndexRouteImport } from './routes/_authenticated/rack/create/index'
 import { Route as AuthenticatedOrdersTrackOrderIndexRouteImport } from './routes/_authenticated/orders/track-order/index'
 import { Route as AuthenticatedOrdersFirstMileIndexRouteImport } from './routes/_authenticated/orders/first-mile/index'
 import { Route as AuthenticatedOrdersCreateIndexRouteImport } from './routes/_authenticated/orders/create/index'
@@ -287,6 +288,12 @@ const AuthenticatedRevenueDashboardInvoiceAndTaxIndexRoute =
   AuthenticatedRevenueDashboardInvoiceAndTaxIndexRouteImport.update({
     id: '/revenue-dashboard/invoice-and-tax/',
     path: '/revenue-dashboard/invoice-and-tax/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedRackCreateIndexRoute =
+  AuthenticatedRackCreateIndexRouteImport.update({
+    id: '/rack/create/',
+    path: '/rack/create/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 const AuthenticatedOrdersTrackOrderIndexRoute =
@@ -541,6 +548,7 @@ export interface FileRoutesByFullPath {
   '/orders/create': typeof AuthenticatedOrdersCreateIndexRoute
   '/orders/first-mile': typeof AuthenticatedOrdersFirstMileIndexRoute
   '/orders/track-order': typeof AuthenticatedOrdersTrackOrderIndexRoute
+  '/rack/create': typeof AuthenticatedRackCreateIndexRoute
   '/revenue-dashboard/invoice-and-tax': typeof AuthenticatedRevenueDashboardInvoiceAndTaxIndexRoute
   '/revenue-dashboard/settings': typeof AuthenticatedRevenueDashboardSettingsIndexRoute
   '/revenue-dashboard/support': typeof AuthenticatedRevenueDashboardSupportIndexRoute
@@ -612,6 +620,7 @@ export interface FileRoutesByTo {
   '/orders/create': typeof AuthenticatedOrdersCreateIndexRoute
   '/orders/first-mile': typeof AuthenticatedOrdersFirstMileIndexRoute
   '/orders/track-order': typeof AuthenticatedOrdersTrackOrderIndexRoute
+  '/rack/create': typeof AuthenticatedRackCreateIndexRoute
   '/revenue-dashboard/invoice-and-tax': typeof AuthenticatedRevenueDashboardInvoiceAndTaxIndexRoute
   '/revenue-dashboard/settings': typeof AuthenticatedRevenueDashboardSettingsIndexRoute
   '/revenue-dashboard/support': typeof AuthenticatedRevenueDashboardSupportIndexRoute
@@ -685,6 +694,7 @@ export interface FileRoutesById {
   '/_authenticated/orders/create/': typeof AuthenticatedOrdersCreateIndexRoute
   '/_authenticated/orders/first-mile/': typeof AuthenticatedOrdersFirstMileIndexRoute
   '/_authenticated/orders/track-order/': typeof AuthenticatedOrdersTrackOrderIndexRoute
+  '/_authenticated/rack/create/': typeof AuthenticatedRackCreateIndexRoute
   '/_authenticated/revenue-dashboard/invoice-and-tax/': typeof AuthenticatedRevenueDashboardInvoiceAndTaxIndexRoute
   '/_authenticated/revenue-dashboard/settings/': typeof AuthenticatedRevenueDashboardSettingsIndexRoute
   '/_authenticated/revenue-dashboard/support/': typeof AuthenticatedRevenueDashboardSupportIndexRoute
@@ -758,6 +768,7 @@ export interface FileRouteTypes {
     | '/orders/create'
     | '/orders/first-mile'
     | '/orders/track-order'
+    | '/rack/create'
     | '/revenue-dashboard/invoice-and-tax'
     | '/revenue-dashboard/settings'
     | '/revenue-dashboard/support'
@@ -829,6 +840,7 @@ export interface FileRouteTypes {
     | '/orders/create'
     | '/orders/first-mile'
     | '/orders/track-order'
+    | '/rack/create'
     | '/revenue-dashboard/invoice-and-tax'
     | '/revenue-dashboard/settings'
     | '/revenue-dashboard/support'
@@ -901,6 +913,7 @@ export interface FileRouteTypes {
     | '/_authenticated/orders/create/'
     | '/_authenticated/orders/first-mile/'
     | '/_authenticated/orders/track-order/'
+    | '/_authenticated/rack/create/'
     | '/_authenticated/revenue-dashboard/invoice-and-tax/'
     | '/_authenticated/revenue-dashboard/settings/'
     | '/_authenticated/revenue-dashboard/support/'
@@ -1195,6 +1208,13 @@ declare module '@tanstack/react-router' {
       path: '/revenue-dashboard/invoice-and-tax'
       fullPath: '/revenue-dashboard/invoice-and-tax'
       preLoaderRoute: typeof AuthenticatedRevenueDashboardInvoiceAndTaxIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/rack/create/': {
+      id: '/_authenticated/rack/create/'
+      path: '/rack/create'
+      fullPath: '/rack/create'
+      preLoaderRoute: typeof AuthenticatedRackCreateIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/orders/track-order/': {
@@ -1645,6 +1665,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedOrdersCreateIndexRoute: typeof AuthenticatedOrdersCreateIndexRoute
   AuthenticatedOrdersFirstMileIndexRoute: typeof AuthenticatedOrdersFirstMileIndexRoute
   AuthenticatedOrdersTrackOrderIndexRoute: typeof AuthenticatedOrdersTrackOrderIndexRoute
+  AuthenticatedRackCreateIndexRoute: typeof AuthenticatedRackCreateIndexRoute
   AuthenticatedRevenueDashboardInvoiceAndTaxIndexRoute: typeof AuthenticatedRevenueDashboardInvoiceAndTaxIndexRoute
   AuthenticatedRevenueDashboardSettingsIndexRoute: typeof AuthenticatedRevenueDashboardSettingsIndexRoute
   AuthenticatedRevenueDashboardSupportIndexRoute: typeof AuthenticatedRevenueDashboardSupportIndexRoute
@@ -1696,6 +1717,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
     AuthenticatedOrdersFirstMileIndexRoute,
   AuthenticatedOrdersTrackOrderIndexRoute:
     AuthenticatedOrdersTrackOrderIndexRoute,
+  AuthenticatedRackCreateIndexRoute: AuthenticatedRackCreateIndexRoute,
   AuthenticatedRevenueDashboardInvoiceAndTaxIndexRoute:
     AuthenticatedRevenueDashboardInvoiceAndTaxIndexRoute,
   AuthenticatedRevenueDashboardSettingsIndexRoute:
