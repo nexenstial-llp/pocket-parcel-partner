@@ -18,6 +18,7 @@ import { Suspense, lazy } from "react";
 import { Modal } from "antd";
 import { useDeleteUser } from "@/features/users/users.query";
 import { useNavigate } from "@tanstack/react-router";
+import { removeUnderscores } from "@/utils/typography.util";
 // remove direct import of ChangePasswordModal
 const ChangePasswordModal = lazy(() => import("./ChangePasswordModal"));
 
@@ -140,11 +141,7 @@ const UserProfileCard = ({ data }) => {
                 <Tag color={verifyColor}>
                   {is_verified ? "Verified" : "Not Verified"}
                 </Tag>
-                {role && (
-                  <Tag color="blue">
-                    {role.charAt(0).toUpperCase() + role.slice(1).toLowerCase()}
-                  </Tag>
-                )}
+                {role && <Tag color="blue">{removeUnderscores(role)}</Tag>}
               </div>
             </div>
           </div>

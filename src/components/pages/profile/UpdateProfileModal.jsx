@@ -8,6 +8,7 @@ import {
 } from "@/features/users/users.query";
 import { updateUserSchema } from "@/features/users/users.schema";
 import { useQueryClient } from "@tanstack/react-query";
+import { fetchLocationFromPincode } from "@/features/orders/orders.service";
 // import { updateUserSchema } from "./schemas"; // adjust your schema path
 
 function UpdateProfileModal({ visible, onClose }) {
@@ -22,6 +23,17 @@ function UpdateProfileModal({ visible, onClose }) {
         onClose?.();
       },
     });
+
+  const handlePincodeFill = async (pincode, form) => {
+    if (!pincode || pincode.length !== 6) return;
+
+    const location = await fetchLocationFromPincode(pincode);
+    if (!location) return;
+    form.setFieldsValue({
+      city: location.district,
+      state: location.state,
+    });
+  };
   useEffect(() => {
     form.setFieldsValue({
       full_name: data?.full_name ?? "",
@@ -121,16 +133,19 @@ function UpdateProfileModal({ visible, onClose }) {
 
         {/* City + State + Pincode */}
         <div className="grid grid-cols-3 gap-4">
+          <Form.Item label="Pincode" name="pincode">
+            <Input
+              placeholder="Pincode"
+              maxLength={6}
+              onBlur={(e) => handlePincodeFill(e.target.value, form)}
+            />
+          </Form.Item>
           <Form.Item label="City" name="city">
-            <Input placeholder="City" />
+            <Input readOnly placeholder="City" />
           </Form.Item>
 
           <Form.Item label="State" name="state">
-            <Input placeholder="State" />
-          </Form.Item>
-
-          <Form.Item label="Pincode" name="pincode">
-            <Input placeholder="Pincode" />
+            <Input readOnly placeholder="State" />
           </Form.Item>
         </div>
 
