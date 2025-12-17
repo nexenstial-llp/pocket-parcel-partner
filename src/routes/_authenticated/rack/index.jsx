@@ -1,6 +1,5 @@
 import PageLayout from "@/components/layout/PageLayout";
 import { createFileRoute, useSearch } from "@tanstack/react-router";
-import { useDeleteRack, useFetchRacks } from "@/features/rack/rack.query";
 import { useQueryClient } from "@tanstack/react-query";
 import { message } from "antd";
 import { Modal } from "antd";
@@ -11,6 +10,8 @@ import { useMemo, useCallback } from "react";
 import ResponsiveTable from "@/components/ui/ResponsiveTable";
 import ResponsiveCard from "@/components/ui/cards/ResponsiveCard";
 import ErrorFallback from "@/components/ui/ErrorFallback";
+import { validatePagination } from "@/utils/validatePagination.util";
+import { useDeleteRack, useFetchRacks } from "@/features/rack/racks.query";
 
 export const Route = createFileRoute("/_authenticated/rack/")({
   component: RouteComponent,

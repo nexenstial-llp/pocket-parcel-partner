@@ -1,8 +1,8 @@
 import PageLayout from "@/components/layout/PageLayout";
 import ResponsiveCard from "@/components/ui/cards/ResponsiveCard";
 import ErrorFallback from "@/components/ui/ErrorFallback";
-import RackDetailsCard from "@/features/racks/components/RackDetailsCard";
-import { useFetchRackById } from "@/features/racks/racks.query";
+import RackDetailsCard from "@/features/rack/components/RackDetailsCard";
+import { useFetchRackById } from "@/features/rack/racks.query";
 import { createFileRoute, useParams } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authenticated/rack/$id/")({
