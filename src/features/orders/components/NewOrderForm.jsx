@@ -10,6 +10,7 @@ import {
   Row,
   Col,
   Select,
+  Space,
 } from "antd";
 import { EnvironmentOutlined, CodeSandboxOutlined } from "@ant-design/icons";
 import AddressSelectorModal from "./AddressSelectorModal";
@@ -35,10 +36,13 @@ import {
   createPaymentSession,
   verifyPayment,
 } from "@/features/payment/payment.service";
-import { useNavigate } from "@tanstack/react-router";
 import dayjs from "dayjs";
 import { FaShippingFast } from "react-icons/fa";
 import { RiBillLine } from "react-icons/ri";
+import PaymentSuccessModal from "./PaymentSuccessModal";
+import { useUrlParams } from "@/hooks/useUrlParams";
+import { Radio } from "antd";
+import PaginatedSelect from "@/components/ui/PaginatedSelect";
 let cashfree;
 
 const initializeCashfree = async () => {
@@ -49,13 +53,14 @@ const initializeCashfree = async () => {
 
 initializeCashfree();
 const { Text } = Typography;
-const responsiveColSpan = { xs: 24, sm: 12, md: 8, lg: 6 };
 
 const deliveryTypeOptions = [
   { label: "Forward", value: "FORWARD" },
   { label: "Reverse", value: "REVERSE" },
 ];
 const NewOrderForm = () => {
+  const { params, setParams } = useUrlParams();
+  const { pickup_type = "warehouse" } = params;
   const [current, setCurrent] = useState(0);
   const [form] = Form.useForm();
   //   const navigate = useNavigate();
@@ -84,16 +89,23 @@ const NewOrderForm = () => {
 
   // Order Data
   const [totalData, setTotalData] = useState({});
-  console.log("totalData", totalData);
 
   const [recommendationData, setRecommendationData] = useState(null);
   const [carrierPartnerData, setCarrierPartnerData] = useState(null);
-  console.log("carrierPartnerData", carrierPartnerData);
   const [CashFreeOfferId, setCashFreeOfferId] = useState(null);
   const [paymentSessionId, setPaymentSessionId] = useState(null);
-  // console.log("recommendationData", recommendationData);
-  // console.log("totalData", totalData);
-  // console.log("carrierPartnerData", carrierPartnerData);
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+  const [successDetails, setSuccessDetails] = useState({
+    transactionId: null,
+    orderId: null,
+    orderNumber: null,
+  });
+
+  const handleOrderTypeChange = (value) => {
+    setParams({ pickup_type: value });
+    setCurrent(0);
+    form.resetFields();
+  };
 
   // Calculate Price
   const { mutate: calculatePriceOfOrder, isPending: calculatePricePending } =
@@ -250,77 +262,99 @@ const NewOrderForm = () => {
       title: "Select Addresses",
       icon: <EnvironmentOutlined />,
       content: (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Pickup Address Card */}
-          <Card
-            title="From Address"
-            className="shadow-sm border-gray-200"
-            extra={
-              <Button type="link" onClick={() => setIsPickupModalOpen(true)}>
-                {pickupAddress ? "Change" : "Select"}
-              </Button>
-            }
-          >
-            {pickupAddress ? (
-              <div className="flex flex-col gap-1">
-                <Text strong>{pickupAddress.label}</Text>
-                <Text>
-                  {pickupAddress.full_name} | {pickupAddress.phone_number}
-                </Text>
-                <Text type="secondary">{addressToString(pickupAddress)}</Text>
-              </div>
-            ) : (
-              <div className="text-center py-8 text-gray-400">
-                <Button
-                  type="dashed"
-                  onClick={() => setIsPickupModalOpen(true)}
-                >
-                  + Select Pickup Address
+        <>
+          {pickup_type === "warehouse" && (
+            <Form.Item
+              rules={[{ required: true, message: "Please select a warehouse" }]}
+              name="warehouse_id"
+              label="Warehouse"
+              className="mb-2!"
+              wrapperCol={{ span: 8 }}
+            >
+              <PaginatedSelect
+                fetchUrl="v1/transit-warehouse/warehouses"
+                valueField="id"
+                labelField="name"
+                onChange={(value) => console.log(value)}
+                placeholder="Select Warehouse"
+              />
+            </Form.Item>
+          )}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Pickup Address Card */}
+            <Card
+              title="From Address"
+              className="shadow-sm border-gray-200"
+              extra={
+                <Button type="link" onClick={() => setIsPickupModalOpen(true)}>
+                  {pickupAddress ? "Change" : "Select"}
                 </Button>
-              </div>
-            )}
-          </Card>
+              }
+            >
+              {pickupAddress ? (
+                <div className="flex flex-col gap-1">
+                  <Text strong>{pickupAddress.label}</Text>
+                  <Text>
+                    {pickupAddress.full_name} | {pickupAddress.phone_number}
+                  </Text>
+                  <Text type="secondary">{addressToString(pickupAddress)}</Text>
+                </div>
+              ) : (
+                <div className="text-center py-8 text-gray-400">
+                  <Button
+                    type="dashed"
+                    onClick={() => setIsPickupModalOpen(true)}
+                  >
+                    + Select Pickup Address
+                  </Button>
+                </div>
+              )}
+            </Card>
 
-          {/* Delivery Address Card */}
-          <Card
-            title="To Address"
-            className="shadow-sm border-gray-200"
-            extra={
-              <Button type="link" onClick={() => setIsDropModalOpen(true)}>
-                {dropAddress ? "Change" : "Select"}
-              </Button>
-            }
-          >
-            {dropAddress ? (
-              <div className="flex flex-col gap-1">
-                <Text strong>{dropAddress.label}</Text>
-                <Text>
-                  {dropAddress.full_name} | {dropAddress.phone_number}
-                </Text>
-                <Text type="secondary">{addressToString(dropAddress)}</Text>
-              </div>
-            ) : (
-              <div className="text-center py-8 text-gray-400">
-                <Button type="dashed" onClick={() => setIsDropModalOpen(true)}>
-                  + Select Delivery Address
+            {/* Delivery Address Card */}
+            <Card
+              title="To Address"
+              className="shadow-sm border-gray-200"
+              extra={
+                <Button type="link" onClick={() => setIsDropModalOpen(true)}>
+                  {dropAddress ? "Change" : "Select"}
                 </Button>
-              </div>
-            )}
-          </Card>
+              }
+            >
+              {dropAddress ? (
+                <div className="flex flex-col gap-1">
+                  <Text strong>{dropAddress.label}</Text>
+                  <Text>
+                    {dropAddress.full_name} | {dropAddress.phone_number}
+                  </Text>
+                  <Text type="secondary">{addressToString(dropAddress)}</Text>
+                </div>
+              ) : (
+                <div className="text-center py-8 text-gray-400">
+                  <Button
+                    type="dashed"
+                    onClick={() => setIsDropModalOpen(true)}
+                  >
+                    + Select Delivery Address
+                  </Button>
+                </div>
+              )}
+            </Card>
 
-          <AddressSelectorModal
-            open={isPickupModalOpen}
-            onCancel={() => setIsPickupModalOpen(false)}
-            onSelect={handleSelectPickup}
-            title="Select Pickup Address"
-          />
-          <AddressSelectorModal
-            open={isDropModalOpen}
-            onCancel={() => setIsDropModalOpen(false)}
-            onSelect={handleSelectDrop}
-            title="Select Delivery Address"
-          />
-        </div>
+            <AddressSelectorModal
+              open={isPickupModalOpen}
+              onCancel={() => setIsPickupModalOpen(false)}
+              onSelect={handleSelectPickup}
+              title="Select Pickup Address"
+            />
+            <AddressSelectorModal
+              open={isDropModalOpen}
+              onCancel={() => setIsDropModalOpen(false)}
+              onSelect={handleSelectDrop}
+              title="Select Delivery Address"
+            />
+          </div>
+        </>
       ),
     },
     {
@@ -328,99 +362,124 @@ const NewOrderForm = () => {
       icon: <CodeSandboxOutlined />,
       content: (
         <ResponsiveCard title="Shipment Details">
-          <Row gutter={16}>
-            <Col xs={24} sm={12} md={8} lg={6}>
+          <Row gutter={[24]} align="top">
+            {/* SECTION 1: Configuration */}
+            <Col xs={24} md={12} lg={6}>
               <Form.Item
                 name={["shipment_details", "delivery_type"]}
-                label="Delivery Type"
+                label="Service Type"
                 initialValue="FORWARD"
+                className="mb-0"
               >
-                <Select options={deliveryTypeOptions} />
-              </Form.Item>
-            </Col>
-            <Col {...responsiveColSpan}>
-              <Form.Item name={["shipment_details", "length"]} label="Length">
-                <InputNumber
-                  style={{ width: "100%" }}
-                  min={0}
-                  controls={false}
-                  addonAfter="cm"
+                <Select
+                  placeholder="Select Type"
+                  options={deliveryTypeOptions}
+                  className="w-full"
                 />
               </Form.Item>
             </Col>
-            <Col {...responsiveColSpan}>
-              <Form.Item name={["shipment_details", "breadth"]} label="Breadth">
-                <InputNumber
-                  style={{ width: "100%" }}
-                  min={0}
-                  controls={false}
-                  addonAfter="cm"
-                />
-              </Form.Item>
-            </Col>
-            <Col {...responsiveColSpan}>
-              <Form.Item name={["shipment_details", "height"]} label="Height">
-                <InputNumber
-                  style={{ width: "100%" }}
-                  min={0}
-                  controls={false}
-                  addonAfter="cm"
-                />
-              </Form.Item>
-            </Col>
-            <Col {...responsiveColSpan}>
-              <Form.Item name={["shipment_details", "weight"]} label="Weight">
-                <InputNumber
-                  style={{ width: "100%" }}
-                  min={0}
-                  controls={false}
-                  addonAfter="kg"
-                />
-              </Form.Item>
-            </Col>
-            <Col {...responsiveColSpan}>
+
+            {/* SECTION 2: Dimensions */}
+            <Col xs={24} sm={12} md={12} lg={9}>
               <Form.Item
-                label="Volumetric Weight"
-                tooltip={
-                  <p>
-                    Volumetric Weight is calculated using the formula: (Length x
-                    Breadth x Height) / 5000.
-                  </p>
-                }
+                label={"Dimensions (L × B × H)"}
+                className="mb-0"
+                required
+              >
+                <Space.Compact block>
+                  <Form.Item name={["shipment_details", "length"]} noStyle>
+                    <InputNumber
+                      min={0}
+                      controls={false}
+                      placeholder="L"
+                      className="w-full"
+                    />
+                  </Form.Item>
+                  <Form.Item name={["shipment_details", "breadth"]} noStyle>
+                    <InputNumber
+                      min={0}
+                      controls={false}
+                      placeholder="B"
+                      className="w-full border-l-0"
+                    />
+                  </Form.Item>
+                  <Form.Item name={["shipment_details", "height"]} noStyle>
+                    <InputNumber
+                      min={0}
+                      controls={false}
+                      placeholder="H"
+                      className="w-full border-l-0"
+                    />
+                  </Form.Item>
+                  <Text className="bg-gray-100 px-2 text-nowrap rounded-r-sm text-xs">
+                    cm
+                  </Text>
+                </Space.Compact>
+              </Form.Item>
+            </Col>
+            {/* Actual Weight Input */}
+            <Col xs={24} sm={12} lg={9}>
+              <Form.Item
+                name={["shipment_details", "weight"]}
+                label="Actual Weight"
+                className="mb-0"
               >
                 <InputNumber
-                  readOnly
-                  value={volumetricWeight}
-                  style={{ width: "100%" }}
                   min={0}
                   controls={false}
-                  addonAfter="kg"
+                  suffix="kg"
+                  className="w-full shadow-none"
+                  placeholder="0"
                 />
               </Form.Item>
             </Col>
-            <Col {...responsiveColSpan}>
-              <Form.Item
-                label="Final Weight"
-                tooltip={
-                  <p>
-                    Final Weight is the maximum of the actual weight and the
-                    volumetric weight.
-                  </p>
-                }
-              >
-                <InputNumber
-                  readOnly
-                  value={finalWeight}
-                  style={{ width: "100%" }}
-                  min={0}
-                  controls={false}
-                  addonAfter="kg"
-                />
-              </Form.Item>
+
+            {/* SECTION 3: Weight Calculations */}
+            <Col xs={24} sm={12}>
+              <div className="bg-slate-50 border border-slate-100 rounded-md p-3 mb-2">
+                <Row gutter={[12, 8]}>
+                  {/* Volumetric Display */}
+                  <Col span={12}>
+                    <Form.Item
+                      label={
+                        <span className="text-xs text-gray-500">
+                          Volumetric
+                        </span>
+                      }
+                      className="mb-0"
+                      tooltip="Calculation: (L × B × H) / 5000"
+                    >
+                      <div className="ant-input ant-input-sm ant-input-disabled bg-transparent border-0 text-gray-500 font-medium px-0">
+                        {volumetricWeight || 0}{" "}
+                        <span className="text-xs">kg</span>
+                      </div>
+                    </Form.Item>
+                  </Col>
+
+                  {/* Final Weight Highlight */}
+                  <Col span={12}>
+                    <Form.Item
+                      label={
+                        <span className="text-xs text-blue-600 font-bold">
+                          Billable
+                        </span>
+                      }
+                      className="mb-0"
+                    >
+                      <div className="text-blue-700 font-bold text-lg leading-tight">
+                        {finalWeight || 0}{" "}
+                        <span className="text-xs font-normal text-gray-500">
+                          kg
+                        </span>
+                      </div>
+                    </Form.Item>
+                  </Col>
+                </Row>
+              </div>
             </Col>
           </Row>
 
-          <Row gutter={16}>
+          <Row gutter={24}>
             {/* Category Selection - Visual */}
             <Col span={24}>
               <Form.Item label="Select Category">
@@ -432,9 +491,8 @@ const NewOrderForm = () => {
                   ]}
                 >
                   <VisualSelector
-                    fetchUrl="/v1/admin/categories"
+                    fetchUrl="/v1/mobile/catalog/categories"
                     queryKey="categories_visual"
-                    dataPoint="categories"
                   />
                 </Form.Item>
               </Form.Item>
@@ -448,9 +506,8 @@ const NewOrderForm = () => {
                   noStyle
                 >
                   <VisualSelector
-                    fetchUrl="/v1/admin/sub-categories"
+                    fetchUrl="/v1/mobile/catalog/sub-categories"
                     queryKey="sub_categories_visual"
-                    dataPoint="sub_categories"
                     params={{ category_id }}
                     disabled={!category_id}
                   />
@@ -469,9 +526,8 @@ const NewOrderForm = () => {
                   getValueProps={(value) => ({ value: value?.[0] })} // Extract single ID from array for display
                 >
                   <VisualSelector
-                    fetchUrl="/v1/admin/items"
+                    fetchUrl="/v1/mobile/catalog/items"
                     queryKey="items_visual"
-                    dataPoint="items"
                     params={
                       sub_category_id ? { sub_category_id } : { category_id }
                     }
@@ -515,7 +571,6 @@ const NewOrderForm = () => {
       content: <SummaryStep summaryData={summaryData} />,
     },
   ];
-  const navigate = useNavigate();
 
   const { mutate: createOrder, isPending } = useCreateComprehensiveOrder({
     onSuccess: (data) => {
@@ -536,9 +591,15 @@ const NewOrderForm = () => {
         if (result.paymentDetails) {
           verifyPayment(CashFreeOfferId)
             .then(() => {
-              message.success("Payment successful!");
-              message.success("Order created successfully!");
-              navigate({ to: "/orders" });
+              // message.success("Payment successful!");
+              // message.success("Order created successfully!");
+              // navigate({ to: "/orders" });
+              setSuccessDetails({
+                transactionId: CashFreeOfferId,
+                orderId: data?.order_id || data?.id,
+                orderNumber: data?.order_number,
+              });
+              setIsSuccessModalOpen(true);
             })
             .catch(() => {
               message.error("Payment verification failed");
@@ -644,6 +705,24 @@ const NewOrderForm = () => {
   };
   return (
     <div className="w-full flex flex-col gap-3">
+      <Radio.Group
+        options={[
+          {
+            label: "Direct Carrier Partner (Warehouse Pickup)",
+            value: "warehouse",
+          },
+          {
+            label: "First Mile Order + Carrier Partner (Home Pickup)",
+            value: "home",
+          },
+        ]}
+        onChange={(e) => handleOrderTypeChange(e.target.value)}
+        value={pickup_type}
+        optionType="button"
+        buttonStyle="solid"
+        className="mb-2!"
+      />
+
       <Steps
         onChange={(e) => setCurrent(e)}
         current={current}
@@ -685,6 +764,17 @@ const NewOrderForm = () => {
           )}
         </div>
       </Form>
+
+      {isSuccessModalOpen && (
+        <PaymentSuccessModal
+          open={isSuccessModalOpen}
+          onClose={() => setIsSuccessModalOpen(false)}
+          amount={summaryData?.total_charge}
+          transactionId={successDetails.transactionId}
+          orderId={successDetails.orderId}
+          orderNumber={successDetails.orderNumber}
+        />
+      )}
     </div>
   );
 };

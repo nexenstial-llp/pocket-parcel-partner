@@ -8,7 +8,19 @@ import EmailPasswordLoginForm from "@/features/auth/components/EmailPasswordLogi
 
 const { Title, Text } = Typography;
 
-export const Route = createFileRoute("/auth/login")({
+const sendOtpApi = async (email) => {
+  const response = await axiosInstance.post(
+    "/auth/email/send-otp",
+    { email },
+    {
+      skipAuth: true,
+      suppressErrorToast: true,
+    }
+  );
+  return response.data;
+};
+
+export const Route = createFileRoute("/auth/Login")({
   validateSearch: (search) => ({
     redirect: search.redirect || "/",
   }),

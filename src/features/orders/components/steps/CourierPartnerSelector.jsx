@@ -3,11 +3,8 @@ import { Card, Radio } from "antd";
 import AWSImage from "@/components/ui/AWSImage";
 
 export default function CourierPartnerSelector({ data, value, onChange }) {
-  console.log("data", data);
-
   const preferenceArray =
     data?.recommendations?.result?.[0]?.preference_array || [];
-  console.log("preferenceArray", preferenceArray);
   return (
     <div className="space-y-4">
       <h3 className="text-lg font-semibold mb-2">Select Carrier Partner</h3>

@@ -1,5 +1,11 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { createRack, deleteRack, getRacks } from "./racks.service";
+import {
+  createRack,
+  deleteRack,
+  getRackById,
+  getRacks,
+  updateRack,
+} from "./racks.service";
 
 // Get all racks
 export const useFetchRacks = ({ page, limit }) => {
@@ -24,6 +30,25 @@ export const useDeleteRack = ({ onError, onSuccess, ...rest }) => {
 export const useCreateRack = ({ onError, onSuccess, ...rest }) => {
   return useMutation({
     mutationFn: createRack,
+    onSuccess,
+    onError,
+    ...rest,
+  });
+};
+
+// Get rack by id
+export const useFetchRackById = (id) => {
+  return useQuery({
+    queryKey: ["rack", id],
+    queryFn: () => getRackById(id),
+    enabled: !!id,
+  });
+};
+
+// Update rack
+export const useUpdateRack = ({ onError, onSuccess, ...rest }) => {
+  return useMutation({
+    mutationFn: updateRack,
     onSuccess,
     onError,
     ...rest,

@@ -7,11 +7,12 @@ export const getAddressesById = async (id) => {
 };
 
 // Get all addresses
-export const getAllAddresses = async ({ page, limit }) => {
+export const getAllAddresses = async ({ page, limit, search }) => {
   const response = await axiosInstance.get("/v1/mobile/addresses", {
     params: {
       page,
       limit,
+      search,
     },
   });
   return response?.data ?? null;

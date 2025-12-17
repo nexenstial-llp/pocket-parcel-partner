@@ -32,7 +32,11 @@ const AWSImage = ({
   size,
   ...props
 }) => {
-  const { data: imageUrl, isLoading, isError } = useGetPresignedUrl({ s3Key });
+  const {
+    data: imageUrl,
+    isLoading,
+    isError,
+  } = useGetPresignedUrl({ s3Key, expiresIn: 3600 });
   const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
@@ -52,7 +56,7 @@ const AWSImage = ({
           "flex items-center justify-center bg-gray-50 rounded animate-pulse",
           className
         )}
-        style={{ width, height: height || "100%", minHeight: 50 }}
+        style={{ width, height: height || "100%", minHeight: 100 }}
       >
         <LoadingOutlined className="text-gray-400 text-xl" />
       </div>
@@ -68,7 +72,7 @@ const AWSImage = ({
           "flex items-center justify-center bg-gray-100 rounded text-gray-400 border border-gray-200",
           className
         )}
-        style={{ width, height: height || "100%", minHeight: 50 }}
+        style={{ width, height: height || "100%", minHeight: 100 }}
       >
         <FileImageOutlined className="text-2xl" />
       </div>

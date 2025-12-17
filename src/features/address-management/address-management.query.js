@@ -18,10 +18,10 @@ export const useGetAddressesById = (id) => {
 };
 
 // Get addresses by id query
-export const useGetAllAddresses = ({ page, limit }) => {
+export const useGetAllAddresses = ({ page, limit, search }) => {
   return useQuery({
-    queryKey: ["addresses", { page, limit }],
-    queryFn: () => getAllAddresses({ page, limit }),
+    queryKey: ["addresses", { page, limit, search }],
+    queryFn: () => getAllAddresses({ page, limit, search }),
   });
 };
 

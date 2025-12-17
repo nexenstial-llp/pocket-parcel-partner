@@ -1,7 +1,9 @@
 import z from "zod";
 // Address type enum validation
-const addressTypeSchema = z.enum(["HOME", "OFFICE", "WAREHOUSE", "OTHER"]);
-export const addressBaseSchema = {
+const addressTypeSchema = z.enum(["HOME", "WORK", "OTHERS"]);
+// Address usage type enum validation
+const addressUsageTypeSchema = z.enum(["PICKUP", "DELIVERY", "BOTH"]);
+const addressBaseSchema = {
   label: z
     .string()
     .min(1, "Label is required")
@@ -14,6 +16,7 @@ export const addressBaseSchema = {
     .string()
     .min(10, "Phone number must be at least 10 digits")
     .max(15, "Phone number must be less than 15 digits"),
+  email: z.email("Please provide a valid email address").optional(),
   address_line1: z
     .string()
     .min(1, "Address line 1 is required")
@@ -55,10 +58,10 @@ export const addressBaseSchema = {
   address_type: addressTypeSchema.default("HOME"),
   custom_address_type: z
     .string()
-    .min(1, "Custom address type is required when address_type is OTHER")
+    .min(1, "Custom address type is required when address_type is OTHERS")
     .max(50, "Custom address type must be less than 50 characters")
     .optional(),
-
+  usage_type: addressUsageTypeSchema.optional(),
   is_default: z.boolean().default(false),
 };
 
@@ -93,6 +96,7 @@ export const updateAddressSchema = z
       .min(10, "Phone number must be at least 10 digits")
       .max(15, "Phone number must be less than 15 digits")
       .optional(),
+    email: z.email("Please provide a valid email address").optional(),
     address_line1: z
       .string()
       .min(1, "Address line 1 is required")
@@ -138,15 +142,15 @@ export const updateAddressSchema = z
     address_type: addressTypeSchema.optional(),
     custom_address_type: z
       .string()
-      .min(1, "Custom address type is required when address_type is OTHER")
+      .min(1, "Custom address type is required when address_type is OTHERS")
       .max(50, "Custom address type must be less than 50 characters")
       .optional(),
     is_default: z.boolean().optional(),
   })
   .refine(
     (data) => {
-      // If address_type is OTHER, custom_address_type must be provided
-      if (data.address_type === "OTHER") {
+      // If address_type is OTHERS, custom_address_type must be provided
+      if (data.address_type === "OTHERS") {
         return (
           data.custom_address_type && data.custom_address_type.trim().length > 0
         );
@@ -154,7 +158,7 @@ export const updateAddressSchema = z
       return true;
     },
     {
-      message: "custom_address_type is required when address_type is OTHER",
+      message: "custom_address_type is required when address_type is OTHERS",
       path: ["custom_address_type"],
     }
   );

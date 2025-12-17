@@ -258,7 +258,7 @@ const PaginatedSelect = ({
       notFoundContent={isLoading ? <Spin size="small" /> : "No data found"}
       allowClear
       disabled={disabled}
-      dropdownRender={dropdownRender}
+      popupRender={dropdownRender}
     />
   );
 };

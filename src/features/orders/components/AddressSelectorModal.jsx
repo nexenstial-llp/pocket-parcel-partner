@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { Modal, Input, List, Button, Tag, Space, Typography } from "antd";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useGetAllAddresses } from "@/features/address-management/address-management.query";
 import {
   SearchOutlined,
@@ -8,27 +8,47 @@ import {
   PlusOutlined,
 } from "@ant-design/icons";
 import AddressModal from "@/features/address-management/components/AddressModal";
+import EditAddressModal from "@/features/address-management/components/EditAddressModal";
 
 const { Text } = Typography;
 
 const AddressSelectorModal = ({ open, onCancel, onSelect, title }) => {
   const [searchText, setSearchText] = useState("");
+  const [debouncedSearchText, setDebouncedSearchText] = useState("");
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const { data, isLoading } = useGetAllAddresses({ page: 1, limit: 100 }); // Fetch enough addresses
+  // Edit modal
+  const [isEditModalData, setIsEditModalData] = useState({
+    open: false,
+    id: null,
+    type: "edit",
+  });
+  // Pagination state
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setPage(1);
+      setDebouncedSearchText(searchText);
+    }, 500);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [searchText]);
+
+  const handlePageChange = (page, pageSize) => {
+    setPage(page);
+    setLimit(pageSize);
+  };
+
+  const { data, isLoading } = useGetAllAddresses({
+    page,
+    limit,
+    search: debouncedSearchText,
+  });
 
   const addresses = useMemo(() => data?.data?.addresses || [], [data]);
-
-  const filteredAddresses = useMemo(() => {
-    if (!searchText) return addresses;
-    const lowerSearch = searchText.toLowerCase();
-    return addresses.filter(
-      (addr) =>
-        addr.label?.toLowerCase().includes(lowerSearch) ||
-        addr.full_name?.toLowerCase().includes(lowerSearch) ||
-        addr.city?.toLowerCase().includes(lowerSearch) ||
-        addr.phone_number?.includes(lowerSearch)
-    );
-  }, [addresses, searchText]);
 
   return (
     <>
@@ -37,7 +57,7 @@ const AddressSelectorModal = ({ open, onCancel, onSelect, title }) => {
         open={open}
         onCancel={onCancel}
         footer={null}
-        width={700}
+        width={{ xs: "80%", sm: "70%", md: "60%", xxl: "50%" }}
         centered
       >
         <div className="flex gap-2 mb-4">
@@ -60,15 +80,43 @@ const AddressSelectorModal = ({ open, onCancel, onSelect, title }) => {
 
         <List
           loading={isLoading}
-          dataSource={filteredAddresses}
+          dataSource={addresses}
           size="small"
-          pagination={{ pageSize: 5, size: "small" }}
+          pagination={{
+            pageSize: limit,
+            current: page,
+            showSizeChanger: true,
+            showQuickJumper: true,
+            showTotal: (total) => `Total ${total} addresses`,
+            size: "small",
+            onChange: handlePageChange,
+            total: data?.data?.pagination?.total,
+            pageSizeOptions: ["10", "20", "30", "40", "50"],
+          }}
           renderItem={(item) => (
             <List.Item
               className="hover:bg-slate-50 cursor-pointer transition-colors border border-gray-100 mb-2 rounded-lg p-3"
-              onClick={() => onSelect(item)}
               actions={[
-                <Button type="primary" size="small" key="select">
+                <Button
+                  onClick={() =>
+                    setIsEditModalData({
+                      open: true,
+                      id: item.id,
+                      type: "edit",
+                    })
+                  }
+                  type="default"
+                  size="small"
+                  key="edit"
+                >
+                  Edit
+                </Button>,
+                <Button
+                  onClick={() => onSelect(item)}
+                  type="primary"
+                  size="small"
+                  key="select"
+                >
                   Select
                 </Button>,
               ]}
@@ -107,6 +155,15 @@ const AddressSelectorModal = ({ open, onCancel, onSelect, title }) => {
         <AddressModal
           open={isAddModalOpen}
           onClose={() => setIsAddModalOpen(false)}
+        />
+      )}
+
+      {isEditModalData.open && (
+        <EditAddressModal
+          modalData={isEditModalData}
+          onClose={() =>
+            setIsEditModalData({ open: false, id: null, type: "edit" })
+          }
         />
       )}
     </>

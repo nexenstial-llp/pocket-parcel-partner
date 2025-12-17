@@ -11,6 +11,14 @@ export const getRacks = async ({ page, limit }) => {
   return response.data;
 };
 
+// Get rack by id
+export const getRackById = async (rackId) => {
+  const response = await axiosInstance.get(
+    `v1/transit-warehouse/racks/${rackId}`
+  );
+  return response.data;
+};
+
 // Create rack
 export const createRack = async (rackData) => {
   const response = await axiosInstance.post(
@@ -21,10 +29,10 @@ export const createRack = async (rackData) => {
 };
 
 // Update rack
-export const updateRack = async (rackData) => {
-  const response = await axiosInstance.put(
-    "v1/transit-warehouse/racks",
-    rackData
+export const updateRack = async ({ id, data }) => {
+  const response = await axiosInstance.patch(
+    `v1/transit-warehouse/racks/${id}/update`,
+    data
   );
   return response.data;
 };

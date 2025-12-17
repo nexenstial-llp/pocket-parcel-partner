@@ -1,17 +1,16 @@
 import PageLayout from "@/components/layout/PageLayout";
+import { createFileRoute, useSearch } from "@tanstack/react-router";
+import { useDeleteRack, useFetchRacks } from "@/features/rack/rack.query";
+import { useQueryClient } from "@tanstack/react-query";
+import { message } from "antd";
+import { Modal } from "antd";
+import { Button, Tag } from "antd";
+import { Link } from "@tanstack/react-router";
+import { getSerialNumber } from "@/utils/serialNumber.util";
+import { useMemo, useCallback } from "react";
+import ResponsiveTable from "@/components/ui/ResponsiveTable";
 import ResponsiveCard from "@/components/ui/cards/ResponsiveCard";
 import ErrorFallback from "@/components/ui/ErrorFallback";
-import ResponsiveTable from "@/components/ui/tables/ResponsiveTable";
-import { useDeleteRack, useFetchRacks } from "@/features/racks/racks.query";
-import { getSerialNumber } from "@/utils/serialNumber.util";
-import { validatePagination } from "@/utils/validatePagination.util";
-import { useQueryClient } from "@tanstack/react-query";
-import { createFileRoute, Link, useSearch } from "@tanstack/react-router";
-import { Modal } from "antd";
-import { message } from "antd";
-import { Button, Tag } from "antd";
-import { useCallback } from "react";
-import { useMemo } from "react";
 
 export const Route = createFileRoute("/_authenticated/rack/")({
   component: RouteComponent,
@@ -22,6 +21,7 @@ function RouteComponent() {
   const { page, limit } = useSearch({ strict: false });
   const queryClient = useQueryClient();
   const { data, isLoading, isError, error } = useFetchRacks({ page, limit });
+
   const { mutate: deleteMutate, isPending: isDeletePending } = useDeleteRack({
     onSuccess: async () => {
       message.success("Rack deleted successfully");
@@ -115,6 +115,8 @@ function RouteComponent() {
   if (isError) {
     return <ErrorFallback error={error} />;
   }
+  console.log("data?.data", data?.data);
+
   return (
     <PageLayout items={[{ title: "Home", href: "/home" }, { title: "Rack" }]}>
       <ResponsiveCard
@@ -128,7 +130,7 @@ function RouteComponent() {
         <ResponsiveTable
           loading={isLoading || isDeletePending}
           columns={columns}
-          data={data?.data || []}
+          dataSource={data?.data || []}
         />
       </ResponsiveCard>
     </PageLayout>

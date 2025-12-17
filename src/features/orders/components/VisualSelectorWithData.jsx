@@ -1,59 +1,26 @@
 /* eslint-disable react/prop-types */
-import { useQuery } from "@tanstack/react-query";
-import axiosInstance from "@/utils/axiosInstance.util";
-import { Spin, Typography } from "antd";
+import { Typography } from "antd";
 import { CodeSandboxOutlined } from "@ant-design/icons";
 import AWSImage from "@/components/ui/AWSImage";
-import { useEffect } from "react";
 
 const { Text } = Typography;
 
-const VisualSelector = ({
+const VisualSelectorWithData = ({
   value,
   onChange,
-  fetchUrl,
-  queryKey,
-  params = {},
-  dataPoint,
+  data,
   labelField = "name",
   valueField = "id",
   imageField = "image_key",
   disabled = false,
-  setSelectedData,
 }) => {
-  const { data, isLoading } = useQuery({
-    queryKey: [queryKey, params],
-    queryFn: async () => {
-      const response = await axiosInstance.get(fetchUrl, {
-        params: { limit: 100, is_active: true, ...params },
-      });
-      return response.data;
-    },
-    enabled: !disabled && !!fetchUrl,
-  });
-
-  // Handle nested data points like data.items
-  const items = (dataPoint ? data?.data?.[dataPoint] : data?.data) || [];
-
-  useEffect(() => {
-    if (items.length === 0) {
-      onChange?.(null);
-    }
-  }, [items.length, onChange]);
+  const items = data || [];
 
   const handleSelect = (id) => {
     if (!disabled) {
       onChange?.(id);
     }
   };
-
-  if (isLoading && !disabled) {
-    return (
-      <div className="flex justify-center p-4">
-        <Spin />
-      </div>
-    );
-  }
 
   if (disabled || items.length === 0) {
     if (disabled) return null;
@@ -69,10 +36,7 @@ const VisualSelector = ({
         return (
           <div
             key={item[valueField]}
-            onClick={() => {
-              setSelectedData?.(item);
-              handleSelect(item[valueField]);
-            }}
+            onClick={() => handleSelect(item[valueField])}
             className={`
               flex flex-col items-center justify-center 
               min-w-[120px] w-[120px] h-[120px] 
@@ -112,4 +76,4 @@ const VisualSelector = ({
   );
 };
 
-export default VisualSelector;
+export default VisualSelectorWithData;

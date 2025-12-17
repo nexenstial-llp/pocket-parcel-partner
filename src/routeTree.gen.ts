@@ -13,7 +13,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as AuthLoginRouteImport } from './routes/auth/login'
+import { Route as AuthLoginRouteImport } from './routes/auth/Login'
 import { Route as AuthenticatedSettingsRouteRouteImport } from './routes/_authenticated/settings/route'
 import { Route as AuthenticatedDashboardRouteRouteImport } from './routes/_authenticated/dashboard/route'
 import { Route as AuthenticatedWarehousesIndexRouteImport } from './routes/_authenticated/warehouses/index'
@@ -47,6 +47,7 @@ import { Route as AuthenticatedRevenueDashboardSupportIndexRouteImport } from '.
 import { Route as AuthenticatedRevenueDashboardSettingsIndexRouteImport } from './routes/_authenticated/revenue-dashboard/settings/index'
 import { Route as AuthenticatedRevenueDashboardInvoiceAndTaxIndexRouteImport } from './routes/_authenticated/revenue-dashboard/invoice-and-tax/index'
 import { Route as AuthenticatedRackCreateIndexRouteImport } from './routes/_authenticated/rack/create/index'
+import { Route as AuthenticatedRackIdIndexRouteImport } from './routes/_authenticated/rack/$id/index'
 import { Route as AuthenticatedOrdersTrackOrderIndexRouteImport } from './routes/_authenticated/orders/track-order/index'
 import { Route as AuthenticatedOrdersFirstMileIndexRouteImport } from './routes/_authenticated/orders/first-mile/index'
 import { Route as AuthenticatedOrdersCreateIndexRouteImport } from './routes/_authenticated/orders/create/index'
@@ -66,6 +67,7 @@ import { Route as AuthenticatedRevenueDashboardReportsShipmentRevenueIndexRouteI
 import { Route as AuthenticatedRevenueDashboardReportsCommissionBreakdownIndexRouteImport } from './routes/_authenticated/revenue-dashboard/reports/commission-breakdown/index'
 import { Route as AuthenticatedRevenueDashboardMyEarningsSettlementsAndPayoutsIndexRouteImport } from './routes/_authenticated/revenue-dashboard/my-earnings/settlements-and-payouts/index'
 import { Route as AuthenticatedRevenueDashboardMyEarningsRevenueSummaryIndexRouteImport } from './routes/_authenticated/revenue-dashboard/my-earnings/revenue-summary/index'
+import { Route as AuthenticatedRackIdEditIndexRouteImport } from './routes/_authenticated/rack/$id/edit/index'
 import { Route as AuthenticatedOrdersFirstMileCreateIndexRouteImport } from './routes/_authenticated/orders/first-mile/create/index'
 import { Route as AuthenticatedOrdersFirstMileCalculatePriceIndexRouteImport } from './routes/_authenticated/orders/first-mile/calculate-price/index'
 import { Route as AuthenticatedOrdersFirstMileIdIndexRouteImport } from './routes/_authenticated/orders/first-mile/$id/index'
@@ -97,8 +99,8 @@ const IndexRoute = IndexRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthLoginRoute = AuthLoginRouteImport.update({
-  id: '/auth/login',
-  path: '/auth/login',
+  id: '/auth/Login',
+  path: '/auth/Login',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedSettingsRouteRoute =
@@ -296,6 +298,12 @@ const AuthenticatedRackCreateIndexRoute =
     path: '/rack/create/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedRackIdIndexRoute =
+  AuthenticatedRackIdIndexRouteImport.update({
+    id: '/rack/$id/',
+    path: '/rack/$id/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedOrdersTrackOrderIndexRoute =
   AuthenticatedOrdersTrackOrderIndexRouteImport.update({
     id: '/orders/track-order/',
@@ -414,6 +422,12 @@ const AuthenticatedRevenueDashboardMyEarningsRevenueSummaryIndexRoute =
     path: '/revenue-dashboard/my-earnings/revenue-summary/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedRackIdEditIndexRoute =
+  AuthenticatedRackIdEditIndexRouteImport.update({
+    id: '/rack/$id/edit/',
+    path: '/rack/$id/edit/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedOrdersFirstMileCreateIndexRoute =
   AuthenticatedOrdersFirstMileCreateIndexRouteImport.update({
     id: '/orders/first-mile/create/',
@@ -523,7 +537,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard': typeof AuthenticatedDashboardRouteRouteWithChildren
   '/settings': typeof AuthenticatedSettingsRouteRouteWithChildren
-  '/auth/login': typeof AuthLoginRoute
+  '/auth/Login': typeof AuthLoginRoute
   '/dashboard/domestic': typeof AuthenticatedDashboardDomesticRouteRouteWithChildren
   '/dashboard/international': typeof AuthenticatedDashboardInternationalRouteRouteWithChildren
   '/orders/returns': typeof AuthenticatedOrdersReturnsRouteRoute
@@ -548,6 +562,7 @@ export interface FileRoutesByFullPath {
   '/orders/create': typeof AuthenticatedOrdersCreateIndexRoute
   '/orders/first-mile': typeof AuthenticatedOrdersFirstMileIndexRoute
   '/orders/track-order': typeof AuthenticatedOrdersTrackOrderIndexRoute
+  '/rack/$id': typeof AuthenticatedRackIdIndexRoute
   '/rack/create': typeof AuthenticatedRackCreateIndexRoute
   '/revenue-dashboard/invoice-and-tax': typeof AuthenticatedRevenueDashboardInvoiceAndTaxIndexRoute
   '/revenue-dashboard/settings': typeof AuthenticatedRevenueDashboardSettingsIndexRoute
@@ -576,6 +591,7 @@ export interface FileRoutesByFullPath {
   '/orders/first-mile/$id': typeof AuthenticatedOrdersFirstMileIdIndexRoute
   '/orders/first-mile/calculate-price': typeof AuthenticatedOrdersFirstMileCalculatePriceIndexRoute
   '/orders/first-mile/create': typeof AuthenticatedOrdersFirstMileCreateIndexRoute
+  '/rack/$id/edit': typeof AuthenticatedRackIdEditIndexRoute
   '/revenue-dashboard/my-earnings/revenue-summary': typeof AuthenticatedRevenueDashboardMyEarningsRevenueSummaryIndexRoute
   '/revenue-dashboard/my-earnings/settlements-and-payouts': typeof AuthenticatedRevenueDashboardMyEarningsSettlementsAndPayoutsIndexRoute
   '/revenue-dashboard/reports/commission-breakdown': typeof AuthenticatedRevenueDashboardReportsCommissionBreakdownIndexRoute
@@ -595,7 +611,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dashboard': typeof AuthenticatedDashboardRouteRouteWithChildren
   '/settings': typeof AuthenticatedSettingsRouteRouteWithChildren
-  '/auth/login': typeof AuthLoginRoute
+  '/auth/Login': typeof AuthLoginRoute
   '/dashboard/domestic': typeof AuthenticatedDashboardDomesticRouteRouteWithChildren
   '/dashboard/international': typeof AuthenticatedDashboardInternationalRouteRouteWithChildren
   '/orders/returns': typeof AuthenticatedOrdersReturnsRouteRoute
@@ -620,6 +636,7 @@ export interface FileRoutesByTo {
   '/orders/create': typeof AuthenticatedOrdersCreateIndexRoute
   '/orders/first-mile': typeof AuthenticatedOrdersFirstMileIndexRoute
   '/orders/track-order': typeof AuthenticatedOrdersTrackOrderIndexRoute
+  '/rack/$id': typeof AuthenticatedRackIdIndexRoute
   '/rack/create': typeof AuthenticatedRackCreateIndexRoute
   '/revenue-dashboard/invoice-and-tax': typeof AuthenticatedRevenueDashboardInvoiceAndTaxIndexRoute
   '/revenue-dashboard/settings': typeof AuthenticatedRevenueDashboardSettingsIndexRoute
@@ -648,6 +665,7 @@ export interface FileRoutesByTo {
   '/orders/first-mile/$id': typeof AuthenticatedOrdersFirstMileIdIndexRoute
   '/orders/first-mile/calculate-price': typeof AuthenticatedOrdersFirstMileCalculatePriceIndexRoute
   '/orders/first-mile/create': typeof AuthenticatedOrdersFirstMileCreateIndexRoute
+  '/rack/$id/edit': typeof AuthenticatedRackIdEditIndexRoute
   '/revenue-dashboard/my-earnings/revenue-summary': typeof AuthenticatedRevenueDashboardMyEarningsRevenueSummaryIndexRoute
   '/revenue-dashboard/my-earnings/settlements-and-payouts': typeof AuthenticatedRevenueDashboardMyEarningsSettlementsAndPayoutsIndexRoute
   '/revenue-dashboard/reports/commission-breakdown': typeof AuthenticatedRevenueDashboardReportsCommissionBreakdownIndexRoute
@@ -669,7 +687,7 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRouteRouteWithChildren
   '/_authenticated/settings': typeof AuthenticatedSettingsRouteRouteWithChildren
-  '/auth/login': typeof AuthLoginRoute
+  '/auth/Login': typeof AuthLoginRoute
   '/_authenticated/dashboard/domestic': typeof AuthenticatedDashboardDomesticRouteRouteWithChildren
   '/_authenticated/dashboard/international': typeof AuthenticatedDashboardInternationalRouteRouteWithChildren
   '/_authenticated/orders/returns': typeof AuthenticatedOrdersReturnsRouteRoute
@@ -694,6 +712,7 @@ export interface FileRoutesById {
   '/_authenticated/orders/create/': typeof AuthenticatedOrdersCreateIndexRoute
   '/_authenticated/orders/first-mile/': typeof AuthenticatedOrdersFirstMileIndexRoute
   '/_authenticated/orders/track-order/': typeof AuthenticatedOrdersTrackOrderIndexRoute
+  '/_authenticated/rack/$id/': typeof AuthenticatedRackIdIndexRoute
   '/_authenticated/rack/create/': typeof AuthenticatedRackCreateIndexRoute
   '/_authenticated/revenue-dashboard/invoice-and-tax/': typeof AuthenticatedRevenueDashboardInvoiceAndTaxIndexRoute
   '/_authenticated/revenue-dashboard/settings/': typeof AuthenticatedRevenueDashboardSettingsIndexRoute
@@ -722,6 +741,7 @@ export interface FileRoutesById {
   '/_authenticated/orders/first-mile/$id/': typeof AuthenticatedOrdersFirstMileIdIndexRoute
   '/_authenticated/orders/first-mile/calculate-price/': typeof AuthenticatedOrdersFirstMileCalculatePriceIndexRoute
   '/_authenticated/orders/first-mile/create/': typeof AuthenticatedOrdersFirstMileCreateIndexRoute
+  '/_authenticated/rack/$id/edit/': typeof AuthenticatedRackIdEditIndexRoute
   '/_authenticated/revenue-dashboard/my-earnings/revenue-summary/': typeof AuthenticatedRevenueDashboardMyEarningsRevenueSummaryIndexRoute
   '/_authenticated/revenue-dashboard/my-earnings/settlements-and-payouts/': typeof AuthenticatedRevenueDashboardMyEarningsSettlementsAndPayoutsIndexRoute
   '/_authenticated/revenue-dashboard/reports/commission-breakdown/': typeof AuthenticatedRevenueDashboardReportsCommissionBreakdownIndexRoute
@@ -743,7 +763,7 @@ export interface FileRouteTypes {
     | '/'
     | '/dashboard'
     | '/settings'
-    | '/auth/login'
+    | '/auth/Login'
     | '/dashboard/domestic'
     | '/dashboard/international'
     | '/orders/returns'
@@ -768,6 +788,7 @@ export interface FileRouteTypes {
     | '/orders/create'
     | '/orders/first-mile'
     | '/orders/track-order'
+    | '/rack/$id'
     | '/rack/create'
     | '/revenue-dashboard/invoice-and-tax'
     | '/revenue-dashboard/settings'
@@ -796,6 +817,7 @@ export interface FileRouteTypes {
     | '/orders/first-mile/$id'
     | '/orders/first-mile/calculate-price'
     | '/orders/first-mile/create'
+    | '/rack/$id/edit'
     | '/revenue-dashboard/my-earnings/revenue-summary'
     | '/revenue-dashboard/my-earnings/settlements-and-payouts'
     | '/revenue-dashboard/reports/commission-breakdown'
@@ -815,7 +837,7 @@ export interface FileRouteTypes {
     | '/'
     | '/dashboard'
     | '/settings'
-    | '/auth/login'
+    | '/auth/Login'
     | '/dashboard/domestic'
     | '/dashboard/international'
     | '/orders/returns'
@@ -840,6 +862,7 @@ export interface FileRouteTypes {
     | '/orders/create'
     | '/orders/first-mile'
     | '/orders/track-order'
+    | '/rack/$id'
     | '/rack/create'
     | '/revenue-dashboard/invoice-and-tax'
     | '/revenue-dashboard/settings'
@@ -868,6 +891,7 @@ export interface FileRouteTypes {
     | '/orders/first-mile/$id'
     | '/orders/first-mile/calculate-price'
     | '/orders/first-mile/create'
+    | '/rack/$id/edit'
     | '/revenue-dashboard/my-earnings/revenue-summary'
     | '/revenue-dashboard/my-earnings/settlements-and-payouts'
     | '/revenue-dashboard/reports/commission-breakdown'
@@ -888,7 +912,7 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/_authenticated/dashboard'
     | '/_authenticated/settings'
-    | '/auth/login'
+    | '/auth/Login'
     | '/_authenticated/dashboard/domestic'
     | '/_authenticated/dashboard/international'
     | '/_authenticated/orders/returns'
@@ -913,6 +937,7 @@ export interface FileRouteTypes {
     | '/_authenticated/orders/create/'
     | '/_authenticated/orders/first-mile/'
     | '/_authenticated/orders/track-order/'
+    | '/_authenticated/rack/$id/'
     | '/_authenticated/rack/create/'
     | '/_authenticated/revenue-dashboard/invoice-and-tax/'
     | '/_authenticated/revenue-dashboard/settings/'
@@ -941,6 +966,7 @@ export interface FileRouteTypes {
     | '/_authenticated/orders/first-mile/$id/'
     | '/_authenticated/orders/first-mile/calculate-price/'
     | '/_authenticated/orders/first-mile/create/'
+    | '/_authenticated/rack/$id/edit/'
     | '/_authenticated/revenue-dashboard/my-earnings/revenue-summary/'
     | '/_authenticated/revenue-dashboard/my-earnings/settlements-and-payouts/'
     | '/_authenticated/revenue-dashboard/reports/commission-breakdown/'
@@ -979,10 +1005,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/auth/login': {
-      id: '/auth/login'
-      path: '/auth/login'
-      fullPath: '/auth/login'
+    '/auth/Login': {
+      id: '/auth/Login'
+      path: '/auth/Login'
+      fullPath: '/auth/Login'
       preLoaderRoute: typeof AuthLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
@@ -1217,6 +1243,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRackCreateIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/rack/$id/': {
+      id: '/_authenticated/rack/$id/'
+      path: '/rack/$id'
+      fullPath: '/rack/$id'
+      preLoaderRoute: typeof AuthenticatedRackIdIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/orders/track-order/': {
       id: '/_authenticated/orders/track-order/'
       path: '/orders/track-order'
@@ -1348,6 +1381,13 @@ declare module '@tanstack/react-router' {
       path: '/revenue-dashboard/my-earnings/revenue-summary'
       fullPath: '/revenue-dashboard/my-earnings/revenue-summary'
       preLoaderRoute: typeof AuthenticatedRevenueDashboardMyEarningsRevenueSummaryIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/rack/$id/edit/': {
+      id: '/_authenticated/rack/$id/edit/'
+      path: '/rack/$id/edit'
+      fullPath: '/rack/$id/edit'
+      preLoaderRoute: typeof AuthenticatedRackIdEditIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/orders/first-mile/create/': {
@@ -1665,6 +1705,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedOrdersCreateIndexRoute: typeof AuthenticatedOrdersCreateIndexRoute
   AuthenticatedOrdersFirstMileIndexRoute: typeof AuthenticatedOrdersFirstMileIndexRoute
   AuthenticatedOrdersTrackOrderIndexRoute: typeof AuthenticatedOrdersTrackOrderIndexRoute
+  AuthenticatedRackIdIndexRoute: typeof AuthenticatedRackIdIndexRoute
   AuthenticatedRackCreateIndexRoute: typeof AuthenticatedRackCreateIndexRoute
   AuthenticatedRevenueDashboardInvoiceAndTaxIndexRoute: typeof AuthenticatedRevenueDashboardInvoiceAndTaxIndexRoute
   AuthenticatedRevenueDashboardSettingsIndexRoute: typeof AuthenticatedRevenueDashboardSettingsIndexRoute
@@ -1677,6 +1718,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedOrdersFirstMileIdIndexRoute: typeof AuthenticatedOrdersFirstMileIdIndexRoute
   AuthenticatedOrdersFirstMileCalculatePriceIndexRoute: typeof AuthenticatedOrdersFirstMileCalculatePriceIndexRoute
   AuthenticatedOrdersFirstMileCreateIndexRoute: typeof AuthenticatedOrdersFirstMileCreateIndexRoute
+  AuthenticatedRackIdEditIndexRoute: typeof AuthenticatedRackIdEditIndexRoute
   AuthenticatedRevenueDashboardMyEarningsRevenueSummaryIndexRoute: typeof AuthenticatedRevenueDashboardMyEarningsRevenueSummaryIndexRoute
   AuthenticatedRevenueDashboardMyEarningsSettlementsAndPayoutsIndexRoute: typeof AuthenticatedRevenueDashboardMyEarningsSettlementsAndPayoutsIndexRoute
   AuthenticatedRevenueDashboardReportsCommissionBreakdownIndexRoute: typeof AuthenticatedRevenueDashboardReportsCommissionBreakdownIndexRoute
@@ -1717,6 +1759,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
     AuthenticatedOrdersFirstMileIndexRoute,
   AuthenticatedOrdersTrackOrderIndexRoute:
     AuthenticatedOrdersTrackOrderIndexRoute,
+  AuthenticatedRackIdIndexRoute: AuthenticatedRackIdIndexRoute,
   AuthenticatedRackCreateIndexRoute: AuthenticatedRackCreateIndexRoute,
   AuthenticatedRevenueDashboardInvoiceAndTaxIndexRoute:
     AuthenticatedRevenueDashboardInvoiceAndTaxIndexRoute,
@@ -1739,6 +1782,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
     AuthenticatedOrdersFirstMileCalculatePriceIndexRoute,
   AuthenticatedOrdersFirstMileCreateIndexRoute:
     AuthenticatedOrdersFirstMileCreateIndexRoute,
+  AuthenticatedRackIdEditIndexRoute: AuthenticatedRackIdEditIndexRoute,
   AuthenticatedRevenueDashboardMyEarningsRevenueSummaryIndexRoute:
     AuthenticatedRevenueDashboardMyEarningsRevenueSummaryIndexRoute,
   AuthenticatedRevenueDashboardMyEarningsSettlementsAndPayoutsIndexRoute:

@@ -17,12 +17,15 @@ import toast from "react-hot-toast";
 export const uploadFileToS3 = async (file, uploadType, onProgress) => {
   try {
     // Step 1: Get presigned URL from your backend
-    const { data } = await axiosInstance.get("/v1/upload/asset/getuploadurl", {
-      params: {
-        filename: file.name,
-        uploadType: uploadType || "general",
-      },
-    });
+    const { data } = await axiosInstance.get(
+      "/v1/mobile/upload/asset/getuploadurl",
+      {
+        params: {
+          filename: file.name,
+          uploadType: uploadType || "general",
+        },
+      }
+    );
 
     // Extract presigned URL and S3 key from response
     // Adjust based on your actual API response structure
@@ -254,7 +257,7 @@ export const uploadWithRetry = async (
 // Read it from the AWS
 // ============================================
 export const getPreSignedUrlFromS3Key = async (s3Key, expiresIn = 3600) => {
-  const { data } = await axiosInstance.get(`/v1/upload/asset/${s3Key}`, {
+  const { data } = await axiosInstance.get(`/v1/mobile/upload/asset/${s3Key}`, {
     params: {
       expiresIn,
     },
