@@ -21,6 +21,13 @@ const existingRoot = rootElement._reactRootContainer?._internalRoot
 
 const root = existingRoot || createRoot(rootElement);
 
+const env = import.meta.env.VITE_APP_ENV || "development";
+
+document.title =
+  env === "development"
+    ? "(UAT) Pocket Parcel | Transit Warehouse"
+    : "Pocket Parcel | Transit Warehouse";
+
 root.render(
   <StrictMode>
     <ConfigProvider
