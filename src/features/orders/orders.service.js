@@ -139,3 +139,15 @@ export const cancelOrder = async ({ id, cancellation_reason }) => {
   );
   return response?.data?.data ?? null;
 };
+
+// Download invoice
+export const downloadInvoice = async (id) => {
+  const response = await axiosInstance.get(
+    `/v1/transit-warehouse/orders/${id}/invoice`,
+    {
+      responseType: "blob",
+    }
+  );
+
+  return response.data ?? null;
+};

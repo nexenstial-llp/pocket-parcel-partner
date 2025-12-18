@@ -38,7 +38,7 @@ export default function CustomerOrderDetails({ order }) {
           <Descriptions.Item label="Package Details">
             {order?.length} × {order?.breadth} × {order?.height} cm
             <br />
-            Weight: {order?.weight} kg
+            Weight: {(Number(order?.weight || 0) / 1000).toFixed(2)} kg
           </Descriptions.Item>
         </Descriptions>
         {/* STATUS TIMELINE */}
