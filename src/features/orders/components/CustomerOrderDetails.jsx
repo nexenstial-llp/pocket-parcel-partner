@@ -42,7 +42,7 @@ export default function CustomerOrderDetails({ order }) {
           </Descriptions.Item>
         </Descriptions>
         {/* STATUS TIMELINE */}
-        <Card title="Latest Status">
+        <Card size="small" title="Latest Status">
           <Timeline
             items={latestStatus?.map((status) => ({
               color: getStatusColor(status?.to_status),
@@ -68,7 +68,7 @@ export default function CustomerOrderDetails({ order }) {
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* PICKUP ADDRESS */}
-        <Card title="Pickup Address">
+        <Card size="small" title="Pickup Address">
           <Descriptions bordered column={1} size="small">
             <Descriptions.Item label="Name">
               {pickup?.pickup_name}
@@ -87,7 +87,7 @@ export default function CustomerOrderDetails({ order }) {
         </Card>
 
         {/* DELIVERY ADDRESS */}
-        <Card title="Delivery Address">
+        <Card size="small" title="Delivery Address">
           <Descriptions bordered column={1} size="small">
             <Descriptions.Item label="Name">
               {drop?.drop_name}
