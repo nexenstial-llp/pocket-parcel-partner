@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "@tanstack/react-router";
 import { Layout } from "antd";
-import POCKET_PARCEL_DESKTOP from "../../assets/Pocket_Parcel_Desktop.svg";
+import POCKET_PARCEL_DESKTOP from "../../assets/Pocket_Parcel_Desktop.png";
 import POCKET_PARCEL_MOBILE from "../../assets/Pocket_Parcel_Mobile.png";
 
 //icons
