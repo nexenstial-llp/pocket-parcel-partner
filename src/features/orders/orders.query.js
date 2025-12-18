@@ -1,6 +1,7 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import {
   calculatePrice,
+  cancelOrder,
   cancelQwqerOrder,
   checkServiceability,
   createComprehensiveOrder,
@@ -157,6 +158,17 @@ export const useGetDomesticRecommendation = ({
 }) => {
   return useMutation({
     mutationFn: getDomesticRecommendation,
+    retry: false,
+    onSuccess,
+    onError,
+    ...rest,
+  });
+};
+
+// Cancel order
+export const useCancelOrder = ({ onError, onSuccess, ...rest }) => {
+  return useMutation({
+    mutationFn: cancelOrder,
     retry: false,
     onSuccess,
     onError,

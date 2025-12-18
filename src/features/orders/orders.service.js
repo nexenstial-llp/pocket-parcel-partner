@@ -94,8 +94,13 @@ export const calculatePrice = async (data) => {
 };
 
 // Get Orders
-export const getOrders = async () => {
-  const response = await axiosInstance.get("/v1/transit-warehouse/orders");
+export const getOrders = async ({ page = 1, limit = 10 }) => {
+  const response = await axiosInstance.get("/v1/transit-warehouse/orders", {
+    params: {
+      page,
+      limit,
+    },
+  });
   return response?.data?.data ?? null;
 };
 
@@ -125,9 +130,12 @@ export const getDomesticRecommendation = async (data) => {
 };
 
 // Cancel Order
-export const cancelOrder = async (id) => {
+export const cancelOrder = async ({ id, cancellation_reason }) => {
   const response = await axiosInstance.patch(
-    `/v1/transit-warehouse/orders/${id}/cancel`
+    `/v1/transit-warehouse/orders/${id}/cancel`,
+    {
+      cancellation_reason,
+    }
   );
   return response?.data?.data ?? null;
 };

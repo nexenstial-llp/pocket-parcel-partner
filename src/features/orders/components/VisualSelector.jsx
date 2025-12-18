@@ -20,7 +20,12 @@ const VisualSelector = ({
   imageField = "image_key",
   disabled = false,
   setSelectedData,
+  multiple = false,
 }) => {
+  if (multiple) {
+    console.log("value", value);
+  }
+
   const { data, isLoading } = useQuery({
     queryKey: [queryKey, params],
     queryFn: async () => {
@@ -36,14 +41,42 @@ const VisualSelector = ({
   const items = (dataPoint ? data?.data?.[dataPoint] : data?.data) || [];
 
   useEffect(() => {
-    if (items.length === 0) {
-      onChange?.(null);
+    // Only clear value if loading is complete and valid items are empty
+    if (!isLoading && items.length === 0 && !disabled) {
+      if (multiple) {
+        if (value && value.length > 0) {
+          onChange?.([]);
+        }
+      } else {
+        if (value !== null) {
+          onChange?.(null);
+        }
+      }
     }
-  }, [items.length, onChange]);
+  }, [items.length, onChange, multiple, value, isLoading, disabled]);
 
-  const handleSelect = (id) => {
-    if (!disabled) {
+  const handleSelect = (id, item) => {
+    if (disabled) return;
+
+    if (multiple) {
+      const currentValues = Array.isArray(value) ? value : [];
+      let newValues;
+      if (currentValues.includes(id)) {
+        newValues = currentValues.filter((v) => v !== id);
+      } else {
+        newValues = [...currentValues, id];
+      }
+      onChange?.(newValues);
+      // For multiple selection, setSelectedData might be less useful or needs to handle arrays.
+      // Assuming setSelectedData is primarily for single select metadata display for now,
+      // or we can pass the last selected item.
+      if (setSelectedData) {
+        // This behavior might need refinement based on usage, but for now we won't break it.
+        setSelectedData(item);
+      }
+    } else {
       onChange?.(id);
+      setSelectedData?.(item);
     }
   };
 
@@ -63,16 +96,16 @@ const VisualSelector = ({
   return (
     <div className="flex gap-4 overflow-x-auto pb-2 -mx-1 px-1 scrollbar-thin scrollbar-thumb-gray-200">
       {items.map((item) => {
-        const isSelected = value === item[valueField];
+        const itemId = item[valueField];
+        const isSelected = multiple
+          ? Array.isArray(value) && value.includes(itemId)
+          : value === itemId;
         const imageUrl = item[imageField] || null;
 
         return (
           <div
-            key={item[valueField]}
-            onClick={() => {
-              setSelectedData?.(item);
-              handleSelect(item[valueField]);
-            }}
+            key={itemId}
+            onClick={() => handleSelect(itemId, item)}
             className={`
               flex flex-col items-center justify-center 
               min-w-[120px] w-[120px] h-[120px] 

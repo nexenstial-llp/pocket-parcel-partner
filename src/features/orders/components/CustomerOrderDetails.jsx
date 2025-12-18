@@ -1,4 +1,5 @@
 /* eslint-disable react/prop-types */
+import { getStatusColor, removeUnderscores } from "@/utils/typography.util";
 import { Card, Descriptions, Tag, Timeline } from "antd";
 import moment from "moment-timezone";
 
@@ -6,7 +7,7 @@ export default function CustomerOrderDetails({ order }) {
   const pickup = order?.pickup_address;
   const drop = order?.drop_address;
 
-  const latestStatus = order?.status_timeline?.[0];
+  const latestStatus = order?.status_timeline;
 
   return (
     <div className="flex flex-col gap-4">
@@ -43,25 +44,25 @@ export default function CustomerOrderDetails({ order }) {
         {/* STATUS TIMELINE */}
         <Card title="Latest Status">
           <Timeline
-            items={[
-              {
-                color: "blue",
-                children: (
-                  <>
-                    <p className="font-medium">{latestStatus?.to_status}</p>
-                    <p className="text-sm text-gray-500">
-                      {latestStatus?.notes}
-                    </p>
-                    <p className="text-xs text-gray-500 mt-1">
-                      <span className="mr-2 font-bold">
-                        {moment(latestStatus?.created_at).format("DD-MM-YYYY")}
-                      </span>
-                      {moment(latestStatus?.created_at).fromNow()}
-                    </p>
-                  </>
-                ),
-              },
-            ]}
+            items={latestStatus?.map((status) => ({
+              color: getStatusColor(status?.to_status),
+              children: (
+                <>
+                  <p className="font-medium">
+                    {removeUnderscores(status?.to_status)}
+                  </p>
+                  <p className="text-sm text-gray-500">
+                    {removeUnderscores(status?.notes)}
+                  </p>
+                  <p className="text-xs text-gray-500 mt-1">
+                    <span className="mr-2 font-bold">
+                      {moment(status?.created_at).format("DD-MM-YYYY")}
+                    </span>
+                    {moment(status?.created_at).fromNow()}
+                  </p>
+                </>
+              ),
+            }))}
           />
         </Card>
       </div>

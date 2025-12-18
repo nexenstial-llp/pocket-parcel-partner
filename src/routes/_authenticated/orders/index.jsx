@@ -2,8 +2,10 @@ import PageLayout from "@/components/layout/PageLayout";
 import ResponsiveCard from "@/components/ui/cards/ResponsiveCard";
 import ErrorFallback from "@/components/ui/ErrorFallback";
 import ResponsiveTable from "@/components/ui/tables/ResponsiveTable";
+import UrlPagination from "@/components/ui/UrlPagination";
 import { useGetOrders } from "@/features/orders/orders.query";
 import { getSerialNumber } from "@/utils/serialNumber.util";
+import { getStatusColor, removeUnderscores } from "@/utils/typography.util";
 import { validatePagination } from "@/utils/validatePagination.util";
 import { createFileRoute, Link, useSearch } from "@tanstack/react-router";
 import { Tag } from "antd";
@@ -53,7 +55,7 @@ function RouteComponent() {
       key: "order_status",
       render: (text) => {
         return (
-          <Tag color={text === "CONFIRMED" ? "green" : "blue"}>{text}</Tag>
+          <Tag color={getStatusColor(text)}>{removeUnderscores(text)}</Tag>
         );
       },
       fixed: "right",
@@ -63,7 +65,9 @@ function RouteComponent() {
       dataIndex: "payment_status",
       key: "payment_status",
       render: (text) => {
-        return <Tag color={text === "PAID" ? "green" : "blue"}>{text}</Tag>;
+        return (
+          <Tag color={getStatusColor(text)}>{removeUnderscores(text)}</Tag>
+        );
       },
       fixed: "right",
     },
@@ -146,6 +150,7 @@ function RouteComponent() {
             columns={columns}
             dataSource={data?.orders}
           />
+          <UrlPagination total={data?.pagination?.totalItems} />
         </div>
       </ResponsiveCard>
     </PageLayout>

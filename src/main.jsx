@@ -103,6 +103,13 @@ root.render(
           Calendar: {
             controlHeightSM: 26,
           },
+          Table: {
+            cellFontSizeSM: 12,
+          },
+          Descriptions: {
+            itemPaddingBottom: 8,
+            itemPaddingEnd: 5,
+          },
         },
       }}
     >

@@ -43,8 +43,8 @@ import PaymentSuccessModal from "./PaymentSuccessModal";
 import { useUrlParams } from "@/hooks/useUrlParams";
 import { Radio } from "antd";
 import PaginatedSelect from "@/components/ui/PaginatedSelect";
+import toast from "react-hot-toast";
 let cashfree;
-
 const initializeCashfree = async () => {
   cashfree = await load({
     mode: "sandbox",
@@ -70,6 +70,13 @@ const NewOrderForm = () => {
     ["shipment_details", "sub_category_id"],
     form
   );
+  const item_ids = Form.useWatch(["shipment_details", "item_ids"], form);
+  console.log({
+    category_id,
+    sub_category_id,
+    item_ids,
+  });
+
   const [summaryData, setSummaryData] = useState({});
 
   const length = Form.useWatch(["shipment_details", "length"], form);
@@ -80,7 +87,12 @@ const NewOrderForm = () => {
   const volumetricWeight = (length * breadth * height) / 5000 || 0;
 
   const finalWeight =
-    weight > volumetricWeight ? weight : volumetricWeight || 0;
+    weight / 1000 > volumetricWeight ? weight / 1000 : volumetricWeight || 0;
+
+  const itemsQueryParams = sub_category_id
+    ? { sub_category_id }
+    : { category_id };
+
   // State for Address Selection
   const [pickupAddress, setPickupAddress] = useState(null);
   const [dropAddress, setDropAddress] = useState(null);
@@ -161,8 +173,6 @@ const NewOrderForm = () => {
   };
 
   const next = async () => {
-    console.log("hi");
-
     try {
       if (current === 0) {
         if (!pickupAddress || !dropAddress) {
@@ -245,6 +255,7 @@ const NewOrderForm = () => {
       }
     } catch (error) {
       console.error("Step validation failed", error);
+      toast.error(error.message);
     }
   };
 
@@ -384,10 +395,24 @@ const NewOrderForm = () => {
               <Form.Item
                 label={"Dimensions (L × B × H)"}
                 className="mb-0"
-                required
+                rules={[
+                  {
+                    required: true,
+                    message: "Please enter dimensions",
+                  },
+                ]}
               >
                 <Space.Compact block>
-                  <Form.Item name={["shipment_details", "length"]} noStyle>
+                  <Form.Item
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please enter length",
+                      },
+                    ]}
+                    name={["shipment_details", "length"]}
+                    noStyle
+                  >
                     <InputNumber
                       min={0}
                       controls={false}
@@ -395,7 +420,16 @@ const NewOrderForm = () => {
                       className="w-full"
                     />
                   </Form.Item>
-                  <Form.Item name={["shipment_details", "breadth"]} noStyle>
+                  <Form.Item
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please enter breadth",
+                      },
+                    ]}
+                    name={["shipment_details", "breadth"]}
+                    noStyle
+                  >
                     <InputNumber
                       min={0}
                       controls={false}
@@ -403,7 +437,16 @@ const NewOrderForm = () => {
                       className="w-full border-l-0"
                     />
                   </Form.Item>
-                  <Form.Item name={["shipment_details", "height"]} noStyle>
+                  <Form.Item
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please enter height",
+                      },
+                    ]}
+                    name={["shipment_details", "height"]}
+                    noStyle
+                  >
                     <InputNumber
                       min={0}
                       controls={false}
@@ -423,11 +466,12 @@ const NewOrderForm = () => {
                 name={["shipment_details", "weight"]}
                 label="Actual Weight"
                 className="mb-0"
+                rules={[{ required: true, message: "Please enter weight" }]}
               >
                 <InputNumber
                   min={0}
                   controls={false}
-                  suffix="kg"
+                  suffix="gm"
                   className="w-full shadow-none"
                   placeholder="0"
                 />
@@ -491,7 +535,7 @@ const NewOrderForm = () => {
                   ]}
                 >
                   <VisualSelector
-                    fetchUrl="/v1/mobile/catalog/categories"
+                    fetchUrl="/v1/transit-warehouse/catalog/categories"
                     queryKey="categories_visual"
                   />
                 </Form.Item>
@@ -506,10 +550,11 @@ const NewOrderForm = () => {
                   noStyle
                 >
                   <VisualSelector
-                    fetchUrl="/v1/mobile/catalog/sub-categories"
+                    fetchUrl="/v1/transit-warehouse/catalog/subcategories"
                     queryKey="sub_categories_visual"
                     params={{ category_id }}
                     disabled={!category_id}
+                    dataPoint={"sub_categories"}
                   />
                 </Form.Item>
               </Form.Item>
@@ -522,16 +567,14 @@ const NewOrderForm = () => {
                   name={["shipment_details", "item_ids"]}
                   noStyle
                   rules={[{ required: true, message: "Please select an item" }]}
-                  getValueFromEvent={(e) => [e]} // Convert single ID to array for item_ids
-                  getValueProps={(value) => ({ value: value?.[0] })} // Extract single ID from array for display
                 >
                   <VisualSelector
-                    fetchUrl="/v1/mobile/catalog/items"
+                    fetchUrl="/v1/transit-warehouse/catalog/items"
                     queryKey="items_visual"
-                    params={
-                      sub_category_id ? { sub_category_id } : { category_id }
-                    }
+                    params={itemsQueryParams}
                     disabled={!category_id}
+                    dataPoint={"items"}
+                    multiple={true}
                   />
                 </Form.Item>
               </Form.Item>
@@ -703,6 +746,7 @@ const NewOrderForm = () => {
       }
     }
   };
+
   return (
     <div className="w-full flex flex-col gap-3">
       <Radio.Group
@@ -731,7 +775,31 @@ const NewOrderForm = () => {
         size="small"
       />
 
-      <Form onFinish={onFinish} form={form} layout="vertical">
+      <Form
+        onValuesChange={(changedValues) => {
+          // Check if category_id changed
+          if (changedValues.shipment_details?.category_id) {
+            form.setFieldsValue({
+              shipment_details: {
+                sub_category_id: undefined,
+                item_ids: undefined,
+              },
+            });
+          }
+
+          // Check if sub_category_id changed
+          if (changedValues.shipment_details?.sub_category_id) {
+            form.setFieldsValue({
+              shipment_details: {
+                item_ids: undefined,
+              },
+            });
+          }
+        }}
+        onFinish={onFinish}
+        form={form}
+        layout="vertical"
+      >
         <div className="mb-8">{steps[current]?.content}</div>
 
         {/* Navigation Buttons */}

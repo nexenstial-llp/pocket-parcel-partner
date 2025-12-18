@@ -64,7 +64,10 @@ const PaymentSuccessModal = ({
               </Text>
             </div>
           ),
-          <div key="buttons" className="flex flex-col gap-3 w-full">
+          <div key="buttons" className="flex  gap-3 w-full">
+            <Button size="large" key="orders" onClick={handleOrdersClick} block>
+              Back to Orders
+            </Button>
             <Button
               type="primary"
               size="large"
@@ -74,9 +77,6 @@ const PaymentSuccessModal = ({
               className="bg-green-500 hover:bg-green-600 border-green-500"
             >
               View Order Details
-            </Button>
-            <Button size="large" key="orders" onClick={handleOrdersClick} block>
-              Back to Orders
             </Button>
           </div>,
         ]}

@@ -1,130 +1,192 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { CgFolderAdd } from "react-icons/cg";
-import { FaWallet } from "react-icons/fa";
-import { ImMobile } from "react-icons/im";
-import { FaStore } from "react-icons/fa";
-import { BsBank2 } from "react-icons/bs";
-import { TiSocialInstagram } from "react-icons/ti";
-
-// Components
-import GettingStartedCard from "@/components/ui/cards/GettingStartedCard";
-import BusinessProfileCard from "@/components/ui/cards/BusinessProfileCard";
-// Assets
-import AttentionImage from "@/assets/attentionToday.svg";
-import NoPickups from "@/assets/noPickups.svg";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useGetOrders } from "@/features/orders/orders.query";
+import { useFetchWarehouse } from "@/features/warehouses/warehouses.query";
 import PageLayout from "@/components/layout/PageLayout";
-import ResponsiveCard from "@/components/ui/cards/ResponsiveCard";
+import { Card, Spin, Table, Button, Statistic, Row, Col } from "antd";
+import {
+  ShoppingCartOutlined,
+  HomeOutlined,
+  PlusOutlined,
+  RightOutlined,
+} from "@ant-design/icons";
+import { BiPackage } from "react-icons/bi";
+import { TbBuildingWarehouse } from "react-icons/tb";
+import { getStatusColor, removeUnderscores } from "@/utils/typography.util";
+import { Tag } from "antd";
 
-const gettingStarted = [
-  {
-    icon: <CgFolderAdd size={30} />,
-    title: "Add your 1st order",
-    subTitle: " Add your first order to start your shipping journey",
-    btnText: "  Add Oder",
-  },
-  {
-    icon: <FaWallet size={30} />,
-    title: "Recharge your Wallet",
-    subTitle: "Add wallet balance to start shipping orders",
-    btnText: "Recharge",
-  },
-  {
-    icon: <ImMobile size={30} />,
-    title: "Complete your KYC",
-    subTitle: "Complete your KYC verification to start shipping orders",
-    btnText: "Verify KYC",
-  },
-];
-const setUpBusinessProfile = [
-  {
-    icon: <FaStore size={30} />,
-    title: "Add Store Details",
-    subTitle: "Add store name, email & logo",
-    isCompleted: true,
-  },
-  {
-    icon: <BsBank2 size={30} />,
-    title: "Add Bank Details",
-    subTitle: "To receive COD remittance add bank details",
-    isCompleted: false,
-    navigateTO: "/bank-details",
-  },
-  {
-    icon: <TiSocialInstagram size={30} />,
-    title: "Add Store’s Social Media Handle",
-    subTitle: "Share your social media links.",
-    isCompleted: false,
-  },
-];
 export const Route = createFileRoute("/_authenticated/home/")({
-  component: RouteComponent,
+  component: HomeComponent,
 });
 
-function RouteComponent() {
+function HomeComponent() {
+  // Fetch Stats Data
+  const { data: ordersData, isLoading: isLoadingOrders } = useGetOrders({
+    page: 1,
+    limit: 5,
+  });
+  console.log("ordersData", ordersData?.orders?.length);
+  const { data: warehousesData, isLoading: isLoadingWarehouses } =
+    useFetchWarehouse({ page: 1, limit: 1 });
+  console.log(ordersData);
+  const stats = [
+    {
+      title: "Total Orders",
+      value: ordersData?.pagination?.totalItems || 0,
+      icon: <BiPackage size={20} className="text-blue-500" />,
+      loading: isLoadingOrders,
+    },
+    {
+      title: "Total Warehouses",
+      value: warehousesData?.pagination?.total_items || 0,
+      icon: <TbBuildingWarehouse size={20} className="text-green-500" />,
+      loading: isLoadingWarehouses,
+    },
+  ];
+
+  const quickActions = [
+    {
+      title: "Create Order",
+      icon: <ShoppingCartOutlined className="text-2xl text-blue-500" />,
+      link: "/orders/create",
+      description: "Create a new shipment order",
+    },
+    {
+      title: "Add Warehouse",
+      icon: <HomeOutlined className="text-2xl text-green-500" />,
+      link: "/warehouses", // Assuming list page has create button, or specific create route
+      description: "Register a new warehouse",
+    },
+  ];
+
+  const columns = [
+    {
+      title: "S.No",
+      render: (_, record, index) => index + 1,
+      width: "5%",
+    },
+    {
+      title: "Order ID",
+      dataIndex: "order_number",
+      key: "order_number",
+      render: (text) => <span className="font-medium">{text}</span>,
+    },
+    {
+      title: "Status",
+      dataIndex: "order_status",
+      key: "order_status",
+      render: (status) => (
+        <Tag color={getStatusColor(status)}>{removeUnderscores(status)}</Tag>
+      ),
+    },
+    {
+      title: "Date",
+      dataIndex: "created_at",
+      key: "created_at",
+      render: (date) => new Date(date).toLocaleDateString(),
+    },
+    {
+      title: "Action",
+      key: "action",
+      render: (_, record) => (
+        <Link to={`/orders/track-order`} search={{ orderId: record.order_id }}>
+          <Button type="link" size="small">
+            View
+          </Button>
+        </Link>
+      ),
+    },
+  ];
+
   return (
-    <PageLayout className={"gap-4"}>
-      <div className="flex flex-col gap-3">
-        <h2 className="text-xl">Getting Started</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 items-stretch">
-          {gettingStarted &&
-            gettingStarted.map((item) => (
-              <div key={item.title} className="h-full">
-                <GettingStartedCard
-                  icon={item.icon}
-                  title={item.title}
-                  subTitle={item.subTitle}
-                  btnText={item.btnText}
-                />
+    <PageLayout className="gap-6">
+      <div>
+        <h1 className="text-2xl font-bold mb-1 text-gray-800">Welcome Back</h1>
+
+        {/* Stats Section */}
+        <Row gutter={[16, 8]} className="mb-6">
+          {stats.map((stat, index) => (
+            <Col xs={24} sm={12} md={8} key={index}>
+              <Card className="shadow-sm hover:shadow-md transition-shadow">
+                <Spin spinning={stat.loading}>
+                  <Statistic
+                    title={
+                      <span className="text-gray-500 font-medium">
+                        {stat.title}
+                      </span>
+                    }
+                    value={stat.value}
+                    prefix={stat.icon}
+                    valueStyle={{ fontWeight: "bold" }}
+                  />
+                </Spin>
+              </Card>
+            </Col>
+          ))}
+        </Row>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Recent Orders Section */}
+          <div className="lg:col-span-2">
+            <Card
+              title={
+                <span className="font-semibold text-lg">Recent Orders</span>
+              }
+              className="shadow-sm h-full"
+              extra={
+                <Link to="/orders">
+                  <Button type="link" className="flex items-center gap-1 p-0">
+                    View All <RightOutlined />
+                  </Button>
+                </Link>
+              }
+            >
+              <Table
+                dataSource={ordersData?.orders || []}
+                columns={columns}
+                rowKey="id"
+                pagination={false}
+                loading={isLoadingOrders}
+                size="small"
+                scroll={{ x: true }}
+                bordered
+              />
+            </Card>
+          </div>
+
+          {/* Quick Actions Section */}
+          <div className="lg:col-span-1">
+            <Card
+              title={
+                <span className="font-semibold text-lg">Quick Actions</span>
+              }
+              className="shadow-sm h-full"
+            >
+              <div className="flex flex-col gap-4">
+                {quickActions.map((action, index) => (
+                  <Link to={action.link} key={index} className="block">
+                    <div className="flex items-center gap-4 p-4 border border-gray-100 rounded-lg hover:bg-gray-50 hover:border-blue-100 transition-all cursor-pointer group">
+                      <div className="p-3 bg-gray-50 rounded-full group-hover:bg-white transition-colors">
+                        {action.icon}
+                      </div>
+                      <div>
+                        <h4 className="text-base font-medium text-gray-800 m-0">
+                          {action.title}
+                        </h4>
+                        <p className="text-xs text-gray-500 m-0">
+                          {action.description}
+                        </p>
+                      </div>
+                      <div className="ml-auto">
+                        <PlusOutlined className="text-gray-400 group-hover:text-blue-500" />
+                      </div>
+                    </div>
+                  </Link>
+                ))}
               </div>
-            ))}
-        </div>
-      </div>
-      <div className="flex flex-col gap-3">
-        <h2 className="text-xl">Setup Business Profile</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 items-stretch">
-          {setUpBusinessProfile &&
-            setUpBusinessProfile.map((item) => (
-              <div key={item.title} className="h-full">
-                <BusinessProfileCard
-                  icon={item.icon}
-                  title={item.title}
-                  subTitle={item.subTitle}
-                  isCompleted={item.isCompleted}
-                />
-              </div>
-            ))}
-        </div>
-      </div>
-      <ResponsiveCard shadow>
-        <div className="flex flex-col gap-3">
-          <h3>Actions Needing Your Attention Today</h3>
-          <div className="w-full flex justify-center items-center mt-4 min-h-[300px]">
-            <div className="max-w-sm flex justify-center items-center">
-              <figure className="w-1/2">
-                <img src={AttentionImage} alt="" width={"100%"} />
-                <figcaption className="mt-2">
-                  <span className="text-sm">No Pending Actions Today</span>
-                </figcaption>
-              </figure>
-            </div>
+            </Card>
           </div>
         </div>
-      </ResponsiveCard>
-      <ResponsiveCard shadow>
-        <div className="flex flex-col gap-3">
-          <h3>Your Upcoming Pickups</h3>
-          <div className="w-full flex justify-center items-center mt-4 min-h-[300px]">
-            <div className="max-w-sm flex justify-center items-center">
-              <figure className="w-1/2">
-                <img src={NoPickups} alt="" width={"100%"} />
-                <figcaption className="mt-2">
-                  <span className="text-sm">No Pickups Scheduled</span>
-                </figcaption>
-              </figure>
-            </div>
-          </div>
-        </div>
-      </ResponsiveCard>
+      </div>
     </PageLayout>
   );
 }

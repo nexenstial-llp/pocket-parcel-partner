@@ -43,6 +43,10 @@ export const getStatusColor = (status) => {
       return "green";
     case "CANCELLED":
       return "red";
+    case "RETURNED":
+      return "warning";
+    case "CONFIRMED":
+      return "green";
     default:
       return "blue";
   }

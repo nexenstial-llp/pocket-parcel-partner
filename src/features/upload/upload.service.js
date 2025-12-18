@@ -261,6 +261,7 @@ export const getPreSignedUrlFromS3Key = async (s3Key, expiresIn = 3600) => {
     params: {
       expiresIn,
     },
+    noErrorToast: true,
   });
 
   // Extract URL from response based on the provided structure

@@ -10,10 +10,10 @@ export const useUploadFile = (
   });
 };
 
-export const useGetPresignedUrl = ({ s3Key }) => {
+export const useGetPresignedUrl = ({ s3Key, expiresIn }) => {
   return useQuery({
-    queryKey: ["presigned-url", { s3Key }],
-    queryFn: () => uploadService.getPreSignedUrlFromS3Key(s3Key),
+    queryKey: ["presigned-url", { s3Key, expiresIn }],
+    queryFn: () => uploadService.getPreSignedUrlFromS3Key(s3Key, expiresIn),
     enabled: !!s3Key,
     // staleTime: 0,
   });
