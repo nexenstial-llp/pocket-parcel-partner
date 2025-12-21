@@ -881,7 +881,10 @@ const NewOrderForm = () => {
       const validatedData = createPaymentOrderSchema.parse(payload);
       // 1. Create Payment Session (Backend Call)
       const sessionData = await createPaymentSession(validatedData);
-
+      console.log(
+        "sessionData?.payment_order?.payment_session_id",
+        sessionData?.payment_order?.payment_session_id
+      );
       if (!sessionData?.payment_order?.payment_session_id) {
         throw new Error("Failed to generate payment session ID");
       }
