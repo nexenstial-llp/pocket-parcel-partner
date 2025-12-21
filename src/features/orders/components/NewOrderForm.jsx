@@ -1152,7 +1152,14 @@ const NewOrderForm = () => {
       />
 
       <Steps
-        onChange={(e) => setCurrent(e)}
+        onChange={(nextStep) => {
+          if (nextStep > current) {
+            message.warning("Please use Next button to proceed");
+            return;
+          }
+          setCurrent(nextStep);
+        }}
+        // onChange={(e) => setCurrent(e)}
         current={current}
         items={steps}
         className="mb-8"
