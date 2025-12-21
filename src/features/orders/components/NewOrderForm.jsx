@@ -1038,7 +1038,9 @@ const NewOrderForm = () => {
           ...(pickup_type === "warehouse"
             ? { skip_first_mile_pickup: true }
             : {}),
-          warehouse_location_id: warehouseLocation,
+          ...(warehouseLocation && {
+            warehouse_location_id: warehouseLocation,
+          }),
         },
       };
 
