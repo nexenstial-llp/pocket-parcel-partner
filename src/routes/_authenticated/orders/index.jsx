@@ -4,9 +4,12 @@ import ErrorFallback from "@/components/ui/ErrorFallback";
 import ResponsiveTable from "@/components/ui/tables/ResponsiveTable";
 import UrlPagination from "@/components/ui/UrlPagination";
 import { useGetOrders } from "@/features/orders/orders.query";
+import { downloadWaybill } from "@/features/orders/orders.service";
+import { usePdfHandler } from "@/hooks/usePdfHandler";
 import { getSerialNumber } from "@/utils/serialNumber.util";
 import { getStatusColor, removeUnderscores } from "@/utils/typography.util";
 import { validatePagination } from "@/utils/validatePagination.util";
+import { DownloadOutlined } from "@ant-design/icons";
 import { createFileRoute, Link, useSearch } from "@tanstack/react-router";
 import { Tag } from "antd";
 import { Button } from "antd";
@@ -19,6 +22,19 @@ export const Route = createFileRoute("/_authenticated/orders/")({
 function RouteComponent() {
   const { page, limit } = useSearch({ strict: false });
   const { data, isLoading, isError, error } = useGetOrders({ page, limit });
+  const { processPdf, isProcessing } = usePdfHandler();
+
+  const handleWaybill = async (id) => {
+    const blob = await downloadWaybill(id);
+
+    processPdf({
+      blob,
+      print: true,
+      fileName: `waybill-${id}.pdf`,
+      successMessage: "Waybill processed successfully",
+    });
+  };
+
   const columns = [
     {
       title: "S. No",
@@ -71,12 +87,39 @@ function RouteComponent() {
       },
       fixed: "right",
     },
+    {
+      title: "Life Cycle Status",
+      dataIndex: "lifecycle_status",
+      key: "lifecycle_status",
+      render: (text) => {
+        return (
+          <Tag color={getStatusColor(text)}>{removeUnderscores(text)}</Tag>
+        );
+      },
+      fixed: "right",
+    },
 
     {
       title: "Action",
       dataIndex: "action",
       key: "action",
-      render: (_, record) => <Link to={`/orders/${record.id}`}>View</Link>,
+      render: (_, record) => (
+        <div className="flex gap-2">
+          <Button icon={<DownloadOutlined />} type="primary" size="small">
+            Invoice
+          </Button>
+          <Button
+            loading={isProcessing}
+            onClick={() => handleWaybill(record.id)}
+            icon={<DownloadOutlined />}
+            type="primary"
+            size="small"
+          >
+            Waybill
+          </Button>
+          <Link to={`/orders/${record.id}`}>View</Link>
+        </div>
+      ),
       fixed: "right",
     },
   ];

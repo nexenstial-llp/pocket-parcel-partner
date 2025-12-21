@@ -4,13 +4,13 @@ import AWSImage from "@/components/ui/AWSImage";
 import { List } from "react-window";
 
 export default function CourierPartnerSelector({ data, value, onChange }) {
-  const preferenceArray =
-    data?.recommendations?.result?.[0]?.preference_array || [];
+  const preferenceArray = data || [];
 
   // Row Renderer for react-window
   const Row = ({ index, style }) => {
     const item = preferenceArray[index];
-    const isSelected = value === item?.account_code;
+    const { courier_details, price_summary } = item;
+    const isSelected = value === courier_details?.account_code;
 
     return (
       <div style={{ ...style, paddingBottom: "10px" }}>
@@ -19,17 +19,19 @@ export default function CourierPartnerSelector({ data, value, onChange }) {
           className={`cursor-pointer border border-gray-200 hover:shadow-md transition h-full ${
             isSelected ? "border-blue-500! bg-blue-50/10" : ""
           }`}
-          onClick={() => onChange(item?.account_code)}
+          onClick={() => onChange(item)}
         >
           <div className="flex items-center gap-4">
             <div className="size-12 shrink-0 flex items-center justify-center bg-gray-50 rounded p-1">
-              {item?.courier_partner?.logo ? (
+              {courier_details?.logo ? (
                 <AWSImage
-                  s3Key={item?.courier_partner.logo}
+                  s3Key={courier_details.logo}
                   className="w-full h-full object-contain"
                 />
               ) : (
-                <span className="text-xs text-gray-400">No Logo</span>
+                <span className="text-xs text-center text-gray-400">
+                  No Logo
+                </span>
               )}
             </div>
 
@@ -37,21 +39,30 @@ export default function CourierPartnerSelector({ data, value, onChange }) {
               <div className="flex justify-between items-start">
                 <div>
                   <p className="font-semibold text-gray-800 text-base truncate">
-                    {item?.courier_name}
+                    {courier_details?.courier_name}
                   </p>
-                  <p className="text-xs text-gray-500">{item?.account_code}</p>
+                  <p className="text-xs text-gray-500">
+                    {courier_details?.account_code}
+                  </p>
                 </div>
                 <Radio
                   checked={isSelected}
-                  onChange={() => onChange(item?.account_code)}
-                  value={item?.account_code}
+                  onChange={() => onChange(item)}
+                  value={courier_details?.account_code}
                 />
               </div>
 
-              {item?.shipping_charge ? (
-                <p className="mt-1 text-blue-600 font-bold text-sm">
-                  ₹{item?.shipping_charge}
-                </p>
+              {price_summary?.final_total ? (
+                <div className="mt-1 flex gap-2 items-baseline">
+                  <p className="text-blue-600 font-bold text-sm">
+                    ₹{price_summary.final_total}
+                  </p>
+                  {courier_details?.shipping_charge && (
+                    <span className="text-xs text-gray-400">
+                      (Shipping: ₹{courier_details.shipping_charge})
+                    </span>
+                  )}
+                </div>
               ) : (
                 <p className="text-gray-400 text-xs">(No rate available)</p>
               )}

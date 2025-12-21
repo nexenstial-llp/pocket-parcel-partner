@@ -151,3 +151,15 @@ export const downloadInvoice = async (id) => {
 
   return response.data ?? null;
 };
+
+// export waybill
+export const downloadWaybill = async (id) => {
+  const response = await axiosInstance.get(
+    `/v1/transit-warehouse/orders/${id}/waybill`,
+    {
+      responseType: "blob",
+    }
+  );
+
+  return response.data ?? null;
+};

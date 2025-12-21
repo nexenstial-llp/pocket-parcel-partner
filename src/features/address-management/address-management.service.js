@@ -2,13 +2,15 @@ import axiosInstance from "@/utils/axiosInstance.util";
 
 // Get addresses by id
 export const getAddressesById = async (id) => {
-  const response = await axiosInstance.get(`/v1/mobile/addresses/${id}`);
+  const response = await axiosInstance.get(
+    `/v1/transit-warehouse/addresses/${id}`
+  );
   return response?.data?.data ?? null;
 };
 
 // Get all addresses
 export const getAllAddresses = async ({ page, limit, search }) => {
-  const response = await axiosInstance.get("/v1/mobile/addresses", {
+  const response = await axiosInstance.get("/v1/transit-warehouse/addresses", {
     params: {
       page,
       limit,
@@ -18,10 +20,25 @@ export const getAllAddresses = async ({ page, limit, search }) => {
   return response?.data ?? null;
 };
 
+// Get customer address
+export const getCustomerAddress = async ({ page, limit, phone }) => {
+  const response = await axiosInstance.get(
+    "/v1/transit-warehouse/addresses/customer",
+    {
+      params: {
+        page,
+        limit,
+        phone,
+      },
+    }
+  );
+  return response?.data ?? null;
+};
+
 // Create address
 export const createAddress = async (data) => {
   const response = await axiosInstance.post(
-    "/v1/mobile/addresses/create",
+    "/v1/transit-warehouse/addresses/create",
     data
   );
   return response?.data?.data ?? null;
@@ -30,7 +47,7 @@ export const createAddress = async (data) => {
 // Update address
 export const updateAddress = async ({ id, data }) => {
   const response = await axiosInstance.put(
-    `/v1/mobile/addresses/${id}/update`,
+    `/v1/transit-warehouse/addresses/${id}/update`,
     data
   );
   return response?.data?.data ?? null;
@@ -39,7 +56,7 @@ export const updateAddress = async ({ id, data }) => {
 // Delete address
 export const deleteAddress = async (id) => {
   const response = await axiosInstance.delete(
-    `/v1/mobile/addresses/${id}/delete`
+    `/v1/transit-warehouse/addresses/${id}/delete`
   );
   return response?.data?.data ?? null;
 };
@@ -47,7 +64,7 @@ export const deleteAddress = async (id) => {
 // Set default address
 export const setDefaultAddress = async (id) => {
   const response = await axiosInstance.put(
-    `/v1/mobile/addresses/${id}/default`
+    `/v1/transit-warehouse/addresses/${id}/default`
   );
   return response?.data?.data ?? null;
 };

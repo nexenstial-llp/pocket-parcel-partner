@@ -41,17 +41,19 @@ const AddressFormItems = () => {
           <Input placeholder="Please enter email" />
         </Form.Item>
       </div>
-      {/* Address Lines */}
-      <Form.Item
-        label="Address Line 1"
-        name="address_line1"
-        rules={[{ required: true, message: "Address Line 1 is required" }]}
-      >
-        <Input placeholder="House No, Street…" />
-      </Form.Item>
-      <Form.Item label="Address Line 2" name="address_line2">
-        <Input placeholder="Apartment, floor, etc." />
-      </Form.Item>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4">
+        {/* Address Lines */}
+        <Form.Item
+          label="Address Line 1"
+          name="address_line1"
+          rules={[{ required: true, message: "Address Line 1 is required" }]}
+        >
+          <Input placeholder="House No, Street…" />
+        </Form.Item>
+        <Form.Item label="Address Line 2" name="address_line2">
+          <Input placeholder="Apartment, floor, etc." />
+        </Form.Item>
+      </div>
 
       <Form.Item
         label="Landmark"

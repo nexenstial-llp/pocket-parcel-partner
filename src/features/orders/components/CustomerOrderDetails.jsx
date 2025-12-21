@@ -19,16 +19,20 @@ export default function CustomerOrderDetails({ order }) {
           </Descriptions.Item>
 
           <Descriptions.Item label="Payment Status">
-            <Tag color={order?.payment_status === "PAID" ? "green" : "red"}>
-              {order?.payment_status}
+            <Tag color={getStatusColor(order?.payment_status)}>
+              {removeUnderscores(order?.payment_status)}
             </Tag>
           </Descriptions.Item>
 
           <Descriptions.Item label="Order Status">
-            <Tag color="blue">{order?.order_status}</Tag>
+            <Tag color={getStatusColor(order?.order_status)}>
+              {removeUnderscores(order?.order_status)}
+            </Tag>
           </Descriptions.Item>
           <Descriptions.Item label="Lifecycle Status">
-            <Tag color="blue">{order?.lifecycle_status}</Tag>
+            <Tag color={getStatusColor(order?.lifecycle_status)}>
+              {removeUnderscores(order?.lifecycle_status)}
+            </Tag>
           </Descriptions.Item>
 
           <Descriptions.Item label="Total Amount">

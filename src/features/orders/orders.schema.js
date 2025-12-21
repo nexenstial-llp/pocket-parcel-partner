@@ -232,7 +232,7 @@ export const serviceabilityCheckSchema = z
 const pickupInfoSchema = z.object({
   pickup_name: z.string().min(1).max(100),
   pickup_phone: z.string().min(10).max(15),
-  email: z.email().nullable(),
+  email: z.email().nullable().default("abcd@gmail.com"),
   pickup_address: z.string().min(1).max(500),
   pickup_house_number: z.string().max(50).optional(), // House/Building number for QWQER
   pickup_city: z.string().min(1).max(100),
@@ -274,18 +274,17 @@ const dropInfoSchema = z.object({
 const shipmentDetailsSchema = z.object({
   order_type: z.enum(["COD", "PREPAID", "EXCHANGE", "PICKUP"]),
   delivery_type: z.enum(["FORWARD", "REVERSE", "EXCHANGE"]),
-  payment_id: z.string().min(1), // Cashfree payment transaction ID
-  invoice_value: z.number().positive(),
+  invoice_value: z.coerce.number().positive(),
   invoice_date: z.string(),
-  category_id: z.string().uuid(), // UUID reference to Category table
-  item_ids: z.array(z.string().uuid()).min(1), // Array of Item UUIDs from catalog
+  category_id: z.uuid(), // UUID reference to Category table
+  item_ids: z.array(z.uuid()).min(1), // Array of Item UUIDs from catalog
   weight: z.number().positive(), // Total weight in kg
   length: z.number().positive(), // Carton length in cm
   breadth: z.number().positive(), // Carton breadth in cm
   height: z.number().positive(), // Carton height in cm
   cod_value: z.number().min(0).optional(),
   reference_number: z.string().optional(),
-  cp_id: z.string().uuid().optional(), // Reference to CourierPartner table
+  cp_id: z.string().optional(), // Reference to CourierPartner table
   courier_partner_id: z.uuid().optional(),
   clickpost_courier_id: z.number().int().optional(),
   account_code: z.string().optional(),
@@ -314,11 +313,14 @@ const userDefinedFieldSchema = z.object({
 });
 
 const additionalSchema = z.object({
+  warehouse_location_id: z.uuid().optional(), // For walk-in orders: warehouse location to use for pickup
   return_info: returnInfoSchema.optional(),
   special_instructions: z.string().max(1000).optional(),
   enable_whatsapp: z.boolean().optional(),
   is_fragile: z.boolean().optional(),
   is_dangerous: z.boolean().optional(),
+  skip_first_mile_pickup: z.boolean().optional(), // Skip QWQER first-mile pickup (for HQ/warehouse orders)
+  parcel_images: z.array(z.string().min(1)).max(10).optional(), // S3 keys for parcel images (max 10 images)
   gst_number: z.string().optional(),
   channel_name: z.string().optional(),
   order_date: z.string().optional(),
@@ -381,6 +383,8 @@ export const calculatePriceOfOrderSchema = z.object({
   is_cod: z.boolean().default(false),
   insurance_opted: z.boolean().default(false),
   to_pincode: z.string().regex(/^\d{6}$/),
+  cp_id: z.number().optional(),
+  account_code: z.string().optional(),
 });
 
 export const orderRecommendationSchema = z.object({

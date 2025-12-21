@@ -16,15 +16,16 @@ import toast from "react-hot-toast";
  */
 export const uploadFileToS3 = async (file, uploadType, onProgress) => {
   try {
+    const uploadData = {
+      filename: file.name,
+      mimetype: file.type,
+      uploadType: uploadType || "general",
+      fileSize: file.size,
+    };
     // Step 1: Get presigned URL from your backend
-    const { data } = await axiosInstance.get(
-      "/v1/mobile/upload/asset/getuploadurl",
-      {
-        params: {
-          filename: file.name,
-          uploadType: uploadType || "general",
-        },
-      }
+    const { data } = await axiosInstance.post(
+      "/v1/upload/presigned-url",
+      uploadData
     );
 
     // Extract presigned URL and S3 key from response
@@ -256,8 +257,8 @@ export const uploadWithRetry = async (
 // ============================================
 // Read it from the AWS
 // ============================================
-export const getPreSignedUrlFromS3Key = async (s3Key, expiresIn = 3600) => {
-  const { data } = await axiosInstance.get(`/v1/mobile/upload/asset/${s3Key}`, {
+export const getPreSignedUrlFromS3Key = async (s3Key, expiresIn) => {
+  const { data } = await axiosInstance.get(`/v1/upload/asset/${s3Key}`, {
     params: {
       expiresIn,
     },
@@ -271,6 +272,25 @@ export const getPreSignedUrlFromS3Key = async (s3Key, expiresIn = 3600) => {
     data?.s3_pre_signed_url ||
     data?.data?.url ||
     data?.url;
+
+  return assetUrl;
+};
+
+export const getDownloadUrlFromS3Key = async ({ s3_key, expiresIn }) => {
+  const { data } = await axiosInstance.post(
+    `/v1/upload/download-url`,
+    {
+      s3_key,
+      expiresIn,
+    },
+    {
+      noErrorToast: true,
+    }
+  );
+
+  // Extract URL from response based on the provided structure
+  // Structure: { status: true, message: "...", data: "..." }
+  const assetUrl = data?.data?.presignedUrl;
 
   return assetUrl;
 };
@@ -400,6 +420,7 @@ export const VALIDATION_CONFIGS = {
 // ============================================
 
 export default {
+  getDownloadUrlFromS3Key,
   uploadFileToS3,
   getAssetUrl,
   uploadMultipleFiles,

@@ -25,7 +25,7 @@ import { Route as AuthenticatedPaymentIndexRouteImport } from './routes/_authent
 import { Route as AuthenticatedOverviewIndexRouteImport } from './routes/_authenticated/overview/index'
 import { Route as AuthenticatedOrdersIndexRouteImport } from './routes/_authenticated/orders/index'
 import { Route as AuthenticatedHomeIndexRouteImport } from './routes/_authenticated/home/index'
-import { Route as AuthenticatedOrdersCreateOrderRouteImport } from './routes/_authenticated/orders/create-order'
+import { Route as AuthenticatedAddressManagementIndexRouteImport } from './routes/_authenticated/address-management/index'
 import { Route as AuthenticatedToolsReportsRouteRouteImport } from './routes/_authenticated/tools/reports/route'
 import { Route as AuthenticatedToolsRateCardRouteRouteImport } from './routes/_authenticated/tools/rate-card/route'
 import { Route as AuthenticatedToolsRateCalculatorRouteRouteImport } from './routes/_authenticated/tools/rate-calculator/route'
@@ -166,10 +166,10 @@ const AuthenticatedHomeIndexRoute = AuthenticatedHomeIndexRouteImport.update({
   path: '/home/',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
-const AuthenticatedOrdersCreateOrderRoute =
-  AuthenticatedOrdersCreateOrderRouteImport.update({
-    id: '/orders/create-order',
-    path: '/orders/create-order',
+const AuthenticatedAddressManagementIndexRoute =
+  AuthenticatedAddressManagementIndexRouteImport.update({
+    id: '/address-management/',
+    path: '/address-management/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 const AuthenticatedToolsReportsRouteRoute =
@@ -544,7 +544,7 @@ export interface FileRoutesByFullPath {
   '/tools/rate-calculator': typeof AuthenticatedToolsRateCalculatorRouteRouteWithChildren
   '/tools/rate-card': typeof AuthenticatedToolsRateCardRouteRouteWithChildren
   '/tools/reports': typeof AuthenticatedToolsReportsRouteRouteWithChildren
-  '/orders/create-order': typeof AuthenticatedOrdersCreateOrderRoute
+  '/address-management': typeof AuthenticatedAddressManagementIndexRoute
   '/home': typeof AuthenticatedHomeIndexRoute
   '/orders': typeof AuthenticatedOrdersIndexRoute
   '/overview': typeof AuthenticatedOverviewIndexRoute
@@ -618,7 +618,7 @@ export interface FileRoutesByTo {
   '/tools/rate-calculator': typeof AuthenticatedToolsRateCalculatorRouteRouteWithChildren
   '/tools/rate-card': typeof AuthenticatedToolsRateCardRouteRouteWithChildren
   '/tools/reports': typeof AuthenticatedToolsReportsRouteRouteWithChildren
-  '/orders/create-order': typeof AuthenticatedOrdersCreateOrderRoute
+  '/address-management': typeof AuthenticatedAddressManagementIndexRoute
   '/home': typeof AuthenticatedHomeIndexRoute
   '/orders': typeof AuthenticatedOrdersIndexRoute
   '/overview': typeof AuthenticatedOverviewIndexRoute
@@ -694,7 +694,7 @@ export interface FileRoutesById {
   '/_authenticated/tools/rate-calculator': typeof AuthenticatedToolsRateCalculatorRouteRouteWithChildren
   '/_authenticated/tools/rate-card': typeof AuthenticatedToolsRateCardRouteRouteWithChildren
   '/_authenticated/tools/reports': typeof AuthenticatedToolsReportsRouteRouteWithChildren
-  '/_authenticated/orders/create-order': typeof AuthenticatedOrdersCreateOrderRoute
+  '/_authenticated/address-management/': typeof AuthenticatedAddressManagementIndexRoute
   '/_authenticated/home/': typeof AuthenticatedHomeIndexRoute
   '/_authenticated/orders/': typeof AuthenticatedOrdersIndexRoute
   '/_authenticated/overview/': typeof AuthenticatedOverviewIndexRoute
@@ -770,7 +770,7 @@ export interface FileRouteTypes {
     | '/tools/rate-calculator'
     | '/tools/rate-card'
     | '/tools/reports'
-    | '/orders/create-order'
+    | '/address-management'
     | '/home'
     | '/orders'
     | '/overview'
@@ -844,7 +844,7 @@ export interface FileRouteTypes {
     | '/tools/rate-calculator'
     | '/tools/rate-card'
     | '/tools/reports'
-    | '/orders/create-order'
+    | '/address-management'
     | '/home'
     | '/orders'
     | '/overview'
@@ -919,7 +919,7 @@ export interface FileRouteTypes {
     | '/_authenticated/tools/rate-calculator'
     | '/_authenticated/tools/rate-card'
     | '/_authenticated/tools/reports'
-    | '/_authenticated/orders/create-order'
+    | '/_authenticated/address-management/'
     | '/_authenticated/home/'
     | '/_authenticated/orders/'
     | '/_authenticated/overview/'
@@ -1089,11 +1089,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedHomeIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/orders/create-order': {
-      id: '/_authenticated/orders/create-order'
-      path: '/orders/create-order'
-      fullPath: '/orders/create-order'
-      preLoaderRoute: typeof AuthenticatedOrdersCreateOrderRouteImport
+    '/_authenticated/address-management/': {
+      id: '/_authenticated/address-management/'
+      path: '/address-management'
+      fullPath: '/address-management'
+      preLoaderRoute: typeof AuthenticatedAddressManagementIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/tools/reports': {
@@ -1688,7 +1688,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedToolsRateCalculatorRouteRoute: typeof AuthenticatedToolsRateCalculatorRouteRouteWithChildren
   AuthenticatedToolsRateCardRouteRoute: typeof AuthenticatedToolsRateCardRouteRouteWithChildren
   AuthenticatedToolsReportsRouteRoute: typeof AuthenticatedToolsReportsRouteRouteWithChildren
-  AuthenticatedOrdersCreateOrderRoute: typeof AuthenticatedOrdersCreateOrderRoute
+  AuthenticatedAddressManagementIndexRoute: typeof AuthenticatedAddressManagementIndexRoute
   AuthenticatedHomeIndexRoute: typeof AuthenticatedHomeIndexRoute
   AuthenticatedOrdersIndexRoute: typeof AuthenticatedOrdersIndexRoute
   AuthenticatedOverviewIndexRoute: typeof AuthenticatedOverviewIndexRoute
@@ -1738,7 +1738,8 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
     AuthenticatedToolsRateCardRouteRouteWithChildren,
   AuthenticatedToolsReportsRouteRoute:
     AuthenticatedToolsReportsRouteRouteWithChildren,
-  AuthenticatedOrdersCreateOrderRoute: AuthenticatedOrdersCreateOrderRoute,
+  AuthenticatedAddressManagementIndexRoute:
+    AuthenticatedAddressManagementIndexRoute,
   AuthenticatedHomeIndexRoute: AuthenticatedHomeIndexRoute,
   AuthenticatedOrdersIndexRoute: AuthenticatedOrdersIndexRoute,
   AuthenticatedOverviewIndexRoute: AuthenticatedOverviewIndexRoute,

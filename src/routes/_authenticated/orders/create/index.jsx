@@ -1,6 +1,6 @@
 import PageLayout from "@/components/layout/PageLayout";
 import ResponsiveCard from "@/components/ui/cards/ResponsiveCard";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import NewOrderForm from "@/features/orders/components/NewOrderForm";
 
 export const Route = createFileRoute("/_authenticated/orders/create/")({
@@ -16,13 +16,7 @@ function RouteComponent() {
         { title: "Create" },
       ]}
     >
-      <ResponsiveCard
-        size="small"
-        title="Create Order"
-        extra={
-          <Link to={"/orders/first-mile/create"}>Create First Mile Order</Link>
-        }
-      >
+      <ResponsiveCard size="small" title="Create Order">
         <NewOrderForm />
       </ResponsiveCard>
     </PageLayout>

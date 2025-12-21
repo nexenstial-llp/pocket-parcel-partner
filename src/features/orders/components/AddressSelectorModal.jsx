@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import { Modal, Input, List, Button, Tag, Space, Typography } from "antd";
 import { useState, useMemo, useEffect } from "react";
-import { useGetAllAddresses } from "@/features/address-management/address-management.query";
+import { useGetAllCustomerAddress } from "@/features/address-management/address-management.query";
 import {
   SearchOutlined,
   EnvironmentOutlined,
@@ -42,13 +42,13 @@ const AddressSelectorModal = ({ open, onCancel, onSelect, title }) => {
     setLimit(pageSize);
   };
 
-  const { data, isLoading } = useGetAllAddresses({
+  const { data, isLoading } = useGetAllCustomerAddress({
     page,
     limit,
-    search: debouncedSearchText,
+    phone: debouncedSearchText,
   });
 
-  const addresses = useMemo(() => data?.data?.addresses || [], [data]);
+  const addresses = useMemo(() => data?.data || [], [data]);
 
   return (
     <>
@@ -64,7 +64,7 @@ const AddressSelectorModal = ({ open, onCancel, onSelect, title }) => {
           <Input
             size="small"
             prefix={<SearchOutlined />}
-            placeholder="Search by label, name, city, or phone..."
+            placeholder="Search by phone..."
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
           />
@@ -90,7 +90,7 @@ const AddressSelectorModal = ({ open, onCancel, onSelect, title }) => {
             showTotal: (total) => `Total ${total} addresses`,
             size: "small",
             onChange: handlePageChange,
-            total: data?.data?.pagination?.total,
+            total: data?.pagination?.total,
             pageSizeOptions: ["10", "20", "30", "40", "50"],
           }}
           renderItem={(item) => (
@@ -129,16 +129,17 @@ const AddressSelectorModal = ({ open, onCancel, onSelect, title }) => {
                 }
                 title={
                   <Space>
-                    <Text strong>{item.label}</Text>
+                    <Text>
+                      {item.full_name} | {item.phone_number}
+                    </Text>
+
                     <Tag color="blue">{item.address_type}</Tag>
                     {item.is_default && <Tag color="green">Default</Tag>}
                   </Space>
                 }
                 description={
                   <div className="text-xs text-gray-500 flex flex-col">
-                    <Text>
-                      {item.full_name} | {item.phone_number}
-                    </Text>
+                    <Text strong>{item.label}</Text>
                     <p>
                       {item.address_line1},{" "}
                       {item.address_line2 ? item.address_line2 + ", " : ""}

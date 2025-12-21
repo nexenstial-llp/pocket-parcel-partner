@@ -2,7 +2,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import uploadService from "./upload.service";
 
 export const useUploadFile = (
-  uploadType = uploadService.UPLOAD_TYPES.COURIER_LOGO
+  uploadType = uploadService.UPLOAD_TYPES.GENERAL
 ) => {
   return useMutation({
     mutationFn: ({ file, onProgress }) =>
@@ -15,6 +15,15 @@ export const useGetPresignedUrl = ({ s3Key, expiresIn }) => {
     queryKey: ["presigned-url", { s3Key, expiresIn }],
     queryFn: () => uploadService.getPreSignedUrlFromS3Key(s3Key, expiresIn),
     enabled: !!s3Key,
-    // staleTime: 0,
+    retry: 0,
+  });
+};
+
+export const useGetDownloadUrl = ({ onSuccess, onError, ...rest }) => {
+  return useMutation({
+    mutationFn: uploadService.getDownloadUrlFromS3Key,
+    onSuccess,
+    onError,
+    ...rest,
   });
 };

@@ -4,6 +4,7 @@ import {
   deleteAddress,
   getAddressesById,
   getAllAddresses,
+  getCustomerAddress,
   setDefaultAddress,
   updateAddress,
 } from "./address-management.service";
@@ -22,6 +23,15 @@ export const useGetAllAddresses = ({ page, limit, search }) => {
   return useQuery({
     queryKey: ["addresses", { page, limit, search }],
     queryFn: () => getAllAddresses({ page, limit, search }),
+  });
+};
+
+// Get all customer address
+export const useGetAllCustomerAddress = ({ page, limit, phone }) => {
+  return useQuery({
+    queryKey: ["addresses", { page, limit, phone }],
+    queryFn: () => getCustomerAddress({ page, limit, phone }),
+    retry: 1,
   });
 };
 

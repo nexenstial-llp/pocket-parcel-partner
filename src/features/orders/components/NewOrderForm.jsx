@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useState } from "react";
 import {
   Form,
@@ -11,47 +12,54 @@ import {
   Col,
   Select,
   Space,
+  Modal,
+  Divider,
+  Input,
+  Switch,
 } from "antd";
-import { EnvironmentOutlined, CodeSandboxOutlined } from "@ant-design/icons";
+import {
+  EnvironmentOutlined,
+  CodeSandboxOutlined,
+  FileTextOutlined,
+  CameraOutlined,
+  SafetyCertificateOutlined,
+  MessageOutlined,
+  ShoppingOutlined,
+  ShopOutlined,
+  HomeOutlined,
+  CheckCircleFilled,
+} from "@ant-design/icons";
+import WebcamCapture from "@/components/ui/WebcamCapture";
 import AddressSelectorModal from "./AddressSelectorModal";
 import ResponsiveButton from "@/components/ui/ResponsiveButton";
 import BackButton from "@/components/ui/BackButton";
 import {
-  useCalculatePriceOfOrder,
   useCheckServiceability,
   useCreateComprehensiveOrder,
-  useGetDomesticRecommendation,
+  useCalculatePriceOfOrder,
 } from "@/features/orders/orders.query";
 import {
   calculatePriceOfOrderSchema,
   createOrderSchema,
-  orderRecommendationSchema,
 } from "../orders.schema";
 import VisualSelector from "./VisualSelector";
 import ResponsiveCard from "@/components/ui/cards/ResponsiveCard";
 import CourierPartnerSelector from "./CourierPartnerSelector";
 import SummaryStep from "./steps/SummaryStep";
 import { load } from "@cashfreepayments/cashfree-js";
-import {
-  createPaymentSession,
-  verifyPayment,
-} from "@/features/payment/payment.service";
+import { verifyPayment } from "@/features/payment/payment.service";
 import dayjs from "dayjs";
 import { FaShippingFast } from "react-icons/fa";
 import { RiBillLine } from "react-icons/ri";
 import PaymentSuccessModal from "./PaymentSuccessModal";
 import { useUrlParams } from "@/hooks/useUrlParams";
-import { Radio } from "antd";
-import PaginatedSelect from "@/components/ui/PaginatedSelect";
 import toast from "react-hot-toast";
-let cashfree;
-const initializeCashfree = async () => {
-  cashfree = await load({
-    mode: "sandbox",
-  });
-};
-
-initializeCashfree();
+import { useCheckWeightRangeServiceability } from "@/features/weight-range/weight-range.query";
+import { applyZodErrorsToForm } from "@/utils/formError.util";
+import { useCreatePaymentSession } from "@/features/payment/payment.query";
+import { useEffect } from "react";
+import { createPaymentOrderSchema } from "@/features/payment/payment.schema";
+import PaginatedSelect from "@/components/ui/PaginatedSelect";
 const { Text } = Typography;
 
 const deliveryTypeOptions = [
@@ -63,6 +71,10 @@ const NewOrderForm = () => {
   const { pickup_type = "warehouse" } = params;
   const [current, setCurrent] = useState(0);
   const [form] = Form.useForm();
+  const [cashfree, setCashfree] = useState(null);
+  const [warehouse, setWarehouse] = useState(null);
+  const [warehouseLocation, setWarehouseLocation] = useState(null);
+  console.log({ warehouse, warehouseLocation });
   //   const navigate = useNavigate();
   // Watch fields for dependent selects
   const category_id = Form.useWatch(["shipment_details", "category_id"], form);
@@ -70,15 +82,8 @@ const NewOrderForm = () => {
     ["shipment_details", "sub_category_id"],
     form
   );
-  const item_ids = Form.useWatch(["shipment_details", "item_ids"], form);
-  console.log({
-    category_id,
-    sub_category_id,
-    item_ids,
-  });
 
   const [summaryData, setSummaryData] = useState({});
-
   const length = Form.useWatch(["shipment_details", "length"], form);
   const breadth = Form.useWatch(["shipment_details", "breadth"], form);
   const height = Form.useWatch(["shipment_details", "height"], form);
@@ -101,17 +106,29 @@ const NewOrderForm = () => {
 
   // Order Data
   const [totalData, setTotalData] = useState({});
+  const [carrierOptions, setCarrierOptions] = useState([]);
 
-  const [recommendationData, setRecommendationData] = useState(null);
   const [carrierPartnerData, setCarrierPartnerData] = useState(null);
-  const [CashFreeOfferId, setCashFreeOfferId] = useState(null);
-  const [paymentSessionId, setPaymentSessionId] = useState(null);
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
   const [successDetails, setSuccessDetails] = useState({
     transactionId: null,
     orderId: null,
     orderNumber: null,
   });
+  const [chargeableWeight, setchargableWeight] = useState(null);
+
+  useEffect(() => {
+    const initSdk = async () => {
+      const cf = await load({ mode: "sandbox" });
+      setCashfree(cf);
+    };
+    initSdk();
+  }, []);
+  useEffect(() => {
+    if (!warehouse) {
+      setWarehouseLocation(null);
+    }
+  }, [warehouse]);
 
   const handleOrderTypeChange = (value) => {
     setParams({ pickup_type: value });
@@ -119,12 +136,30 @@ const NewOrderForm = () => {
     form.resetFields();
   };
 
+  const {
+    mutateAsync: checkWeightRangeServiceability,
+    isPending: isCheckWeightRangeServiceabilityPending,
+  } = useCheckWeightRangeServiceability({
+    onSuccess: (data) => {
+      console.log(data);
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+
+  // Payment Hooks
+  const { mutateAsync: createPaymentSession } = useCreatePaymentSession();
+
   // Calculate Price
   const { mutate: calculatePriceOfOrder, isPending: calculatePricePending } =
     useCalculatePriceOfOrder({
       onSuccess: (data) => {
         console.log("Calculate Price Data:", data);
-        setSummaryData(data);
+        if (Array.isArray(data)) {
+          setCarrierOptions(data);
+        }
+        // setSummaryData(data); // Don't set summary data here, wait for selection
         setCurrent((prev) => prev + 1);
       },
       onError: (error) => {
@@ -140,22 +175,6 @@ const NewOrderForm = () => {
       },
       onError: (error) => {
         message.error(error.message || "Serviceability check failed");
-      },
-    });
-
-  const { mutate: recommendationMutate, isPending: isRecommendationPending } =
-    useGetDomesticRecommendation({
-      onSuccess: (data) => {
-        const isServiceable =
-          data?.recommendations?.result?.[0]?.preference_array?.length > 0;
-
-        if (!isServiceable) {
-          message.error("Service not available for this shipment");
-          return;
-        }
-
-        setRecommendationData(data);
-        setCurrent((prev) => prev + 1);
       },
     });
 
@@ -215,47 +234,86 @@ const NewOrderForm = () => {
         serviceabilityCheck(payload);
       } else if (current === 1) {
         const values = await form.validateFields();
-        const payload = {
-          pickup_pincode: totalData.pickup_info.pickup_pincode,
-          drop_pincode: totalData.drop_info.drop_pincode,
-          length: Number(values.shipment_details.length),
-          breadth: Number(values.shipment_details.breadth),
-          height: Number(values.shipment_details.height),
-          weight: Number(values.shipment_details.weight),
-          delivery_type: values.shipment_details.delivery_type,
-          order_type: "PREPAID",
+        const weightPayload = {
+          length: Number(values?.shipment_details?.length),
+          breadth: Number(values?.shipment_details?.breadth),
+          height: Number(values?.shipment_details?.height),
+          actual_weight: Number(values?.shipment_details?.weight),
         };
 
-        const validData = orderRecommendationSchema.parse(payload);
+        const weightResponse = await checkWeightRangeServiceability(
+          weightPayload
+        );
+        if (
+          weightResponse?.status === false ||
+          weightResponse?.data?.is_serviceable === false
+        ) {
+          Modal.error({
+            title: "Weight Serviceability Check Failed",
+            content:
+              weightResponse?.data?.reason ||
+              weightResponse?.message ||
+              "Package not serviceable",
+          });
+          return;
+        }
+        if (weightResponse?.data?.is_serviceable) {
+          setchargableWeight(weightResponse?.data?.chargeable_weight_grams);
+        }
+        // const payload = {
+        //   pickup_pincode: totalData.pickup_info.pickup_pincode,
+        //   drop_pincode: totalData.drop_info.drop_pincode,
+        //   length: Number(values.shipment_details.length),
+        //   breadth: Number(values.shipment_details.breadth),
+        //   height: Number(values.shipment_details.height),
+        //   weight: Number(weightResponse?.data?.chargeable_weight_grams),
+        //   delivery_type: values.shipment_details.delivery_type,
+        //   order_type: "PREPAID",
+        // };
+
+        // const validData = orderRecommendationSchema.parse(payload);
 
         setTotalData((prev) => ({ ...prev, ...values }));
-        recommendationMutate(validData);
+        setCurrent((prev) => prev + 1);
+        // recommendationMutate(validData);
       } else if (current === 2) {
+        // Validation for Additional Details Step
         const values = await form.validateFields();
         const payload = {
           from_latitude: Number(totalData?.pickup_info?.pickup_lat),
           from_longitude: Number(totalData?.pickup_info?.pickup_long),
-          courier_partner: String(carrierPartnerData?.carrier_partner),
-          is_cod: totalData?.shipment_details?.is_cod,
-          insurance_opted: totalData?.shipment_details?.insurance_opted,
+          // courier_partner: String(carrierPartnerData?.carrier_partner),
+          // is_cod: totalData?.shipment_details?.is_cod,
+          // insurance_opted: totalData?.shipment_details?.insurance_opted,
           to_pincode: totalData?.drop_info?.drop_pincode,
           length: Number(totalData?.shipment_details?.length),
           breadth: Number(totalData?.shipment_details?.breadth),
           height: Number(totalData?.shipment_details?.height),
-          weight: Number(totalData?.shipment_details?.weight),
+          weight: Number(chargeableWeight),
+          cp_id: carrierPartnerData?.carrier_partner,
+          account_code: carrierPartnerData?.account_code,
         };
-        // console.log("values:", values);
         const validData = calculatePriceOfOrderSchema.parse(payload);
         calculatePriceOfOrder(validData);
-        setTotalData((prev) => {
-          return { ...prev, ...values };
-        });
+        setTotalData((prev) => ({ ...prev, ...values }));
+      } else if (current === 3) {
+        if (!carrierPartnerData || !carrierPartnerData.account_code) {
+          message.error("Please select a carrier partner");
+          return;
+        }
+        const values = await form.validateFields();
+        setTotalData((prev) => ({ ...prev, ...values }));
+        setCurrent(current + 1);
       } else {
         setCurrent(current + 1);
       }
     } catch (error) {
       console.error("Step validation failed", error);
-      toast.error(error.message);
+      if (error.name === "ZodError") {
+        applyZodErrorsToForm(form, error);
+      } else {
+        toast.error(error?.message);
+      }
     }
   };
 
@@ -273,24 +331,34 @@ const NewOrderForm = () => {
       title: "Select Addresses",
       icon: <EnvironmentOutlined />,
       content: (
-        <>
-          {pickup_type === "warehouse" && (
-            <Form.Item
-              rules={[{ required: true, message: "Please select a warehouse" }]}
-              name="warehouse_id"
-              label="Warehouse"
-              className="mb-2!"
-              wrapperCol={{ span: 8 }}
-            >
+        <div className="flex flex-col gap-4">
+          <div className="grid grid-cols-2 gap-4">
+            <PaginatedSelect
+              fetchUrl="/v1/transit-warehouse/warehouses"
+              valueField="id"
+              labelField="name"
+              queryKey="warehouses"
+              placeholder="Select Warehouse"
+              value={warehouse}
+              onChange={(value) => {
+                setWarehouse(value);
+              }}
+            />
+            {warehouse && (
               <PaginatedSelect
-                fetchUrl="v1/transit-warehouse/warehouses"
+                fetchUrl={`/v1/transit-warehouse/warehouses/${warehouse}/locations`}
+                fetchUrlItem={`/v1/transit-warehouse/warehouses/locations`}
                 valueField="id"
-                labelField="name"
-                onChange={(value) => console.log(value)}
-                placeholder="Select Warehouse"
+                labelField="location_name"
+                queryKey="locations"
+                placeholder="Select Location"
+                value={warehouseLocation}
+                onChange={(value) => {
+                  setWarehouseLocation(value);
+                }}
               />
-            </Form.Item>
-          )}
+            )}
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Pickup Address Card */}
             <Card
@@ -365,7 +433,7 @@ const NewOrderForm = () => {
               title="Select Delivery Address"
             />
           </div>
-        </>
+        </div>
       ),
     },
     {
@@ -373,6 +441,63 @@ const NewOrderForm = () => {
       icon: <CodeSandboxOutlined />,
       content: (
         <ResponsiveCard title="Shipment Details">
+          <Row gutter={24}>
+            {/* Category Selection - Visual */}
+            <Col span={24}>
+              <Form.Item label="Select Category">
+                <Form.Item
+                  name={["shipment_details", "category_id"]}
+                  noStyle
+                  rules={[
+                    { required: true, message: "Please select a category" },
+                  ]}
+                >
+                  <VisualSelector
+                    fetchUrl="/v1/transit-warehouse/catalog/categories"
+                    queryKey="categories_visual"
+                  />
+                </Form.Item>
+              </Form.Item>
+            </Col>
+
+            {/* Sub Category Selection - Visual */}
+            <Col span={24}>
+              <Form.Item label="Select Sub-Category">
+                <Form.Item
+                  name={["shipment_details", "sub_category_id"]}
+                  noStyle
+                >
+                  <VisualSelector
+                    fetchUrl="/v1/transit-warehouse/catalog/subcategories"
+                    queryKey="sub_categories_visual"
+                    params={{ category_id }}
+                    disabled={!category_id}
+                    dataPoint={"sub_categories"}
+                  />
+                </Form.Item>
+              </Form.Item>
+            </Col>
+
+            {/* Item Selection - Visual */}
+            <Col span={24}>
+              <Form.Item label="Select Item">
+                <Form.Item
+                  name={["shipment_details", "item_ids"]}
+                  noStyle
+                  rules={[{ required: true, message: "Please select an item" }]}
+                >
+                  <VisualSelector
+                    fetchUrl="/v1/transit-warehouse/catalog/items"
+                    queryKey="items_visual"
+                    params={itemsQueryParams}
+                    disabled={!category_id}
+                    dataPoint={"items"}
+                    multiple={true}
+                  />
+                </Form.Item>
+              </Form.Item>
+            </Col>
+          </Row>
           <Row gutter={[24]} align="top">
             {/* SECTION 1: Configuration */}
             <Col xs={24} md={12} lg={6}>
@@ -521,62 +646,169 @@ const NewOrderForm = () => {
                 </Row>
               </div>
             </Col>
+            {/* <Col xs={24} sm={12}>
+              <Form.Item
+                name={["shipment_details", "invoice_value"]}
+                label={"Invoice Value"}
+                className="mb-0"
+              >
+                <InputNumber
+                  className="w-full!"
+                  placeholder="Enter Invoice Value"
+                  style={{
+                    maxWidth: "200px",
+                  }}
+                />
+              </Form.Item>
+            </Col> */}
           </Row>
+        </ResponsiveCard>
+      ),
+    },
+    // Additional Details Step
+    {
+      title: "Additional Details",
+      icon: <FileTextOutlined />,
+      content: (
+        <ResponsiveCard
+          title={
+            <span className="flex items-center gap-2">
+              <SafetyCertificateOutlined className="text-blue-500" /> Additional
+              Details
+            </span>
+          }
+          size="small" // Compact Antd Card padding
+          className="shadow-sm"
+        >
+          {/* 1. COMPACT SUMMARY STRIP */}
+          <div className="mb-4 rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
+            <div className="mb-3 flex items-center gap-2 text-sm font-semibold text-gray-700">
+              <ShoppingOutlined className="text-blue-600" />
+              <span>Shipment Dimensions</span>
+            </div>
 
-          <Row gutter={24}>
-            {/* Category Selection - Visual */}
-            <Col span={24}>
-              <Form.Item label="Select Category">
-                <Form.Item
-                  name={["shipment_details", "category_id"]}
-                  noStyle
-                  rules={[
-                    { required: true, message: "Please select a category" },
-                  ]}
+            <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+              {[
+                {
+                  label: "Length",
+                  value: totalData?.shipment_details?.length,
+                  unit: "cm",
+                },
+                {
+                  label: "Breadth",
+                  value: totalData?.shipment_details?.breadth,
+                  unit: "cm",
+                },
+                {
+                  label: "Height",
+                  value: totalData?.shipment_details?.height,
+                  unit: "cm",
+                },
+                {
+                  label: "Weight",
+                  value: totalData?.shipment_details?.weight,
+                  unit: "gm",
+                },
+              ].map((item) => (
+                <div
+                  key={item.label}
+                  className="flex items-center gap-3 rounded-lg bg-gray-50 p-3"
                 >
-                  <VisualSelector
-                    fetchUrl="/v1/transit-warehouse/catalog/categories"
-                    queryKey="categories_visual"
-                  />
-                </Form.Item>
+                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100">
+                    <ShoppingOutlined className="text-blue-600 text-sm" />
+                  </div>
+
+                  <div className="flex flex-col">
+                    <span className="text-xs uppercase text-gray-500">
+                      {item.label}
+                    </span>
+                    <span className="font-semibold text-gray-800">
+                      {item.value ?? "--"} {item.unit}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* 2. FORM INPUTS */}
+          <Row gutter={[20, 0]}>
+            {/* Left Col: Special Instructions */}
+            <Col xs={24} md={14}>
+              <Form.Item
+                name={["additional", "special_instructions"]}
+                label={
+                  <span className="text-xs font-semibold text-gray-500 uppercase">
+                    Instructions
+                  </span>
+                }
+                className="mb-2 md:mb-0"
+              >
+                <Input.TextArea
+                  prefix={<MessageOutlined className="text-gray-300 mr-1" />}
+                  placeholder="e.g. Ring doorbell, Leave at gate..."
+                  autoSize={{ minRows: 3, maxRows: 3 }}
+                  className="rounded-md text-sm"
+                />
               </Form.Item>
             </Col>
 
-            {/* Sub Category Selection - Visual */}
-            <Col span={24}>
-              <Form.Item label="Select Sub-Category">
-                <Form.Item
-                  name={["shipment_details", "sub_category_id"]}
-                  noStyle
-                >
-                  <VisualSelector
-                    fetchUrl="/v1/transit-warehouse/catalog/subcategories"
-                    queryKey="sub_categories_visual"
-                    params={{ category_id }}
-                    disabled={!category_id}
-                    dataPoint={"sub_categories"}
-                  />
-                </Form.Item>
-              </Form.Item>
+            {/* Right Col: Toggles (Stacked densely) */}
+            <Col xs={24} md={10}>
+              <div className="bg-white p-3 rounded-lg border border-gray-100 h-full flex flex-col justify-center gap-2">
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-gray-600 flex items-center gap-2">
+                    <MessageOutlined className="text-green-500" /> WhatsApp
+                    Updates
+                  </span>
+                  <Form.Item
+                    name={["additional", "enable_whatsapp"]}
+                    valuePropName="checked"
+                    initialValue={true}
+                    noStyle
+                  >
+                    <Switch size="small" />
+                  </Form.Item>
+                </div>
+
+                {/* <div className="flex justify-between items-center">
+                  <Tooltip title="Courier will not pick up from origin">
+                    <span className="text-sm text-gray-600 flex items-center gap-2 cursor-help border-b border-dashed border-gray-300">
+                      <StopOutlined className="text-orange-500" /> Skip 1st Mile
+                    </span>
+                  </Tooltip>
+                  <Form.Item
+                    name={["additional", "skip_first_mile_pickup"]}
+                    valuePropName="checked"
+                    noStyle
+                  >
+                    <Switch size="small" />
+                  </Form.Item>
+                </div> */}
+
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-gray-600 flex items-center gap-2">
+                    <SafetyCertificateOutlined className="text-red-500" />{" "}
+                    Fragile Item
+                  </span>
+                  <Form.Item
+                    name={["additional", "is_fragile"]}
+                    valuePropName="checked"
+                    noStyle
+                  >
+                    <Switch size="small" className="bg-gray-200" />
+                  </Form.Item>
+                </div>
+              </div>
             </Col>
 
-            {/* Item Selection - Visual */}
+            {/* Bottom: Camera */}
             <Col span={24}>
-              <Form.Item label="Select Item">
-                <Form.Item
-                  name={["shipment_details", "item_ids"]}
-                  noStyle
-                  rules={[{ required: true, message: "Please select an item" }]}
-                >
-                  <VisualSelector
-                    fetchUrl="/v1/transit-warehouse/catalog/items"
-                    queryKey="items_visual"
-                    params={itemsQueryParams}
-                    disabled={!category_id}
-                    dataPoint={"items"}
-                    multiple={true}
-                  />
-                </Form.Item>
+              <Divider dashed className="my-3 text-xs text-gray-400">
+                <CameraOutlined /> Parcel Proof
+              </Divider>
+              <Form.Item name={["additional", "parcel_images"]} noStyle>
+                <WebcamCapture maxCount={2} />
               </Form.Item>
             </Col>
           </Row>
@@ -589,20 +821,31 @@ const NewOrderForm = () => {
       icon: <FaShippingFast />,
       content: (
         <CourierPartnerSelector
-          data={recommendationData}
+          data={carrierOptions}
           value={carrierPartnerData?.account_code}
-          onChange={(accountCode) => {
-            const preferenceArray =
-              recommendationData?.recommendations?.result?.[0]
-                ?.preference_array || [];
+          onChange={(selectedItem) => {
+            if (!selectedItem) return;
+            const { courier_details } = selectedItem;
 
-            const selected = preferenceArray.find(
-              (item) => item.account_code === accountCode
-            );
             setCarrierPartnerData({
-              carrier_partner: selected?.cp_id,
-              account_code: selected?.account_code,
+              carrier_partner: courier_details?.cp_id, // Assuming cp_id is needed for backend
+              account_code: courier_details?.account_code,
+              ...courier_details,
             });
+            // Update summary data for the final step
+            // SummaryStep expects an array with [0] containing keys { courier_service, price_summary }
+            // The selectedItem already matches this structure.
+            setSummaryData([selectedItem]);
+
+            // Also update form values?
+            setTotalData((prev) => ({
+              ...prev,
+              shipment_details: {
+                ...prev.shipment_details,
+                courier_partner: courier_details?.cp_id,
+                account_code: courier_details?.account_code,
+              },
+            }));
           }}
         />
       ),
@@ -611,44 +854,121 @@ const NewOrderForm = () => {
     {
       title: "Summary",
       icon: <RiBillLine />,
-      content: <SummaryStep summaryData={summaryData} />,
+      content: (
+        <SummaryStep summaryData={summaryData} shipmentData={totalData} />
+      ),
     },
   ];
+  // Extract Payment Logic into a reusable function
+  // Helper function to handle Payment Session Creation + Cashfree Checkout
+  const initiatePayment = async (
+    orderId,
+    orderNumber,
+    amount,
+    customerData
+  ) => {
+    try {
+      const payload = {
+        order_id: orderId,
+        order_amount: amount,
+        customer_details: {
+          customer_id: customerData.phone, // Ensure this maps correctly
+          customer_phone: customerData.phone,
+          customer_name: customerData.name,
+          customer_email: customerData.email,
+        },
+      };
+      const validatedData = createPaymentOrderSchema.parse(payload);
+      // 1. Create Payment Session (Backend Call)
+      const sessionData = await createPaymentSession(validatedData);
 
-  const { mutate: createOrder, isPending } = useCreateComprehensiveOrder({
-    onSuccess: (data) => {
-      console.log("data", data);
+      if (!sessionData?.payment_order?.payment_session_id) {
+        throw new Error("Failed to generate payment session ID");
+      }
 
+      if (!sessionData?.payment_order?.cf_order_id) {
+        throw new Error("Failed to generate Cashfree Order ID");
+      }
+
+      // 2. Trigger Cashfree SDK (Frontend Modal)
       const checkoutOptions = {
-        paymentSessionId: paymentSessionId,
+        paymentSessionId: sessionData?.payment_order?.payment_session_id,
         redirectTarget: "_modal",
       };
 
       cashfree.checkout(checkoutOptions).then((result) => {
+        // A. User Closed Popup or Failed
         if (result.error) {
-          message.error(result.error.message || "Payment failed");
+          console.warn("Payment failed or dismissed:", result.error);
+          message.error("Payment failed or cancelled. Please retry.");
+          // We DO NOT reset createdOrderId here, so the next click reuses this order.
         }
+
+        // B. Redirect (Not used in modal mode usually, but safety check)
         if (result.redirect) {
-          console.log("Payment Redirect");
+          console.log("Payment Redirecting...");
         }
+
+        // C. Success (Payment Completed)
         if (result.paymentDetails) {
-          verifyPayment(CashFreeOfferId)
+          console.log("Payment Completed at Gateway, Verifying...");
+
+          verifyPayment(sessionData?.payment_order?.cf_order_id)
             .then(() => {
-              // message.success("Payment successful!");
-              // message.success("Order created successfully!");
-              // navigate({ to: "/orders" });
               setSuccessDetails({
-                transactionId: CashFreeOfferId,
-                orderId: data?.order_id || data?.id,
-                orderNumber: data?.order_number,
+                transactionId: sessionData?.payment_order?.cf_order_id,
+                orderId: orderId,
+                orderNumber: orderNumber,
               });
               setIsSuccessModalOpen(true);
+
+              // Clear the "createdOrderId" so if they start a NEW form, it creates a NEW order
+              // setCreatedOrderId(null);
+              // setCreatedOrderNumber(null);
             })
-            .catch(() => {
-              message.error("Payment verification failed");
+            .catch((err) => {
+              console.error("Verification Error:", err);
+              message.error(
+                "Payment successful but verification failed. Contact support."
+              );
             });
         }
       });
+    } catch (error) {
+      console.error("Initiate Payment Error:", error);
+      if (error.name === "ZodError") {
+        applyZodErrorsToForm(form, error);
+      } else {
+        message.error(error.message || "Failed to initiate payment");
+      }
+    }
+  };
+
+  const { mutate: createOrder, isPending } = useCreateComprehensiveOrder({
+    onSuccess: async (data) => {
+      try {
+        const orderId = data?.order?.id;
+        const orderNumber = data?.order?.order_number;
+        // setCreatedOrderId(orderId);
+        // setCreatedOrderNumber(newOrderNumber);
+        const customerInfo = {
+          name: totalData.pickup_info.pickup_name,
+          phone: totalData.pickup_info.pickup_phone,
+          email: totalData.pickup_info.pickup_email,
+        };
+
+        await initiatePayment(
+          orderId,
+          orderNumber,
+          summaryData?.[0]?.price_summary?.final_total,
+          customerInfo
+        );
+      } catch (error) {
+        console.error(error);
+        message.error(
+          "Order created, but payment initialization failed. Please try paying from the Orders page."
+        );
+      }
     },
     onError: (error) => {
       console.error("Order creation failed:", error);
@@ -658,22 +978,6 @@ const NewOrderForm = () => {
 
   const onFinish = async () => {
     try {
-      const sessionData = await createPaymentSession({
-        order_amount: summaryData.total_charge,
-        customer_details: {
-          customer_id: totalData.pickup_info.pickup_phone,
-          customer_phone: totalData.pickup_info.pickup_phone,
-          customer_name: totalData.pickup_info.pickup_name,
-          customer_email: totalData.pickup_info.pickup_email,
-        },
-      });
-      console.log("Session Data:", sessionData);
-
-      if (!sessionData?.payment_order?.payment_session_id) {
-        throw new Error("Failed to create payment session");
-      }
-
-      setPaymentSessionId(sessionData?.payment_order?.payment_session_id);
       const removeNullValues = (obj) => {
         if (obj === null || typeof obj !== "object") {
           return obj;
@@ -699,11 +1003,6 @@ const NewOrderForm = () => {
       };
 
       const cleanedTotalData = removeNullValues(totalData);
-      setCashFreeOfferId(sessionData?.payment_order?.cf_order_id);
-      if (!sessionData?.payment_order?.cf_order_id) {
-        message.error("Payment session not initiated. Please try again.");
-        return;
-      }
 
       const payload = {
         ...cleanedTotalData,
@@ -711,7 +1010,6 @@ const NewOrderForm = () => {
           ...cleanedTotalData.pickup_info,
           pickup_lat: Number(cleanedTotalData.pickup_info.pickup_lat),
           pickup_long: Number(cleanedTotalData.pickup_info.pickup_long),
-          email: "abcd@gmail.com",
         },
         drop_info: {
           ...cleanedTotalData.drop_info,
@@ -721,50 +1019,136 @@ const NewOrderForm = () => {
         shipment_details: {
           ...cleanedTotalData.shipment_details,
           order_type: "PREPAID",
-          payment_id: sessionData?.payment_order?.cf_order_id,
-          invoice_value: summaryData.total_charge,
+          invoice_value: summaryData?.[0]?.price_summary?.final_total,
           invoice_date: dayjs().format("DD-MM-YYYY"),
-          cp_id: cleanedTotalData?.shipment_details?.courier_partner,
+          cp_id: String(cleanedTotalData?.shipment_details?.courier_partner),
           courier_partner: carrierPartnerData?.carrier_partner,
           account_code: carrierPartnerData?.account_code,
           category_id: cleanedTotalData?.shipment_details?.category_id,
           item_ids: cleanedTotalData?.shipment_details?.item_ids,
         },
+        // additional: {
+        //   ...cleanedTotalData.additional,
+        //   ...(pickup_type === "warehouse"
+        //     ? { skip_first_mile_pickup: true }
+        //     : {}),
+        // },
+        additional: {
+          ...cleanedTotalData.additional,
+          ...(pickup_type === "warehouse"
+            ? { skip_first_mile_pickup: true }
+            : {}),
+          warehouse_location_id: warehouseLocation,
+        },
       };
-      // 1. Validate data against schema (optional but recommended)
+
+      // const customerInfo = {
+      //   name: cleanedTotalData.pickup_info.pickup_name,
+      //   phone: cleanedTotalData.pickup_info.pickup_phone,
+      //   email: cleanedTotalData.pickup_info.pickup_email || "abcd@gmail.com",
+      // };
+
+      // await initiatePayment(
+      //   createdOrderId,
+      //   summaryData?.[0]?.price_summary?.final_total,
+      //   customerInfo
+      // );
       const validatedData = createOrderSchema.parse(payload);
-      // 2. Call API
       createOrder(validatedData);
+      // if (createdOrderId) {
+      //   const customerInfo = {
+      //     name: cleanedTotalData.pickup_info.pickup_name,
+      //     phone: cleanedTotalData.pickup_info.pickup_phone,
+      //     email: cleanedTotalData.pickup_info.pickup_email || "abcd@gmail.com",
+      //   };
+
+      //   await initiatePayment(
+      //     createdOrderId,
+      //     summaryData?.[0]?.price_summary?.final_total,
+      //     customerInfo
+      //   );
+      // } else {
+      //   const validatedData = createOrderSchema.parse(payload);
+      //   createOrder(validatedData);
+      // }
     } catch (error) {
       console.log("Error:", error);
 
       if (error.name === "ZodError") {
-        // Handle validation errors if using Zod manually here
-        message.error("Please check your inputs.");
+        applyZodErrorsToForm(form, error);
       } else {
         console.error("Submission error:", error);
       }
     }
   };
 
+  const PickupTypeSelector = ({ value, onChange }) => {
+    const options = [
+      {
+        value: "warehouse",
+        title: "Warehouse Drop-off",
+        icon: <ShopOutlined className="text-xl" />,
+      },
+      {
+        value: "home",
+        title: "Home Pickup",
+        icon: <HomeOutlined className="text-xl" />,
+      },
+    ];
+
+    return (
+      <Row gutter={[16, 16]} className="mb-6">
+        {options.map((option) => {
+          const isSelected = value === option.value;
+          return (
+            <Col
+              xs={24}
+              md={12}
+              style={{ maxWidth: "300px" }}
+              key={option.value}
+            >
+              <div
+                onClick={() => onChange(option.value)}
+                className={`
+                relative cursor-pointer rounded-lg border-2 p-2 transition-all duration-200
+                ${
+                  isSelected
+                    ? "border-blue-500 bg-blue-50 shadow-md"
+                    : "border-gray-200 bg-white hover:border-blue-300"
+                }
+              `}
+              >
+                {isSelected && (
+                  <div className="absolute top-2 right-2 text-blue-500">
+                    <CheckCircleFilled className="text-xl" />
+                  </div>
+                )}
+                <div
+                  className={`flex  gap-2 items-center text-center ${
+                    isSelected ? "text-blue-700" : "text-gray-600"
+                  }`}
+                >
+                  <div
+                    className={isSelected ? "text-blue-500" : "text-gray-400"}
+                  >
+                    {option.icon}
+                  </div>
+                  <div className="font-semibold text-[16px] mb-1">
+                    {option.title}
+                  </div>
+                </div>
+              </div>
+            </Col>
+          );
+        })}
+      </Row>
+    );
+  };
   return (
     <div className="w-full flex flex-col gap-3">
-      <Radio.Group
-        options={[
-          {
-            label: "Direct Carrier Partner (Warehouse Pickup)",
-            value: "warehouse",
-          },
-          {
-            label: "First Mile Order + Carrier Partner (Home Pickup)",
-            value: "home",
-          },
-        ]}
-        onChange={(e) => handleOrderTypeChange(e.target.value)}
+      <PickupTypeSelector
         value={pickup_type}
-        optionType="button"
-        buttonStyle="solid"
-        className="mb-2!"
+        onChange={handleOrderTypeChange}
       />
 
       <Steps
@@ -814,8 +1198,8 @@ const NewOrderForm = () => {
               onClick={next}
               loading={
                 serviceabilityPending ||
-                isRecommendationPending ||
-                calculatePricePending
+                calculatePricePending ||
+                isCheckWeightRangeServiceabilityPending
               }
             >
               Next
@@ -837,7 +1221,7 @@ const NewOrderForm = () => {
         <PaymentSuccessModal
           open={isSuccessModalOpen}
           onClose={() => setIsSuccessModalOpen(false)}
-          amount={summaryData?.total_charge}
+          amount={summaryData?.[0]?.price_summary?.final_total}
           transactionId={successDetails.transactionId}
           orderId={successDetails.orderId}
           orderNumber={successDetails.orderNumber}

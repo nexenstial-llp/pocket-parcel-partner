@@ -22,10 +22,6 @@ const VisualSelector = ({
   setSelectedData,
   multiple = false,
 }) => {
-  if (multiple) {
-    console.log("value", value);
-  }
-
   const { data, isLoading } = useQuery({
     queryKey: [queryKey, params],
     queryFn: async () => {

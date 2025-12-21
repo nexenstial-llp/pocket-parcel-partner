@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { useGetPresignedUrl } from "@/features/upload/upload.query";
+import { useGetDownloadUrl } from "@/features/upload/upload.query";
 import { cn } from "@/utils/classname.util";
 import { FileImageOutlined, LoadingOutlined } from "@ant-design/icons";
 import { Avatar, Image, Skeleton } from "antd";
@@ -8,19 +8,20 @@ import { useEffect, useState } from "react";
 /**
  * AWSImage - A powerful component to render images from AWS S3 using presigned URLs.
  *
- * @param {string} s3Key - The S3 key of the image.
- * @param {string} mode - Render mode: 'image' (default), 'avatar', 'cover'.
- * @param {boolean} preview - Enable click-to-zoom preview (only for 'image' mode).
- * @param {string} className - Custom CSS classes.
- * @param {number|string} width - Image width.
- * @param {number|string} height - Image height.
- * @param {string} alt - Alt text.
- * @param {object} fallback - Custom fallback element on error.
- * @param {string} shape - Avatar shape (only for 'avatar' mode).
- * @param {number|string} size - Avatar size (only for 'avatar' mode).
+ * @param {string} s3Key
+ * @param {string} mode - 'image' | 'avatar' | 'cover'
+ * @param {boolean} preview
+ * @param {string} className
+ * @param {number|string} width
+ * @param {number|string} height
+ * @param {string} alt
+ * @param {object} fallback
+ * @param {string} shape
+ * @param {number|string} size
  */
 const AWSImage = ({
   s3Key,
+  expiresIn = 3600,
   mode = "image",
   preview = true,
   className,
@@ -32,56 +33,75 @@ const AWSImage = ({
   size,
   ...props
 }) => {
-  const {
-    data: imageUrl,
-    isLoading,
-    isError,
-  } = useGetPresignedUrl({ s3Key, expiresIn: 3600 });
+  const [imageUrl, setImageUrl] = useState(null);
   const [hasError, setHasError] = useState(false);
+  const { mutate, isPending, isError } = useGetDownloadUrl({
+    onSuccess: (url) => {
+      setImageUrl(url);
+    },
+  });
 
+  // SAME behavior as before: refetch when s3Key changes
   useEffect(() => {
+    if (!s3Key) return;
+
     setHasError(false);
-  }, [s3Key]);
+    setImageUrl(null);
+    mutate({ s3_key: s3Key, expiresIn });
+  }, [s3Key, expiresIn, mutate]);
+
+  if (mode == "avatar" && !s3Key) {
+    return <Avatar shape={shape} size={size} />;
+  }
 
   if (!s3Key) return null;
 
-  // Loading State
-  if (isLoading) {
+  /* ---------------- Loading State ---------------- */
+  if (isPending) {
     if (mode === "avatar") {
       return <Skeleton.Avatar active shape={shape} size={size} />;
     }
+
     return (
       <div
         className={cn(
           "flex items-center justify-center bg-gray-50 rounded animate-pulse",
           className
         )}
-        style={{ width, height: height || "100%", minHeight: 60 }}
+        style={{
+          width: width || size,
+          height: height || "100%",
+          minHeight: size || 60,
+        }}
       >
         <LoadingOutlined className="text-gray-400 text-xl" />
       </div>
     );
   }
 
-  // Error State
+  /* ---------------- Error State ---------------- */
   if (isError || hasError || !imageUrl) {
     if (fallback) return fallback;
+
     return (
       <div
         className={cn(
           "flex items-center justify-center bg-gray-100 rounded text-gray-400 border border-gray-200",
           className
         )}
-        style={{ width, height: height || "100%", minHeight: 60 }}
+        style={{
+          width: width || size,
+          height: height || "100%",
+          minHeight: size || 60,
+        }}
       >
         <FileImageOutlined className="text-2xl" />
       </div>
     );
   }
 
-  // Render Modes
+  /* ---------------- Render Modes ---------------- */
   if (mode === "avatar") {
-    console.log("avatar");
     return (
       <Avatar
         src={imageUrl}
@@ -112,7 +132,7 @@ const AWSImage = ({
     );
   }
 
-  // Default: Ant Design Image
+  /* ---------------- Default Image ---------------- */
   return (
     <Image
       src={imageUrl}

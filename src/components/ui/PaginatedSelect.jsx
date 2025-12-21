@@ -14,6 +14,7 @@ const getNestedValue = (obj, path) => {
 const PaginatedSelect = ({
   placeholder = "Search items",
   fetchUrl = "/api/search",
+  fetchUrlItem,
   queryKey = "select-items",
   debounceTime = 400,
   pageSize = 20,
@@ -27,23 +28,45 @@ const PaginatedSelect = ({
   defaultParams = {},
   renderOption = null,
   disabled = false,
-  sort_by = "name",
-  sort_order = "asc",
+  sort_by,
+  sort_order,
   dropdownRender,
   dataPoint,
+  initialItems, // Array of full objects for initial values in multi-select
 }) => {
-  const [searchText, setSearchText] = useState("");
+  const [searchText, setSearchText] = useState();
   const [showSelect, setShowSelect] = useState(false);
   const [initialItemDetails, setInitialItemDetails] = useState(null);
+
+  const formatOptions = useCallback(
+    (items) => {
+      if (!items || !Array.isArray(items)) return [];
+      return items.map((item) => ({
+        label: renderOption
+          ? renderOption(item)
+          : getNestedValue(item, labelField),
+        value: getNestedValue(item, valueField),
+        data: item,
+      }));
+    },
+    [labelField, valueField, renderOption]
+  );
+
+  // Format initial items if provided
+  const initialOptions = useMemo(() => {
+    if (!initialItems || !Array.isArray(initialItems)) return [];
+    return formatOptions(initialItems);
+  }, [initialItems, formatOptions]);
+
   // Initialize with provided label if available
   useEffect(() => {
-    if (value && initialLabel && !initialItemDetails) {
+    if (value && initialLabel && !initialItemDetails && mode !== "multiple") {
       setInitialItemDetails({
         [valueField]: value,
         [labelField]: initialLabel,
       });
     }
-  }, [value, initialLabel, valueField, labelField, initialItemDetails]);
+  }, [value, initialLabel, valueField, labelField, initialItemDetails, mode]);
 
   // Fetch initial item details if we have a value but no details and no initialLabel
   const { data: itemDetailsData, isLoading: itemDetailsLoading } = useQuery({
@@ -52,7 +75,9 @@ const PaginatedSelect = ({
       // Only fetch if we have a value and need to show the details and don't have initialLabel
       if (!value || initialItemDetails) return null;
       try {
-        const response = await axiosInstance.get(`${fetchUrl}/${value}`);
+        const response = await axiosInstance.get(
+          `${fetchUrlItem || fetchUrl}/${value}`
+        );
         return response.data.data;
       } catch (error) {
         console.error("Failed to fetch item details:", error);
@@ -72,26 +97,12 @@ const PaginatedSelect = ({
     }
   }, [itemDetailsData]);
 
-  const formatOptions = useCallback(
-    (items) => {
-      if (!items || !Array.isArray(items)) return [];
-      return items.map((item) => ({
-        label: renderOption
-          ? renderOption(item)
-          : getNestedValue(item, labelField),
-        value: getNestedValue(item, valueField),
-        data: item,
-      }));
-    },
-    [labelField, valueField, renderOption]
-  );
-
   const fetchItems = useCallback(
     async ({ pageParam = 1 }) => {
       const params = {
         page: pageParam,
         limit: pageSize,
-        search: searchText || "",
+        search: searchText,
         sort_by,
         sort_order,
         ...defaultParams,
@@ -145,12 +156,27 @@ const PaginatedSelect = ({
       queryFn: fetchItems,
       getNextPageParam: (lastPage) => lastPage.nextPage,
       refetchOnWindowFocus: false,
+      staleTime: 60000, // keep previous data for 1 min to avoid flickering
     });
 
   const options = useMemo(() => {
-    if (!data?.pages) return [];
-    return data.pages.flatMap((page) => formatOptions(page.items));
-  }, [data?.pages, formatOptions]);
+    let fetchedOptions = [];
+    if (data?.pages) {
+      fetchedOptions = data.pages.flatMap((page) => formatOptions(page.items));
+    }
+
+    // Merge fetched options with initial options to ensure selected items always have labels
+    // We use a Map to avoid duplicates, prioritizing fetched options if they exist (might be more up to date)
+    const optionMap = new Map();
+
+    // Add initial options first
+    initialOptions.forEach((opt) => optionMap.set(opt.value, opt));
+
+    // Add/Overwrite with fetched options
+    fetchedOptions.forEach((opt) => optionMap.set(opt.value, opt));
+
+    return Array.from(optionMap.values());
+  }, [data?.pages, formatOptions, initialOptions]);
 
   const handleSearch = (text) => {
     debouncedSetSearchText(text);
@@ -177,13 +203,16 @@ const PaginatedSelect = ({
 
   const handleSelectChange = (newValue) => {
     onChange(newValue);
-    setShowSelect(!newValue);
-    if (!newValue) {
-      setInitialItemDetails(undefined);
+    // For single select, hide the dropdown after selection
+    if (mode !== "multiple") {
+      setShowSelect(!newValue);
+      if (!newValue) {
+        setInitialItemDetails(undefined);
+      }
     }
   };
 
-  // If we have a value selected but not showing the dropdown
+  // If we have a value selected but not showing the dropdown (Single select only)
   if (!showSelect && value && mode !== "multiple") {
     // Find display name from different sources
     let displayContent;
@@ -210,14 +239,16 @@ const PaginatedSelect = ({
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          padding: "2px 10px",
+          padding: "3px 10px",
           cursor: disabled ? "default" : "pointer",
           backgroundColor: "#f5f5f5",
           border: "1px solid #d9d9d9",
           borderRadius: "4px",
-          fontSize: "12px",
+          fontSize: "14px",
           width: "100%",
+          ...style,
         }}
+        onClick={() => !disabled && setShowSelect(true)}
       >
         <div
           style={{
@@ -258,7 +289,12 @@ const PaginatedSelect = ({
       notFoundContent={isLoading ? <Spin size="small" /> : "No data found"}
       allowClear
       disabled={disabled}
-      popupRender={dropdownRender}
+      dropdownRender={dropdownRender}
+      onBlur={() => {
+        if (mode !== "multiple" && value) {
+          setShowSelect(false);
+        }
+      }}
     />
   );
 };

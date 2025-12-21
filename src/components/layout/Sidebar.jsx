@@ -9,7 +9,6 @@ import POCKET_PARCEL_MOBILE from "../../assets/Pocket_Parcel_Mobile.png";
 import { AiTwotoneContainer } from "react-icons/ai";
 import { HiHome } from "react-icons/hi";
 import { TbBuildingWarehouse } from "react-icons/tb";
-import { IoSettingsOutline } from "react-icons/io5";
 import { BiCabinet } from "react-icons/bi";
 import { Drawer } from "antd";
 import SidebarMenu from "./SidebarMenu";
@@ -112,10 +111,10 @@ const sidebarData = [
         key: "/orders/create",
         label: <Link to="/orders/create">Create Order</Link>,
       },
-      {
-        key: "/orders/first-mile",
-        label: <Link to="/orders/first-mile">First Mile (QWQER)</Link>,
-      },
+      // {
+      //   key: "/orders/first-mile",
+      //   label: <Link to="/orders/first-mile">First Mile (QWQER)</Link>,
+      // },
       // {
       //   key: "/orders/returns",
       //   label: <Link to="/orders/returns">Returns</Link>,
@@ -160,6 +159,12 @@ const sidebarData = [
     key: "rack",
     icon: <BiCabinet />,
     label: <Link to="/rack">Rack</Link>,
+  },
+  // Address Management
+  {
+    key: "address-management",
+    icon: <TbBuildingWarehouse />,
+    label: <Link to="/address-management">Address Management</Link>,
   },
   // {
   //   key: "returns",
@@ -223,11 +228,11 @@ const sidebarData = [
   //     },
   //   ],
   // },
-  {
-    key: "settings",
-    icon: <IoSettingsOutline />,
-    label: <Link to="/settings/address-management">Settings</Link>,
-  },
+  // {
+  //   key: "settings",
+  //   icon: <IoSettingsOutline />,
+  //   label: <Link to="/settings/address-management">Settings</Link>,
+  // },
 ];
 
 const Sidebar = ({
