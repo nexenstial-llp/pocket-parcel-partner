@@ -34,7 +34,7 @@ export const removeUnderscores = (text) => {
 export const getStatusColor = (status) => {
   switch (status) {
     case "PENDING":
-      return "warning";
+      return "blue";
     case "IN_TRANSIT":
       return "orange";
     case "PAID":
