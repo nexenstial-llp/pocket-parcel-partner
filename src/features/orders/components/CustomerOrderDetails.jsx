@@ -1,16 +1,51 @@
 /* eslint-disable react/prop-types */
 import { getStatusColor, removeUnderscores } from "@/utils/typography.util";
-import { Card, Descriptions, Tag, Timeline } from "antd";
+import { Button, Card, Descriptions, Tag, Timeline } from "antd";
 import moment from "moment-timezone";
-
+import { useEditOrder } from "../orders.query";
+import { message } from "antd";
+import { EditOutlined } from "@ant-design/icons";
+import { useState } from "react";
+import EditAddressModal from "./EditAddressModal";
+const initialState = {
+  open: false,
+  type: null,
+};
 export default function CustomerOrderDetails({ order }) {
   const pickup = order?.pickup_address;
   const drop = order?.drop_address;
+  const [isModalVisible, setIsModalVisible] = useState(initialState);
 
+  // const customerOriginalPickupAddress = order?.customer_original_pickup_address;
   const latestStatus = order?.status_timeline;
+
+  const { mutate, isPending: isEditPending } = useEditOrder({
+    onSuccess: () => {
+      message.success("Order edited successfully");
+    },
+    onError: (error) => {
+      message.error(error?.response?.data?.message || "Failed to edit order");
+    },
+  });
+
+  const handleOk = (values) => {
+    mutate({ id: order?.id, data: values });
+    setIsModalVisible(initialState);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(initialState);
+  };
 
   return (
     <div className="flex flex-col gap-4">
+      <EditAddressModal
+        open={isModalVisible.open}
+        onOk={handleOk}
+        onCancel={handleCancel}
+        addressData={order}
+        // type={isModalVisible.type}
+      />
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* ORDER SUMMARY */}
         <Descriptions bordered column={1} size="small">
@@ -91,7 +126,25 @@ export default function CustomerOrderDetails({ order }) {
         </Card>
 
         {/* DELIVERY ADDRESS */}
-        <Card size="small" title="Delivery Address">
+        <Card
+          extra={
+            <Button
+              size="small"
+              type="primary"
+              icon={<EditOutlined />}
+              onClick={() =>
+                setIsModalVisible({
+                  type: "drop",
+                  open: true,
+                })
+              }
+            >
+              Edit
+            </Button>
+          }
+          size="small"
+          title="Delivery Address"
+        >
           <Descriptions bordered column={1} size="small">
             <Descriptions.Item label="Name">
               {drop?.drop_name}

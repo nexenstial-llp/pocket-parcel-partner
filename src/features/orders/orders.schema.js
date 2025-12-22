@@ -387,7 +387,7 @@ export const calculatePriceOfOrderSchema = z.object({
   cp_id: z.number().optional(),
   account_code: z.string().optional(),
   offer_code: z.string().optional(),
-  skip_first_mile_pickup: z.boolean().optional().default(false),
+  skip_first_mile_pickup: z.boolean().optional(),
 });
 
 export const orderRecommendationSchema = z.object({

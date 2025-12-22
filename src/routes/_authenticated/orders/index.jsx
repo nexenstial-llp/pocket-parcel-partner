@@ -4,7 +4,10 @@ import ErrorFallback from "@/components/ui/ErrorFallback";
 import ResponsiveTable from "@/components/ui/tables/ResponsiveTable";
 import UrlPagination from "@/components/ui/UrlPagination";
 import { useGetOrders } from "@/features/orders/orders.query";
-import { downloadWaybill } from "@/features/orders/orders.service";
+import {
+  downloadInvoice,
+  downloadWaybill,
+} from "@/features/orders/orders.service";
 import { usePdfHandler } from "@/hooks/usePdfHandler";
 import { getSerialNumber } from "@/utils/serialNumber.util";
 import { getStatusColor, removeUnderscores } from "@/utils/typography.util";
@@ -32,6 +35,17 @@ function RouteComponent() {
       print: true,
       fileName: `waybill-${id}.pdf`,
       successMessage: "Waybill processed successfully",
+    });
+  };
+
+  const handleInvoice = async (id) => {
+    const blob = await downloadInvoice(id);
+
+    processPdf({
+      blob,
+      print: true,
+      fileName: `invoice-${id}.pdf`,
+      successMessage: "Invoice processed successfully",
     });
   };
 
@@ -105,9 +119,14 @@ function RouteComponent() {
       key: "action",
       render: (_, record) => (
         <div className="flex gap-2">
-          <Button icon={<DownloadOutlined />} type="primary" size="small">
+          {/* <Button
+            onClick={() => handleInvoice(record.id)}
+            icon={<DownloadOutlined />}
+            type="primary"
+            size="small"
+          >
             Invoice
-          </Button>
+          </Button> */}
           <Button
             loading={isProcessing}
             onClick={() => handleWaybill(record.id)}
@@ -115,7 +134,7 @@ function RouteComponent() {
             type="primary"
             size="small"
           >
-            Waybill
+            Invoice
           </Button>
           <Link to={`/orders/${record.id}`}>View</Link>
         </div>

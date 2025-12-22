@@ -4,7 +4,10 @@ import ErrorFallback from "@/components/ui/ErrorFallback";
 import CancelComprehensiveOrderModal from "@/features/orders/components/CancelComprehensiveOrderModal";
 import CustomerOrderDetails from "@/features/orders/components/CustomerOrderDetails";
 import { useGetOrderById, usePackOrder } from "@/features/orders/orders.query";
-import { downloadInvoice } from "@/features/orders/orders.service";
+import {
+  downloadInvoice,
+  downloadWaybill,
+} from "@/features/orders/orders.service";
 import { usePdfHandler } from "@/hooks/usePdfHandler";
 
 import { DownloadOutlined } from "@ant-design/icons";
@@ -43,6 +46,18 @@ function RouteComponent() {
       download: true,
       fileName: `invoice-${id}.pdf`,
       successMessage: "Invoice processed successfully",
+    });
+  };
+
+  const handleWaybill = async () => {
+    const blob = await downloadWaybill(id);
+
+    processPdf({
+      blob,
+      print: true,
+      download: true,
+      fileName: `waybill-${id}.pdf`,
+      successMessage: "Waybill processed successfully",
     });
   };
 
@@ -90,7 +105,7 @@ function RouteComponent() {
                 Cancel Order
               </Button>
             )}
-            {data?.order?.lifecycle_status === "PACKED" && (
+            {/* {data?.order?.lifecycle_status === "PACKED" && (
               <Button
                 icon={<DownloadOutlined />}
                 type="primary"
@@ -99,7 +114,23 @@ function RouteComponent() {
               >
                 Print Invoice
               </Button>
-            )}
+            )} */}
+            {/* <Button
+              icon={<DownloadOutlined />}
+              type="primary"
+              onClick={handlePrint}
+              loading={isProcessing}
+            >
+              Print Invoice
+            </Button> */}
+            <Button
+              icon={<DownloadOutlined />}
+              type="primary"
+              onClick={handleWaybill}
+              loading={isProcessing}
+            >
+              Print Invoice
+            </Button>
           </div>
         }
       >

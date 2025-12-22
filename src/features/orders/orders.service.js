@@ -140,6 +140,15 @@ export const cancelOrder = async ({ id, cancellation_reason }) => {
   return response?.data?.data ?? null;
 };
 
+// Edit order
+export const editOrder = async ({ id, data }) => {
+  const response = await axiosInstance.patch(
+    `/v1/transit-warehouse/orders/${id}`,
+    data
+  );
+  return response?.data?.data ?? null;
+};
+
 // Download invoice
 export const downloadInvoice = async (id) => {
   const response = await axiosInstance.get(

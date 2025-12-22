@@ -7,6 +7,7 @@ import {
   createComprehensiveOrder,
   createQuickOrder,
   createReverseOrder,
+  editOrder,
   getAllQwqerOrders,
   getDomesticRecommendation,
   getOrderById,
@@ -169,6 +170,17 @@ export const useGetDomesticRecommendation = ({
 export const useCancelOrder = ({ onError, onSuccess, ...rest }) => {
   return useMutation({
     mutationFn: cancelOrder,
+    retry: false,
+    onSuccess,
+    onError,
+    ...rest,
+  });
+};
+
+// Edit Order
+export const useEditOrder = ({ onError, onSuccess, ...rest }) => {
+  return useMutation({
+    mutationFn: editOrder,
     retry: false,
     onSuccess,
     onError,
