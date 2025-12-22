@@ -56,9 +56,10 @@ export default function SummaryStep({
         cp_id: carrierPartnerData?.carrier_partner,
         account_code: carrierPartnerData?.account_code,
         offer_code: code,
-        ...(pickup_type === "WAREHOUSE" && {
-          skip_first_mile_pickup: true,
-        }),
+        // ...(pickup_type === "WAREHOUSE" && {
+        //   skip_first_mile_pickup: true,
+        // }),
+        skip_first_mile_pickup: pickup_type === "warehouse" ? true : false,
       };
       const validData = calculatePriceOfOrderSchema.parse(payload);
       calculatePriceOfOrder(validData);
@@ -82,9 +83,7 @@ export default function SummaryStep({
         cp_id: carrierPartnerData?.carrier_partner,
         offer_code: "",
         account_code: carrierPartnerData?.account_code,
-        ...(pickup_type === "WAREHOUSE" && {
-          skip_first_mile_pickup: true,
-        }),
+        skip_first_mile_pickup: pickup_type === "warehouse" ? true : false,
       };
       const validData = calculatePriceOfOrderSchema.parse(payload);
       calculatePriceOfOrder(validData);

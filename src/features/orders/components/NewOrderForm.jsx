@@ -298,7 +298,7 @@ const NewOrderForm = () => {
           breadth: Number(totalData?.shipment_details?.breadth),
           height: Number(totalData?.shipment_details?.height),
           weight: Number(chargeableWeight),
-          skip_first_mile_pickup: pickup_type === "WAREHOUSE" ? true : false,
+          skip_first_mile_pickup: pickup_type === "warehouse" ? true : false,
 
           // cp_id: carrierPartnerData?.carrier_partner,
           // account_code: carrierPartnerData?.account_code,
