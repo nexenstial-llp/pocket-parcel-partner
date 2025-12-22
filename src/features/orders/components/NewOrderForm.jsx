@@ -115,6 +115,7 @@ const NewOrderForm = () => {
     orderNumber: null,
   });
   const [chargeableWeight, setchargableWeight] = useState(null);
+  const [offerCode, setOfferCode] = useState(null);
 
   useEffect(() => {
     const initSdk = async () => {
@@ -293,6 +294,10 @@ const NewOrderForm = () => {
           breadth: Number(totalData?.shipment_details?.breadth),
           height: Number(totalData?.shipment_details?.height),
           weight: Number(chargeableWeight),
+          ...(pickup_type === "WAREHOUSE" && {
+            skip_first_mile_pickup: true,
+          }),
+
           // cp_id: carrierPartnerData?.carrier_partner,
           // account_code: carrierPartnerData?.account_code,
         };
@@ -329,6 +334,36 @@ const NewOrderForm = () => {
     }${addr.city}, ${addr.state} - ${addr.pincode}`;
   };
 
+  const handleOfferApplied = (data, code) => {
+    // data is the array of courier services with updated prices
+    if (Array.isArray(data)) {
+      // Find the currently selected courier partner in the new data
+      const currentCpId =
+        carrierPartnerData?.courier_details?.cp_id ||
+        carrierPartnerData?.carrier_partner;
+      const updatedCourier = data.find(
+        (item) =>
+          item?.courier_service?.cp_id === currentCpId ||
+          item?.courier_details?.cp_id === currentCpId
+      );
+
+      if (updatedCourier) {
+        setSummaryData([updatedCourier]);
+        setOfferCode(code);
+        if (code) {
+          message.success("Offer applied successfully!");
+        } else {
+          message.success("Offer removed successfully!");
+        }
+      } else {
+        // Fallback if for some reason the courier isn't found
+        message.warning(
+          "Offer applied, but pricing for selected courier not found. Please re-select courier if needed."
+        );
+      }
+    }
+  };
+
   const steps = [
     {
       title: "Select Addresses",
@@ -337,30 +372,34 @@ const NewOrderForm = () => {
         <div className="flex flex-col gap-4">
           {pickup_type === "warehouse" && (
             <div className="grid grid-cols-2 gap-4">
-              <PaginatedSelect
-                fetchUrl="/v1/transit-warehouse/warehouses"
-                valueField="id"
-                labelField="name"
-                queryKey="warehouses"
-                placeholder="Select Warehouse"
-                value={warehouse}
-                onChange={(value) => {
-                  setWarehouse(value);
-                }}
-              />
-              {warehouse && (
+              <Form.Item name="warehouse" label="Warehouse">
                 <PaginatedSelect
-                  fetchUrl={`/v1/transit-warehouse/warehouses/${warehouse}/locations`}
-                  fetchUrlItem={`/v1/transit-warehouse/warehouses/locations`}
+                  fetchUrl="/v1/transit-warehouse/warehouses"
                   valueField="id"
-                  labelField="location_name"
-                  queryKey="locations"
-                  placeholder="Select Location"
-                  value={warehouseLocation}
+                  labelField="name"
+                  queryKey="warehouses"
+                  placeholder="Select Warehouse"
+                  value={warehouse}
                   onChange={(value) => {
-                    setWarehouseLocation(value);
+                    setWarehouse(value);
                   }}
                 />
+              </Form.Item>
+              {warehouse && (
+                <Form.Item name="warehouseLocation" label="Location">
+                  <PaginatedSelect
+                    fetchUrl={`/v1/transit-warehouse/warehouses/${warehouse}/locations`}
+                    fetchUrlItem={`/v1/transit-warehouse/warehouses/locations`}
+                    valueField="id"
+                    labelField="location_name"
+                    queryKey="locations"
+                    placeholder="Select Location"
+                    value={warehouseLocation}
+                    onChange={(value) => {
+                      setWarehouseLocation(value);
+                    }}
+                  />
+                </Form.Item>
               )}
             </div>
           )}
@@ -860,7 +899,14 @@ const NewOrderForm = () => {
       title: "Summary",
       icon: <RiBillLine />,
       content: (
-        <SummaryStep summaryData={summaryData} shipmentData={totalData} />
+        <SummaryStep
+          summaryData={summaryData}
+          shipmentData={totalData}
+          chargeableWeight={chargeableWeight}
+          carrierPartnerData={carrierPartnerData}
+          onOfferApplied={handleOfferApplied}
+          pickup_type={pickup_type}
+        />
       ),
     },
   ];
@@ -1034,6 +1080,7 @@ const NewOrderForm = () => {
           account_code: carrierPartnerData?.account_code,
           category_id: cleanedTotalData?.shipment_details?.category_id,
           item_ids: cleanedTotalData?.shipment_details?.item_ids,
+          offer_code: offerCode,
         },
         // additional: {
         //   ...cleanedTotalData.additional,
