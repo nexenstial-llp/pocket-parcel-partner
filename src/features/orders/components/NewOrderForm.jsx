@@ -119,8 +119,8 @@ const NewOrderForm = () => {
 
   useEffect(() => {
     const initSdk = async () => {
-      // const cf = await load({ mode: "sandbox" });
-      const cf = await load({ mode: "production" });
+      const cf = await load({ mode: "sandbox" });
+      // const cf = await load({ mode: "production" });
       setCashfree(cf);
     };
     initSdk();
