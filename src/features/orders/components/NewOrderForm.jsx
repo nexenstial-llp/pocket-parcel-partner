@@ -74,7 +74,6 @@ const NewOrderForm = () => {
   const [cashfree, setCashfree] = useState(null);
   const [warehouse, setWarehouse] = useState(null);
   const [warehouseLocation, setWarehouseLocation] = useState(null);
-  console.log({ warehouse, warehouseLocation });
   //   const navigate = useNavigate();
   // Watch fields for dependent selects
   const category_id = Form.useWatch(["shipment_details", "category_id"], form);
@@ -119,11 +118,18 @@ const NewOrderForm = () => {
 
   useEffect(() => {
     const initSdk = async () => {
+      // const cf = await load({ mode: "sandbox" });
       const cf = await load({ mode: "production" });
       setCashfree(cf);
     };
     initSdk();
   }, []);
+  useEffect(() => {
+    if (pickup_type === "home") {
+      setWarehouse(null);
+      setWarehouseLocation(null);
+    }
+  }, [pickup_type]);
   useEffect(() => {
     if (!warehouse) {
       setWarehouseLocation(null);
@@ -329,33 +335,35 @@ const NewOrderForm = () => {
       icon: <EnvironmentOutlined />,
       content: (
         <div className="flex flex-col gap-4">
-          <div className="grid grid-cols-2 gap-4">
-            <PaginatedSelect
-              fetchUrl="/v1/transit-warehouse/warehouses"
-              valueField="id"
-              labelField="name"
-              queryKey="warehouses"
-              placeholder="Select Warehouse"
-              value={warehouse}
-              onChange={(value) => {
-                setWarehouse(value);
-              }}
-            />
-            {warehouse && (
+          {pickup_type === "warehouse" && (
+            <div className="grid grid-cols-2 gap-4">
               <PaginatedSelect
-                fetchUrl={`/v1/transit-warehouse/warehouses/${warehouse}/locations`}
-                fetchUrlItem={`/v1/transit-warehouse/warehouses/locations`}
+                fetchUrl="/v1/transit-warehouse/warehouses"
                 valueField="id"
-                labelField="location_name"
-                queryKey="locations"
-                placeholder="Select Location"
-                value={warehouseLocation}
+                labelField="name"
+                queryKey="warehouses"
+                placeholder="Select Warehouse"
+                value={warehouse}
                 onChange={(value) => {
-                  setWarehouseLocation(value);
+                  setWarehouse(value);
                 }}
               />
-            )}
-          </div>
+              {warehouse && (
+                <PaginatedSelect
+                  fetchUrl={`/v1/transit-warehouse/warehouses/${warehouse}/locations`}
+                  fetchUrlItem={`/v1/transit-warehouse/warehouses/locations`}
+                  valueField="id"
+                  labelField="location_name"
+                  queryKey="locations"
+                  placeholder="Select Location"
+                  value={warehouseLocation}
+                  onChange={(value) => {
+                    setWarehouseLocation(value);
+                  }}
+                />
+              )}
+            </div>
+          )}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Pickup Address Card */}
             <Card
