@@ -282,16 +282,13 @@ const NewOrderForm = () => {
         const payload = {
           from_latitude: Number(totalData?.pickup_info?.pickup_lat),
           from_longitude: Number(totalData?.pickup_info?.pickup_long),
-          // courier_partner: String(carrierPartnerData?.carrier_partner),
-          // is_cod: totalData?.shipment_details?.is_cod,
-          // insurance_opted: totalData?.shipment_details?.insurance_opted,
           to_pincode: totalData?.drop_info?.drop_pincode,
           length: Number(totalData?.shipment_details?.length),
           breadth: Number(totalData?.shipment_details?.breadth),
           height: Number(totalData?.shipment_details?.height),
           weight: Number(chargeableWeight),
-          cp_id: carrierPartnerData?.carrier_partner,
-          account_code: carrierPartnerData?.account_code,
+          // cp_id: carrierPartnerData?.carrier_partner,
+          // account_code: carrierPartnerData?.account_code,
         };
         const validData = calculatePriceOfOrderSchema.parse(payload);
         calculatePriceOfOrder(validData);

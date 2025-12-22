@@ -43,7 +43,7 @@ export default function SummaryStep({ summaryData, shipmentData }) {
           </div>
 
           <div className="flex justify-between mb-1">
-            <span className="text-gray-600">Tax</span>
+            <span className="text-gray-600">Included Tax</span>
             <span>{money(price_summary?.tax_included)}</span>
           </div>
 

@@ -57,11 +57,11 @@ export default function CourierPartnerSelector({ data, value, onChange }) {
                   <p className="text-blue-600 font-bold text-sm">
                     ₹{price_summary.final_total}
                   </p>
-                  {courier_details?.shipping_charge && (
+                  {/* {courier_details?.shipping_charge && (
                     <span className="text-xs text-gray-400">
                       (Shipping: ₹{courier_details.shipping_charge})
                     </span>
-                  )}
+                  )} */}
                 </div>
               ) : (
                 <p className="text-gray-400 text-xs">(No rate available)</p>
