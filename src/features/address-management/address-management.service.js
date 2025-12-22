@@ -38,7 +38,7 @@ export const getCustomerAddress = async ({ page, limit, phone }) => {
 // Create address
 export const createAddress = async (data) => {
   const response = await axiosInstance.post(
-    "/v1/transit-warehouse/addresses/create",
+    "/v1/transit-warehouse/addresses/customer/create",
     data
   );
   return response?.data?.data ?? null;
