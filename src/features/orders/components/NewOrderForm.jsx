@@ -212,6 +212,10 @@ const NewOrderForm = () => {
             drop_pincode: dropAddress.pincode,
           },
         ];
+        if (pickup_type === "warehouse" && !warehouseLocation) {
+          message.error("Please select warehouse location.");
+          return;
+        }
 
         // Update totalData with address info mapping to expected schema
         setTotalData((prev) => ({
@@ -505,7 +509,7 @@ const NewOrderForm = () => {
             </Col>
 
             {/* Sub Category Selection - Visual */}
-            <Col span={24}>
+            {/* <Col span={24}>
               <Form.Item label="Select Sub-Category">
                 <Form.Item
                   name={["shipment_details", "sub_category_id"]}
@@ -520,7 +524,7 @@ const NewOrderForm = () => {
                   />
                 </Form.Item>
               </Form.Item>
-            </Col>
+            </Col> */}
 
             {/* Item Selection - Visual */}
             <Col span={24}>
