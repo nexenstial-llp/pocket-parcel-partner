@@ -27,22 +27,18 @@ function RouteComponent() {
   const { data, isLoading, isError, error } = useGetOrders({ page, limit });
   const { processPdf, isProcessing } = usePdfHandler();
 
-  const handleWaybill = async (id) => {
-    const blob = await downloadWaybill(id);
-
+  const handleWaybill = (id) => {
     processPdf({
-      blob,
+      pdfPromise: () => downloadWaybill(id),
       print: true,
       fileName: `waybill-${id}.pdf`,
       successMessage: "Waybill processed successfully",
     });
   };
 
-  const handleInvoice = async (id) => {
-    const blob = await downloadInvoice(id);
-
+  const handleInvoice = (id) => {
     processPdf({
-      blob,
+      pdfPromise: () => downloadInvoice(id),
       print: true,
       fileName: `invoice-${id}.pdf`,
       successMessage: "Invoice processed successfully",
@@ -133,6 +129,7 @@ function RouteComponent() {
             icon={<DownloadOutlined />}
             type="primary"
             size="small"
+            disabled={isProcessing}
           >
             Invoice
           </Button>

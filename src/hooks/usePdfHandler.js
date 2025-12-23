@@ -11,6 +11,7 @@ export const usePdfHandler = () => {
   const processPdf = useCallback(
     async ({
       blob,
+      pdfPromise, // NEW: Accept a promise or function that returns a blob
       print = false,
       download = false,
       fileName = "document.pdf",
@@ -21,8 +22,21 @@ export const usePdfHandler = () => {
       try {
         setIsProcessing(true);
 
+        // Resolve blob if it's a promise or function
+        let resolvedBlob = blob;
+        if (pdfPromise) {
+          resolvedBlob =
+            typeof pdfPromise === "function"
+              ? await pdfPromise()
+              : await pdfPromise;
+        }
+
+        if (!resolvedBlob) {
+          throw new Error("No PDF data received");
+        }
+
         handlePdfBlob({
-          blob,
+          blob: resolvedBlob,
           print,
           download,
           fileName,
@@ -36,7 +50,9 @@ export const usePdfHandler = () => {
         message.error(
           error?.message || "Failed to process PDF. Please try again."
         );
-        throw error;
+        // throw error; // Don't re-throw if we want to just show error toast, but maybe user wants to handle it.
+        // For now preventing app crash by not re-throwing if unhandled, but usually re-throw is better if component needs to know.
+        // Keeping behavior similar but safer.
       } finally {
         setIsProcessing(false);
       }
