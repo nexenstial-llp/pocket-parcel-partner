@@ -60,14 +60,14 @@ const AddressSelectorModal = ({ open, onCancel, onSelect, title }) => {
         width={{ xs: "80%", sm: "70%", md: "60%", xxl: "50%" }}
         centered
       >
-        <div className="flex gap-2 mb-4">
-          <Input
+        <div className="flex justify-end gap-2 mb-4">
+          {/* <Input
             size="small"
             prefix={<SearchOutlined />}
             placeholder="Search by phone..."
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
-          />
+          /> */}
           <Button
             size="small"
             type="primary"
@@ -97,20 +97,20 @@ const AddressSelectorModal = ({ open, onCancel, onSelect, title }) => {
             <List.Item
               className="hover:bg-slate-50 cursor-pointer transition-colors border border-gray-100 mb-2 rounded-lg p-3"
               actions={[
-                <Button
-                  onClick={() =>
-                    setIsEditModalData({
-                      open: true,
-                      id: item.id,
-                      type: "edit",
-                    })
-                  }
-                  type="default"
-                  size="small"
-                  key="edit"
-                >
-                  Edit
-                </Button>,
+                // <Button
+                //   onClick={() =>
+                //     setIsEditModalData({
+                //       open: true,
+                //       id: item.id,
+                //       type: "edit",
+                //     })
+                //   }
+                //   type="default"
+                //   size="small"
+                //   key="edit"
+                // >
+                //   Edit
+                // </Button>,
                 <Button
                   onClick={() => onSelect(item)}
                   type="primary"
