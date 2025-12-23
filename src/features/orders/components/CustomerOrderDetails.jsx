@@ -235,10 +235,10 @@ export default function CustomerOrderDetails({ order }) {
                   "Dimensions (cm)",
                   `${order.length} × ${order.breadth} × ${order.height}`,
                 ],
-                ["Weight", `${order.weight} kg`],
-                ["Volumetric Weight", order.volumetric_weight],
-                ["Chargeable Weight", order.chargeable_weight],
-                ["Declared Value", `₹${order.declared_value}`],
+                ["Weight", `${order.weight / 1000} kg`],
+                ["Volumetric Weight", `${order.volumetric_weight} kg`],
+                ["Chargeable Weight", `${order.chargeable_weight / 1000} kg`],
+                ["Declared Value", `₹ ${order.declared_value}`],
                 ["Created Via", removeUnderscores(order.created_via)],
               ].map(([label, value]) => (
                 <div key={label}>
@@ -265,8 +265,9 @@ export default function CustomerOrderDetails({ order }) {
                 No status updates yet.
               </Text>
             ) : (
-              <div className="flex justify-center">
+              <div className="flex justify-center min-w-[300px]">
                 <Timeline
+                  className="min-w-[300px]"
                   reverse
                   mode="left"
                   items={statusTimeline.map((status) => ({

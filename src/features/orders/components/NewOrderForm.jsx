@@ -180,7 +180,7 @@ const NewOrderForm = () => {
   /* -------------------- LOAD CASHFREE -------------------- */
   useEffect(() => {
     let mounted = true;
-    load({ mode: "sandbox" }).then((cf) => {
+    load({ mode: "production" }).then((cf) => {
       if (mounted) setCashfree(cf);
     });
     return () => {
@@ -845,7 +845,7 @@ const NewOrderForm = () => {
                 {
                   label: "Weight",
                   value: totalData?.shipment_details?.weight,
-                  unit: "gm",
+                  unit: weightUnit,
                 },
               ].map((item) => (
                 <div

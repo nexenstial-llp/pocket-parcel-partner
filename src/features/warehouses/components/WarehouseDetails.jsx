@@ -196,7 +196,7 @@ export default function WarehouseDetails({ data }) {
                       >
                         Edit
                       </Button>
-                      <Button
+                      {/* <Button
                         onClick={(e) => handleDeleteLocation(e, loc?.id)}
                         icon={<DeleteOutlined />}
                         type="primary"
@@ -204,7 +204,7 @@ export default function WarehouseDetails({ data }) {
                         size="small"
                       >
                         Delete
-                      </Button>
+                      </Button> */}
                     </div>
                   </div>
                 }

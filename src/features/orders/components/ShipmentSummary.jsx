@@ -10,7 +10,7 @@ const ShipmentSummary = ({ data }) => {
   if (!data) return null;
 
   const { pickup_info, drop_info, shipment_details } = data;
-
+console.log(shipment_details+"-----------------------------")
   return (
     <Card
       size="small"
@@ -52,6 +52,7 @@ const ShipmentSummary = ({ data }) => {
       </div>
 
       {/* PACKAGE INFO */}
+      
       <div className="flex justify-between items-center bg-gray-50 rounded-md px-3 py-2 text-sm">
         <div className="flex items-center gap-2 text-gray-600">
           <CodeSandboxOutlined />
