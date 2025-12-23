@@ -101,17 +101,17 @@ function RouteComponent() {
       },
       fixed: "right",
     },
-    {
-      title: "Life Cycle Status",
-      dataIndex: "lifecycle_status",
-      key: "lifecycle_status",
-      render: (text) => {
-        return (
-          <Tag color={getStatusColor(text)}>{removeUnderscores(text)}</Tag>
-        );
-      },
-      fixed: "right",
-    },
+    // {
+    //   title: "Life Cycle Status",
+    //   dataIndex: "lifecycle_status",
+    //   key: "lifecycle_status",
+    //   render: (text) => {
+    //     return (
+    //       <Tag color={getStatusColor(text)}>{removeUnderscores(text)}</Tag>
+    //     );
+    //   },
+    //   fixed: "right",
+    // },
 
     {
       title: "Action",

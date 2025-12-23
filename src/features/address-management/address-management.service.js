@@ -47,7 +47,7 @@ export const createAddress = async (data) => {
 // Update address
 export const updateAddress = async ({ id, data }) => {
   const response = await axiosInstance.put(
-    `/v1/transit-warehouse/addresses/${id}/update`,
+    `/v1/transit-warehouse/addresses/customer/${id}/update`,
     data
   );
   return response?.data?.data ?? null;
