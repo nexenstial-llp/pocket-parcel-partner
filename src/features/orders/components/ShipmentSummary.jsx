@@ -6,11 +6,22 @@ import {
   CodeSandboxOutlined,
 } from "@ant-design/icons";
 
-const ShipmentSummary = ({ data }) => {
+const ShipmentSummary = ({ data, weightUnit = "gm" }) => {
   if (!data) return null;
 
   const { pickup_info, drop_info, shipment_details } = data;
-console.log(shipment_details+"-----------------------------")
+
+  console.log('shipment_details:', shipment_details);
+
+  // Convert weight to kg based on the unit used during input
+  const getWeightInKg = (weight) => {
+    if (!weight) return "0.00";
+    // If weightUnit is kg, the weight is already in kg
+    // If weightUnit is gm, convert to kg by dividing by 1000
+    const weightInKg = weightUnit === "kg" ? weight : weight / 1000;
+    return weightInKg.toFixed(2);
+  };
+  
   return (
     <Card
       size="small"
@@ -64,7 +75,7 @@ console.log(shipment_details+"-----------------------------")
 
         <div className="flex items-center gap-3">
           <span className="font-medium">
-            {shipment_details?.weight / 1000} kg
+            {getWeightInKg(shipment_details?.weight)} kg
           </span>
           <Tag color="green" className="m-0">
             {shipment_details?.delivery_type}

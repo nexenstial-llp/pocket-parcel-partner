@@ -358,7 +358,18 @@ const NewOrderForm = () => {
 
         // const validData = orderRecommendationSchema.parse(payload);
 
-        setTotalData((prev) => ({ ...prev, ...values }));
+        // Update totalData with chargeable weight instead of actual weight
+        setTotalData((prev) => ({
+          ...prev,
+          ...values,
+          shipment_details: {
+            ...values.shipment_details,
+            // Store chargeable weight in the same unit as input for display consistency
+            weight: weightUnit === "kg" 
+              ? weightResponse?.data?.chargeable_weight_grams / 1000 
+              : weightResponse?.data?.chargeable_weight_grams,
+          },
+        }));
         setCurrent((prev) => prev + 1);
         // recommendationMutate(validData);
       } else if (current === 2) {
@@ -701,7 +712,17 @@ const NewOrderForm = () => {
                   </Form.Item>
                   <Select
                     value={dimensionUnit}
-                    onChange={setDimensionUnit}
+                    onChange={(value) => {
+                      setDimensionUnit(value);
+                      // Reset dimension fields when unit changes
+                      form.setFieldsValue({
+                        shipment_details: {
+                          length: undefined,
+                          breadth: undefined,
+                          height: undefined,
+                        },
+                      });
+                    }}
                     options={[
                       { label: "cm", value: "cm" },
                       { label: "inch", value: "inch" },
@@ -727,7 +748,15 @@ const NewOrderForm = () => {
                     <Select
                       defaultValue="gm"
                       value={weightUnit}
-                      onChange={setWeightUnit}
+                      onChange={(value) => {
+                        setWeightUnit(value);
+                        // Reset weight field when unit changes
+                        form.setFieldsValue({
+                          shipment_details: {
+                            weight: undefined,
+                          },
+                        });
+                      }}
                       className="select-after"
                       style={{ width: 80 }}
                       options={[
@@ -1001,6 +1030,7 @@ const NewOrderForm = () => {
           onOfferApplied={handleOfferApplied}
           pickup_type={pickup_type}
           form={form}
+          weightUnit={weightUnit}
         />
       ),
     },
@@ -1177,6 +1207,11 @@ const NewOrderForm = () => {
           category_id: cleanedTotalData?.shipment_details?.category_id,
           item_ids: cleanedTotalData?.shipment_details?.item_ids,
           offer_code: offerCode,
+          // Convert weight to grams for API (chargeable weight is already stored)
+          weight:
+            weightUnit === "kg"
+              ? Number(cleanedTotalData?.shipment_details?.weight) * 1000
+              : Number(cleanedTotalData?.shipment_details?.weight),
         },
         additional: {
           ...cleanedTotalData.additional,
@@ -1198,24 +1233,16 @@ const NewOrderForm = () => {
       //   summaryData?.[0]?.price_summary?.final_total,
       //   customerInfo
       // );
+      
+      console.log("=== ORDER PAYLOAD ===");
+      console.log("Weight Unit:", weightUnit);
+      console.log("Weight in totalData:", cleanedTotalData?.shipment_details?.weight);
+      console.log("Weight being sent to API (in grams):", payload.shipment_details.weight);
+      console.log("Chargeable Weight (grams):", chargeableWeight);
+      console.log("Full payload:", payload);
+      
       const validatedData = createOrderSchema.parse(payload);
       createOrder(validatedData);
-      // if (createdOrderId) {
-      //   const customerInfo = {
-      //     name: cleanedTotalData.pickup_info.pickup_name,
-      //     phone: cleanedTotalData.pickup_info.pickup_phone,
-      //     email: cleanedTotalData.pickup_info.pickup_email || "abcd@gmail.com",
-      //   };
-
-      //   await initiatePayment(
-      //     createdOrderId,
-      //     summaryData?.[0]?.price_summary?.final_total,
-      //     customerInfo
-      //   );
-      // } else {
-      //   const validatedData = createOrderSchema.parse(payload);
-      //   createOrder(validatedData);
-      // }
     } catch (error) {
       console.log("Error:", error);
 
