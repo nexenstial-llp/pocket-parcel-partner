@@ -8,7 +8,7 @@ const CancelComprehensiveOrderModal = ({ open, onCancel, id }) => {
   const queryClient = useQueryClient();
   const [form] = Form.useForm();
   // Cancel order
-  const { mutate: cancelOrder, isLoading: isCanceling } = useCancelOrder({
+  const { mutate: cancelOrder, isPending: isCanceling } = useCancelOrder({
     onSuccess: async () => {
       message.success("Order cancelled successfully");
       form.resetFields();

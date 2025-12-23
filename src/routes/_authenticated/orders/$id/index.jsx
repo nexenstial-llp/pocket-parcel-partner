@@ -27,7 +27,7 @@ function RouteComponent() {
   const [open, setOpen] = useState(false);
   const queryClient = useQueryClient();
   const { data, isLoading, isError, error } = useGetOrderById(id);
-  const { mutateAsync: packOrder, isLoading: isPacking } = usePackOrder({
+  const { mutateAsync: packOrder, isPending: isPacking } = usePackOrder({
     onSuccess: () => {
       message.success("Order packed successfully");
       queryClient.invalidateQueries({
@@ -50,12 +50,9 @@ function RouteComponent() {
   };
 
   const handleWaybill = async () => {
-    const blob = await downloadWaybill(id);
-
     processPdf({
-      blob,
+      pdfPromise: () => downloadWaybill(id),
       print: true,
-      download: true,
       fileName: `waybill-${id}.pdf`,
       successMessage: "Waybill processed successfully",
     });
@@ -128,6 +125,7 @@ function RouteComponent() {
               type="primary"
               onClick={handleWaybill}
               loading={isProcessing}
+              disabled={isProcessing}
             >
               Print Invoice
             </Button>

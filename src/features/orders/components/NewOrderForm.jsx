@@ -91,10 +91,7 @@ const NewOrderForm = () => {
   const height = Form.useWatch(["shipment_details", "height"], form) || 0;
   const weight = Form.useWatch(["shipment_details", "weight"], form) || 0;
 
-  const volumetricWeight = (length * breadth * height) / 5000 || 0;
-
-  const finalWeight =
-    weight / 1000 > volumetricWeight ? weight / 1000 : volumetricWeight || 0;
+  /* -------------------- WEIGHT CALC REMOVED -------------------- */
 
   const itemsQueryParams = sub_category_id
     ? { sub_category_id }
@@ -121,6 +118,31 @@ const NewOrderForm = () => {
   const [offerCode, setOfferCode] = useState(null);
   const [isDirty, setIsDirty] = useState(false);
 
+  // Unit State
+  const [dimensionUnit, setDimensionUnit] = useState("cm"); // 'cm' | 'inch'
+  const [weightUnit, setWeightUnit] = useState("gm"); // 'gm' | 'kg'
+
+  /* -------------------- WEIGHT CALC (CORRECT) -------------------- */
+  // Convert dimensions to cm for calculation
+  const lengthInCm =
+    dimensionUnit === "inch" ? (length || 0) * 2.54 : length || 0;
+  const breadthInCm =
+    dimensionUnit === "inch" ? (breadth || 0) * 2.54 : breadth || 0;
+  const heightInCm =
+    dimensionUnit === "inch" ? (height || 0) * 2.54 : height || 0;
+
+  // Convert weight to gm for comparison
+  const weightInGm = weightUnit === "kg" ? (weight || 0) * 1000 : weight || 0;
+
+  const volumetricWeight =
+    lengthInCm && breadthInCm && heightInCm
+      ? (lengthInCm * breadthInCm * heightInCm) / 5000
+      : 0; // This is in kg
+
+  // Final weight is max of actual weight (in kg) and volumetric weight (in kg)
+  // weightInGm / 1000 converts actual weight to kg
+  const finalWeight = Math.max(weightInGm / 1000, volumetricWeight);
+
   const blocker = useBlocker({
     shouldBlockFn: () => isDirty,
     withResolver: true,
@@ -146,13 +168,24 @@ const NewOrderForm = () => {
     }
   }, [blocker, blocker.status]);
 
+  // useEffect(() => {
+  //   const initSdk = async () => {
+  //     const cf = await load({ mode: "sandbox" });
+  //     // const cf = await load({ mode: "production" });
+  //     setCashfree(cf);
+  //   };
+  //   initSdk();
+  // }, []);
+
+  /* -------------------- LOAD CASHFREE -------------------- */
   useEffect(() => {
-    const initSdk = async () => {
-      // const cf = await load({ mode: "sandbox" });
-      const cf = await load({ mode: "production" });
-      setCashfree(cf);
+    let mounted = true;
+    load({ mode: "sandbox" }).then((cf) => {
+      if (mounted) setCashfree(cf);
+    });
+    return () => {
+      mounted = false;
     };
-    initSdk();
   }, []);
   useEffect(() => {
     if (pickup_type === "home") {
@@ -275,10 +308,22 @@ const NewOrderForm = () => {
       } else if (current === 1) {
         const values = await form.validateFields();
         const weightPayload = {
-          length: Number(values?.shipment_details?.length),
-          breadth: Number(values?.shipment_details?.breadth),
-          height: Number(values?.shipment_details?.height),
-          actual_weight: Number(values?.shipment_details?.weight),
+          length:
+            dimensionUnit === "inch"
+              ? Number(values?.shipment_details?.length) * 2.54
+              : Number(values?.shipment_details?.length),
+          breadth:
+            dimensionUnit === "inch"
+              ? Number(values?.shipment_details?.breadth) * 2.54
+              : Number(values?.shipment_details?.breadth),
+          height:
+            dimensionUnit === "inch"
+              ? Number(values?.shipment_details?.height) * 2.54
+              : Number(values?.shipment_details?.height),
+          actual_weight:
+            weightUnit === "kg"
+              ? Number(values?.shipment_details?.weight) * 1000
+              : Number(values?.shipment_details?.weight),
         };
 
         const weightResponse = await checkWeightRangeServiceability(
@@ -654,9 +699,16 @@ const NewOrderForm = () => {
                       className="w-full border-l-0"
                     />
                   </Form.Item>
-                  <Text className="bg-gray-100 px-2 text-nowrap rounded-r-sm text-xs">
-                    cm
-                  </Text>
+                  <Select
+                    value={dimensionUnit}
+                    onChange={setDimensionUnit}
+                    options={[
+                      { label: "cm", value: "cm" },
+                      { label: "inch", value: "inch" },
+                    ]}
+                    style={{ width: 80 }}
+                    size="middle"
+                  />
                 </Space.Compact>
               </Form.Item>
             </Col>
@@ -671,7 +723,19 @@ const NewOrderForm = () => {
                 <InputNumber
                   min={0}
                   controls={false}
-                  suffix="gm"
+                  addonAfter={
+                    <Select
+                      defaultValue="gm"
+                      value={weightUnit}
+                      onChange={setWeightUnit}
+                      className="select-after"
+                      style={{ width: 80 }}
+                      options={[
+                        { label: "gm", value: "gm" },
+                        { label: "kg", value: "kg" },
+                      ]}
+                    />
+                  }
                   className="w-full shadow-none"
                   placeholder="0"
                 />
@@ -740,7 +804,6 @@ const NewOrderForm = () => {
         </ResponsiveCard>
       ),
     },
-    // Additional Details Step
     {
       title: "Additional Details",
       icon: <FileTextOutlined />,
@@ -937,6 +1000,7 @@ const NewOrderForm = () => {
           carrierPartnerData={carrierPartnerData}
           onOfferApplied={handleOfferApplied}
           pickup_type={pickup_type}
+          form={form}
         />
       ),
     },
@@ -1114,20 +1178,12 @@ const NewOrderForm = () => {
           item_ids: cleanedTotalData?.shipment_details?.item_ids,
           offer_code: offerCode,
         },
-        // additional: {
-        //   ...cleanedTotalData.additional,
-        //   ...(pickup_type === "warehouse"
-        //     ? { skip_first_mile_pickup: true }
-        //     : {}),
-        // },
         additional: {
           ...cleanedTotalData.additional,
-          ...(pickup_type === "warehouse"
-            ? { skip_first_mile_pickup: true }
-            : {}),
           ...(warehouseLocation && {
             warehouse_location_id: warehouseLocation,
           }),
+          skip_first_mile_pickup: pickup_type === "warehouse" ? true : false,
         },
       };
 
