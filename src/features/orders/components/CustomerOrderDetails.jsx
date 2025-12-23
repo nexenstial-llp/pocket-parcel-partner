@@ -265,8 +265,9 @@ export default function CustomerOrderDetails({ order }) {
                 No status updates yet.
               </Text>
             ) : (
-              <div className="flex justify-center">
+              <div className="flex justify-center min-w-[300px]">
                 <Timeline
+                  className="min-w-[300px]"
                   reverse
                   mode="left"
                   items={statusTimeline.map((status) => ({
