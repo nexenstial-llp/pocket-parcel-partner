@@ -180,7 +180,7 @@ const NewOrderForm = () => {
   /* -------------------- LOAD CASHFREE -------------------- */
   useEffect(() => {
     let mounted = true;
-    load({ mode: "sandbox" }).then((cf) => {
+    load({ mode: "production" }).then((cf) => {
       if (mounted) setCashfree(cf);
     });
     return () => {
