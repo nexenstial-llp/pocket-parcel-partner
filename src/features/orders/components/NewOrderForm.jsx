@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useBlocker } from "@tanstack/react-router";
 import {
   Form,
   Steps,
@@ -57,9 +58,10 @@ import toast from "react-hot-toast";
 import { useCheckWeightRangeServiceability } from "@/features/weight-range/weight-range.query";
 import { applyZodErrorsToForm } from "@/utils/formError.util";
 import { useCreatePaymentSession } from "@/features/payment/payment.query";
-import { useEffect } from "react";
+
 import { createPaymentOrderSchema } from "@/features/payment/payment.schema";
 import PaginatedSelect from "@/components/ui/PaginatedSelect";
+import { useRef } from "react";
 const { Text } = Typography;
 
 const deliveryTypeOptions = [
@@ -74,7 +76,8 @@ const NewOrderForm = () => {
   const [cashfree, setCashfree] = useState(null);
   const [warehouse, setWarehouse] = useState(null);
   const [warehouseLocation, setWarehouseLocation] = useState(null);
-  //   const navigate = useNavigate();
+
+  const isPromptOpen = useRef(false);
   // Watch fields for dependent selects
   const category_id = Form.useWatch(["shipment_details", "category_id"], form);
   const sub_category_id = Form.useWatch(
@@ -83,10 +86,10 @@ const NewOrderForm = () => {
   );
 
   const [summaryData, setSummaryData] = useState({});
-  const length = Form.useWatch(["shipment_details", "length"], form);
-  const breadth = Form.useWatch(["shipment_details", "breadth"], form);
-  const height = Form.useWatch(["shipment_details", "height"], form);
-  const weight = Form.useWatch(["shipment_details", "weight"], form);
+  const length = Form.useWatch(["shipment_details", "length"], form) || 0;
+  const breadth = Form.useWatch(["shipment_details", "breadth"], form) || 0;
+  const height = Form.useWatch(["shipment_details", "height"], form) || 0;
+  const weight = Form.useWatch(["shipment_details", "weight"], form) || 0;
 
   const volumetricWeight = (length * breadth * height) / 5000 || 0;
 
@@ -116,6 +119,32 @@ const NewOrderForm = () => {
   });
   const [chargeableWeight, setchargableWeight] = useState(null);
   const [offerCode, setOfferCode] = useState(null);
+  const [isDirty, setIsDirty] = useState(false);
+
+  const blocker = useBlocker({
+    shouldBlockFn: () => isDirty,
+    withResolver: true,
+  });
+
+  useEffect(() => {
+    if (blocker.status === "blocked" && !isPromptOpen.current) {
+      isPromptOpen.current = true;
+      Modal.confirm({
+        title: "Unsaved Changes",
+        content: "You have unsaved changes. Are you sure you want to exit?",
+        okText: "Yes, Exit",
+        cancelText: "No, Stay",
+        onOk: () => {
+          isPromptOpen.current = false;
+          blocker.proceed();
+        },
+        onCancel: () => {
+          isPromptOpen.current = false;
+          blocker.reset();
+        },
+      });
+    }
+  }, [blocker, blocker.status]);
 
   useEffect(() => {
     const initSdk = async () => {
@@ -675,13 +704,13 @@ const NewOrderForm = () => {
                   <Col span={12}>
                     <Form.Item
                       label={
-                        <span className="text-xs text-blue-600 font-bold">
-                          Billable
+                        <span className="text-blue-600 font-bold">
+                          Chargeable Weight
                         </span>
                       }
                       className="mb-0"
                     >
-                      <div className="text-blue-700 font-bold text-lg leading-tight">
+                      <div className="text-blue-700 font-bold text-3xl leading-tight">
                         {finalWeight || 0}{" "}
                         <span className="text-xs font-normal text-gray-500">
                           kg
@@ -1003,6 +1032,7 @@ const NewOrderForm = () => {
   const { mutate: createOrder, isPending } = useCreateComprehensiveOrder({
     onSuccess: async (data) => {
       try {
+        setIsDirty(false);
         const orderId = data?.order?.id;
         const orderNumber = data?.order?.order_number;
         // setCreatedOrderId(orderId);
@@ -1237,13 +1267,15 @@ const NewOrderForm = () => {
             });
           }
 
-          // Check if sub_category_id changed
           if (changedValues.shipment_details?.sub_category_id) {
             form.setFieldsValue({
               shipment_details: {
                 item_ids: undefined,
               },
             });
+          }
+          if (!isDirty) {
+            setIsDirty(true);
           }
         }}
         onFinish={onFinish}

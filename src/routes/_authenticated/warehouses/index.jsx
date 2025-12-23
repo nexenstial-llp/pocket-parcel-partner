@@ -2,16 +2,11 @@ import PageLayout from "@/components/layout/PageLayout";
 import ResponsiveCard from "@/components/ui/cards/ResponsiveCard";
 import ErrorFallback from "@/components/ui/ErrorFallback";
 import UrlPagination from "@/components/ui/UrlPagination";
-import {
-  useDeleteWarehouse,
-  useFetchWarehouse,
-} from "@/features/warehouses/warehouses.query";
+import { useFetchWarehouse } from "@/features/warehouses/warehouses.query";
+import { getSerialNumber } from "@/utils/serialNumber.util";
 import { validatePagination } from "@/utils/validatePagination.util";
-import { useQueryClient } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Tag } from "antd";
-import { message } from "antd";
-import { Modal } from "antd";
 import { Button, Table } from "antd";
 
 export const Route = createFileRoute("/_authenticated/warehouses/")({
@@ -20,7 +15,6 @@ export const Route = createFileRoute("/_authenticated/warehouses/")({
 });
 
 function RouteComponent() {
-  const queryClient = useQueryClient();
   // 👇 get page & limit from URL
   const { page, limit } = Route.useSearch();
   const { data, isLoading, isError, error, refetch } = useFetchWarehouse({
@@ -28,28 +22,11 @@ function RouteComponent() {
     limit,
   });
 
-  const { mutate: deleteWarehouse, isPending } = useDeleteWarehouse({
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["warehouses"] });
-      message.success("Warehouse deactivated successfully");
-    },
-  });
-
-  const handleDelete = (id) => {
-    Modal.confirm({
-      title: "Would you like to deactivate this warehouse?",
-      content:
-        "The deactivate action will be permanent, and there will be no option to undo or reverse it.",
-      okText: "Yes",
-      okType: "danger",
-      cancelText: "No",
-      onOk: () => {
-        deleteWarehouse(id);
-      },
-    });
-  };
-
   const columns = [
+    {
+      title: "S.No",
+      render: (_, record, index) => getSerialNumber({ page, limit, index }),
+    },
     {
       title: "Code",
       dataIndex: "code",
@@ -118,13 +95,6 @@ function RouteComponent() {
                   View
                 </Button>
               </Link>
-              <Button
-                size="small"
-                onClick={() => handleDelete(record?.id)}
-                danger
-              >
-                Deactivate
-              </Button>
             </>
           )}
         </div>
@@ -153,7 +123,7 @@ function RouteComponent() {
       >
         <Table
           size="small"
-          loading={isLoading || isPending}
+          loading={isLoading}
           bordered
           columns={columns}
           dataSource={data?.data || []}
