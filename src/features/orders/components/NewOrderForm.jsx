@@ -845,7 +845,7 @@ const NewOrderForm = () => {
                 {
                   label: "Weight",
                   value: totalData?.shipment_details?.weight,
-                  unit: "gm",
+                  unit: weightUnit,
                 },
               ].map((item) => (
                 <div
