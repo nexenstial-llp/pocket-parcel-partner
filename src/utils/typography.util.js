@@ -109,3 +109,14 @@ export const getS3KeyFromUrl = (url) => {
     "https://s3.ap-south-1.amazonaws.com/pp-s3.pocketparcel.in/"
   )?.[1];
 };
+
+export const formatINR = (value) => {
+  if (value === null || value === undefined || value === "") return "";
+  const num = Number(value);
+  if (Number.isNaN(num)) return String(value);
+  return new Intl.NumberFormat("en-IN", {
+    style: "currency",
+    currency: "INR",
+    maximumFractionDigits: 2,
+  }).format(num);
+};

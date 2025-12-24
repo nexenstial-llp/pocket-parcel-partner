@@ -1,23 +1,11 @@
 /* eslint-disable react/prop-types */
 import { useState } from "react";
-import {
-  Card,
-  Timeline,
-  Tag,
-  Row,
-  Col,
-  Space,
-  Typography,
-  Button,
-  Divider,
-  Badge,
-} from "antd";
+import { Card, Tag, Row, Col, Space, Typography, Divider } from "antd";
 import {
   EnvironmentOutlined,
   UserOutlined,
   PhoneOutlined,
   MailOutlined,
-  EditOutlined,
   InboxOutlined,
   DollarOutlined,
   CalendarOutlined,
@@ -50,34 +38,35 @@ export default function CustomerOrderDetails({ order }) {
   /* ---------------------------------- */
 
   const StatusBadge = ({ status }) => (
-    <Badge
-      status={
-        status?.includes("SUCCESS") || status?.includes("DELIVERED")
-          ? "success"
-          : status?.includes("PENDING") || status?.includes("PROCESSING")
-          ? "processing"
-          : status?.includes("CANCELLED") || status?.includes("FAILED")
-          ? "error"
-          : "default"
-      }
-      text={
-        <span className="text-xs font-medium">
-          {removeUnderscores(status)}
-        </span>
-      }
-    />
+    <Tag color={getStatusColor(status)}>{removeUnderscores(status)}</Tag>
   );
+  // const StatusBadge = ({ status }) => (
+  //   <Badge
+  //     status={
+  //       status?.includes("SUCCESS") || status?.includes("DELIVERED")
+  //         ? "success"
+  //         : status?.includes("PENDING") || status?.includes("PROCESSING")
+  //         ? "processing"
+  //         : status?.includes("CANCELLED") || status?.includes("FAILED")
+  //         ? "error"
+  //         : "default"
+  //     }
+  //     text={
+  //       <span className="text-xs font-medium">{removeUnderscores(status)}</span>
+  //     }
+  //   />
+  // );
 
   const InfoRow = ({ icon, label, value }) => (
     <div className="flex items-start gap-3 py-2">
-      <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0">
+      <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center shrink-0">
         <span className="text-gray-600 text-sm">{icon}</span>
       </div>
       <div className="flex-1 min-w-0">
         <div className="text-[10px] uppercase tracking-wider text-gray-500 mb-0.5">
           {label}
         </div>
-        <div className="text-sm text-gray-900 font-medium break-words">
+        <div className="text-sm text-gray-900 font-medium wrap-break-word">
           {value}
         </div>
       </div>
@@ -106,8 +95,14 @@ export default function CustomerOrderDetails({ order }) {
             {typeLabel && (
               <Tag
                 bordered={false}
-                color="default"
-                className="rounded-full px-3 py-0.5 text-[10px] font-medium bg-gray-100 text-gray-700"
+                color={
+                  typeLabel === "Pickup"
+                    ? "blue"
+                    : typeLabel === "Drop"
+                    ? "green"
+                    : "warning"
+                }
+                className={`rounded-full px-3 py-0.5 text-[10px] font-medium bg-gray-100 text-gray-700`}
               >
                 {typeLabel}
               </Tag>
@@ -142,14 +137,14 @@ export default function CustomerOrderDetails({ order }) {
           )}
 
           <div className="flex items-start gap-3 py-2">
-            <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0">
+            <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center shrink-0">
               <EnvironmentOutlined className="text-gray-600 text-sm" />
             </div>
             <div className="flex-1 min-w-0">
               <div className="text-[10px] uppercase tracking-wider text-gray-500 mb-0.5">
                 Address
               </div>
-              <div className="text-sm text-gray-900 font-medium break-words">
+              <div className="text-sm text-gray-900 font-medium wrap-break-word">
                 {data.pickup_address || data.drop_address || data.address}
               </div>
               <Text type="secondary" className="text-xs mt-1 block">
@@ -179,15 +174,12 @@ export default function CustomerOrderDetails({ order }) {
       <Row gutter={[16, 16]}>
         {/* ================= HEADER ================= */}
         <Col xs={24} lg={14}>
-          <Card
-            className="rounded-xl border-0 shadow-sm hover:shadow-md transition-all duration-200 h-full"
-            bodyStyle={{ padding: "24px" }}
-          >
+          <Card className="rounded-xl border-0 shadow-sm hover:shadow-md transition-all duration-200 h-full">
             <Row gutter={[24, 16]} align="middle">
               <Col xs={24} md={14}>
                 <Space direction="vertical" size={4}>
                   <div className="flex items-center gap-2">
-                    <div className="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center">
+                    <div className="size-8 rounded-lg bg-gray-100 flex items-center justify-center">
                       <InboxOutlined className="text-gray-700 text-lg" />
                     </div>
                     <div>
@@ -197,30 +189,40 @@ export default function CustomerOrderDetails({ order }) {
                       >
                         Order Number
                       </Text>
-                      <Title level={4} style={{ margin: 0 }} className="!text-lg">
+                      <Title
+                        level={4}
+                        style={{ margin: 0 }}
+                        className="text-lg!"
+                      >
                         {order.order_number}
                       </Title>
                     </div>
                   </div>
                   <div className="ml-12">
                     <Text type="secondary" className="text-xs">
-                      Ref: <span className="text-gray-900">{order.reference_number}</span>
+                      Ref:{" "}
+                      <span className="text-gray-900">
+                        {order.reference_number}
+                      </span>
                     </Text>
                   </div>
                 </Space>
               </Col>
 
               <Col xs={24} md={10}>
-                <div className="text-right md:text-right text-left">
+                <div className="text-right md:text-right">
                   <div className="flex items-center justify-end gap-2 mb-2">
                     <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center">
                       <DollarOutlined className="text-gray-600" />
                     </div>
                     <div>
-                      <Text type="secondary" className="text-[10px] uppercase tracking-wider block">
+                      <Text
+                        type="secondary"
+                        className="text-[10px] uppercase tracking-wider block"
+                      >
                         Total Amount
                       </Text>
-                      <div className="text-2xl font-bold text-gray-900">
+                      <div className="text-2xl font-bold text-green-600">
                         ₹{order.total_amount}
                       </div>
                     </div>
@@ -246,88 +248,22 @@ export default function CustomerOrderDetails({ order }) {
             <Divider className="my-4" />
 
             <Space size={[12, 12]} wrap>
-              <StatusBadge status={order.payment_status} />
-              <StatusBadge status={order.order_status} />
-              <StatusBadge status={order.lifecycle_status} />
+              Payment Status: <StatusBadge status={order.payment_status} />
+              Order Status: <StatusBadge status={order.order_status} />
+              Lifecycle Status: <StatusBadge status={order.lifecycle_status} />
             </Space>
-          </Card>
-        </Col>
-        {/* ================= PACKAGE DETAILS ================= */}
-        <Col xs={24} lg={10}>
-          <Card
-            className="rounded-xl border-0 shadow-sm hover:shadow-md transition-all duration-200 h-full"
-            bodyStyle={{ padding: "24px" }}
-          >
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center">
-                <InboxOutlined className="text-gray-700 text-lg" />
-              </div>
-              <Text strong className="text-base">
-                Package Details
-              </Text>
-            </div>
-
-            <div className="grid grid-cols-2 gap-x-4 gap-y-4">
-              {[
-                {
-                  label: "Dimensions",
-                  value: `${order.length} × ${order.breadth} × ${order.height} cm`,
-                  highlight: false,
-                },
-                {
-                  label: "Weight",
-                  value: `${order.weight / 1000} kg`,
-                  highlight: false,
-                },
-                {
-                  label: "Volumetric",
-                  value: `${order.volumetric_weight} kg`,
-                  highlight: false,
-                },
-                {
-                  label: "Chargeable",
-                  value: `${order.chargeable_weight / 1000} kg`,
-                  highlight: true,
-                },
-                {
-                  label: "Declared Value",
-                  value: `₹${order.declared_value}`,
-                  highlight: false,
-                },
-                {
-                  label: "Created Via",
-                  value: removeUnderscores(order.created_via),
-                  highlight: false,
-                },
-              ].map(({ label, value, highlight }) => (
-                <div
-                  key={label}
-                  className={`${
-                    highlight ? "col-span-2 bg-gray-50 rounded-lg p-3 border border-gray-200" : ""
-                  }`}
-                >
-                  <div className="text-[10px] uppercase tracking-wider text-gray-500 mb-1">
-                    {label}
-                  </div>
-                  <div
-                    className={`font-semibold ${
-                      highlight ? "text-gray-900 text-base" : "text-gray-900 text-sm"
-                    }`}
-                  >
-                    {value}
-                  </div>
-                </div>
-              ))}
-            </div>
 
             {/* Courier Partner Info */}
-            {(order.cp_id || order.account_code || order.carrier_partner || order.courier_partner) && (
+            {(order.cp_id ||
+              order.account_code ||
+              order.carrier_partner ||
+              order.courier_partner) && (
               <div className="mt-4 pt-4 border-t border-gray-200">
                 <div className="flex items-start gap-3">
                   {order.courier_logo && (
-                    <div className="w-12 h-12 rounded-lg border border-gray-200 bg-white flex items-center justify-center p-1 flex-shrink-0">
-                      <img 
-                        src={order.courier_logo} 
+                    <div className="w-12 h-12 rounded-lg border border-gray-200 bg-white flex items-center justify-center p-1 shrink-0">
+                      <img
+                        src={order.courier_logo}
                         alt="Courier Partner"
                         className="w-full h-full object-contain"
                       />
@@ -370,25 +306,98 @@ export default function CustomerOrderDetails({ order }) {
             )}
           </Card>
         </Col>
+        {/* ================= PACKAGE DETAILS ================= */}
+        <Col xs={24} lg={10}>
+          <Card
+            className="rounded-xl border-0 shadow-sm hover:shadow-md transition-all duration-200 h-full"
+            title={
+              <div className="flex items-center gap-3">
+                <div className="size-8 rounded-lg bg-gray-100 flex items-center justify-center">
+                  <InboxOutlined className="text-gray-700 text-lg" />
+                </div>
+                <Text strong className="text-base">
+                  Package Details
+                </Text>
+              </div>
+            }
+          >
+            <div className="grid grid-cols-2 gap-x-4 gap-y-4">
+              {[
+                {
+                  label: "Dimensions",
+                  value: `${order.length} × ${order.breadth} × ${order.height} cm`,
+                  highlight: false,
+                },
+                {
+                  label: "Weight",
+                  value: `${order.weight / 1000} kg`,
+                  highlight: false,
+                },
+                {
+                  label: "Volumetric",
+                  value: `${order.volumetric_weight} kg`,
+                  highlight: false,
+                },
+                {
+                  label: "Chargeable",
+                  value: `${order.chargeable_weight / 1000} kg`,
+                  highlight: true,
+                },
+                {
+                  label: "Declared Value",
+                  value: `₹${order.declared_value}`,
+                  highlight: false,
+                },
+                {
+                  label: "Created Via",
+                  value: removeUnderscores(order.created_via),
+                  highlight: false,
+                },
+              ].map(({ label, value, highlight }) => (
+                <div
+                  key={label}
+                  className={`${
+                    highlight
+                      ? "col-span-2 bg-gray-50 rounded-lg p-3 border border-gray-200"
+                      : ""
+                  }`}
+                >
+                  <div className="text-[10px] uppercase tracking-wider text-gray-500 mb-1">
+                    {label}
+                  </div>
+                  <div
+                    className={`font-semibold ${
+                      highlight
+                        ? "text-gray-900 text-base"
+                        : "text-gray-900 text-sm"
+                    }`}
+                  >
+                    {value}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </Card>
+        </Col>
       </Row>
       <Card
         className="rounded-xl border-0 shadow-sm hover:shadow-md transition-all duration-200"
-        bodyStyle={{ padding: "24px" }}
-      >
-        <div className="flex items-center gap-3 mb-6">
-          <div className="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center">
-            <CalendarOutlined className="text-gray-700 text-lg" />
+        title={
+          <div className="flex items-center gap-3">
+            <div className="size-8 rounded-lg bg-gray-100 flex items-center justify-center">
+              <CalendarOutlined className="text-gray-700 text-lg" />
+            </div>
+            <Text strong className="text-base">
+              Status Timeline
+            </Text>
           </div>
-          <Text strong className="text-base">
-            Status Timeline
-          </Text>
-        </div>
-
+        }
+      >
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Left Column - Status Steps & Stats */}
           <div className="flex flex-col gap-6">
             <OrderStatusSteps orders={order} />
-            
+
             {/* Timeline Stats Summary */}
             {statusTimeline.length > 0 && (
               <div className="grid grid-cols-3 gap-3">
@@ -405,7 +414,10 @@ export default function CustomerOrderDetails({ order }) {
                     Current Status
                   </div>
                   <div className="text-xs font-bold text-gray-900 truncate">
-                    {removeUnderscores(statusTimeline[statusTimeline.length - 1]?.to_status || "N/A")}
+                    {removeUnderscores(
+                      statusTimeline[statusTimeline.length - 1]?.to_status ||
+                        "N/A"
+                    )}
                   </div>
                 </div>
                 <div className="bg-gray-50 rounded-lg p-3 border border-gray-200">
@@ -413,7 +425,9 @@ export default function CustomerOrderDetails({ order }) {
                     Last Updated
                   </div>
                   <div className="text-xs font-bold text-gray-900">
-                    {moment(statusTimeline[statusTimeline.length - 1]?.created_at).fromNow()}
+                    {moment(
+                      statusTimeline[statusTimeline.length - 1]?.created_at
+                    ).fromNow()}
                   </div>
                 </div>
               </div>
@@ -421,7 +435,7 @@ export default function CustomerOrderDetails({ order }) {
           </div>
 
           {/* Right Column - Timeline Updates */}
-          <div className="h-[500px] flex flex-col bg-white rounded-xl border border-gray-200">
+          <div className="h-[300px] overflow-y-auto p-4 flex flex-col bg-white rounded-xl border border-gray-200">
             {statusTimeline.length === 0 ? (
               <div className="text-center py-8">
                 <div className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center mx-auto mb-3">
@@ -439,27 +453,32 @@ export default function CustomerOrderDetails({ order }) {
                 {[...statusTimeline].reverse().map((status, reversedIndex) => {
                   const reversedArray = [...statusTimeline].reverse();
                   const isLatest = reversedIndex === reversedArray.length - 1;
-                  const isFirst = reversedIndex === 0;
-                  const statusColor = getStatusColorForTimeline(status.to_status);
-                  const prevStatus = reversedIndex > 0 ? reversedArray[reversedIndex - 1] : null;
-                  const timeDiff = prevStatus 
-                    ? moment(status.created_at).diff(moment(prevStatus.created_at), 'minutes')
+                  const statusColor = getStatusColorForTimeline(
+                    status.to_status
+                  );
+                  const prevStatus =
+                    reversedIndex > 0 ? reversedArray[reversedIndex - 1] : null;
+                  const timeDiff = prevStatus
+                    ? moment(status.created_at).diff(
+                        moment(prevStatus.created_at),
+                        "minutes"
+                      )
                     : null;
 
                   return (
-                    <div 
-                      key={reversedIndex} 
+                    <div
+                      key={reversedIndex}
                       className={`flex gap-3 p-3 hover:bg-gray-50 transition-colors ${
-                        isLatest ? 'bg-gray-50' : ''
+                        isLatest ? "bg-gray-50" : ""
                       }`}
                     >
                       {/* Timeline Dot & Line */}
                       <div className="flex flex-col items-center pt-0.5">
-                        <div 
-                          className={`w-2.5 h-2.5 rounded-full border-2 border-white shadow-sm flex-shrink-0 ${
-                            isLatest ? 'ring-2 ring-offset-1 ring-gray-300' : ''
+                        <div
+                          className={`w-2.5 h-2.5 rounded-full border-2 border-white shadow-sm shrink-0 ${
+                            isLatest ? "ring-2 ring-offset-1 ring-gray-300" : ""
                           }`}
-                          style={{ 
+                          style={{
                             backgroundColor: statusColor,
                           }}
                         />
@@ -489,15 +508,22 @@ export default function CustomerOrderDetails({ order }) {
                               </div>
                             )}
                           </div>
-                          
+
                           {/* Timestamp */}
-                          <div className="text-right flex-shrink-0">
+                          <div className="text-right shrink-0">
                             <div className="text-[10px] font-medium text-gray-900">
-                              {moment(status.created_at).format("DD MMM, HH:mm")}
+                              {moment(status.created_at).format(
+                                "DD MMM, HH:mm"
+                              )}
                             </div>
                             {timeDiff !== null && timeDiff > 0 && (
                               <div className="text-[9px] text-gray-500 mt-0.5">
-                                +{timeDiff < 60 ? `${timeDiff}m` : `${Math.floor(timeDiff / 60)}h ${timeDiff % 60}m`}
+                                +
+                                {timeDiff < 60
+                                  ? `${timeDiff}m`
+                                  : `${Math.floor(timeDiff / 60)}h ${
+                                      timeDiff % 60
+                                    }m`}
                               </div>
                             )}
                           </div>
@@ -520,18 +546,18 @@ export default function CustomerOrderDetails({ order }) {
       </Card>
       {/* ================= ADDRESSES ================= */}
       <Card
-        className="rounded-xl border-0 shadow-sm hover:shadow-md transition-all duration-200"
-        bodyStyle={{ padding: "24px" }}
-      >
-        <div className="flex items-center gap-3 mb-6">
-          <div className="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center">
-            <EnvironmentOutlined className="text-gray-700 text-lg" />
+        title={
+          <div className="flex items-center gap-3 ">
+            <div className="size-8 rounded-lg bg-gray-100 flex items-center justify-center">
+              <EnvironmentOutlined className="text-gray-700 text-lg" />
+            </div>
+            <Text strong className="text-base">
+              Addresses
+            </Text>
           </div>
-          <Text strong className="text-base">
-            Addresses
-          </Text>
-        </div>
-
+        }
+        className="rounded-xl border-0 shadow-sm hover:shadow-md transition-all duration-200"
+      >
         <Row gutter={[16, 16]}>
           <Col xs={24} md={8}>
             <AddressBlock
@@ -554,22 +580,22 @@ export default function CustomerOrderDetails({ order }) {
               title="Delivery Address"
               typeLabel="Drop"
               data={drop}
-              extra={
-                <Button
-                  size="small"
-                  type="primary"
-                  className="!bg-gradient-to-r from-blue-500 to-blue-600 border-0 shadow-sm hover:shadow-md transition-all"
-                  icon={<EditOutlined />}
-                  onClick={() =>
-                    setIsModalVisible({
-                      type: "drop",
-                      open: true,
-                    })
-                  }
-                >
-                  Edit
-                </Button>
-              }
+              // extra={
+              //   <Button
+              //     size="small"
+              //     type="primary"
+              //     className="bg-linear-to-r! from-blue-500 to-blue-600 border-0 shadow-sm hover:shadow-md transition-all"
+              //     icon={<EditOutlined />}
+              //     onClick={() =>
+              //       setIsModalVisible({
+              //         type: "drop",
+              //         open: true,
+              //       })
+              //     }
+              //   >
+              //     Edit
+              //   </Button>
+              // }
             />
           </Col>
         </Row>

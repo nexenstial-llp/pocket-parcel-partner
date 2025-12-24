@@ -4,10 +4,7 @@ import ErrorFallback from "@/components/ui/ErrorFallback";
 import ResponsiveTable from "@/components/ui/tables/ResponsiveTable";
 import UrlPagination from "@/components/ui/UrlPagination";
 import { useGetOrders } from "@/features/orders/orders.query";
-import {
-  downloadInvoice,
-  downloadWaybill,
-} from "@/features/orders/orders.service";
+import { downloadWaybill } from "@/features/orders/orders.service";
 import { usePdfHandler } from "@/hooks/usePdfHandler";
 import { getSerialNumber } from "@/utils/serialNumber.util";
 import { getStatusColor, removeUnderscores } from "@/utils/typography.util";
@@ -36,14 +33,14 @@ function RouteComponent() {
     });
   };
 
-  const handleInvoice = (id) => {
-    processPdf({
-      pdfPromise: () => downloadInvoice(id),
-      print: true,
-      fileName: `invoice-${id}.pdf`,
-      successMessage: "Invoice processed successfully",
-    });
-  };
+  // const handleInvoice = (id) => {
+  //   processPdf({
+  //     pdfPromise: () => downloadInvoice(id),
+  //     print: true,
+  //     fileName: `invoice-${id}.pdf`,
+  //     successMessage: "Invoice processed successfully",
+  //   });
+  // };
 
   const columns = [
     {

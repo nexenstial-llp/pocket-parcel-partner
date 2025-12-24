@@ -1,38 +1,56 @@
 /* eslint-disable react/prop-types */
-import { Button, Card, Tag } from "antd";
+import {
+  Button,
+  Card,
+  Tag,
+  Space,
+  Typography,
+  Tooltip,
+  Badge,
+  Row,
+  Col,
+  Divider,
+} from "antd";
+import {
+  CheckCircleFilled,
+  InfoCircleOutlined,
+  CreditCardOutlined,
+} from "@ant-design/icons";
 import ShipmentSummary from "../ShipmentSummary.jsx";
 import { useState, useEffect } from "react";
 import { useCalculatePriceOfOrder } from "../../orders.query.js";
-import axiosInstance from "@/utils/axiosInstance.util.js";
 import { calculatePriceOfOrderSchema } from "../../orders.schema.js";
 import { message } from "antd";
 import { applyZodErrorsToForm } from "@/utils/formError.util.js";
 import { BiSolidOffer } from "react-icons/bi";
 import { MdOutlineRemoveCircle } from "react-icons/md";
+import { useGetAllOffers } from "@/features/offers/offers.query.js";
+import { formatINR } from "@/utils/typography.util.js";
 
-const money = (v) => `₹${Number(v).toFixed(2)}`;
+const { Text } = Typography;
 
 export default function SummaryStep({
   summaryData,
   shipmentData,
   chargeableWeight,
+  chargeableDimensions,
   carrierPartnerData,
   onOfferApplied,
   pickup_type,
   form,
+  dimensionUnit,
   weightUnit,
+  offerCode,
+  setOfferCode,
 }) {
   const [offerOptions, setOfferOptions] = useState([]);
-  const [offerCode, setOfferCode] = useState(null);
-
-  const getOffers = async () => {
-    const response = await axiosInstance.get(`v1/transit-warehouse/offers`);
-    setOfferOptions(response?.data?.data?.offers || []);
-  };
+  const { data, isLoading } = useGetAllOffers();
 
   useEffect(() => {
-    getOffers();
-  }, []);
+    if (data) {
+      setOfferOptions(data?.data?.offers || []);
+    }
+  }, [data]);
 
   const {
     mutate: calculatePriceOfOrder,
@@ -54,9 +72,9 @@ export default function SummaryStep({
         from_latitude: Number(shipmentData?.pickup_info?.pickup_lat),
         from_longitude: Number(shipmentData?.pickup_info?.pickup_long),
         to_pincode: shipmentData?.drop_info?.drop_pincode,
-        length: Number(shipmentData?.shipment_details?.length),
-        breadth: Number(shipmentData?.shipment_details?.breadth),
-        height: Number(shipmentData?.shipment_details?.height),
+        length: Number(chargeableDimensions?.length_cm),
+        breadth: Number(chargeableDimensions?.breadth_cm),
+        height: Number(chargeableDimensions?.height_cm),
         weight: Number(chargeableWeight),
         cp_id: carrierPartnerData?.carrier_partner,
         account_code: carrierPartnerData?.account_code,
@@ -66,7 +84,6 @@ export default function SummaryStep({
       const validData = calculatePriceOfOrderSchema.parse(payload);
       calculatePriceOfOrder(validData);
     } catch (error) {
-      console.log(error);
       if (error.name === "ZodError") {
         applyZodErrorsToForm(form, error);
       } else {
@@ -85,84 +102,131 @@ export default function SummaryStep({
     recalcWithOffer("");
   };
 
+  const activeOffer = offerOptions.find((o) => o.offer_code === offerCode);
+
   if (!summaryData?.length) return null;
   const d = summaryData[0];
   const { courier_service, price_summary } = d;
 
   return (
-    <div className="flex flex-col gap-3 w-full max-w-[640px] mx-auto">
+    <div className="flex flex-col gap-4 w-full max-w-[640px] mx-auto">
       {/* SHIPMENT */}
-      <ShipmentSummary data={shipmentData} weightUnit={weightUnit} />
+      <ShipmentSummary
+        data={shipmentData}
+        dimensionUnit={dimensionUnit}
+        weightUnit={weightUnit}
+        chargeableWeight={chargeableWeight}
+        chargeableDimensions={chargeableDimensions}
+      />
 
-      {/* OFFERS - COMPACT PILL STYLE */}
+      {/* OFFERS SECTION */}
       {offerOptions?.length > 0 && (
         <Card
+          loading={isLoading}
           size="small"
-          className="w-full shadow-sm"
+          className="w-full shadow-sm border border-gray-100"
           title={
-            <span className="flex items-center gap-2 text-sm">
-              <BiSolidOffer className="text-orange-500" />
-              Available Offers
-            </span>
+            <Space className="items-center">
+              <BiSolidOffer className="text-orange-500 text-lg" />
+              <span className="text-base font-semibold">Available Offers</span>
+              <Badge count={offerOptions.length} className="ml-2!" />
+            </Space>
           }
         >
-          {offerOptions?.length === 0 ? (
-            <div className="text-xs text-gray-400 text-center py-3">
-              No offers available for this shipment.
-            </div>
-          ) : (
-            <div className="flex flex-col gap-2">
-              {offerOptions.map((offer) => {
-                const isActive = offerCode === offer.offer_code;
+          {offerOptions?.map((offer) => {
+            const isActive = offerCode === offer?.offer_code;
 
-                return (
-                  <div
-                    key={offer.id}
-                    className={`flex items-center justify-between px-3 py-2 rounded-md border text-xs transition-all
-              ${
-                isActive
-                  ? "border-green-500 bg-green-50"
-                  : "border-gray-200 bg-gray-50 hover:border-blue-300 hover:bg-blue-50"
-              }`}
-                  >
-                    {/* Left: Offer info */}
-                    <div className="flex flex-col gap-0.5">
-                      <div className="flex items-center gap-2">
-                        <span className="font-semibold text-gray-800">
-                          {offer.offer_name}
-                        </span>
+            return (
+              <div
+                key={offer?.id}
+                className={`
+                  p-4 mb-3 last:mb-0 rounded-xl border transition-all hover:shadow-md
+                  ${
+                    isActive
+                      ? "border-emerald-300 bg-emerald-50 shadow-md ring-1 ring-emerald-200"
+                      : "border-gray-200 bg-white hover:border-blue-200 hover:bg-blue-50/30"
+                  }
+                `}
+              >
+                <Row gutter={[16, 8]} align="middle" wrap={false}>
+                  {/* Left Column - Offer Details */}
+                  <Col xs={24} lg={16}>
+                    <Space direction="vertical" size="small" className="w-full">
+                      {/* Title & Code */}
+                      <Space align="start">
+                        <div className="flex items-center gap-2 mb-1">
+                          <div
+                            className={`w-2.5 h-2.5 rounded-full ${
+                              isActive ? "bg-emerald-500" : "bg-blue-500"
+                            }`}
+                          />
+                          <Text strong className="text-base leading-tight">
+                            {offer.display_name || offer.offer_name}
+                          </Text>
+                        </div>
                         <Tag
                           color={isActive ? "green" : "blue"}
-                          className="px-2 py-0 text-[10px] rounded-full"
+                          className="px-2.5 py-1 text-xs font-mono"
                         >
-                          CODE: {offer.offer_code}
+                          {offer.offer_code}
                         </Tag>
-                      </div>
+                      </Space>
 
-                      {offer.description && (
-                        <span className="text-[11px] text-gray-500">
-                          {offer.description}
-                        </span>
+                      {/* Discount Badge */}
+                      {/* <div className="flex gap-3 mb-2">
+                        <div className="bg-linear-to-r from-emerald-100 to-emerald-200 px-3 py-1.5 rounded-full text-xs font-semibold text-emerald-800 shadow-sm">
+                          {discountType}
+                        </div>
+                        <div className="text-xs text-gray-600 bg-gray-50 px-2.5 py-1 rounded-md">
+                          Min: {minOrder} | {maxDiscount}
+                        </div>
+                      </div> */}
+                      {/* T&Cs Tooltip */}
+                      {offer.terms_and_conditions && (
+                        <Tooltip
+                          title={offer.terms_and_conditions}
+                          placement="top"
+                          className="mb-2"
+                        >
+                          <div className="flex items-center gap-1 text-xs text-gray-500 cursor-help mx-auto mb-3">
+                            <InfoCircleOutlined className="w-3.5 h-3.5" />
+                            <span>T&Cs</span>
+                          </div>
+                        </Tooltip>
                       )}
+                    </Space>
+                  </Col>
 
-                      {offer.max_discount_amount && (
-                        <span className="text-[11px] text-gray-400">
-                          Save up to {money(offer.max_discount_amount)}
-                        </span>
-                      )}
-                    </div>
+                  {/* Right Column - Stats & Action */}
+                  <Col xs={24} lg={8}>
+                    <Space
+                      direction="vertical"
+                      size="small"
+                      className="w-full h-full justify-end"
+                    >
+                      {/* Usage Progress */}
+                      {/* <div className="mb-3">
+                        <div className="flex items-center justify-between mb-1">
+                          <Text className="text-xs text-gray-500">
+                            Uses Left
+                          </Text>
+                          <Text className="text-xs font-mono">
+                            {usageLeft}/{offer.usage_limit_per_user}
+                          </Text>
+                        </div>
+                      </div> */}
 
-                    {/* Right: Action */}
-                    <div className="flex items-center gap-2">
-                      {isActive && (
-                        <span className="text-[11px] text-green-600 font-medium hidden sm:inline">
-                          Applied
-                        </span>
-                      )}
-
+                      {/* Action Button */}
                       <Button
-                        size="small"
+                        block
                         type={isActive ? "default" : "primary"}
+                        onClick={() =>
+                          isActive
+                            ? handleRemoveOffer()
+                            : handleApplyOffer(offer.offer_code)
+                        }
+                        loading={isCalculatePricingPending}
+                        className="rounded-lg font-semibold h-11 shadow-sm"
                         icon={
                           isActive ? (
                             <MdOutlineRemoveCircle className="text-red-500" />
@@ -170,21 +234,15 @@ export default function SummaryStep({
                             <BiSolidOffer />
                           )
                         }
-                        onClick={() =>
-                          isActive
-                            ? handleRemoveOffer()
-                            : handleApplyOffer(offer.offer_code)
-                        }
-                        disabled={isCalculatePricingPending}
                       >
-                        {isActive ? "Remove" : "Apply"}
+                        {isActive ? "Remove Offer" : "Apply Offer"}
                       </Button>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          )}
+                    </Space>
+                  </Col>
+                </Row>
+              </div>
+            );
+          })}
         </Card>
       )}
 
@@ -192,49 +250,95 @@ export default function SummaryStep({
       <Card
         loading={isCalculatePricingPending}
         size="small"
-        className="w-full shadow-sm"
-        title="Payment Summary"
+        className="w-full shadow-sm border-t-4 border-emerald-500"
+        title={
+          <Space>
+            <CreditCardOutlined className="text-emerald-600" />
+            <span className="font-semibold">Payment Summary</span>
+          </Space>
+        }
       >
-        {/* COURIER */}
-        <div className="flex justify-between items-center mb-2 text-xs">
-          <span className="text-gray-500">Carrier Partner</span>
-          <div className="text-right">
-            <div className="font-medium text-gray-800 text-sm">
-              {courier_service?.cp_name}
-            </div>
-            <div className="text-[11px] text-gray-500">
-              {courier_service?.account_code} • {courier_service?.service_type}
-            </div>
+        {/* Active Offer Summary */}
+        {activeOffer && (
+          <div className="mb-4 p-3 bg-emerald-50 border border-emerald-200 rounded-lg shadow-sm">
+            <Row align="middle" gutter={[12, 0]}>
+              <Col>
+                <CheckCircleFilled className="text-emerald-500 text-lg" />
+              </Col>
+              <Col flex="auto">
+                <Text strong className="text-base block">
+                  {activeOffer.display_name}
+                </Text>
+                <Text className="text-sm text-gray-600">
+                  {activeOffer.offer_code}
+                </Text>
+              </Col>
+              <Col>
+                <Button
+                  size="small"
+                  danger
+                  onClick={handleRemoveOffer}
+                  ghost
+                  icon={<MdOutlineRemoveCircle />}
+                  className="rounded-md"
+                >
+                  Remove
+                </Button>
+              </Col>
+            </Row>
           </div>
+        )}
+
+        {/* Carrier Info */}
+        <div className="mb-4 pb-3 border-b border-gray-200">
+          <Row align="middle" gutter={[16, 8]}>
+            <Col flex="auto">
+              <Text className="text-sm font-medium text-gray-700">
+                Carrier Partner
+              </Text>
+            </Col>
+            <Col>
+              <Space direction="vertical" size={0} className="text-right">
+                <Text strong className="text-base">
+                  {courier_service?.cp_name}
+                </Text>
+                <Tag className="text-xs px-2 py-0.5 mt-1">
+                  {courier_service?.account_code}
+                </Tag>
+              </Space>
+            </Col>
+          </Row>
         </div>
 
-        {/* PRICE */}
-        <div className="bg-gray-50 rounded-md p-3 text-xs">
-          <div className="flex justify-between mb-1">
-            <span className="text-gray-600">Subtotal</span>
-            <span>{money(price_summary?.original_total)}</span>
-          </div>
-
-          {/* <div className="flex justify-between mb-1">
-            <span className="text-gray-600">Included Tax</span>
-            <span>{money(price_summary?.tax_included)}</span>
-          </div> */}
+        {/* Price Breakdown */}
+        <div className="space-y-3">
+          <Row justify="space-between">
+            <Text className="text-gray-600">Subtotal</Text>
+            <Text strong>{formatINR(price_summary?.original_total)}</Text>
+          </Row>
 
           {price_summary?.discount > 0 && (
-            <div className="flex justify-between text-red-500 mb-1">
-              <span>Discount</span>
-              <span>−{money(price_summary?.discount)}</span>
-            </div>
+            <Row justify="space-between">
+              <Text className="text-emerald-600! font-medium flex items-center gap-1">
+                <CheckCircleFilled className="w-3.5 h-3.5" />
+                Offer Discount
+              </Text>
+              <Text className="text-emerald-600! font-bold text-lg">
+                −{formatINR(price_summary?.discount)}
+              </Text>
+            </Row>
           )}
 
-          <div className="border-t border-gray-200 my-2" />
+          <Divider size="small" className="border-gray-200" />
 
-          <div className="flex justify-between items-center">
-            <span className="font-semibold text-sm">Payable Amount</span>
-            <span className="text-lg font-bold text-green-700">
-              {money(price_summary?.final_total)}
-            </span>
-          </div>
+          <Row justify="space-between" align="middle">
+            <Text strong className="text-xl font-semibold text-gray-900">
+              Payable Amount
+            </Text>
+            <Text strong className="text-xl! font-bold text-emerald-600!">
+              {formatINR(price_summary?.final_total)}
+            </Text>
+          </Row>
         </div>
       </Card>
     </div>

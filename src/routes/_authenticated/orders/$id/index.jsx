@@ -4,10 +4,7 @@ import ErrorFallback from "@/components/ui/ErrorFallback";
 import CancelComprehensiveOrderModal from "@/features/orders/components/CancelComprehensiveOrderModal";
 import CustomerOrderDetails from "@/features/orders/components/CustomerOrderDetails";
 import { useGetOrderById, usePackOrder } from "@/features/orders/orders.query";
-import {
-  downloadInvoice,
-  downloadWaybill,
-} from "@/features/orders/orders.service";
+import { downloadWaybill } from "@/features/orders/orders.service";
 import { usePdfHandler } from "@/hooks/usePdfHandler";
 
 import { DownloadOutlined } from "@ant-design/icons";
@@ -27,30 +24,33 @@ function RouteComponent() {
   const [open, setOpen] = useState(false);
   const queryClient = useQueryClient();
   const { data, isLoading, isError, error } = useGetOrderById(id);
-  const { mutateAsync: packOrder, isPending: isPacking } = usePackOrder({
-    onSuccess: () => {
+  const { mutate: packOrder, isPending: isPacking } = usePackOrder({
+    onSuccess: async () => {
       message.success("Order packed successfully");
-      queryClient.invalidateQueries({
+      await queryClient.invalidateQueries({
         queryKey: ["orders"],
       });
-      queryClient.invalidateQueries({
+      await queryClient.invalidateQueries({
         queryKey: ["order", id],
       });
+    },
+    onError: (error) => {
+      message.error("Failed to pack order", error);
     },
   });
   const { processPdf, isProcessing } = usePdfHandler();
 
-  const handlePrint = async () => {
-    const blob = await downloadInvoice(id);
+  // const handlePrint = async () => {
+  //   const blob = await downloadInvoice(id);
 
-    processPdf({
-      blob,
-      print: true,
-      download: true,
-      fileName: `invoice-${id}.pdf`,
-      successMessage: "Invoice processed successfully",
-    });
-  };
+  //   processPdf({
+  //     blob,
+  //     print: true,
+  //     download: true,
+  //     fileName: `invoice-${id}.pdf`,
+  //     successMessage: "Invoice processed successfully",
+  //   });
+  // };
 
   const handleWaybill = async () => {
     processPdf({

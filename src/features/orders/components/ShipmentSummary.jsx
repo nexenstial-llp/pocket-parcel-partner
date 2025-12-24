@@ -6,29 +6,16 @@ import {
   CodeSandboxOutlined,
 } from "@ant-design/icons";
 
-const ShipmentSummary = ({ data, weightUnit = "gm" }) => {
+const ShipmentSummary = ({
+  data,
+  dimensionUnit,
+  weightUnit,
+  chargeableWeight,
+}) => {
   if (!data) return null;
-
   const { pickup_info, drop_info, shipment_details } = data;
-
-  console.log('shipment_details:', shipment_details);
-
-  // Convert weight to kg based on the unit used during input
-  const getWeightInKg = (weight) => {
-    if (!weight) return "0.00";
-    // If weightUnit is kg, the weight is already in kg
-    // If weightUnit is gm, convert to kg by dividing by 1000
-    const weightInKg = weightUnit === "kg" ? weight : weight / 1000;
-    return weightInKg.toFixed(2);
-  };
-  
   return (
-    <Card
-      size="small"
-      className="w-full shadow-sm"
-      bodyStyle={{ padding: 14 }}
-      title="Shipment Summary"
-    >
+    <Card size="small" className="w-full shadow-sm" title="Shipment Summary">
       {/* PICKUP → DROP */}
       <div className="grid grid-cols-2 gap-4 text-sm mb-3">
         <div>
@@ -63,19 +50,22 @@ const ShipmentSummary = ({ data, weightUnit = "gm" }) => {
       </div>
 
       {/* PACKAGE INFO */}
-      
+
       <div className="flex justify-between items-center bg-gray-50 rounded-md px-3 py-2 text-sm">
         <div className="flex items-center gap-2 text-gray-600">
           <CodeSandboxOutlined />
           <span>
             {shipment_details?.length} ×{shipment_details?.breadth} ×
-            {shipment_details?.height} cm
+            {shipment_details?.height} {dimensionUnit}
           </span>
         </div>
 
         <div className="flex items-center gap-3">
           <span className="font-medium">
-            {getWeightInKg(shipment_details?.weight)} kg
+            {shipment_details?.weight} {weightUnit}
+          </span>
+          <span className="font-medium">
+            {Number(chargeableWeight / 1000).toFixed(2)} kg
           </span>
           <Tag color="green" className="m-0">
             {shipment_details?.delivery_type}
