@@ -62,10 +62,10 @@ const ShipmentSummary = ({
 
         <div className="flex items-center gap-3">
           <span className="font-medium">
-            {shipment_details?.weight} {weightUnit}
+            Actual Weight: {shipment_details?.weight} {weightUnit}
           </span>
           <span className="font-medium">
-            {Number(chargeableWeight / 1000).toFixed(2)} kg
+            Chargeable Weight: {Number(chargeableWeight / 1000).toFixed(2)} kg
           </span>
           <Tag color="green" className="m-0">
             {shipment_details?.delivery_type}

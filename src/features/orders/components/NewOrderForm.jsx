@@ -1146,7 +1146,7 @@ const NewOrderForm = () => {
               <span>Shipment Dimensions</span>
             </div>
 
-            <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 md:grid-cols-4 lg:grid-cols-5">
               {[
                 {
                   label: "Length",
@@ -1162,6 +1162,11 @@ const NewOrderForm = () => {
                   label: "Height",
                   value: totalData?.shipment_details?.height,
                   unit: dimensionUnit,
+                },
+                {
+                  label: "Actual Weight",
+                  value: totalData?.shipment_details?.weight,
+                  unit: weightUnit,
                 },
                 {
                   label: "Chargeable Weight",
