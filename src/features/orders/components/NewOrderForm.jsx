@@ -180,7 +180,8 @@ const NewOrderForm = () => {
   /* -------------------- LOAD CASHFREE -------------------- */
   useEffect(() => {
     let mounted = true;
-    load({ mode: "sandbox" }).then((cf) => {
+    const mode = import.meta.env.VITE_APP_ENV === "production" ? "production" : "sandbox";
+    load({ mode }).then((cf) => {
       if (mounted) setCashfree(cf);
     });
     return () => {
