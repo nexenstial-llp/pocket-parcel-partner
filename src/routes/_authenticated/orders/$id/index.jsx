@@ -33,6 +33,9 @@ function RouteComponent() {
       queryClient.invalidateQueries({
         queryKey: ["orders"],
       });
+      queryClient.invalidateQueries({
+        queryKey: ["order", id],
+      });
     },
   });
   const { processPdf, isProcessing } = usePdfHandler();
