@@ -3,7 +3,7 @@
 import { Steps } from "antd";
 import { FaBox, FaTruck } from "react-icons/fa";
 import { TbTruckDelivery } from "react-icons/tb";
-import { FcShipped } from "react-icons/fc";
+import { FaCheckCircle } from "react-icons/fa";
 
 const OrderStatusSteps = ({ order }) => {
   // 1. Define step mapping from status_timeline
@@ -26,7 +26,7 @@ const OrderStatusSteps = ({ order }) => {
     {
       title: "Delivered",
       statuses: ["DELIVERED", "RTO_DELIVERED"],
-      icon: <FcShipped />,
+      icon: <FaCheckCircle />,
     },
   ];
 

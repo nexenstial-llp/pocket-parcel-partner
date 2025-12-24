@@ -20,6 +20,7 @@ export default function SummaryStep({
   onOfferApplied,
   pickup_type,
   form,
+  weightUnit,
 }) {
   const [offerOptions, setOfferOptions] = useState([]);
   const [offerCode, setOfferCode] = useState(null);
@@ -91,7 +92,7 @@ export default function SummaryStep({
   return (
     <div className="flex flex-col gap-3 w-full max-w-[640px] mx-auto">
       {/* SHIPMENT */}
-      <ShipmentSummary data={shipmentData} />
+      <ShipmentSummary data={shipmentData} weightUnit={weightUnit} />
 
       {/* OFFERS - COMPACT PILL STYLE */}
       {offerOptions?.length > 0 && (

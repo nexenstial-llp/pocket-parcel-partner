@@ -16,9 +16,12 @@ function RouteComponent() {
         { title: "Create" },
       ]}
     >
-      <ResponsiveCard size="small" title="Create Order">
+      <div className="bg-white rounded-xl border-0 shadow-sm p-6">
+        <div className="mb-6">
+          <h2 className="text-xl font-semibold text-gray-900">Create Order</h2>
+        </div>
         <NewOrderForm />
-      </ResponsiveCard>
+      </div>
     </PageLayout>
   );
 }

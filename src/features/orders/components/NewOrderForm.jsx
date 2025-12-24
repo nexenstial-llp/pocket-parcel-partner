@@ -136,12 +136,12 @@ const NewOrderForm = () => {
 
   const volumetricWeight =
     lengthInCm && breadthInCm && heightInCm
-      ? (lengthInCm * breadthInCm * heightInCm) / 5000
+      ? parseFloat(((lengthInCm * breadthInCm * heightInCm) / 5000).toFixed(2))
       : 0; // This is in kg
 
   // Final weight is max of actual weight (in kg) and volumetric weight (in kg)
   // weightInGm / 1000 converts actual weight to kg
-  const finalWeight = Math.max(weightInGm / 1000, volumetricWeight);
+  const finalWeight = parseFloat(Math.max(weightInGm / 1000, volumetricWeight).toFixed(2));
 
   const blocker = useBlocker({
     shouldBlockFn: () => isDirty,
@@ -180,7 +180,8 @@ const NewOrderForm = () => {
   /* -------------------- LOAD CASHFREE -------------------- */
   useEffect(() => {
     let mounted = true;
-    load({ mode: "production" }).then((cf) => {
+    const mode = import.meta.env.VITE_APP_ENV === "production" ? "production" : "sandbox";
+    load({ mode }).then((cf) => {
       if (mounted) setCashfree(cf);
     });
     return () => {
@@ -358,7 +359,18 @@ const NewOrderForm = () => {
 
         // const validData = orderRecommendationSchema.parse(payload);
 
-        setTotalData((prev) => ({ ...prev, ...values }));
+        // Update totalData with chargeable weight instead of actual weight
+        setTotalData((prev) => ({
+          ...prev,
+          ...values,
+          shipment_details: {
+            ...values.shipment_details,
+            // Store chargeable weight in the same unit as input for display consistency
+            weight: weightUnit === "kg" 
+              ? weightResponse?.data?.chargeable_weight_grams / 1000 
+              : weightResponse?.data?.chargeable_weight_grams,
+          },
+        }));
         setCurrent((prev) => prev + 1);
         // recommendationMutate(validData);
       } else if (current === 2) {
@@ -482,27 +494,46 @@ const NewOrderForm = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Pickup Address Card */}
             <Card
-              title="From Address"
-              className="shadow-sm border-gray-200"
+              title={
+                <span className="text-gray-900 font-semibold flex items-center gap-2">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gray-100">
+                    <EnvironmentOutlined className="text-gray-600" />
+                  </div>
+                  From Address
+                </span>
+              }
+              className="rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-all duration-200 bg-white"
+              bodyStyle={{ padding: "24px" }}
               extra={
-                <Button type="link" onClick={() => setIsPickupModalOpen(true)}>
+                <Button
+                  type="text"
+                  onClick={() => setIsPickupModalOpen(true)}
+                  className="text-gray-600 hover:text-gray-900 font-medium"
+                >
                   {pickupAddress ? "Change" : "Select"}
                 </Button>
               }
             >
               {pickupAddress ? (
-                <div className="flex flex-col gap-1">
-                  <Text strong>{pickupAddress.label}</Text>
-                  <Text>
-                    {pickupAddress.full_name} | {pickupAddress.phone_number}
+                <div className="flex flex-col gap-2">
+                  <Text strong className="text-base text-gray-900">
+                    {pickupAddress.label}
                   </Text>
-                  <Text type="secondary">{addressToString(pickupAddress)}</Text>
+                  <div className="flex items-center gap-2 text-gray-700">
+                    <Text>{pickupAddress.full_name}</Text>
+                    <span className="text-gray-400">|</span>
+                    <Text>{pickupAddress.phone_number}</Text>
+                  </div>
+                  <Text type="secondary" className="text-sm">
+                    {addressToString(pickupAddress)}
+                  </Text>
                 </div>
               ) : (
-                <div className="text-center py-8 text-gray-400">
+                <div className="text-center py-10 text-gray-400">
                   <Button
                     type="dashed"
                     onClick={() => setIsPickupModalOpen(true)}
+                    className="border-gray-300 hover:border-gray-400"
                   >
                     + Select Pickup Address
                   </Button>
@@ -512,27 +543,46 @@ const NewOrderForm = () => {
 
             {/* Delivery Address Card */}
             <Card
-              title="To Address"
-              className="shadow-sm border-gray-200"
+              title={
+                <span className="text-gray-900 font-semibold flex items-center gap-2">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gray-100">
+                    <EnvironmentOutlined className="text-gray-600" />
+                  </div>
+                  To Address
+                </span>
+              }
+              className="rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-all duration-200 bg-white"
+              bodyStyle={{ padding: "24px" }}
               extra={
-                <Button type="link" onClick={() => setIsDropModalOpen(true)}>
+                <Button
+                  type="text"
+                  onClick={() => setIsDropModalOpen(true)}
+                  className="text-gray-600 hover:text-gray-900 font-medium"
+                >
                   {dropAddress ? "Change" : "Select"}
                 </Button>
               }
             >
               {dropAddress ? (
-                <div className="flex flex-col gap-1">
-                  <Text strong>{dropAddress.label}</Text>
-                  <Text>
-                    {dropAddress.full_name} | {dropAddress.phone_number}
+                <div className="flex flex-col gap-2">
+                  <Text strong className="text-base text-gray-900">
+                    {dropAddress.label}
                   </Text>
-                  <Text type="secondary">{addressToString(dropAddress)}</Text>
+                  <div className="flex items-center gap-2 text-gray-700">
+                    <Text>{dropAddress.full_name}</Text>
+                    <span className="text-gray-400">|</span>
+                    <Text>{dropAddress.phone_number}</Text>
+                  </div>
+                  <Text type="secondary" className="text-sm">
+                    {addressToString(dropAddress)}
+                  </Text>
                 </div>
               ) : (
-                <div className="text-center py-8 text-gray-400">
+                <div className="text-center py-10 text-gray-400">
                   <Button
                     type="dashed"
                     onClick={() => setIsDropModalOpen(true)}
+                    className="border-gray-300 hover:border-gray-400"
                   >
                     + Select Delivery Address
                   </Button>
@@ -560,11 +610,14 @@ const NewOrderForm = () => {
       title: "Package Details",
       icon: <CodeSandboxOutlined />,
       content: (
-        <ResponsiveCard title="Shipment Details">
+        <div className="bg-white rounded-xl border-0 shadow-sm p-6">
+          <div className="mb-4">
+            <h3 className="text-base font-semibold text-gray-900">Shipment Details</h3>
+          </div>
           <Row gutter={24}>
             {/* Category Selection - Visual */}
             <Col span={24}>
-              <Form.Item label="Select Category">
+              <Form.Item label={<span className="text-sm font-semibold text-gray-700">Select Category</span>}>
                 <Form.Item
                   name={["shipment_details", "category_id"]}
                   noStyle
@@ -580,27 +633,9 @@ const NewOrderForm = () => {
               </Form.Item>
             </Col>
 
-            {/* Sub Category Selection - Visual */}
-            {/* <Col span={24}>
-              <Form.Item label="Select Sub-Category">
-                <Form.Item
-                  name={["shipment_details", "sub_category_id"]}
-                  noStyle
-                >
-                  <VisualSelector
-                    fetchUrl="/v1/transit-warehouse/catalog/subcategories"
-                    queryKey="sub_categories_visual"
-                    params={{ category_id }}
-                    disabled={!category_id}
-                    dataPoint={"sub_categories"}
-                  />
-                </Form.Item>
-              </Form.Item>
-            </Col> */}
-
             {/* Item Selection - Visual */}
             <Col span={24}>
-              <Form.Item label="Select Item">
+              <Form.Item label={<span className="text-sm font-semibold text-gray-700">Select Item</span>}>
                 <Form.Item
                   name={["shipment_details", "item_ids"]}
                   noStyle
@@ -618,19 +653,22 @@ const NewOrderForm = () => {
               </Form.Item>
             </Col>
           </Row>
+          
+          <Divider className="my-6 border-gray-200" />
+          
           <Row gutter={[24]} align="top">
             {/* SECTION 1: Configuration */}
             <Col xs={24} md={12} lg={6}>
               <Form.Item
                 name={["shipment_details", "delivery_type"]}
-                label="Service Type"
+                label={<span className="text-sm font-semibold text-gray-700">Service Type</span>}
                 initialValue="FORWARD"
                 className="mb-0"
               >
                 <Select
                   placeholder="Select Type"
                   options={deliveryTypeOptions}
-                  className="w-full"
+                  className="w-full rounded-lg"
                 />
               </Form.Item>
             </Col>
@@ -638,7 +676,7 @@ const NewOrderForm = () => {
             {/* SECTION 2: Dimensions */}
             <Col xs={24} sm={12} md={12} lg={9}>
               <Form.Item
-                label={"Dimensions (L × B × H)"}
+                label={<span className="text-sm font-semibold text-gray-700">Dimensions (L × B × H)</span>}
                 className="mb-0"
                 rules={[
                   {
@@ -660,6 +698,7 @@ const NewOrderForm = () => {
                   >
                     <InputNumber
                       min={0}
+                      precision={0}
                       controls={false}
                       placeholder="L"
                       className="w-full"
@@ -677,6 +716,7 @@ const NewOrderForm = () => {
                   >
                     <InputNumber
                       min={0}
+                      precision={0}
                       controls={false}
                       placeholder="B"
                       className="w-full border-l-0"
@@ -694,6 +734,7 @@ const NewOrderForm = () => {
                   >
                     <InputNumber
                       min={0}
+                      precision={0}
                       controls={false}
                       placeholder="H"
                       className="w-full border-l-0"
@@ -701,7 +742,17 @@ const NewOrderForm = () => {
                   </Form.Item>
                   <Select
                     value={dimensionUnit}
-                    onChange={setDimensionUnit}
+                    onChange={(value) => {
+                      setDimensionUnit(value);
+                      // Reset dimension fields when unit changes
+                      form.setFieldsValue({
+                        shipment_details: {
+                          length: undefined,
+                          breadth: undefined,
+                          height: undefined,
+                        },
+                      });
+                    }}
                     options={[
                       { label: "cm", value: "cm" },
                       { label: "inch", value: "inch" },
@@ -716,7 +767,7 @@ const NewOrderForm = () => {
             <Col xs={24} sm={12} lg={9}>
               <Form.Item
                 name={["shipment_details", "weight"]}
-                label="Actual Weight"
+                label={<span className="text-sm font-semibold text-gray-700">Actual Weight</span>}
                 className="mb-0"
                 rules={[{ required: true, message: "Please enter weight" }]}
               >
@@ -727,7 +778,15 @@ const NewOrderForm = () => {
                     <Select
                       defaultValue="gm"
                       value={weightUnit}
-                      onChange={setWeightUnit}
+                      onChange={(value) => {
+                        setWeightUnit(value);
+                        // Reset weight field when unit changes
+                        form.setFieldsValue({
+                          shipment_details: {
+                            weight: undefined,
+                          },
+                        });
+                      }}
                       className="select-after"
                       style={{ width: 80 }}
                       options={[
@@ -744,7 +803,7 @@ const NewOrderForm = () => {
 
             {/* SECTION 3: Weight Calculations */}
             <Col xs={24} sm={12}>
-              <div className="bg-slate-50 border border-slate-100 rounded-md p-3 mb-2">
+              <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-2">
                 <Row gutter={[12, 8]}>
                   {/* Volumetric Display */}
                   <Col span={12}>
@@ -757,9 +816,12 @@ const NewOrderForm = () => {
                       className="mb-0"
                       tooltip="Calculation: (L × B × H) / 5000"
                     >
-                      <div className="ant-input ant-input-sm ant-input-disabled bg-transparent border-0 text-gray-500 font-medium px-0">
-                        {volumetricWeight || 0}{" "}
-                        <span className="text-xs">kg</span>
+                      <div className="text-gray-600 font-semibold text-lg">
+                        {(volumetricWeight || 0).toFixed(2)}{" "}
+                        <span className="text-xs font-normal">kg</span>
+                      </div>
+                      <div className="text-gray-500 text-xs mt-1">
+                        {((volumetricWeight || 0) * 1000).toFixed(0)} gm
                       </div>
                     </Form.Item>
                   </Col>
@@ -768,17 +830,20 @@ const NewOrderForm = () => {
                   <Col span={12}>
                     <Form.Item
                       label={
-                        <span className="text-blue-600 font-bold">
+                        <span className="text-gray-700 font-semibold text-xs">
                           Chargeable Weight
                         </span>
                       }
                       className="mb-0"
                     >
-                      <div className="text-blue-700 font-bold text-3xl leading-tight">
-                        {finalWeight || 0}{" "}
+                      <div className="text-gray-900 font-bold text-2xl leading-tight">
+                        {(finalWeight || 0).toFixed(2)}{" "}
                         <span className="text-xs font-normal text-gray-500">
                           kg
                         </span>
+                      </div>
+                      <div className="text-gray-500 text-xs mt-1">
+                        {((finalWeight || 0) * 1000).toFixed(0)} gm
                       </div>
                     </Form.Item>
                   </Col>
@@ -801,27 +866,25 @@ const NewOrderForm = () => {
               </Form.Item>
             </Col> */}
           </Row>
-        </ResponsiveCard>
+        </div>
       ),
     },
     {
       title: "Additional Details",
       icon: <FileTextOutlined />,
       content: (
-        <ResponsiveCard
-          title={
-            <span className="flex items-center gap-2">
-              <SafetyCertificateOutlined className="text-blue-500" /> Additional
+        <div className="bg-white rounded-xl border-0 shadow-sm p-6">
+          <div className="mb-4">
+            <h3 className="text-base font-semibold text-gray-900 flex items-center gap-2">
+              <SafetyCertificateOutlined className="text-gray-600" /> Additional
               Details
-            </span>
-          }
-          size="small" // Compact Antd Card padding
-          className="shadow-sm"
-        >
+            </h3>
+          </div>
+          
           {/* 1. COMPACT SUMMARY STRIP */}
-          <div className="mb-4 rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
+          <div className="mb-4 rounded-xl border border-gray-200 bg-gray-50 p-4">
             <div className="mb-3 flex items-center gap-2 text-sm font-semibold text-gray-700">
-              <ShoppingOutlined className="text-blue-600" />
+              <ShoppingOutlined className="text-gray-600" />
               <span>Shipment Dimensions</span>
             </div>
 
@@ -850,10 +913,10 @@ const NewOrderForm = () => {
               ].map((item) => (
                 <div
                   key={item.label}
-                  className="flex items-center gap-3 rounded-lg bg-gray-50 p-3"
+                  className="flex items-center gap-3 rounded-lg bg-white p-3 border border-gray-200"
                 >
-                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100">
-                    <ShoppingOutlined className="text-blue-600 text-sm" />
+                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100">
+                    <ShoppingOutlined className="text-gray-600 text-sm" />
                   </div>
 
                   <div className="flex flex-col">
@@ -893,10 +956,10 @@ const NewOrderForm = () => {
 
             {/* Right Col: Toggles (Stacked densely) */}
             <Col xs={24} md={10}>
-              <div className="bg-white p-3 rounded-lg border border-gray-100 h-full flex flex-col justify-center gap-2">
+              <div className="bg-gray-50 p-3 rounded-lg border border-gray-200 h-full flex flex-col justify-center gap-2">
                 <div className="flex justify-between items-center">
                   <span className="text-sm text-gray-600 flex items-center gap-2">
-                    <MessageOutlined className="text-green-500" /> WhatsApp
+                    <MessageOutlined className="text-gray-500" /> WhatsApp
                     Updates
                   </span>
                   <Form.Item
@@ -909,24 +972,9 @@ const NewOrderForm = () => {
                   </Form.Item>
                 </div>
 
-                {/* <div className="flex justify-between items-center">
-                  <Tooltip title="Courier will not pick up from origin">
-                    <span className="text-sm text-gray-600 flex items-center gap-2 cursor-help border-b border-dashed border-gray-300">
-                      <StopOutlined className="text-orange-500" /> Skip 1st Mile
-                    </span>
-                  </Tooltip>
-                  <Form.Item
-                    name={["additional", "skip_first_mile_pickup"]}
-                    valuePropName="checked"
-                    noStyle
-                  >
-                    <Switch size="small" />
-                  </Form.Item>
-                </div> */}
-
                 <div className="flex justify-between items-center">
                   <span className="text-sm text-gray-600 flex items-center gap-2">
-                    <SafetyCertificateOutlined className="text-red-500" />{" "}
+                    <SafetyCertificateOutlined className="text-gray-500" />{" "}
                     Fragile Item
                   </span>
                   <Form.Item
@@ -950,7 +998,7 @@ const NewOrderForm = () => {
               </Form.Item>
             </Col>
           </Row>
-        </ResponsiveCard>
+        </div>
       ),
     },
     // Placeholder for Carrier Partner Step (to be implemented/reused)
@@ -1001,6 +1049,7 @@ const NewOrderForm = () => {
           onOfferApplied={handleOfferApplied}
           pickup_type={pickup_type}
           form={form}
+          weightUnit={weightUnit}
         />
       ),
     },
@@ -1177,6 +1226,11 @@ const NewOrderForm = () => {
           category_id: cleanedTotalData?.shipment_details?.category_id,
           item_ids: cleanedTotalData?.shipment_details?.item_ids,
           offer_code: offerCode,
+          // Convert weight to grams for API (chargeable weight is already stored)
+          weight:
+            weightUnit === "kg"
+              ? Number(cleanedTotalData?.shipment_details?.weight) * 1000
+              : Number(cleanedTotalData?.shipment_details?.weight),
         },
         additional: {
           ...cleanedTotalData.additional,
@@ -1198,24 +1252,16 @@ const NewOrderForm = () => {
       //   summaryData?.[0]?.price_summary?.final_total,
       //   customerInfo
       // );
+      
+      console.log("=== ORDER PAYLOAD ===");
+      console.log("Weight Unit:", weightUnit);
+      console.log("Weight in totalData:", cleanedTotalData?.shipment_details?.weight);
+      console.log("Weight being sent to API (in grams):", payload.shipment_details.weight);
+      console.log("Chargeable Weight (grams):", chargeableWeight);
+      console.log("Full payload:", payload);
+      
       const validatedData = createOrderSchema.parse(payload);
       createOrder(validatedData);
-      // if (createdOrderId) {
-      //   const customerInfo = {
-      //     name: cleanedTotalData.pickup_info.pickup_name,
-      //     phone: cleanedTotalData.pickup_info.pickup_phone,
-      //     email: cleanedTotalData.pickup_info.pickup_email || "abcd@gmail.com",
-      //   };
-
-      //   await initiatePayment(
-      //     createdOrderId,
-      //     summaryData?.[0]?.price_summary?.final_total,
-      //     customerInfo
-      //   );
-      // } else {
-      //   const validatedData = createOrderSchema.parse(payload);
-      //   createOrder(validatedData);
-      // }
     } catch (error) {
       console.log("Error:", error);
 
@@ -1255,30 +1301,32 @@ const NewOrderForm = () => {
               <div
                 onClick={() => onChange(option.value)}
                 className={`
-                relative cursor-pointer rounded-lg border-2 p-2 transition-all duration-200
+                relative cursor-pointer rounded-xl border-2 p-4 transition-all duration-200
                 ${
                   isSelected
-                    ? "border-blue-500 bg-blue-50 shadow-md"
-                    : "border-gray-200 bg-white hover:border-blue-300"
+                    ? "border-gray-900 bg-gray-50 shadow-md"
+                    : "border-gray-200 bg-white hover:border-gray-400 hover:shadow-sm"
                 }
               `}
               >
                 {isSelected && (
-                  <div className="absolute top-2 right-2 text-blue-500">
-                    <CheckCircleFilled className="text-xl" />
+                  <div className="absolute top-3 right-3 text-gray-900">
+                    <CheckCircleFilled className="text-lg" />
                   </div>
                 )}
                 <div
-                  className={`flex  gap-2 items-center text-center ${
-                    isSelected ? "text-blue-700" : "text-gray-600"
+                  className={`flex gap-3 items-center ${
+                    isSelected ? "text-gray-900" : "text-gray-600"
                   }`}
                 >
                   <div
-                    className={isSelected ? "text-blue-500" : "text-gray-400"}
+                    className={`flex h-10 w-10 items-center justify-center rounded-lg ${
+                      isSelected ? "bg-gray-200 text-gray-900" : "bg-gray-100 text-gray-500"
+                    }`}
                   >
                     {option.icon}
                   </div>
-                  <div className="font-semibold text-[16px] mb-1">
+                  <div className="font-semibold text-base">
                     {option.title}
                   </div>
                 </div>
@@ -1307,7 +1355,7 @@ const NewOrderForm = () => {
         // onChange={(e) => setCurrent(e)}
         current={current}
         items={steps}
-        className="mb-8"
+        className="mb-8 bg-white rounded-xl border border-gray-200 p-6 shadow-sm"
         size="small"
       />
 
@@ -1341,9 +1389,9 @@ const NewOrderForm = () => {
         <div className="mb-8">{steps[current]?.content}</div>
 
         {/* Navigation Buttons */}
-        <div className="flex justify-end gap-4 -mx-3 -mb-8 sticky bottom-0 bg-white p-4 border-t border-gray-300 z-10 shadow-md rounded-b-lg">
+        <div className="flex justify-end gap-3 -mx-6 -mb-6 sticky bottom-0 bg-gradient-to-t from-white via-white to-transparent p-6 border-t border-gray-200 z-10 shadow-lg rounded-b-xl">
           {current > 0 && (
-            <ResponsiveButton onClick={prev}>Previous</ResponsiveButton>
+            <ResponsiveButton onClick={prev} className="border-gray-300 hover:border-gray-400">Previous</ResponsiveButton>
           )}
           {current === 0 && <BackButton navigateTo="/orders">Back</BackButton>}
           {current < steps.length - 1 && (
@@ -1355,6 +1403,7 @@ const NewOrderForm = () => {
                 calculatePricePending ||
                 isCheckWeightRangeServiceabilityPending
               }
+              className="bg-gray-900 hover:bg-gray-800 border-0"
             >
               Next
             </ResponsiveButton>
@@ -1364,6 +1413,7 @@ const NewOrderForm = () => {
               loading={isPending}
               type="primary"
               htmlType="submit"
+              className="bg-gray-900 hover:bg-gray-800 border-0"
             >
               Create Order & Pay
             </ResponsiveButton>
