@@ -159,19 +159,19 @@ const AddressSelectorModal = ({ open, onCancel, onSelect, title }) => {
             <List.Item
               className="hover:bg-slate-50 border border-gray-100 rounded-lg mb-2"
               actions={[
-                <Button
-                  size="small"
-                  onClick={() =>
-                    setIsEditModalData({
-                      open: true,
-                      id: item.id,
-                      type: "edit",
-                    })
-                  }
-                  key="edit"
-                >
-                  Edit
-                </Button>,
+                // <Button
+                //   size="small"
+                //   onClick={() =>
+                //     setIsEditModalData({
+                //       open: true,
+                //       id: item.id,
+                //       type: "edit",
+                //     })
+                //   }
+                //   key="edit"
+                // >
+                //   Edit
+                // </Button>,
                 <Button
                   size="small"
                   type="primary"
