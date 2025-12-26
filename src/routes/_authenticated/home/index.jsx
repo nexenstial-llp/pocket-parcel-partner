@@ -88,7 +88,7 @@ function HomeComponent() {
       title: "Action",
       key: "action",
       render: (_, record) => (
-        <Link to={`/orders/track-order`} search={{ orderId: record.order_id }}>
+        <Link to={`/orders/${record.id}`}>
           <Button type="link" size="small">
             View
           </Button>
