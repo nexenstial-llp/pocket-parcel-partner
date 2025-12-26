@@ -1,14 +1,17 @@
 /* eslint-disable react/prop-types */
 import { useState } from "react";
-import { Card, Tag, Row, Col, Space, Typography, Divider } from "antd";
+import { Card, Tag, Row, Col, Typography, Divider, Timeline } from "antd";
 import {
   EnvironmentOutlined,
   UserOutlined,
   PhoneOutlined,
-  MailOutlined,
   InboxOutlined,
   DollarOutlined,
-  CalendarOutlined,
+  ExclamationCircleOutlined,
+  CreditCardOutlined,
+  ShopOutlined,
+  ClockCircleOutlined,
+  PushpinOutlined,
 } from "@ant-design/icons";
 
 import moment from "moment-timezone";
@@ -20,8 +23,10 @@ import {
 import EditAddressModal from "./EditAddressModal";
 
 import OrderStatusSteps from "./OrderStatusSteps";
+import { Empty } from "antd";
+import { Alert } from "antd";
 
-const { Text, Title } = Typography;
+const { Title } = Typography;
 
 const initialState = { open: false, type: null };
 
@@ -32,91 +37,100 @@ export default function CustomerOrderDetails({ order }) {
   const drop = order?.drop_address;
   const originalPickup = order?.customer_original_pickup_address;
   const statusTimeline = order?.status_timeline || [];
+  const isPendingPayment = order?.payment_status === "PENDING";
 
   /* ---------------------------------- */
   /* Reusable UI blocks                 */
   /* ---------------------------------- */
-
-  const StatusBadge = ({ status }) => (
-    <Tag color={getStatusColor(status)}>{removeUnderscores(status)}</Tag>
+  const StatusBadge = ({ status, label }) => (
+    <div className="flex items-center gap-2">
+      <span className="text-xs text-gray-500 uppercase tracking-wide font-medium">
+        {label}:
+      </span>
+      <Tag
+        color={getStatusColor(status)}
+        className="rounded-md px-2 py-0.5 text-[11px] font-semibold uppercase border-0"
+        style={{ lineHeight: "18px" }}
+      >
+        {removeUnderscores(status)}
+      </Tag>
+    </div>
   );
-  // const StatusBadge = ({ status }) => (
-  //   <Badge
-  //     status={
-  //       status?.includes("SUCCESS") || status?.includes("DELIVERED")
-  //         ? "success"
-  //         : status?.includes("PENDING") || status?.includes("PROCESSING")
-  //         ? "processing"
-  //         : status?.includes("CANCELLED") || status?.includes("FAILED")
-  //         ? "error"
-  //         : "default"
-  //     }
-  //     text={
-  //       <span className="text-xs font-medium">{removeUnderscores(status)}</span>
-  //     }
-  //   />
-  // );
 
   const InfoRow = ({ icon, label, value }) => (
-    <div className="flex items-start gap-3 py-2">
-      <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center shrink-0">
-        <span className="text-gray-600 text-sm">{icon}</span>
-      </div>
-      <div className="flex-1 min-w-0">
-        <div className="text-[10px] uppercase tracking-wider text-gray-500 mb-0.5">
+    <div className="flex items-start gap-3 py-1.5">
+      <div className="mt-0.5 text-gray-400 text-sm shrink-0">{icon}</div>
+      <div className="min-w-0 flex-1">
+        <div className="text-[10px] uppercase tracking-wide text-gray-400 mb-0.5">
           {label}
         </div>
-        <div className="text-sm text-gray-900 font-medium wrap-break-word">
-          {value}
+        <div className="text-sm text-gray-700 leading-snug wrap-break-word">
+          {value || <span className="text-gray-300 italic">N/A</span>}
         </div>
       </div>
     </div>
   );
 
-  const AddressBlock = ({ title, data, typeLabel, extra }) => {
-    if (!data) return null;
+  const AddressBlock = ({ title, data, icon, typeLabel }) => {
+    if (!data)
+      return (
+        <Card
+          size="small"
+          className="h-full bg-gray-50 border-dashed border-gray-200 shadow-none flex items-center justify-center"
+        >
+          <Empty
+            description={
+              <span className="text-xs text-gray-400">No {title}</span>
+            }
+            image={Empty.PRESENTED_IMAGE_SIMPLE}
+          />
+        </Card>
+      );
 
     return (
       <Card
         size="small"
-        className="h-full rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-all duration-200 bg-white"
-      >
-        <div className="flex justify-between items-start mb-4">
+        className="h-full border border-gray-100 shadow-sm hover:shadow-md transition-shadow duration-200"
+        styles={{
+          header: {
+            borderBottom: "1px solid #f0f0f0",
+            padding: "12px 16px",
+            minHeight: "auto",
+          },
+          body: {
+            padding: "16px",
+          },
+        }}
+        title={
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center">
-              <EnvironmentOutlined className="text-gray-600 text-sm" />
-            </div>
-            <Text strong className="text-sm text-gray-900">
-              {title}
-            </Text>
-          </div>
-
-          <div className="flex items-center gap-2">
+            {icon}
+            <span className="text-sm font-semibold text-gray-800">{title}</span>
             {typeLabel && (
-              <Tag
-                bordered={false}
-                color={
-                  typeLabel === "Pickup"
-                    ? "blue"
-                    : typeLabel === "Drop"
-                    ? "green"
-                    : "warning"
-                }
-                className={`rounded-full px-3 py-0.5 text-[10px] font-medium bg-gray-100 text-gray-700`}
+              <span
+                className={`ml-auto text-[10px] font-medium bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full uppercase tracking-wide ${
+                  typeLabel === "Source"
+                    ? "bg-green-500 text-white"
+                    : typeLabel === "Destination"
+                    ? "bg-orange-500 text-white"
+                    : ""
+                }`}
               >
                 {typeLabel}
-              </Tag>
+              </span>
             )}
-            {extra}
           </div>
-        </div>
-
-        <Space direction="vertical" size={0} className="w-full">
+        }
+      >
+        <div className="space-y-1">
           {(data.pickup_name || data.drop_name) && (
             <InfoRow
               icon={<UserOutlined />}
               label="Name"
-              value={data.pickup_name || data.drop_name}
+              value={
+                <span className="font-medium text-gray-900">
+                  {data.pickup_name || data.drop_name}
+                </span>
+              }
             />
           )}
 
@@ -128,33 +142,24 @@ export default function CustomerOrderDetails({ order }) {
             />
           )}
 
-          {(data.email || data.drop_email) && (
+          <div className="border-t border-gray-200">
             <InfoRow
-              icon={<MailOutlined />}
-              label="Email"
-              value={data.email || data.drop_email}
+              icon={<EnvironmentOutlined />}
+              label="Address"
+              value={
+                <div>
+                  <div className="mb-0.5">
+                    {data.pickup_address || data.drop_address}
+                  </div>
+                  <div className="text-xs text-gray-500">
+                    {data.city}, {data.state}{" "}
+                    {data.pincode && ` - ${data.pincode}`}
+                  </div>
+                </div>
+              }
             />
-          )}
-
-          <div className="flex items-start gap-3 py-2">
-            <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center shrink-0">
-              <EnvironmentOutlined className="text-gray-600 text-sm" />
-            </div>
-            <div className="flex-1 min-w-0">
-              <div className="text-[10px] uppercase tracking-wider text-gray-500 mb-0.5">
-                Address
-              </div>
-              <div className="text-sm text-gray-900 font-medium wrap-break-word">
-                {data.pickup_address || data.drop_address || data.address}
-              </div>
-              <Text type="secondary" className="text-xs mt-1 block">
-                {data.pickup_city || data.drop_city || data.city},{" "}
-                {data.pickup_state || data.drop_state || data.state} -{" "}
-                {data.pickup_pincode || data.drop_pincode || data.pincode}
-              </Text>
-            </div>
           </div>
-        </Space>
+        </div>
       </Card>
     );
   };
@@ -163,7 +168,7 @@ export default function CustomerOrderDetails({ order }) {
   /* Component Render                   */
   /* ---------------------------------- */
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-5 font-sans text-gray-800">
       <EditAddressModal
         open={isModalVisible.open}
         onCancel={() => setIsModalVisible(initialState)}
@@ -171,435 +176,354 @@ export default function CustomerOrderDetails({ order }) {
         addressData={order}
         type={isModalVisible.type}
       />
-      <Row gutter={[16, 16]}>
-        {/* ================= HEADER ================= */}
-        <Col xs={24} lg={14}>
-          <Card className="rounded-xl border-0 shadow-sm hover:shadow-md transition-all duration-200 h-full">
-            <Row gutter={[24, 16]} align="middle">
-              <Col xs={24} md={14}>
-                <Space direction="vertical" size={4}>
-                  <div className="flex items-center gap-2">
-                    <div className="size-8 rounded-lg bg-gray-100 flex items-center justify-center">
-                      <InboxOutlined className="text-gray-700 text-lg" />
-                    </div>
-                    <div>
-                      <Text
-                        type="secondary"
-                        className="text-[10px] uppercase tracking-wider block"
-                      >
-                        Order Number
-                      </Text>
-                      <Title
-                        level={4}
-                        style={{ margin: 0 }}
-                        className="text-lg!"
-                      >
-                        {order.order_number}
-                      </Title>
-                    </div>
-                  </div>
-                  <div className="ml-12">
-                    <Text type="secondary" className="text-xs">
-                      Ref:{" "}
-                      <span className="text-gray-900">
-                        {order.reference_number}
-                      </span>
-                    </Text>
-                  </div>
-                </Space>
-              </Col>
+      {isPendingPayment && (
+        <Alert
+          message="Payment Required"
+          description={
+            <div>
+              <p className="m-0 text-xs">
+                This order requires payment to be processed. Please complete the
+                payment using the <strong>&quot;Pay Now&quot;</strong> button
+                above.
+              </p>
+              <p className="m-0 mt-2">
+                <strong>Amount Due: ₹{order?.total_amount}</strong>
+              </p>
+            </div>
+          }
+          type="warning"
+          showIcon
+          icon={<ExclamationCircleOutlined />}
+          className="mb-4"
+        />
+      )}
 
-              <Col xs={24} md={10}>
-                <div className="text-right md:text-right">
-                  <div className="flex items-center justify-end gap-2 mb-2">
-                    <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center">
-                      <DollarOutlined className="text-gray-600" />
-                    </div>
-                    <div>
-                      <Text
-                        type="secondary"
-                        className="text-[10px] uppercase tracking-wider block"
-                      >
-                        Total Amount
-                      </Text>
-                      <div className="text-2xl font-bold text-green-600">
-                        ₹{order.total_amount}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="text-xs space-y-1 bg-gray-50 rounded-lg p-3 mt-2">
-                    <div className="flex justify-between items-center gap-4">
-                      <span className="text-gray-500">Payment Mode:</span>
-                      <span className="text-gray-900 font-semibold">
-                        {order.payment_mode}
-                      </span>
-                    </div>
-                    <div className="flex justify-between items-center gap-4">
-                      <span className="text-gray-500">Gateway:</span>
-                      <span className="text-gray-900 font-semibold">
-                        {order.payment_gateway}
-                      </span>
-                    </div>
-                  </div>
+      {/* ================= TOP SECTION: HEADER & SUMMARY ================= */}
+      <Card
+        styles={{
+          body: {
+            padding: 0,
+          },
+        }}
+        className="border-gray-200 shadow-sm rounded-lg overflow-hidden"
+      >
+        <div className="p-5 md:p-6 bg-white">
+          <Row gutter={[24, 24]} align="middle">
+            {/* Order ID & Basic Info */}
+            <Col xs={24} md={14}>
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 border border-blue-100">
+                  <InboxOutlined className="text-xl" />
                 </div>
-              </Col>
-            </Row>
+                <div>
+                  <div className="flex items-baseline gap-3 flex-wrap">
+                    <Title
+                      level={4}
+                      className="mb-0! text-gray-900! font-bold!"
+                    >
+                      {order?.order_number}
+                    </Title>
+                    <Tag className="m-0 bg-gray-100 border-gray-200 text-gray-500 font-mono text-xs px-2 rounded">
+                      Ref: {order?.reference_number}
+                    </Tag>
+                  </div>
 
-            <Divider className="my-4" />
-
-            <Space size={[12, 12]} wrap>
-              Payment Status: <StatusBadge status={order.payment_status} />
-              Order Status: <StatusBadge status={order.order_status} />
-              Lifecycle Status: <StatusBadge status={order.lifecycle_status} />
-            </Space>
-
-            {/* Courier Partner Info */}
-            {(order.cp_id ||
-              order.account_code ||
-              order.carrier_partner ||
-              order.courier_partner) && (
-              <div className="mt-4 pt-4 border-t border-gray-200">
-                <div className="flex items-start gap-3">
-                  {order.courier_logo && (
-                    <div className="w-12 h-12 rounded-lg border border-gray-200 bg-white flex items-center justify-center p-1 shrink-0">
-                      <img
-                        src={order.courier_logo}
-                        alt="Courier Partner"
-                        className="w-full h-full object-contain"
-                      />
-                    </div>
-                  )}
-                  <div className="flex-1 min-w-0">
-                    <div className="text-[10px] uppercase tracking-wider text-gray-500 mb-1">
-                      Courier Partner
-                    </div>
-                    {(order.courier_name || order.cp_name) && (
-                      <div className="font-semibold text-sm text-gray-900 mb-2">
-                        {order.courier_name || order.cp_name}
-                      </div>
-                    )}
-                    <div className="grid grid-cols-2 gap-2">
-                      {order.cp_id && (
-                        <div>
-                          <div className="text-[9px] uppercase tracking-wider text-gray-400">
-                            CP ID
-                          </div>
-                          <div className="text-xs text-gray-700 font-medium">
-                            {order.cp_id}
-                          </div>
-                        </div>
-                      )}
-                      {order.account_code && (
-                        <div>
-                          <div className="text-[9px] uppercase tracking-wider text-gray-400">
-                            Account Code
-                          </div>
-                          <div className="text-xs text-gray-700 font-medium">
-                            {order.account_code}
-                          </div>
-                        </div>
-                      )}
-                    </div>
+                  <div className="flex flex-wrap gap-4 mt-3">
+                    <StatusBadge status={order?.order_status} label="Order" />
+                    <Divider
+                      size="small"
+                      type="vertical"
+                      className="h-5! bg-gray-300"
+                    />
+                    <StatusBadge
+                      status={order?.payment_status}
+                      label="Payment"
+                    />
+                    <Divider
+                      size="small"
+                      type="vertical"
+                      className="h-5! bg-gray-300"
+                    />
+                    <StatusBadge
+                      status={order?.lifecycle_status}
+                      label="Lifecycle"
+                    />
                   </div>
                 </div>
               </div>
+            </Col>
+
+            {/* Price & Payment Details */}
+            <Col xs={24} md={10}>
+              <div className="bg-gray-50 rounded-lg p-4 border border-gray-100 flex flex-col md:items-end">
+                <div className="text-xs text-gray-500 uppercase tracking-wider mb-1">
+                  Total Amount
+                </div>
+                <div className="text-2xl font-bold text-gray-900 mb-2">
+                  ₹{Number(order?.total_amount).toLocaleString("en-IN")}
+                </div>
+
+                <div className="flex items-center gap-3 text-xs text-gray-600">
+                  <span className="flex items-center gap-1.5 bg-white px-2 py-1 rounded border border-gray-200">
+                    <CreditCardOutlined /> {order?.payment_mode}
+                  </span>
+                  <span className="flex items-center gap-1.5 bg-white px-2 py-1 rounded border border-gray-200">
+                    <DollarOutlined /> {order?.payment_gateway}
+                  </span>
+                </div>
+              </div>
+            </Col>
+          </Row>
+        </div>
+
+        {/* Courier Info Footer (if available) */}
+        {(order?.cp_id || order?.courier_name || order?.cp_name) && (
+          <div className="bg-gray-50 px-6 py-3 border-t border-gray-200 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm">
+            <span className="text-gray-500 font-medium text-xs uppercase tracking-wide">
+              Carrier Partner:
+            </span>
+
+            <div className="flex items-center gap-2">
+              {order?.courier_logo ? (
+                <img
+                  src={order?.courier_logo}
+                  alt="Courier"
+                  className="h-5 object-contain"
+                />
+              ) : (
+                <ShopOutlined className="text-gray-400" />
+              )}
+              <span className="font-semibold text-gray-700">
+                {order?.courier_name ||
+                  order?.cp_name ||
+                  order?.account_code ||
+                  "Unknown Carrier"}
+              </span>
+            </div>
+
+            {order?.account_code && (
+              <span className="text-gray-500 text-xs">
+                Acc:{" "}
+                <span className="font-mono text-gray-700">
+                  {order?.account_code}
+                </span>
+              </span>
             )}
+          </div>
+        )}
+      </Card>
+
+      <Row gutter={[20, 20]}>
+        {/* ================= LEFT COL: TIMELINE ================= */}
+        <Col xs={24} lg={16}>
+          <Card
+            className="h-full shadow-sm border-gray-200 rounded-lg"
+            title={
+              <span className="text-sm font-semibold flex items-center gap-2">
+                <ClockCircleOutlined /> Order Journey
+              </span>
+            }
+            styles={{
+              body: {
+                padding: "0px",
+              },
+            }}
+          >
+            <div className="p-6">
+              {/* Visual Stepper */}
+              <div className="px-2">
+                <OrderStatusSteps orders={order} />
+              </div>
+
+              <Divider className="my-6 border-gray-100" />
+
+              {/* Granular Timeline */}
+              <div className="rounded-lg p-4 border border-gray-100">
+                <div className="flex items-center justify-between mb-4">
+                  <span className="text-xs font-bold text-gray-500 uppercase tracking-wide">
+                    Activity Log
+                  </span>
+                  <span className="text-xs text-gray-400">
+                    {statusTimeline.length} updates
+                  </span>
+                </div>
+
+                <div className="max-h-[300px] overflow-y-auto p-2 custom-scrollbar">
+                  {statusTimeline.length === 0 ? (
+                    <Empty
+                      image={Empty.PRESENTED_IMAGE_SIMPLE}
+                      description="No updates yet"
+                    />
+                  ) : (
+                    <Timeline
+                      reverse
+                      items={[...statusTimeline].map((status, idx) => {
+                        const isLatest = idx === 0;
+                        const statusColor = getStatusColorForTimeline(
+                          status.to_status
+                        );
+
+                        return {
+                          color: isLatest ? "blue" : "gray", // Or map 'statusColor' to accepted Antd colors if needed (blue, red, green, gray)
+                          dot: (
+                            <div
+                              className={`w-2.5 h-2.5 rounded-full border-2 border-white ring-1 ring-gray-200 ${
+                                isLatest
+                                  ? "ring-blue-200 bg-blue-500"
+                                  : "bg-gray-400"
+                              }`}
+                              style={{
+                                backgroundColor: isLatest
+                                  ? undefined
+                                  : statusColor,
+                              }}
+                            />
+                          ),
+                          children: (
+                            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-1 pb-2 bg-orange-50 hover:shadow-sm p-4 rounded-md">
+                              <div>
+                                <div
+                                  className={`text-sm ${
+                                    isLatest
+                                      ? "font-bold text-gray-800"
+                                      : "font-medium text-gray-600"
+                                  }`}
+                                >
+                                  {removeUnderscores(status.to_status)}
+                                </div>
+                                {status.notes && (
+                                  <div className="text-xs text-gray-500 mt-0.5 bg-white px-1.5 py-0.5 rounded border border-gray-200 inline-block">
+                                    {removeUnderscores(status.notes)}
+                                  </div>
+                                )}
+                              </div>
+                              <div className="text-xs text-gray-400 font-mono whitespace-nowrap">
+                                {moment(status.created_at).format(
+                                  "DD MMM YY, HH:mm"
+                                )}
+                              </div>
+                            </div>
+                          ),
+                        };
+                      })}
+                    />
+                  )}
+                </div>
+              </div>
+            </div>
           </Card>
         </Col>
-        {/* ================= PACKAGE DETAILS ================= */}
-        <Col xs={24} lg={10}>
+
+        {/* ================= RIGHT COL: PACKAGE DETAILS ================= */}
+        <Col xs={24} lg={8}>
           <Card
-            className="rounded-xl border-0 shadow-sm hover:shadow-md transition-all duration-200 h-full"
+            className="h-full shadow-sm border-gray-200 rounded-lg"
             title={
-              <div className="flex items-center gap-3">
-                <div className="size-8 rounded-lg bg-gray-100 flex items-center justify-center">
-                  <InboxOutlined className="text-gray-700 text-lg" />
-                </div>
-                <Text strong className="text-base">
-                  Package Details
-                </Text>
-              </div>
+              <span className="text-sm font-semibold flex items-center gap-2">
+                <InboxOutlined /> Package Details
+              </span>
             }
           >
-            <div className="grid grid-cols-2 gap-x-4 gap-y-4">
-              {[
-                {
-                  label: "Dimensions",
-                  value: `${order.length} × ${order.breadth} × ${order.height} cm`,
-                  highlight: false,
-                },
-                {
-                  label: "Weight",
-                  value: `${order.weight / 1000} kg`,
-                  highlight: false,
-                },
-                {
-                  label: "Volumetric",
-                  value: `${order.volumetric_weight} kg`,
-                  highlight: false,
-                },
-                {
-                  label: "Chargeable",
-                  value: `${order.chargeable_weight / 1000} kg`,
-                  highlight: true,
-                },
-                {
-                  label: "Declared Value",
-                  value: `₹${order.declared_value}`,
-                  highlight: false,
-                },
-                {
-                  label: "Created Via",
-                  value: removeUnderscores(order.created_via),
-                  highlight: false,
-                },
-              ].map(({ label, value, highlight }) => (
-                <div
-                  key={label}
-                  className={`${
-                    highlight
-                      ? "col-span-2 bg-gray-50 rounded-lg p-3 border border-gray-200"
-                      : ""
-                  }`}
-                >
-                  <div className="text-[10px] uppercase tracking-wider text-gray-500 mb-1">
-                    {label}
-                  </div>
+            <div className="space-y-4">
+              {/* Main Grid */}
+              <div className="grid grid-cols-2 gap-3">
+                {[
+                  {
+                    label: "Dimensions",
+                    value: `${order?.length}×${order?.breadth}×${order?.height} cm`,
+                    full: true,
+                  },
+                  {
+                    label: "Weight",
+                    value: `${(order?.weight / 1000).toFixed(2)} kg`,
+                  },
+                  {
+                    label: "Volumetric",
+                    value: `${order?.volumetric_weight} kg`,
+                  },
+                  {
+                    label: "Chargeable",
+                    value: `${(order?.chargeable_weight / 1000).toFixed(2)} kg`,
+                    highlight: true,
+                  },
+                ].map((item, i) => (
                   <div
-                    className={`font-semibold ${
-                      highlight
-                        ? "text-gray-900 text-base"
-                        : "text-gray-900 text-sm"
-                    }`}
+                    key={i}
+                    className={`p-3 rounded border ${
+                      item.highlight
+                        ? "bg-blue-50 border-blue-100 col-span-2"
+                        : "bg-white border-gray-100"
+                    } ${item.full ? "col-span-2" : ""}`}
                   >
-                    {value}
+                    <div
+                      className={`text-[10px] uppercase tracking-wider mb-0.5 ${
+                        item.highlight
+                          ? "text-blue-600 font-semibold"
+                          : "text-gray-400"
+                      }`}
+                    >
+                      {item.label}
+                    </div>
+                    <div
+                      className={`font-semibold ${
+                        item.highlight
+                          ? "text-blue-900 text-lg"
+                          : "text-gray-700 text-sm"
+                      }`}
+                    >
+                      {item.value}
+                    </div>
                   </div>
+                ))}
+              </div>
+
+              <div className="pt-2">
+                <div className="text-xs text-gray-400 mb-1">
+                  Creation Source
                 </div>
-              ))}
+                <Tag className="m-0 bg-gray-50 text-gray-600 border-gray-200">
+                  {removeUnderscores(order?.created_via || "Web Dashboard")}
+                </Tag>
+              </div>
             </div>
           </Card>
         </Col>
       </Row>
-      <Card
-        className="rounded-xl border-0 shadow-sm hover:shadow-md transition-all duration-200"
-        title={
-          <div className="flex items-center gap-3">
-            <div className="size-8 rounded-lg bg-gray-100 flex items-center justify-center">
-              <CalendarOutlined className="text-gray-700 text-lg" />
-            </div>
-            <Text strong className="text-base">
-              Status Timeline
-            </Text>
-          </div>
-        }
-      >
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Left Column - Status Steps & Stats */}
-          <div className="flex flex-col gap-6">
-            <OrderStatusSteps orders={order} />
 
-            {/* Timeline Stats Summary */}
-            {statusTimeline.length > 0 && (
-              <div className="grid grid-cols-3 gap-3">
-                <div className="bg-gray-50 rounded-lg p-3 border border-gray-200">
-                  <div className="text-[10px] text-gray-600 font-medium uppercase tracking-wide mb-1">
-                    Total Updates
-                  </div>
-                  <div className="text-xl font-bold text-gray-900">
-                    {statusTimeline.length}
-                  </div>
-                </div>
-                <div className="bg-gray-50 rounded-lg p-3 border border-gray-200">
-                  <div className="text-[10px] text-gray-600 font-medium uppercase tracking-wide mb-1">
-                    Current Status
-                  </div>
-                  <div className="text-xs font-bold text-gray-900 truncate">
-                    {removeUnderscores(
-                      statusTimeline[statusTimeline.length - 1]?.to_status ||
-                        "N/A"
-                    )}
-                  </div>
-                </div>
-                <div className="bg-gray-50 rounded-lg p-3 border border-gray-200">
-                  <div className="text-[10px] text-gray-600 font-medium uppercase tracking-wide mb-1">
-                    Last Updated
-                  </div>
-                  <div className="text-xs font-bold text-gray-900">
-                    {moment(
-                      statusTimeline[statusTimeline.length - 1]?.created_at
-                    ).fromNow()}
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Right Column - Timeline Updates */}
-          <div className="h-[300px] overflow-y-auto p-4 flex flex-col bg-white rounded-xl border border-gray-200">
-            {statusTimeline.length === 0 ? (
-              <div className="text-center py-8">
-                <div className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center mx-auto mb-3">
-                  <CalendarOutlined className="text-gray-400 text-lg" />
-                </div>
-                <Text strong className="text-sm text-gray-900 block mb-1">
-                  No status updates yet
-                </Text>
-                <Text type="secondary" className="text-xs block">
-                  Status updates will appear here as your order progresses
-                </Text>
-              </div>
-            ) : (
-              <div className="flex-1 overflow-y-auto custom-scrollbar divide-y divide-gray-100">
-                {[...statusTimeline].reverse().map((status, reversedIndex) => {
-                  const reversedArray = [...statusTimeline].reverse();
-                  const isLatest = reversedIndex === reversedArray.length - 1;
-                  const statusColor = getStatusColorForTimeline(
-                    status.to_status
-                  );
-                  const prevStatus =
-                    reversedIndex > 0 ? reversedArray[reversedIndex - 1] : null;
-                  const timeDiff = prevStatus
-                    ? moment(status.created_at).diff(
-                        moment(prevStatus.created_at),
-                        "minutes"
-                      )
-                    : null;
-
-                  return (
-                    <div
-                      key={reversedIndex}
-                      className={`flex gap-3 p-3 hover:bg-gray-50 transition-colors ${
-                        isLatest ? "bg-gray-50" : ""
-                      }`}
-                    >
-                      {/* Timeline Dot & Line */}
-                      <div className="flex flex-col items-center pt-0.5">
-                        <div
-                          className={`w-2.5 h-2.5 rounded-full border-2 border-white shadow-sm shrink-0 ${
-                            isLatest ? "ring-2 ring-offset-1 ring-gray-300" : ""
-                          }`}
-                          style={{
-                            backgroundColor: statusColor,
-                          }}
-                        />
-                        {!isLatest && (
-                          <div className="w-0.5 bg-gray-200 flex-1 mt-1" />
-                        )}
-                      </div>
-
-                      {/* Content */}
-                      <div className="flex-1 min-w-0 pb-1">
-                        {/* Header Row */}
-                        <div className="flex items-start justify-between gap-2">
-                          <div className="flex-1 min-w-0">
-                            <div className="flex items-center gap-1.5 flex-wrap">
-                              <span className="text-xs font-semibold text-gray-900">
-                                {removeUnderscores(status.to_status)}
-                              </span>
-                              {isLatest && (
-                                <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-medium bg-gray-900 text-white">
-                                  Latest
-                                </span>
-                              )}
-                            </div>
-                            {status.from_status && (
-                              <div className="text-[10px] text-gray-500 mt-0.5">
-                                from {removeUnderscores(status.from_status)}
-                              </div>
-                            )}
-                          </div>
-
-                          {/* Timestamp */}
-                          <div className="text-right shrink-0">
-                            <div className="text-[10px] font-medium text-gray-900">
-                              {moment(status.created_at).format(
-                                "DD MMM, HH:mm"
-                              )}
-                            </div>
-                            {timeDiff !== null && timeDiff > 0 && (
-                              <div className="text-[9px] text-gray-500 mt-0.5">
-                                +
-                                {timeDiff < 60
-                                  ? `${timeDiff}m`
-                                  : `${Math.floor(timeDiff / 60)}h ${
-                                      timeDiff % 60
-                                    }m`}
-                              </div>
-                            )}
-                          </div>
-                        </div>
-
-                        {/* Notes */}
-                        {status.notes && (
-                          <div className="mt-1.5 text-[11px] text-gray-600 bg-gray-50 rounded px-2.5 py-1.5 border border-gray-100">
-                            {removeUnderscores(status.notes)}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-          </div>
-        </div>
-      </Card>
-      {/* ================= ADDRESSES ================= */}
-      <Card
-        title={
-          <div className="flex items-center gap-3 ">
-            <div className="size-8 rounded-lg bg-gray-100 flex items-center justify-center">
-              <EnvironmentOutlined className="text-gray-700 text-lg" />
-            </div>
-            <Text strong className="text-base">
-              Addresses
-            </Text>
-          </div>
-        }
-        className="rounded-xl border-0 shadow-sm hover:shadow-md transition-all duration-200"
-      >
+      {/* ================= ADDRESSES ROW ================= */}
+      <div className="mt-2">
+        <h3 className="text-sm font-bold text-gray-600 mb-3 uppercase tracking-wider pl-1">
+          Shipping Addresses
+        </h3>
         <Row gutter={[16, 16]}>
           <Col xs={24} md={8}>
             <AddressBlock
-              title="Customer Pickup (Original)"
-              typeLabel="Customer"
+              title="Customer (Origin)"
+              typeLabel="Source"
+              icon={<UserOutlined className="text-blue-500" />}
               data={originalPickup}
             />
           </Col>
 
           <Col xs={24} md={8}>
             <AddressBlock
-              title="Pickup (Current)"
-              typeLabel="Pickup"
+              title="Pickup Location"
+              typeLabel="WAREHOUSE"
+              icon={<ShopOutlined className="text-orange-500" />}
               data={pickup}
             />
           </Col>
 
           <Col xs={24} md={8}>
             <AddressBlock
-              title="Delivery Address"
-              typeLabel="Drop"
+              title="Delivery Location"
+              typeLabel="Destination"
+              icon={<PushpinOutlined className="text-green-500" />}
               data={drop}
-              // extra={
-              //   <Button
-              //     size="small"
-              //     type="primary"
-              //     className="bg-linear-to-r! from-blue-500 to-blue-600 border-0 shadow-sm hover:shadow-md transition-all"
-              //     icon={<EditOutlined />}
-              //     onClick={() =>
-              //       setIsModalVisible({
-              //         type: "drop",
-              //         open: true,
-              //       })
-              //     }
-              //   >
-              //     Edit
-              //   </Button>
-              // }
             />
           </Col>
         </Row>
-      </Card>
+      </div>
     </div>
   );
 }
