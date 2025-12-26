@@ -172,3 +172,19 @@ export const downloadWaybill = async (id) => {
 
   return response.data ?? null;
 };
+
+// Generate Shipping label
+export const generateShippingLabel = async ({ id, format = "pdf" }) => {
+  const response = await axiosInstance.get(
+    `/v1/hq/orders/${id}/shipping-label`,
+    {
+      params: {
+        format,
+      },
+      responseType: "blob",
+      noErrorToast: true,
+      suppressErrorToast: true,
+    }
+  );
+  return response?.data ?? null;
+};

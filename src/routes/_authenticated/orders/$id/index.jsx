@@ -4,7 +4,10 @@ import ErrorFallback from "@/components/ui/ErrorFallback";
 import CancelComprehensiveOrderModal from "@/features/orders/components/CancelComprehensiveOrderModal";
 import CustomerOrderDetails from "@/features/orders/components/CustomerOrderDetails";
 import { useGetOrderById, usePackOrder } from "@/features/orders/orders.query";
-import { downloadWaybill } from "@/features/orders/orders.service";
+import {
+  downloadWaybill,
+  generateShippingLabel,
+} from "@/features/orders/orders.service";
 import { createPaymentOrderSchema } from "@/features/payment/payment.schema";
 import {
   createPaymentSession,
@@ -143,27 +146,43 @@ function RouteComponent() {
       setIsPaymentProcessing(false);
     }
   };
-  const { processPdf, isProcessing } = usePdfHandler();
+  const { processPdf } = usePdfHandler();
 
-  // const handlePrint = async () => {
-  //   const blob = await downloadInvoice(id);
+  const [isWaybillLoading, setIsWaybillLoading] = useState(false);
+  const [isLabelLoading, setIsLabelLoading] = useState(false);
 
-  //   processPdf({
-  //     blob,
-  //     print: true,
-  //     download: true,
-  //     fileName: `invoice-${id}.pdf`,
-  //     successMessage: "Invoice processed successfully",
-  //   });
-  // };
-
+  const handleShippingLabel = async () => {
+    if (isLabelLoading) return; // Prevent double click
+    setIsLabelLoading(true);
+    try {
+      // Must await here so the 'finally' block doesn't run immediately
+      await processPdf({
+        pdfPromise: () => generateShippingLabel({ id, format: "pdf" }),
+        print: true,
+        fileName: `shipping-label-${id}.pdf`,
+        successMessage: "Shipping label processed successfully",
+      });
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsLabelLoading(false);
+    }
+  };
   const handleWaybill = async () => {
-    processPdf({
-      pdfPromise: () => downloadWaybill(id),
-      print: true,
-      fileName: `waybill-${id}.pdf`,
-      successMessage: "Waybill processed successfully",
-    });
+    if (isWaybillLoading) return; // Prevent double click
+    setIsWaybillLoading(true);
+    try {
+      await processPdf({
+        pdfPromise: () => downloadWaybill(id),
+        print: true,
+        fileName: `waybill-${id}.pdf`,
+        successMessage: "Waybill processed successfully",
+      });
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsWaybillLoading(false);
+    }
   };
 
   const isPendingPayment = data?.order?.payment_status === "PENDING";
@@ -223,32 +242,23 @@ function RouteComponent() {
                 Cancel Order
               </Button>
             )}
-            {/* {data?.order?.lifecycle_status === "PACKED" && (
-              <Button
-                icon={<DownloadOutlined />}
-                type="primary"
-                onClick={handlePrint}
-                loading={isProcessing}
-              >
-                Print Invoice
-              </Button>
-            )} */}
-            {/* <Button
-              icon={<DownloadOutlined />}
-              type="primary"
-              onClick={handlePrint}
-              loading={isProcessing}
-            >
-              Print Invoice
-            </Button> */}
             <Button
               icon={<DownloadOutlined />}
               type="primary"
               onClick={handleWaybill}
-              loading={isProcessing}
-              disabled={isProcessing}
+              loading={isWaybillLoading}
+              disabled={isWaybillLoading}
             >
               Print Invoice
+            </Button>
+            <Button
+              icon={<DownloadOutlined />}
+              type="primary"
+              onClick={handleShippingLabel}
+              loading={isLabelLoading}
+              disabled={isLabelLoading}
+            >
+              Shipping Label
             </Button>
           </div>
         }
