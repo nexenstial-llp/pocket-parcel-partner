@@ -41,7 +41,8 @@ function RouteComponent() {
       });
     },
     onError: (error) => {
-      message.error("Failed to pack order", error);
+      // message.error("Failed to pack order", error);
+      console.log("Failed to pack order", error);
     },
   });
 

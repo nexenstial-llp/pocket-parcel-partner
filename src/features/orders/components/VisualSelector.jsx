@@ -108,8 +108,8 @@ const VisualSelector = ({
               border rounded-xl cursor-pointer transition-all duration-200 shrink-0
               ${
                 isSelected
-                  ? "border-blue-500 bg-blue-50 shadow-md ring-2 ring-blue-100"
-                  : "border-gray-200 bg-white hover:border-blue-300 hover:shadow-sm"
+                  ? "border-blue-500 bg-blue-200 shadow-lg ring-2 ring-blue-100"
+                  : "border-gray-200 bg-white hover:border-blue-300 shadow hover:shadow-md hover:bg-blue-50"
               }
             `}
           >
