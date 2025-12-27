@@ -28,7 +28,7 @@ async function fetchCurrentUser() {
   if (!token) return null;
 
   try {
-    const response = await axiosInstance.get("mobile/users/me");
+    const response = await axiosInstance.get("transit-warehouse/users/me");
     return response?.data?.data ?? null;
   } catch (error) {
     Object.values(STORAGE_KEYS).forEach((key) => localStorage.removeItem(key));
