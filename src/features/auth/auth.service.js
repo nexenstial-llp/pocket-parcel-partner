@@ -25,7 +25,7 @@ export const emailPasswordLogin = async ({ email, password }) => {
 };
 // Auth method
 export const authMe = async () => {
-  const response = await axiosInstance.get("/v1/mobile/auth/me");
+  const response = await axiosInstance.get("/v1/transit-warehouse/auth/me");
   return response.data;
 };
 
@@ -78,7 +78,7 @@ export const verifyEmailOtpApi = async (email, otp) => {
 // Send mobile otp
 export const sendMobileOtpApi = async (data) => {
   const response = await axiosInstance.post(
-    "/v1/auth/mobile/send-verification-otp",
+    "/v1/auth/transit-warehouse/send-verification-otp",
     {
       ...data,
     },
@@ -93,7 +93,7 @@ export const sendMobileOtpApi = async (data) => {
 // Verify mobile otp
 export const verifyMobileOtpApi = async (data) => {
   const response = await axiosInstance.post(
-    "/v1/auth/mobile/verify-phone",
+    "/v1/auth/transit-warehouse/verify-phone",
     data,
     {
       skipAuth: true,
@@ -106,7 +106,7 @@ export const verifyMobileOtpApi = async (data) => {
 // Resend mobile otp
 export const resendMobileOtpApi = async (data) => {
   const response = await axiosInstance.post(
-    "/v1/auth/mobile/resend-otp",
+    "/v1/auth/transit-warehouse/resend-otp",
     data,
     {
       skipAuth: true,
