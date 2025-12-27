@@ -17,8 +17,6 @@ export const usePdfHandler = () => {
       fileName = "document.pdf",
       successMessage,
     }) => {
-      if (isProcessing) return;
-
       try {
         setIsProcessing(true);
 
@@ -57,7 +55,7 @@ export const usePdfHandler = () => {
         setIsProcessing(false);
       }
     },
-    [isProcessing]
+    []
   );
 
   return {
@@ -65,4 +63,3 @@ export const usePdfHandler = () => {
     isProcessing,
   };
 };
-4;

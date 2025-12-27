@@ -69,3 +69,11 @@ export const deleteLocation = async (id) => {
   );
   return response?.data?.data ?? null;
 };
+
+// Get warehouse locations
+export const getWarehouseLocations = async (id) => {
+  const response = await axiosInstance.get(
+    `/v1/transit-warehouse/warehouses/${id}/locations`
+  );
+  return response?.data?.data ?? null;
+};

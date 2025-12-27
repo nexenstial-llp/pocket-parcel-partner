@@ -4,18 +4,15 @@ import ErrorFallback from "@/components/ui/ErrorFallback";
 import ResponsiveTable from "@/components/ui/tables/ResponsiveTable";
 import UrlPagination from "@/components/ui/UrlPagination";
 import { useGetOrders } from "@/features/orders/orders.query";
-import {
-  downloadInvoice,
-  downloadWaybill,
-} from "@/features/orders/orders.service";
+import { downloadWaybill } from "@/features/orders/orders.service";
 import { usePdfHandler } from "@/hooks/usePdfHandler";
 import { getSerialNumber } from "@/utils/serialNumber.util";
 import { getStatusColor, removeUnderscores } from "@/utils/typography.util";
 import { validatePagination } from "@/utils/validatePagination.util";
 import { DownloadOutlined } from "@ant-design/icons";
 import { createFileRoute, Link, useSearch } from "@tanstack/react-router";
-import { Tag } from "antd";
-import { Button } from "antd";
+import { Tag, Button } from "antd";
+import { useState } from "react";
 
 export const Route = createFileRoute("/_authenticated/orders/")({
   component: RouteComponent,
@@ -26,23 +23,21 @@ function RouteComponent() {
   const { page, limit } = useSearch({ strict: false });
   const { data, isLoading, isError, error } = useGetOrders({ page, limit });
   const { processPdf, isProcessing } = usePdfHandler();
+  const [loadingKey, setLoadingKey] = useState(null);
 
-  const handleWaybill = (id) => {
-    processPdf({
-      pdfPromise: () => downloadWaybill(id),
-      print: true,
-      fileName: `waybill-${id}.pdf`,
-      successMessage: "Waybill processed successfully",
-    });
-  };
+  const handleWaybill = async (id) => {
+    try {
+      setLoadingKey(id);
 
-  const handleInvoice = (id) => {
-    processPdf({
-      pdfPromise: () => downloadInvoice(id),
-      print: true,
-      fileName: `invoice-${id}.pdf`,
-      successMessage: "Invoice processed successfully",
-    });
+      await processPdf({
+        pdfPromise: () => downloadWaybill(id),
+        print: true,
+        fileName: `waybill-${id}.pdf`,
+        successMessage: "Waybill processed successfully",
+      });
+    } finally {
+      setLoadingKey(null);
+    }
   };
 
   const columns = [
@@ -115,21 +110,13 @@ function RouteComponent() {
       key: "action",
       render: (_, record) => (
         <div className="flex gap-2">
-          {/* <Button
-            onClick={() => handleInvoice(record.id)}
-            icon={<DownloadOutlined />}
-            type="primary"
-            size="small"
-          >
-            Invoice
-          </Button> */}
           <Button
-            loading={isProcessing}
+            loading={loadingKey === record.id && isProcessing}
+            disabled={loadingKey === record.id && isProcessing}
             onClick={() => handleWaybill(record.id)}
             icon={<DownloadOutlined />}
             type="primary"
             size="small"
-            disabled={isProcessing}
           >
             Invoice
           </Button>
@@ -145,22 +132,6 @@ function RouteComponent() {
   }
   return (
     <PageLayout items={[{ title: "Home", href: "/home" }, { title: "Orders" }]}>
-      {/* <SearchPanelCard
-        searchTypeOptions={[
-          { label: "AWB", value: "AWB" },
-          { label: "Order ID", value: "order_id" },
-          { label: "Reference Number", value: "reference_number" },
-          { label: "Phone No", value: "phone" },
-        ]}
-        extraButtons={[
-          <Button size="small" key={"Report Status"}>
-            Report Status
-          </Button>,
-          <Button size="small" key={"Generate Report"} type="primary">
-            Generate Report
-          </Button>,
-        ]}
-      /> */}
       <ResponsiveCard
         size="small"
         extra={
@@ -173,36 +144,6 @@ function RouteComponent() {
         title="Orders"
       >
         <div className="flex flex-col gap-2">
-          {/* <div className="flex gap-2 items-center overflow-x-auto">
-            <Select
-              style={{ minWidth: 150 }}
-              options={[
-                { label: "SELF - Self Demo", value: "self" },
-                { label: "Bluedart - Bluedart", value: "BLUEDART" },
-                { label: "DTDC - PP <> DTDC", value: "DTDC" },
-              ]}
-              placeholder="Carrier Partner"
-              allowClear
-            />
-            <Select
-              options={[
-                { label: "SUCCESS", value: "SUCCESS" },
-                { label: "IN PROGRESS", value: "IN PROGRESS" },
-                { label: "FAILURE", value: "FAILURE" },
-              ]}
-              placeholder="Order Status"
-              allowClear
-            />
-            <Select
-              options={[
-                { label: "FORWARD", value: "FORWARD" },
-                { label: "REVERSE", value: "REVERSE" },
-              ]}
-              placeholder="Delivery Type"
-              allowClear
-            />
-            <DatePicker.RangePicker placeholder={"Created Date"} />
-          </div> */}
           <ResponsiveTable
             size={"small"}
             loading={isLoading}

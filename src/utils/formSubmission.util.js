@@ -31,6 +31,10 @@ export const handleFormSubmission = async ({
   } catch (err) {
     if (err.name === "ZodError") {
       applyZodErrorsToForm(form, err);
+    } else if (err.errorFields?.length > 0) {
+      message.error(
+        err?.errorFields?.map((field) => `${field?.errors?.[0]} \n`)
+      );
     } else {
       message.error(
         messages.genericError || err?.message || "Something went wrong"

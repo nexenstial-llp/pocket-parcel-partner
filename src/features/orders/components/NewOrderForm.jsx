@@ -6,7 +6,6 @@ import {
   Steps,
   Button,
   Card,
-  Typography,
   message,
   InputNumber,
   Row,
@@ -29,6 +28,11 @@ import {
   ShopOutlined,
   HomeOutlined,
   CheckCircleFilled,
+  FlagOutlined,
+  UserOutlined,
+  EditOutlined,
+  PlusOutlined,
+  InfoCircleOutlined,
 } from "@ant-design/icons";
 import WebcamCapture from "@/components/ui/WebcamCapture";
 import AddressSelectorModal from "./AddressSelectorModal";
@@ -44,7 +48,6 @@ import {
   createOrderSchema,
 } from "../orders.schema";
 import VisualSelector from "./VisualSelector";
-import ResponsiveCard from "@/components/ui/cards/ResponsiveCard";
 import CourierPartnerSelector from "./CourierPartnerSelector";
 import SummaryStep from "./steps/SummaryStep";
 import { load } from "@cashfreepayments/cashfree-js";
@@ -60,14 +63,21 @@ import { applyZodErrorsToForm } from "@/utils/formError.util";
 import { useCreatePaymentSession } from "@/features/payment/payment.query";
 
 import { createPaymentOrderSchema } from "@/features/payment/payment.schema";
-import PaginatedSelect from "@/components/ui/PaginatedSelect";
 import { useRef } from "react";
-const { Text } = Typography;
+import { Alert } from "antd";
+import { Warehouse } from "lucide-react";
+import {
+  useFetchWarehouse,
+  useFetchWarehouseLocations,
+} from "@/features/warehouses/warehouses.query";
+import ResponsiveCard from "@/components/ui/cards/ResponsiveCard";
 
 const deliveryTypeOptions = [
   { label: "Forward", value: "FORWARD" },
   { label: "Reverse", value: "REVERSE" },
 ];
+const cashFreePaymentMode =
+  import.meta.env.VITE_APP_ENV === "production" ? "production" : "sandbox";
 const NewOrderForm = () => {
   const { params, setParams } = useUrlParams();
   const { pickup_type = "warehouse" } = params;
@@ -115,11 +125,14 @@ const NewOrderForm = () => {
     orderNumber: null,
   });
   const [chargeableWeight, setchargableWeight] = useState(null);
+  const [chargeableDimensions, setchargableDimensions] = useState({});
+
   const [offerCode, setOfferCode] = useState(null);
   const [isDirty, setIsDirty] = useState(false);
 
   // Unit State
   const [dimensionUnit, setDimensionUnit] = useState("cm"); // 'cm' | 'inch'
+
   const [weightUnit, setWeightUnit] = useState("gm"); // 'gm' | 'kg'
 
   /* -------------------- WEIGHT CALC (CORRECT) -------------------- */
@@ -141,7 +154,14 @@ const NewOrderForm = () => {
 
   // Final weight is max of actual weight (in kg) and volumetric weight (in kg)
   // weightInGm / 1000 converts actual weight to kg
-  const finalWeight = parseFloat(Math.max(weightInGm / 1000, volumetricWeight).toFixed(2));
+  const finalWeight = parseFloat(
+    Math.max(weightInGm / 1000, volumetricWeight).toFixed(2)
+  );
+
+  // Auto-select first warehouse
+  const { data: warehousesData } = useFetchWarehouse({ page: 1, limit: 100 });
+  const { data: warehouseLocationsData } =
+    useFetchWarehouseLocations(warehouse);
 
   const blocker = useBlocker({
     shouldBlockFn: () => isDirty,
@@ -168,20 +188,10 @@ const NewOrderForm = () => {
     }
   }, [blocker, blocker.status]);
 
-  // useEffect(() => {
-  //   const initSdk = async () => {
-  //     const cf = await load({ mode: "sandbox" });
-  //     // const cf = await load({ mode: "production" });
-  //     setCashfree(cf);
-  //   };
-  //   initSdk();
-  // }, []);
-
   /* -------------------- LOAD CASHFREE -------------------- */
   useEffect(() => {
     let mounted = true;
-    const mode = import.meta.env.VITE_APP_ENV === "production" ? "production" : "sandbox";
-    load({ mode }).then((cf) => {
+    load({ mode: cashFreePaymentMode }).then((cf) => {
       if (mounted) setCashfree(cf);
     });
     return () => {
@@ -199,6 +209,35 @@ const NewOrderForm = () => {
       setWarehouseLocation(null);
     }
   }, [warehouse]);
+
+  useEffect(() => {
+    if (
+      pickup_type === "warehouse" &&
+      !warehouse &&
+      warehousesData?.data?.length
+    ) {
+      const firstWarehouseId = warehousesData.data[0].id;
+
+      setWarehouse(firstWarehouseId);
+      form.setFieldsValue({ warehouse: firstWarehouseId });
+    }
+  }, [pickup_type, warehouse, warehousesData, form]);
+
+  useEffect(() => {
+    if (
+      pickup_type === "warehouse" &&
+      warehouse &&
+      !warehouseLocation &&
+      warehouseLocationsData?.length
+    ) {
+      const firstLocationId = warehouseLocationsData.find(
+        (item) => item.is_primary === true
+      );
+
+      setWarehouseLocation(firstLocationId?.id);
+      form.setFieldsValue({ warehouseLocation: firstLocationId?.id });
+    }
+  }, [pickup_type, warehouse, warehouseLocation, warehouseLocationsData, form]);
 
   const handleOrderTypeChange = (value) => {
     setParams({ pickup_type: value });
@@ -260,6 +299,8 @@ const NewOrderForm = () => {
     setIsDropModalOpen(false);
     form.setFieldsValue({ drop_address: address });
   };
+  console.log("totalData", totalData);
+  console.log("current", current);
 
   const next = async () => {
     try {
@@ -268,11 +309,23 @@ const NewOrderForm = () => {
           message.error("Please select both Pickup and Delivery addresses.");
           return;
         }
+        if (!pickupAddress?.latitude || !pickupAddress?.longitude) {
+          message.error(
+            "Pickup Address does not have valid coordinates, please select valid address or edit the existing pickup address."
+          );
+          return;
+        }
+        if (!dropAddress?.latitude || !dropAddress?.longitude) {
+          message.error(
+            "Delivery Address does not have valid coordinates, please select valid address or edit the existing drop address."
+          );
+          return;
+        }
         // Validate Serviceability
         const payload = [
           {
-            pickup_pincode: pickupAddress.pincode,
-            drop_pincode: dropAddress.pincode,
+            pickup_pincode: pickupAddress?.pincode,
+            drop_pincode: dropAddress?.pincode,
           },
         ];
         if (pickup_type === "warehouse" && !warehouseLocation) {
@@ -284,24 +337,24 @@ const NewOrderForm = () => {
         setTotalData((prev) => ({
           ...prev,
           pickup_info: {
-            pickup_pincode: pickupAddress.pincode,
-            pickup_lat: pickupAddress.latitude,
-            pickup_long: pickupAddress.longitude,
-            pickup_name: pickupAddress.full_name,
-            pickup_phone: pickupAddress.phone_number,
+            pickup_pincode: pickupAddress?.pincode,
+            pickup_lat: pickupAddress?.latitude,
+            pickup_long: pickupAddress?.longitude,
+            pickup_name: pickupAddress?.full_name,
+            pickup_phone: pickupAddress?.phone_number,
             pickup_address: addressToString(pickupAddress),
-            pickup_city: pickupAddress.city,
-            pickup_state: pickupAddress.state,
+            pickup_city: pickupAddress?.city,
+            pickup_state: pickupAddress?.state,
           },
           drop_info: {
-            drop_pincode: dropAddress.pincode,
-            drop_latitude: dropAddress.latitude,
-            drop_longitude: dropAddress.longitude,
-            drop_name: dropAddress.full_name,
-            drop_phone: dropAddress.phone_number,
+            drop_pincode: dropAddress?.pincode,
+            drop_latitude: dropAddress?.latitude,
+            drop_longitude: dropAddress?.longitude,
+            drop_name: dropAddress?.full_name,
+            drop_phone: dropAddress?.phone_number,
             drop_address: addressToString(dropAddress),
-            drop_city: dropAddress.city,
-            drop_state: dropAddress.state,
+            drop_city: dropAddress?.city,
+            drop_state: dropAddress?.state,
           },
         }));
 
@@ -326,7 +379,16 @@ const NewOrderForm = () => {
               ? Number(values?.shipment_details?.weight) * 1000
               : Number(values?.shipment_details?.weight),
         };
+        console.log("values", values);
 
+        // const shipmentDetails = {
+        //   ...values.shipment_details,
+        //   ...weightPayload,
+        //   weight:
+        //     weightUnit === "kg"
+        //       ? Number(values?.shipment_details?.weight) * 1000
+        //       : Number(values?.shipment_details?.weight),
+        // };
         const weightResponse = await checkWeightRangeServiceability(
           weightPayload
         );
@@ -345,31 +407,11 @@ const NewOrderForm = () => {
         }
         if (weightResponse?.data?.is_serviceable) {
           setchargableWeight(weightResponse?.data?.chargeable_weight_grams);
+          setchargableDimensions(weightResponse?.data?.dimensions);
         }
-        // const payload = {
-        //   pickup_pincode: totalData.pickup_info.pickup_pincode,
-        //   drop_pincode: totalData.drop_info.drop_pincode,
-        //   length: Number(values.shipment_details.length),
-        //   breadth: Number(values.shipment_details.breadth),
-        //   height: Number(values.shipment_details.height),
-        //   weight: Number(weightResponse?.data?.chargeable_weight_grams),
-        //   delivery_type: values.shipment_details.delivery_type,
-        //   order_type: "PREPAID",
-        // };
-
-        // const validData = orderRecommendationSchema.parse(payload);
-
-        // Update totalData with chargeable weight instead of actual weight
         setTotalData((prev) => ({
           ...prev,
           ...values,
-          shipment_details: {
-            ...values.shipment_details,
-            // Store chargeable weight in the same unit as input for display consistency
-            weight: weightUnit === "kg" 
-              ? weightResponse?.data?.chargeable_weight_grams / 1000 
-              : weightResponse?.data?.chargeable_weight_grams,
-          },
         }));
         setCurrent((prev) => prev + 1);
         // recommendationMutate(validData);
@@ -380,9 +422,9 @@ const NewOrderForm = () => {
           from_latitude: Number(totalData?.pickup_info?.pickup_lat),
           from_longitude: Number(totalData?.pickup_info?.pickup_long),
           to_pincode: totalData?.drop_info?.drop_pincode,
-          length: Number(totalData?.shipment_details?.length),
-          breadth: Number(totalData?.shipment_details?.breadth),
-          height: Number(totalData?.shipment_details?.height),
+          length: Number(chargeableDimensions?.length_cm),
+          breadth: Number(chargeableDimensions?.breadth_cm),
+          height: Number(chargeableDimensions?.height_cm),
           weight: Number(chargeableWeight),
           skip_first_mile_pickup: pickup_type === "warehouse" ? true : false,
 
@@ -398,17 +440,26 @@ const NewOrderForm = () => {
           return;
         }
         const values = await form.validateFields();
+        console.log("values", values);
         setTotalData((prev) => ({ ...prev, ...values }));
+        setCurrent(current + 1);
+      } else if (current === 4) {
+        console.log("current", current);
         setCurrent(current + 1);
       } else {
         setCurrent(current + 1);
       }
     } catch (error) {
-      console.error("Step validation failed", error);
+      console.log("error", error);
+
       if (error.name === "ZodError") {
         applyZodErrorsToForm(form, error);
+      } else if (error.errorFields?.length > 0) {
+        toast.error(
+          error?.errorFields?.map((field) => `${field?.errors?.[0]} \n`)
+        );
       } else {
-        toast.error(error?.message);
+        toast.error(error?.message || "Please enter all the fields");
       }
     }
   };
@@ -457,85 +508,194 @@ const NewOrderForm = () => {
       title: "Select Addresses",
       icon: <EnvironmentOutlined />,
       content: (
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-6">
+          {/* Warehouse Selection Section */}
           {pickup_type === "warehouse" && (
-            <div className="grid grid-cols-2 gap-4">
-              <Form.Item name="warehouse" label="Warehouse">
-                <PaginatedSelect
-                  fetchUrl="/v1/transit-warehouse/warehouses"
-                  valueField="id"
-                  labelField="name"
-                  queryKey="warehouses"
-                  placeholder="Select Warehouse"
-                  value={warehouse}
-                  onChange={(value) => {
-                    setWarehouse(value);
-                  }}
-                />
-              </Form.Item>
-              {warehouse && (
-                <Form.Item name="warehouseLocation" label="Location">
-                  <PaginatedSelect
-                    fetchUrl={`/v1/transit-warehouse/warehouses/${warehouse}/locations`}
-                    fetchUrlItem={`/v1/transit-warehouse/warehouses/locations`}
-                    valueField="id"
-                    labelField="location_name"
-                    queryKey="locations"
-                    placeholder="Select Location"
-                    value={warehouseLocation}
-                    onChange={(value) => {
-                      setWarehouseLocation(value);
-                    }}
-                  />
-                </Form.Item>
+            <Card
+              className="shadow-sm border-blue-50"
+              title={
+                <div className="flex items-center gap-2">
+                  <Warehouse className="text-blue-500" />
+                  <span>Select Warehouse</span>
+                </div>
+              }
+              size="small"
+            >
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5 max-w-[600px]">
+                <div>
+                  <Form.Item
+                    name="warehouse"
+                    label={
+                      <span className="text-sm font-medium text-gray-700">
+                        Warehouse
+                        <span className="text-red-500 ml-1">*</span>
+                      </span>
+                    }
+                  >
+                    <Select
+                      placeholder="Select Warehouse"
+                      loading={!warehousesData}
+                      showSearch
+                      optionFilterProp="children"
+                      value={warehouse}
+                      onChange={(value) => {
+                        setWarehouse(value);
+                        setWarehouseLocation(null);
+                        form.setFieldsValue({
+                          warehouse: value,
+                          warehouseLocation: null,
+                        });
+                      }}
+                      className="w-full"
+                      options={warehousesData?.data?.map((w) => ({
+                        label: w.name,
+                        value: w.id,
+                      }))}
+                    />
+                  </Form.Item>
+                </div>
+
+                {warehouse && (
+                  <div className="animate-fadeIn">
+                    <Form.Item
+                      name="warehouseLocation"
+                      label={
+                        <span className="text-sm font-medium text-gray-700">
+                          Location/Section
+                          <span className="text-red-500 ml-1">*</span>
+                        </span>
+                      }
+                    >
+                      <Select
+                        placeholder="Select Location"
+                        loading={!warehouseLocationsData}
+                        showSearch
+                        optionFilterProp="children"
+                        value={warehouseLocation}
+                        onChange={(value) => {
+                          setWarehouseLocation(value);
+                          form.setFieldsValue({ warehouseLocation: value });
+                        }}
+                        className="w-full"
+                        options={warehouseLocationsData?.map((l) => ({
+                          label: l.location_name,
+                          value: l.id,
+                        }))}
+                      />
+                    </Form.Item>
+                  </div>
+                )}
+              </div>
+
+              {!warehouse && (
+                <div className="mt-2 text-xs text-gray-500 flex items-center gap-1">
+                  <InfoCircleOutlined />
+                  Select a warehouse first to choose specific location
+                </div>
               )}
-            </div>
+            </Card>
           )}
+
+          {/* Address Cards Section */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Pickup Address Card */}
             <Card
+              className={`shadow-md hover:shadow-lg transition-all duration-300 ${
+                pickupAddress
+                  ? "border-blue-200 border-2"
+                  : "border-gray-200 border-2 border-dashed hover:border-blue-300"
+              }`}
               title={
-                <span className="text-gray-900 font-semibold flex items-center gap-2">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gray-100">
-                    <EnvironmentOutlined className="text-gray-600" />
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 rounded-lg bg-blue-50">
+                      <EnvironmentOutlined className="text-blue-600 text-lg" />
+                    </div>
+                    <div>
+                      <div className="font-semibold text-gray-800">
+                        Pickup Address
+                      </div>
+                      <div className="text-xs text-gray-500">
+                        Where we&apos;ll pick up your shipment
+                      </div>
+                    </div>
                   </div>
-                  From Address
-                </span>
+                  <Button
+                    type={pickupAddress ? "default" : "primary"}
+                    icon={pickupAddress ? <EditOutlined /> : <PlusOutlined />}
+                    onClick={() => setIsPickupModalOpen(true)}
+                    className="flex items-center gap-2"
+                  >
+                    {pickupAddress ? "Change" : "Add Address"}
+                  </Button>
+                </div>
               }
-              className="rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-all duration-200 bg-white"
-              bodyStyle={{ padding: "24px" }}
-              extra={
-                <Button
-                  type="text"
-                  onClick={() => setIsPickupModalOpen(true)}
-                  className="text-gray-600 hover:text-gray-900 font-medium"
-                >
-                  {pickupAddress ? "Change" : "Select"}
-                </Button>
-              }
+              bodyStyle={{ padding: pickupAddress ? "20px" : "40px 20px" }}
             >
               {pickupAddress ? (
-                <div className="flex flex-col gap-2">
-                  <Text strong className="text-base text-gray-900">
-                    {pickupAddress.label}
-                  </Text>
-                  <div className="flex items-center gap-2 text-gray-700">
-                    <Text>{pickupAddress.full_name}</Text>
-                    <span className="text-gray-400">|</span>
-                    <Text>{pickupAddress.phone_number}</Text>
+                <div className="space-y-4">
+                  <div className="flex items-start gap-3">
+                    <div className="p-2 rounded-full bg-green-50 mt-1">
+                      <UserOutlined className="text-green-600" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2">
+                        <span className="font-semibold text-gray-900">
+                          {pickupAddress.label}
+                        </span>
+                        {pickupAddress.is_default && (
+                          <span className="px-2 py-0.5 text-xs bg-blue-100 text-blue-700 rounded-full">
+                            Default
+                          </span>
+                        )}
+                      </div>
+                      <div className="mt-1 text-gray-700">
+                        {pickupAddress.full_name} • {pickupAddress.phone_number}
+                      </div>
+                    </div>
                   </div>
-                  <Text type="secondary" className="text-sm">
-                    {addressToString(pickupAddress)}
-                  </Text>
+
+                  <div className="flex items-start gap-3">
+                    <div className="p-2 rounded-full bg-gray-50 mt-1">
+                      <HomeOutlined className="text-gray-600" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="text-gray-700 whitespace-pre-line">
+                        {addressToString(pickupAddress)}
+                      </div>
+                    </div>
+                  </div>
+
+                  {pickupAddress.landmark && (
+                    <div className="flex items-start gap-3">
+                      <div className="p-2 rounded-full bg-orange-50 mt-1">
+                        <FlagOutlined className="text-orange-500" />
+                      </div>
+                      <div className="flex-1">
+                        <div className="text-sm text-gray-600">Landmark</div>
+                        <div className="text-gray-700">
+                          {pickupAddress.landmark}
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               ) : (
-                <div className="text-center py-10 text-gray-400">
+                <div className="text-center">
+                  <div className="p-4 inline-flex rounded-full bg-blue-50 mb-3">
+                    <EnvironmentOutlined className="text-3xl text-blue-400" />
+                  </div>
+                  <div className="text-gray-600 mb-4">
+                    No pickup address selected
+                  </div>
                   <Button
                     type="dashed"
+                    size="large"
+                    icon={<EnvironmentOutlined />}
                     onClick={() => setIsPickupModalOpen(true)}
-                    className="border-gray-300 hover:border-gray-400"
+                    className="w-full h-12 border-2 border-dashed border-blue-200 hover:border-blue-400"
                   >
-                    + Select Pickup Address
+                    Select Pickup Address
                   </Button>
                 </div>
               )}
@@ -543,81 +703,160 @@ const NewOrderForm = () => {
 
             {/* Delivery Address Card */}
             <Card
+              className={`shadow-md hover:shadow-lg transition-all duration-300 ${
+                dropAddress
+                  ? "border-green-200 border-2"
+                  : "border-gray-200 border-2 border-dashed hover:border-green-300"
+              }`}
               title={
-                <span className="text-gray-900 font-semibold flex items-center gap-2">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gray-100">
-                    <EnvironmentOutlined className="text-gray-600" />
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 rounded-lg bg-green-50">
+                      <HomeOutlined className="text-green-600 text-lg" />
+                    </div>
+                    <div>
+                      <div className="font-semibold text-gray-800">
+                        Delivery Address
+                      </div>
+                      <div className="text-xs text-gray-500">
+                        Where we&apos;ll deliver your shipment
+                      </div>
+                    </div>
                   </div>
-                  To Address
-                </span>
+                  <Button
+                    type={dropAddress ? "default" : "primary"}
+                    icon={dropAddress ? <EditOutlined /> : <PlusOutlined />}
+                    onClick={() => setIsDropModalOpen(true)}
+                    className="flex items-center gap-2"
+                  >
+                    {dropAddress ? "Change" : "Add Address"}
+                  </Button>
+                </div>
               }
-              className="rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-all duration-200 bg-white"
-              bodyStyle={{ padding: "24px" }}
-              extra={
-                <Button
-                  type="text"
-                  onClick={() => setIsDropModalOpen(true)}
-                  className="text-gray-600 hover:text-gray-900 font-medium"
-                >
-                  {dropAddress ? "Change" : "Select"}
-                </Button>
-              }
+              bodyStyle={{ padding: dropAddress ? "20px" : "40px 20px" }}
             >
               {dropAddress ? (
-                <div className="flex flex-col gap-2">
-                  <Text strong className="text-base text-gray-900">
-                    {dropAddress.label}
-                  </Text>
-                  <div className="flex items-center gap-2 text-gray-700">
-                    <Text>{dropAddress.full_name}</Text>
-                    <span className="text-gray-400">|</span>
-                    <Text>{dropAddress.phone_number}</Text>
+                <div className="space-y-4">
+                  <div className="flex items-start gap-3">
+                    <div className="p-2 rounded-full bg-blue-50 mt-1">
+                      <UserOutlined className="text-blue-600" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2">
+                        <span className="font-semibold text-gray-900">
+                          {dropAddress.label}
+                        </span>
+                        {dropAddress.is_default && (
+                          <span className="px-2 py-0.5 text-xs bg-green-100 text-green-700 rounded-full">
+                            Default
+                          </span>
+                        )}
+                      </div>
+                      <div className="mt-1 text-gray-700">
+                        {dropAddress.full_name} • {dropAddress.phone_number}
+                      </div>
+                    </div>
                   </div>
-                  <Text type="secondary" className="text-sm">
-                    {addressToString(dropAddress)}
-                  </Text>
+
+                  <div className="flex items-start gap-3">
+                    <div className="p-2 rounded-full bg-gray-50 mt-1">
+                      <HomeOutlined className="text-gray-600" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="text-gray-700 whitespace-pre-line">
+                        {addressToString(dropAddress)}
+                      </div>
+                    </div>
+                  </div>
+
+                  {dropAddress.landmark && (
+                    <div className="flex items-start gap-3">
+                      <div className="p-2 rounded-full bg-orange-50 mt-1">
+                        <FlagOutlined className="text-orange-500" />
+                      </div>
+                      <div className="flex-1">
+                        <div className="text-sm text-gray-600">Landmark</div>
+                        <div className="text-gray-700">
+                          {dropAddress.landmark}
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               ) : (
-                <div className="text-center py-10 text-gray-400">
+                <div className="text-center">
+                  <div className="p-4 inline-flex rounded-full bg-green-50 mb-3">
+                    <HomeOutlined className="text-3xl text-green-400" />
+                  </div>
+                  <div className="text-gray-600 mb-4">
+                    No delivery address selected
+                  </div>
                   <Button
                     type="dashed"
+                    size="large"
+                    icon={<HomeOutlined />}
                     onClick={() => setIsDropModalOpen(true)}
-                    className="border-gray-300 hover:border-gray-400"
+                    className="w-full h-12 border-2 border-dashed border-green-200 hover:border-green-400"
                   >
-                    + Select Delivery Address
+                    Select Delivery Address
                   </Button>
                 </div>
               )}
             </Card>
-
-            <AddressSelectorModal
-              open={isPickupModalOpen}
-              onCancel={() => setIsPickupModalOpen(false)}
-              onSelect={handleSelectPickup}
-              title="Select Pickup Address"
-            />
-            <AddressSelectorModal
-              open={isDropModalOpen}
-              onCancel={() => setIsDropModalOpen(false)}
-              onSelect={handleSelectDrop}
-              title="Select Delivery Address"
-            />
           </div>
+
+          {/* Action Buttons for Quick Navigation */}
+          {pickupAddress && dropAddress && (
+            <div className="flex justify-center mt-4">
+              <Alert
+                message="Both addresses are selected!"
+                description="You can proceed to the next step by clicking 'Next' or continue to Package Details."
+                type="success"
+                showIcon
+                className="w-full"
+              />
+            </div>
+          )}
+
+          {/* Address Selection Modals */}
+          <AddressSelectorModal
+            open={isPickupModalOpen}
+            onCancel={() => setIsPickupModalOpen(false)}
+            onSelect={handleSelectPickup}
+            title="Select Pickup Address"
+            type="pickup"
+          />
+          <AddressSelectorModal
+            open={isDropModalOpen}
+            onCancel={() => setIsDropModalOpen(false)}
+            onSelect={handleSelectDrop}
+            title="Select Delivery Address"
+            type="delivery"
+          />
         </div>
       ),
     },
+
     {
       title: "Package Details",
       icon: <CodeSandboxOutlined />,
       content: (
         <div className="bg-white rounded-xl border-0 shadow-sm p-6">
           <div className="mb-4">
-            <h3 className="text-base font-semibold text-gray-900">Shipment Details</h3>
+            <h3 className="text-base font-semibold text-gray-900">
+              Shipment Details
+            </h3>
           </div>
           <Row gutter={24}>
             {/* Category Selection - Visual */}
             <Col span={24}>
-              <Form.Item label={<span className="text-sm font-semibold text-gray-700">Select Category</span>}>
+              <Form.Item
+                label={
+                  <span className="text-sm font-semibold text-gray-700">
+                    Select Category
+                  </span>
+                }
+              >
                 <Form.Item
                   name={["shipment_details", "category_id"]}
                   noStyle
@@ -635,7 +874,13 @@ const NewOrderForm = () => {
 
             {/* Item Selection - Visual */}
             <Col span={24}>
-              <Form.Item label={<span className="text-sm font-semibold text-gray-700">Select Item</span>}>
+              <Form.Item
+                label={
+                  <span className="text-sm font-semibold text-gray-700">
+                    Select Item
+                  </span>
+                }
+              >
                 <Form.Item
                   name={["shipment_details", "item_ids"]}
                   noStyle
@@ -653,15 +898,19 @@ const NewOrderForm = () => {
               </Form.Item>
             </Col>
           </Row>
-          
+
           <Divider className="my-6 border-gray-200" />
-          
+
           <Row gutter={[24]} align="top">
             {/* SECTION 1: Configuration */}
             <Col xs={24} md={12} lg={6}>
               <Form.Item
                 name={["shipment_details", "delivery_type"]}
-                label={<span className="text-sm font-semibold text-gray-700">Service Type</span>}
+                label={
+                  <span className="text-sm font-semibold text-gray-700">
+                    Service Type
+                  </span>
+                }
                 initialValue="FORWARD"
                 className="mb-0"
               >
@@ -676,7 +925,11 @@ const NewOrderForm = () => {
             {/* SECTION 2: Dimensions */}
             <Col xs={24} sm={12} md={12} lg={9}>
               <Form.Item
-                label={<span className="text-sm font-semibold text-gray-700">Dimensions (L × B × H)</span>}
+                label={
+                  <span className="text-sm font-semibold text-gray-700">
+                    Dimensions (L × B × H)
+                  </span>
+                }
                 className="mb-0"
                 rules={[
                   {
@@ -684,6 +937,7 @@ const NewOrderForm = () => {
                     message: "Please enter dimensions",
                   },
                 ]}
+                tooltip="Please enter dimensions in integer format only"
               >
                 <Space.Compact block>
                   <Form.Item
@@ -698,6 +952,7 @@ const NewOrderForm = () => {
                   >
                     <InputNumber
                       min={0}
+                      step={1}
                       precision={0}
                       controls={false}
                       placeholder="L"
@@ -716,6 +971,7 @@ const NewOrderForm = () => {
                   >
                     <InputNumber
                       min={0}
+                      step={1}
                       precision={0}
                       controls={false}
                       placeholder="B"
@@ -734,6 +990,7 @@ const NewOrderForm = () => {
                   >
                     <InputNumber
                       min={0}
+                      step={1}
                       precision={0}
                       controls={false}
                       placeholder="H"
@@ -767,7 +1024,11 @@ const NewOrderForm = () => {
             <Col xs={24} sm={12} lg={9}>
               <Form.Item
                 name={["shipment_details", "weight"]}
-                label={<span className="text-sm font-semibold text-gray-700">Actual Weight</span>}
+                label={
+                  <span className="text-sm font-semibold text-gray-700">
+                    Actual Weight
+                  </span>
+                }
                 className="mb-0"
                 rules={[{ required: true, message: "Please enter weight" }]}
               >
@@ -816,12 +1077,9 @@ const NewOrderForm = () => {
                       className="mb-0"
                       tooltip="Calculation: (L × B × H) / 5000"
                     >
-                      <div className="text-gray-600 font-semibold text-lg">
+                      <div className="ant-input ant-input-sm ant-input-disabled bg-transparent border-0 text-gray-500 font-medium px-0">
                         {(volumetricWeight || 0).toFixed(2)}{" "}
-                        <span className="text-xs font-normal">kg</span>
-                      </div>
-                      <div className="text-gray-500 text-xs mt-1">
-                        {((volumetricWeight || 0) * 1000).toFixed(0)} gm
+                        <span className="text-xs">kg</span>
                       </div>
                     </Form.Item>
                   </Col>
@@ -880,7 +1138,7 @@ const NewOrderForm = () => {
               Details
             </h3>
           </div>
-          
+
           {/* 1. COMPACT SUMMARY STRIP */}
           <div className="mb-4 rounded-xl border border-gray-200 bg-gray-50 p-4">
             <div className="mb-3 flex items-center gap-2 text-sm font-semibold text-gray-700">
@@ -888,27 +1146,32 @@ const NewOrderForm = () => {
               <span>Shipment Dimensions</span>
             </div>
 
-            <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 md:grid-cols-4 lg:grid-cols-5">
               {[
                 {
                   label: "Length",
                   value: totalData?.shipment_details?.length,
-                  unit: "cm",
+                  unit: dimensionUnit,
                 },
                 {
                   label: "Breadth",
                   value: totalData?.shipment_details?.breadth,
-                  unit: "cm",
+                  unit: dimensionUnit,
                 },
                 {
                   label: "Height",
                   value: totalData?.shipment_details?.height,
-                  unit: "cm",
+                  unit: dimensionUnit,
                 },
                 {
-                  label: "Weight",
+                  label: "Actual Weight",
                   value: totalData?.shipment_details?.weight,
                   unit: weightUnit,
+                },
+                {
+                  label: "Chargeable Weight",
+                  value: (Number(chargeableWeight || 0) / 1000).toFixed(2),
+                  unit: "kg",
                 },
               ].map((item) => (
                 <div
@@ -1012,7 +1275,7 @@ const NewOrderForm = () => {
           onChange={(selectedItem) => {
             if (!selectedItem) return;
             const { courier_details } = selectedItem;
-
+            setOfferCode("");
             setCarrierPartnerData({
               carrier_partner: courier_details?.cp_id, // Assuming cp_id is needed for backend
               account_code: courier_details?.account_code,
@@ -1045,10 +1308,14 @@ const NewOrderForm = () => {
           summaryData={summaryData}
           shipmentData={totalData}
           chargeableWeight={chargeableWeight}
+          chargeableDimensions={chargeableDimensions}
           carrierPartnerData={carrierPartnerData}
           onOfferApplied={handleOfferApplied}
+          offerCode={offerCode}
+          setOfferCode={setOfferCode}
           pickup_type={pickup_type}
           form={form}
+          dimensionUnit={dimensionUnit}
           weightUnit={weightUnit}
         />
       ),
@@ -1076,10 +1343,6 @@ const NewOrderForm = () => {
       const validatedData = createPaymentOrderSchema.parse(payload);
       // 1. Create Payment Session (Backend Call)
       const sessionData = await createPaymentSession(validatedData);
-      console.log(
-        "sessionData?.payment_order?.payment_session_id",
-        sessionData?.payment_order?.payment_session_id
-      );
       if (!sessionData?.payment_order?.payment_session_id) {
         throw new Error("Failed to generate payment session ID");
       }
@@ -1097,7 +1360,6 @@ const NewOrderForm = () => {
       cashfree.checkout(checkoutOptions).then((result) => {
         // A. User Closed Popup or Failed
         if (result.error) {
-          console.warn("Payment failed or dismissed:", result.error);
           message.error("Payment failed or cancelled. Please retry.");
           // We DO NOT reset createdOrderId here, so the next click reuses this order.
         }
@@ -1109,8 +1371,6 @@ const NewOrderForm = () => {
 
         // C. Success (Payment Completed)
         if (result.paymentDetails) {
-          console.log("Payment Completed at Gateway, Verifying...");
-
           verifyPayment(sessionData?.payment_order?.cf_order_id)
             .then(() => {
               setSuccessDetails({
@@ -1133,7 +1393,6 @@ const NewOrderForm = () => {
         }
       });
     } catch (error) {
-      console.error("Initiate Payment Error:", error);
       if (error.name === "ZodError") {
         applyZodErrorsToForm(form, error);
       } else {
@@ -1217,6 +1476,10 @@ const NewOrderForm = () => {
         },
         shipment_details: {
           ...cleanedTotalData.shipment_details,
+          length: parseInt(chargeableDimensions?.length_cm),
+          breadth: parseInt(chargeableDimensions?.breadth_cm),
+          height: parseInt(chargeableDimensions?.height_cm),
+          weight: chargeableWeight,
           order_type: "PREPAID",
           invoice_value: summaryData?.[0]?.price_summary?.final_total,
           invoice_date: dayjs().format("DD-MM-YYYY"),
@@ -1225,12 +1488,7 @@ const NewOrderForm = () => {
           account_code: carrierPartnerData?.account_code,
           category_id: cleanedTotalData?.shipment_details?.category_id,
           item_ids: cleanedTotalData?.shipment_details?.item_ids,
-          offer_code: offerCode,
-          // Convert weight to grams for API (chargeable weight is already stored)
-          weight:
-            weightUnit === "kg"
-              ? Number(cleanedTotalData?.shipment_details?.weight) * 1000
-              : Number(cleanedTotalData?.shipment_details?.weight),
+          ...(offerCode && { offer_code: offerCode }),
         },
         additional: {
           ...cleanedTotalData.additional,
@@ -1252,19 +1510,10 @@ const NewOrderForm = () => {
       //   summaryData?.[0]?.price_summary?.final_total,
       //   customerInfo
       // );
-      
-      console.log("=== ORDER PAYLOAD ===");
-      console.log("Weight Unit:", weightUnit);
-      console.log("Weight in totalData:", cleanedTotalData?.shipment_details?.weight);
-      console.log("Weight being sent to API (in grams):", payload.shipment_details.weight);
-      console.log("Chargeable Weight (grams):", chargeableWeight);
-      console.log("Full payload:", payload);
-      
+
       const validatedData = createOrderSchema.parse(payload);
       createOrder(validatedData);
     } catch (error) {
-      console.log("Error:", error);
-
       if (error.name === "ZodError") {
         applyZodErrorsToForm(form, error);
       } else {
@@ -1288,7 +1537,7 @@ const NewOrderForm = () => {
     ];
 
     return (
-      <Row gutter={[16, 16]} className="mb-6">
+      <Row gutter={[16, 16]}>
         {options.map((option) => {
           const isSelected = value === option.value;
           return (
@@ -1301,34 +1550,34 @@ const NewOrderForm = () => {
               <div
                 onClick={() => onChange(option.value)}
                 className={`
-                relative cursor-pointer rounded-xl border-2 p-4 transition-all duration-200
+                relative cursor-pointer rounded-xl border-2 p-2 transition-all duration-200
                 ${
                   isSelected
-                    ? "border-gray-900 bg-gray-50 shadow-md"
+                    ? "border-blue-500 bg-blue-50 shadow-md"
                     : "border-gray-200 bg-white hover:border-gray-400 hover:shadow-sm"
                 }
               `}
               >
                 {isSelected && (
-                  <div className="absolute top-3 right-3 text-gray-900">
+                  <div className="absolute top-3 right-3 text-blue-500">
                     <CheckCircleFilled className="text-lg" />
                   </div>
                 )}
                 <div
                   className={`flex gap-3 items-center ${
-                    isSelected ? "text-gray-900" : "text-gray-600"
+                    isSelected ? "text-blue-500" : "text-gray-600"
                   }`}
                 >
                   <div
                     className={`flex h-10 w-10 items-center justify-center rounded-lg ${
-                      isSelected ? "bg-gray-200 text-gray-900" : "bg-gray-100 text-gray-500"
+                      isSelected
+                        ? "bg-gray-200 text-blue-500"
+                        : "bg-gray-100 text-gray-500"
                     }`}
                   >
                     {option.icon}
                   </div>
-                  <div className="font-semibold text-base">
-                    {option.title}
-                  </div>
+                  <div className="font-semibold text-base">{option.title}</div>
                 </div>
               </div>
             </Col>
@@ -1338,100 +1587,108 @@ const NewOrderForm = () => {
     );
   };
   return (
-    <div className="w-full flex flex-col gap-3">
-      <PickupTypeSelector
-        value={pickup_type}
-        onChange={handleOrderTypeChange}
-      />
-
-      <Steps
-        onChange={(nextStep) => {
-          if (nextStep > current) {
-            message.warning("Please use Next button to proceed");
-            return;
-          }
-          setCurrent(nextStep);
-        }}
-        // onChange={(e) => setCurrent(e)}
-        current={current}
-        items={steps}
-        className="mb-8 bg-white rounded-xl border border-gray-200 p-6 shadow-sm"
-        size="small"
-      />
-
-      <Form
-        onValuesChange={(changedValues) => {
-          // Check if category_id changed
-          if (changedValues.shipment_details?.category_id) {
-            form.setFieldsValue({
-              shipment_details: {
-                sub_category_id: undefined,
-                item_ids: undefined,
-              },
-            });
-          }
-
-          if (changedValues.shipment_details?.sub_category_id) {
-            form.setFieldsValue({
-              shipment_details: {
-                item_ids: undefined,
-              },
-            });
-          }
-          if (!isDirty) {
-            setIsDirty(true);
-          }
-        }}
-        onFinish={onFinish}
-        form={form}
-        layout="vertical"
-      >
-        <div className="mb-8">{steps[current]?.content}</div>
-
-        {/* Navigation Buttons */}
-        <div className="flex justify-end gap-3 -mx-6 -mb-6 sticky bottom-0 bg-gradient-to-t from-white via-white to-transparent p-6 border-t border-gray-200 z-10 shadow-lg rounded-b-xl">
-          {current > 0 && (
-            <ResponsiveButton onClick={prev} className="border-gray-300 hover:border-gray-400">Previous</ResponsiveButton>
-          )}
-          {current === 0 && <BackButton navigateTo="/orders">Back</BackButton>}
-          {current < steps.length - 1 && (
-            <ResponsiveButton
-              type="primary"
-              onClick={next}
-              loading={
-                serviceabilityPending ||
-                calculatePricePending ||
-                isCheckWeightRangeServiceabilityPending
-              }
-              className="bg-gray-900 hover:bg-gray-800 border-0"
-            >
-              Next
-            </ResponsiveButton>
-          )}
-          {current === steps.length - 1 && (
-            <ResponsiveButton
-              loading={isPending}
-              type="primary"
-              htmlType="submit"
-              className="bg-gray-900 hover:bg-gray-800 border-0"
-            >
-              Create Order & Pay
-            </ResponsiveButton>
-          )}
-        </div>
-      </Form>
-
-      {isSuccessModalOpen && (
-        <PaymentSuccessModal
-          open={isSuccessModalOpen}
-          onClose={() => setIsSuccessModalOpen(false)}
-          amount={summaryData?.[0]?.price_summary?.final_total}
-          transactionId={successDetails.transactionId}
-          orderId={successDetails.orderId}
-          orderNumber={successDetails.orderNumber}
+    <ResponsiveCard title="Create New Order">
+      <div className="w-full flex flex-col gap-4">
+        <PickupTypeSelector
+          value={pickup_type}
+          onChange={handleOrderTypeChange}
         />
-      )}
-    </div>
+
+        <Steps
+          onChange={(nextStep) => {
+            if (nextStep > current) {
+              message.warning("Please use Next button to proceed");
+              return;
+            }
+            setCurrent(nextStep);
+          }}
+          // onChange={(e) => setCurrent(e)}
+          current={current}
+          items={steps}
+          size="small"
+        />
+
+        <Form
+          onValuesChange={(changedValues) => {
+            // Check if category_id changed
+            if (changedValues.shipment_details?.category_id) {
+              form.setFieldsValue({
+                shipment_details: {
+                  sub_category_id: undefined,
+                  item_ids: undefined,
+                },
+              });
+            }
+
+            if (changedValues.shipment_details?.sub_category_id) {
+              form.setFieldsValue({
+                shipment_details: {
+                  item_ids: undefined,
+                },
+              });
+            }
+            if (!isDirty) {
+              setIsDirty(true);
+            }
+          }}
+          onFinish={onFinish}
+          form={form}
+          layout="vertical"
+        >
+          <div className="mb-8">{steps[current]?.content}</div>
+
+          {/* Navigation Buttons */}
+          <div className="flex justify-end gap-3 -mx-6 -mb-6 sticky bottom-0 bg-white p-3 border-t border-gray-200 z-10 shadow-lg rounded-b-xl">
+            {current > 0 && (
+              <ResponsiveButton
+                onClick={prev}
+                className="border-gray-300 hover:border-gray-400"
+              >
+                Previous
+              </ResponsiveButton>
+            )}
+            {current === 0 && (
+              <BackButton navigateTo="/orders">Back</BackButton>
+            )}
+            {current < steps.length - 1 && (
+              <ResponsiveButton
+                type="primary"
+                onClick={next}
+                loading={
+                  serviceabilityPending ||
+                  calculatePricePending ||
+                  isCheckWeightRangeServiceabilityPending
+                }
+                className="bg-gray-900 hover:bg-gray-800 border-0"
+              >
+                Next
+              </ResponsiveButton>
+            )}
+            {current === steps.length - 1 && (
+              <ResponsiveButton
+                loading={isPending}
+                type="primary"
+                htmlType="submit"
+                className="bg-gray-900 hover:bg-gray-800 border-0"
+              >
+                Create Order & Pay
+              </ResponsiveButton>
+            )}
+          </div>
+        </Form>
+
+        {isSuccessModalOpen && (
+          <PaymentSuccessModal
+            open={isSuccessModalOpen}
+            onClose={() => setIsSuccessModalOpen(false)}
+            amount={summaryData?.[0]?.price_summary?.final_total}
+            transactionId={successDetails.transactionId}
+            orderId={successDetails.orderId}
+            orderNumber={successDetails.orderNumber}
+          />
+        )}
+      </div>
+    </ResponsiveCard>
   );
 };
 

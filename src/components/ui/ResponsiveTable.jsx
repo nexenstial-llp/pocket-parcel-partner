@@ -41,6 +41,7 @@ const ResponsiveTable = ({
   bordered = true,
   pagination = false,
   className,
+  sticky = true,
   ...props
 }) => {
   const screens = useBreakpoint();
@@ -56,6 +57,7 @@ const ResponsiveTable = ({
 
   return (
     <Table
+      sticky={sticky}
       columns={columns}
       dataSource={dataSource}
       loading={loading}
@@ -80,6 +82,7 @@ ResponsiveTable.propTypes = {
   bordered: PropTypes.bool,
   pagination: PropTypes.oneOfType([PropTypes.bool, PropTypes.object]),
   className: PropTypes.string,
+  sticky: PropTypes.bool,
 };
 
 export default ResponsiveTable;

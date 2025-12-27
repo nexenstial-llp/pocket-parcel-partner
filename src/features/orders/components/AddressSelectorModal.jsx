@@ -1,11 +1,21 @@
 /* eslint-disable react/prop-types */
-import { Modal, Input, List, Button, Tag, Space, Typography } from "antd";
-import { useState, useMemo, useEffect } from "react";
+import {
+  Modal,
+  Input,
+  List,
+  Button,
+  Tag,
+  Space,
+  Typography,
+  message,
+} from "antd";
+import { useState, useMemo } from "react";
 import { useGetAllCustomerAddress } from "@/features/address-management/address-management.query";
 import {
   SearchOutlined,
   EnvironmentOutlined,
   PlusOutlined,
+  ReloadOutlined,
 } from "@ant-design/icons";
 import AddressModal from "@/features/address-management/components/AddressModal";
 import EditAddressModal from "@/features/address-management/components/EditAddressModal";
@@ -13,43 +23,49 @@ import EditAddressModal from "@/features/address-management/components/EditAddre
 const { Text } = Typography;
 
 const AddressSelectorModal = ({ open, onCancel, onSelect, title }) => {
-  const [searchText, setSearchText] = useState("");
-  const [debouncedSearchText, setDebouncedSearchText] = useState("");
+  /* -------------------- STATE -------------------- */
+  const [inputValue, setInputValue] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState(null); // triggers search
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
+
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  // Edit modal
   const [isEditModalData, setIsEditModalData] = useState({
     open: false,
     id: null,
     type: "edit",
   });
-  // Pagination state
-  const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(10);
 
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      setPage(1);
-      setDebouncedSearchText(searchText);
-    }, 500);
+  /* -------------------- API -------------------- */
+  const { data, isLoading } = useGetAllCustomerAddress({
+    page,
+    limit,
+    phone: phoneNumber, // null → initial load | string → search
+  });
 
-    return () => {
-      clearTimeout(handler);
-    };
-  }, [searchText]);
+  /* -------------------- NORMALIZE DATA -------------------- */
+  const addresses = useMemo(() => {
+    if (!data) return [];
+
+    // Initial load → data is array
+    if (Array.isArray(data.data)) {
+      return data.data;
+    }
+
+    // Search result → data.addresses
+    if (data.data?.addresses) {
+      return data.data.addresses;
+    }
+
+    return [];
+  }, [data]);
 
   const handlePageChange = (page, pageSize) => {
     setPage(page);
     setLimit(pageSize);
   };
-
-  const { data, isLoading } = useGetAllCustomerAddress({
-    page,
-    limit,
-    phone: debouncedSearchText,
-  });
-
-  const addresses = useMemo(() => data?.data || [], [data]);
-
+  const PHONE_10_DIGIT_REGEX = /^\d{10}$/;
+  /* -------------------- RENDER -------------------- */
   return (
     <>
       <Modal
@@ -57,17 +73,52 @@ const AddressSelectorModal = ({ open, onCancel, onSelect, title }) => {
         open={open}
         onCancel={onCancel}
         footer={null}
-        width={{ xs: "80%", sm: "70%", md: "60%", xxl: "50%" }}
+        width={{ xs: "90%", sm: "80%", md: "65%", xxl: "50%" }}
         centered
       >
-        <div className="flex justify-end gap-2 mb-4">
-          {/* <Input
+        {/* SEARCH BAR */}
+        <div className="flex gap-2 mb-4">
+          <Input
+            addonBefore="+91"
             size="small"
+            placeholder="Enter 10 digit mobile number"
             prefix={<SearchOutlined />}
-            placeholder="Search by phone..."
-            value={searchText}
-            onChange={(e) => setSearchText(e.target.value)}
-          /> */}
+            value={inputValue}
+            maxLength={12}
+            onChange={(e) => {
+              const value = e.target.value.replace(/\D/g, "");
+              setInputValue(value);
+            }}
+          />
+
+          <Button
+            size="small"
+            type="primary"
+            onClick={() => {
+              if (!PHONE_10_DIGIT_REGEX.test(inputValue)) {
+                message.error("Please enter a valid 10 digit mobile number");
+                return;
+              }
+              setPage(1);
+              setPhoneNumber(`91${inputValue}`); // 🔥 backend format
+            }}
+            disabled={!PHONE_10_DIGIT_REGEX.test(inputValue)}
+          >
+            Search
+          </Button>
+          <Button
+            size="small"
+            icon={<ReloadOutlined />}
+            onClick={() => {
+              setInputValue("");
+              setPhoneNumber(null);
+              setPage(1);
+            }}
+            disabled={!inputValue && !phoneNumber}
+          >
+            Remove
+          </Button>
+
           <Button
             size="small"
             type="primary"
@@ -78,26 +129,38 @@ const AddressSelectorModal = ({ open, onCancel, onSelect, title }) => {
           </Button>
         </div>
 
+        {/* SEARCH USER INFO (ONLY AFTER SEARCH) */}
+        {data?.data?.user && (
+          <div className="mb-3 text-sm text-gray-600">
+            Showing addresses for <strong>{data.data.user.full_name}</strong> (
+            {data.data.user.phone_number})
+          </div>
+        )}
+
+        {/* ADDRESS LIST */}
         <List
           loading={isLoading}
           dataSource={addresses}
           size="small"
+          locale={{
+            emptyText: phoneNumber
+              ? "No addresses found for this number"
+              : "No addresses available",
+          }}
           pagination={{
-            pageSize: limit,
             current: page,
+            pageSize: limit,
             showSizeChanger: true,
-            showQuickJumper: true,
-            showTotal: (total) => `Total ${total} addresses`,
-            size: "small",
-            onChange: handlePageChange,
             total: data?.pagination?.total,
+            onChange: handlePageChange,
             pageSizeOptions: ["10", "20", "30", "40", "50"],
           }}
           renderItem={(item) => (
             <List.Item
-              className="hover:bg-slate-50 cursor-pointer transition-colors border border-gray-100 mb-2 rounded-lg p-3"
+              className="hover:bg-slate-50 border border-gray-100 rounded-lg mb-2"
               actions={[
                 // <Button
+                //   size="small"
                 //   onClick={() =>
                 //     setIsEditModalData({
                 //       open: true,
@@ -105,16 +168,14 @@ const AddressSelectorModal = ({ open, onCancel, onSelect, title }) => {
                 //       type: "edit",
                 //     })
                 //   }
-                //   type="default"
-                //   size="small"
                 //   key="edit"
                 // >
                 //   Edit
                 // </Button>,
                 <Button
-                  onClick={() => onSelect(item)}
-                  type="primary"
                   size="small"
+                  type="primary"
+                  onClick={() => onSelect(item)}
                   key="select"
                 >
                   Select
@@ -132,19 +193,19 @@ const AddressSelectorModal = ({ open, onCancel, onSelect, title }) => {
                     <Text>
                       {item.full_name} | {item.phone_number}
                     </Text>
-
                     <Tag color="blue">{item.address_type}</Tag>
                     {item.is_default && <Tag color="green">Default</Tag>}
                   </Space>
                 }
                 description={
-                  <div className="text-xs text-gray-500 flex flex-col">
+                  <div className="text-xs text-gray-500">
                     <Text strong>{item.label}</Text>
-                    <p>
-                      {item.address_line1},{" "}
-                      {item.address_line2 ? item.address_line2 + ", " : ""}
-                      {item.city}, {item.state} - {item.pincode}
-                    </p>
+                    <div>
+                      {item.address_line1}
+                      {item.address_line2
+                        ? `, ${item.address_line2}`
+                        : ""}, {item.city}, {item.state} - {item.pincode}
+                    </div>
                   </div>
                 }
               />
@@ -152,6 +213,8 @@ const AddressSelectorModal = ({ open, onCancel, onSelect, title }) => {
           )}
         />
       </Modal>
+
+      {/* ADD ADDRESS */}
       {isAddModalOpen && (
         <AddressModal
           open={isAddModalOpen}
@@ -159,6 +222,7 @@ const AddressSelectorModal = ({ open, onCancel, onSelect, title }) => {
         />
       )}
 
+      {/* EDIT ADDRESS */}
       {isEditModalData.open && (
         <EditAddressModal
           modalData={isEditModalData}

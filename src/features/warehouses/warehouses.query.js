@@ -6,6 +6,7 @@ import {
   deleteWarehouse,
   fetchWarehouses,
   getWarehouseById,
+  getWarehouseLocations,
   updateLocation,
   updateWarehouse,
 } from "./warehouses.service";
@@ -91,5 +92,15 @@ export const useDeleteWarehouseLocation = ({ onError, onSuccess, ...rest }) => {
     onSuccess,
     onError,
     ...rest,
+  });
+};
+
+// Get warehouse locations
+export const useFetchWarehouseLocations = (id) => {
+  return useQuery({
+    queryKey: ["warehouse-locations", id],
+    queryFn: () => getWarehouseLocations(id),
+    retry: false,
+    enabled: !!id,
   });
 };

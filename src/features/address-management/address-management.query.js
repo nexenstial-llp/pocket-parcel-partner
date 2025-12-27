@@ -31,7 +31,7 @@ export const useGetAllCustomerAddress = ({ page, limit, phone }) => {
   return useQuery({
     queryKey: ["addresses", { page, limit, phone }],
     queryFn: () => getCustomerAddress({ page, limit, phone }),
-    retry: 1,
+    retry: 0,
   });
 };
 

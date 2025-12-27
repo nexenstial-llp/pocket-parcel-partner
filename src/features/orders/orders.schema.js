@@ -289,7 +289,7 @@ const shipmentDetailsSchema = z.object({
   clickpost_courier_id: z.number().int().optional(),
   account_code: z.string().optional(),
   courier_partner: z.number().int().optional(),
-  offer_code: z.string().optional(),
+  offer_code: z.string().optional().default(""),
 });
 
 const returnInfoSchema = z.object({
@@ -386,7 +386,7 @@ export const calculatePriceOfOrderSchema = z.object({
   to_pincode: z.string().regex(/^\d{6}$/),
   cp_id: z.number().optional(),
   account_code: z.string().optional(),
-  offer_code: z.string().optional(),
+  offer_code: z.string().optional().default(""),
   skip_first_mile_pickup: z.boolean().optional(),
 });
 
