@@ -54,6 +54,8 @@ import { Route as AuthenticatedOrdersCreateIndexRouteImport } from './routes/_au
 import { Route as AuthenticatedOrdersIdIndexRouteImport } from './routes/_authenticated/orders/$id/index'
 import { Route as AuthenticatedNdrReportsIndexRouteImport } from './routes/_authenticated/ndr/reports/index'
 import { Route as AuthenticatedNdrCasesIndexRouteImport } from './routes/_authenticated/ndr/cases/index'
+import { Route as AuthenticatedAddressManagementCreateIndexRouteImport } from './routes/_authenticated/address-management/create/index'
+import { Route as AuthenticatedAddressManagementIdIndexRouteImport } from './routes/_authenticated/address-management/$id/index'
 import { Route as AuthenticatedAccessControlUsersIndexRouteImport } from './routes/_authenticated/access-control/users/index'
 import { Route as AuthenticatedToolsReportsDownloadReportsRouteRouteImport } from './routes/_authenticated/tools/reports/download-reports/route'
 import { Route as AuthenticatedWarehousesIdEditIndexRouteImport } from './routes/_authenticated/warehouses/$id/edit/index'
@@ -79,6 +81,7 @@ import { Route as AuthenticatedDashboardDomesticOrdersIndexRouteImport } from '.
 import { Route as AuthenticatedDashboardDomesticNdrIndexRouteImport } from './routes/_authenticated/dashboard/domestic/ndr/index'
 import { Route as AuthenticatedDashboardDomesticDelaysIndexRouteImport } from './routes/_authenticated/dashboard/domestic/delays/index'
 import { Route as AuthenticatedDashboardDomesticCourierIndexRouteImport } from './routes/_authenticated/dashboard/domestic/courier/index'
+import { Route as AuthenticatedAddressManagementIdEditIndexRouteImport } from './routes/_authenticated/address-management/$id/edit/index'
 import { Route as AuthenticatedAccessControlUsersCreateIndexRouteImport } from './routes/_authenticated/access-control/users/create/index'
 import { Route as AuthenticatedAccessControlRolesCreateIndexRouteImport } from './routes/_authenticated/access-control/roles/create/index'
 import { Route as AuthenticatedToolsReportsDownloadReportsInstantReportsIndexRouteImport } from './routes/_authenticated/tools/reports/download-reports/instant-reports/index'
@@ -340,6 +343,18 @@ const AuthenticatedNdrCasesIndexRoute =
     path: '/ndr/cases/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedAddressManagementCreateIndexRoute =
+  AuthenticatedAddressManagementCreateIndexRouteImport.update({
+    id: '/address-management/create/',
+    path: '/address-management/create/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAddressManagementIdIndexRoute =
+  AuthenticatedAddressManagementIdIndexRouteImport.update({
+    id: '/address-management/$id/',
+    path: '/address-management/$id/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedAccessControlUsersIndexRoute =
   AuthenticatedAccessControlUsersIndexRouteImport.update({
     id: '/access-control/users/',
@@ -494,6 +509,12 @@ const AuthenticatedDashboardDomesticCourierIndexRoute =
     path: '/courier/',
     getParentRoute: () => AuthenticatedDashboardDomesticRouteRoute,
   } as any)
+const AuthenticatedAddressManagementIdEditIndexRoute =
+  AuthenticatedAddressManagementIdEditIndexRouteImport.update({
+    id: '/address-management/$id/edit/',
+    path: '/address-management/$id/edit/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedAccessControlUsersCreateIndexRoute =
   AuthenticatedAccessControlUsersCreateIndexRouteImport.update({
     id: '/access-control/users/create/',
@@ -556,6 +577,8 @@ export interface FileRoutesByFullPath {
   '/warehouses': typeof AuthenticatedWarehousesIndexRoute
   '/tools/reports/download-reports': typeof AuthenticatedToolsReportsDownloadReportsRouteRouteWithChildren
   '/access-control/users': typeof AuthenticatedAccessControlUsersIndexRoute
+  '/address-management/$id': typeof AuthenticatedAddressManagementIdIndexRoute
+  '/address-management/create': typeof AuthenticatedAddressManagementCreateIndexRoute
   '/ndr/cases': typeof AuthenticatedNdrCasesIndexRoute
   '/ndr/reports': typeof AuthenticatedNdrReportsIndexRoute
   '/orders/$id': typeof AuthenticatedOrdersIdIndexRoute
@@ -580,6 +603,7 @@ export interface FileRoutesByFullPath {
   '/warehouses/create': typeof AuthenticatedWarehousesCreateIndexRoute
   '/access-control/roles/create': typeof AuthenticatedAccessControlRolesCreateIndexRoute
   '/access-control/users/create': typeof AuthenticatedAccessControlUsersCreateIndexRoute
+  '/address-management/$id/edit': typeof AuthenticatedAddressManagementIdEditIndexRoute
   '/dashboard/domestic/courier': typeof AuthenticatedDashboardDomesticCourierIndexRoute
   '/dashboard/domestic/delays': typeof AuthenticatedDashboardDomesticDelaysIndexRoute
   '/dashboard/domestic/ndr': typeof AuthenticatedDashboardDomesticNdrIndexRoute
@@ -630,6 +654,8 @@ export interface FileRoutesByTo {
   '/warehouses': typeof AuthenticatedWarehousesIndexRoute
   '/tools/reports/download-reports': typeof AuthenticatedToolsReportsDownloadReportsRouteRouteWithChildren
   '/access-control/users': typeof AuthenticatedAccessControlUsersIndexRoute
+  '/address-management/$id': typeof AuthenticatedAddressManagementIdIndexRoute
+  '/address-management/create': typeof AuthenticatedAddressManagementCreateIndexRoute
   '/ndr/cases': typeof AuthenticatedNdrCasesIndexRoute
   '/ndr/reports': typeof AuthenticatedNdrReportsIndexRoute
   '/orders/$id': typeof AuthenticatedOrdersIdIndexRoute
@@ -654,6 +680,7 @@ export interface FileRoutesByTo {
   '/warehouses/create': typeof AuthenticatedWarehousesCreateIndexRoute
   '/access-control/roles/create': typeof AuthenticatedAccessControlRolesCreateIndexRoute
   '/access-control/users/create': typeof AuthenticatedAccessControlUsersCreateIndexRoute
+  '/address-management/$id/edit': typeof AuthenticatedAddressManagementIdEditIndexRoute
   '/dashboard/domestic/courier': typeof AuthenticatedDashboardDomesticCourierIndexRoute
   '/dashboard/domestic/delays': typeof AuthenticatedDashboardDomesticDelaysIndexRoute
   '/dashboard/domestic/ndr': typeof AuthenticatedDashboardDomesticNdrIndexRoute
@@ -706,6 +733,8 @@ export interface FileRoutesById {
   '/_authenticated/warehouses/': typeof AuthenticatedWarehousesIndexRoute
   '/_authenticated/tools/reports/download-reports': typeof AuthenticatedToolsReportsDownloadReportsRouteRouteWithChildren
   '/_authenticated/access-control/users/': typeof AuthenticatedAccessControlUsersIndexRoute
+  '/_authenticated/address-management/$id/': typeof AuthenticatedAddressManagementIdIndexRoute
+  '/_authenticated/address-management/create/': typeof AuthenticatedAddressManagementCreateIndexRoute
   '/_authenticated/ndr/cases/': typeof AuthenticatedNdrCasesIndexRoute
   '/_authenticated/ndr/reports/': typeof AuthenticatedNdrReportsIndexRoute
   '/_authenticated/orders/$id/': typeof AuthenticatedOrdersIdIndexRoute
@@ -730,6 +759,7 @@ export interface FileRoutesById {
   '/_authenticated/warehouses/create/': typeof AuthenticatedWarehousesCreateIndexRoute
   '/_authenticated/access-control/roles/create/': typeof AuthenticatedAccessControlRolesCreateIndexRoute
   '/_authenticated/access-control/users/create/': typeof AuthenticatedAccessControlUsersCreateIndexRoute
+  '/_authenticated/address-management/$id/edit/': typeof AuthenticatedAddressManagementIdEditIndexRoute
   '/_authenticated/dashboard/domestic/courier/': typeof AuthenticatedDashboardDomesticCourierIndexRoute
   '/_authenticated/dashboard/domestic/delays/': typeof AuthenticatedDashboardDomesticDelaysIndexRoute
   '/_authenticated/dashboard/domestic/ndr/': typeof AuthenticatedDashboardDomesticNdrIndexRoute
@@ -782,6 +812,8 @@ export interface FileRouteTypes {
     | '/warehouses'
     | '/tools/reports/download-reports'
     | '/access-control/users'
+    | '/address-management/$id'
+    | '/address-management/create'
     | '/ndr/cases'
     | '/ndr/reports'
     | '/orders/$id'
@@ -806,6 +838,7 @@ export interface FileRouteTypes {
     | '/warehouses/create'
     | '/access-control/roles/create'
     | '/access-control/users/create'
+    | '/address-management/$id/edit'
     | '/dashboard/domestic/courier'
     | '/dashboard/domestic/delays'
     | '/dashboard/domestic/ndr'
@@ -856,6 +889,8 @@ export interface FileRouteTypes {
     | '/warehouses'
     | '/tools/reports/download-reports'
     | '/access-control/users'
+    | '/address-management/$id'
+    | '/address-management/create'
     | '/ndr/cases'
     | '/ndr/reports'
     | '/orders/$id'
@@ -880,6 +915,7 @@ export interface FileRouteTypes {
     | '/warehouses/create'
     | '/access-control/roles/create'
     | '/access-control/users/create'
+    | '/address-management/$id/edit'
     | '/dashboard/domestic/courier'
     | '/dashboard/domestic/delays'
     | '/dashboard/domestic/ndr'
@@ -931,6 +967,8 @@ export interface FileRouteTypes {
     | '/_authenticated/warehouses/'
     | '/_authenticated/tools/reports/download-reports'
     | '/_authenticated/access-control/users/'
+    | '/_authenticated/address-management/$id/'
+    | '/_authenticated/address-management/create/'
     | '/_authenticated/ndr/cases/'
     | '/_authenticated/ndr/reports/'
     | '/_authenticated/orders/$id/'
@@ -955,6 +993,7 @@ export interface FileRouteTypes {
     | '/_authenticated/warehouses/create/'
     | '/_authenticated/access-control/roles/create/'
     | '/_authenticated/access-control/users/create/'
+    | '/_authenticated/address-management/$id/edit/'
     | '/_authenticated/dashboard/domestic/courier/'
     | '/_authenticated/dashboard/domestic/delays/'
     | '/_authenticated/dashboard/domestic/ndr/'
@@ -1292,6 +1331,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedNdrCasesIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/address-management/create/': {
+      id: '/_authenticated/address-management/create/'
+      path: '/address-management/create'
+      fullPath: '/address-management/create'
+      preLoaderRoute: typeof AuthenticatedAddressManagementCreateIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/address-management/$id/': {
+      id: '/_authenticated/address-management/$id/'
+      path: '/address-management/$id'
+      fullPath: '/address-management/$id'
+      preLoaderRoute: typeof AuthenticatedAddressManagementIdIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/access-control/users/': {
       id: '/_authenticated/access-control/users/'
       path: '/access-control/users'
@@ -1466,6 +1519,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/dashboard/domestic/courier'
       preLoaderRoute: typeof AuthenticatedDashboardDomesticCourierIndexRouteImport
       parentRoute: typeof AuthenticatedDashboardDomesticRouteRoute
+    }
+    '/_authenticated/address-management/$id/edit/': {
+      id: '/_authenticated/address-management/$id/edit/'
+      path: '/address-management/$id/edit'
+      fullPath: '/address-management/$id/edit'
+      preLoaderRoute: typeof AuthenticatedAddressManagementIdEditIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/access-control/users/create/': {
       id: '/_authenticated/access-control/users/create/'
@@ -1699,6 +1759,8 @@ interface AuthenticatedRouteChildren {
   AuthenticatedToolsIndexRoute: typeof AuthenticatedToolsIndexRoute
   AuthenticatedWarehousesIndexRoute: typeof AuthenticatedWarehousesIndexRoute
   AuthenticatedAccessControlUsersIndexRoute: typeof AuthenticatedAccessControlUsersIndexRoute
+  AuthenticatedAddressManagementIdIndexRoute: typeof AuthenticatedAddressManagementIdIndexRoute
+  AuthenticatedAddressManagementCreateIndexRoute: typeof AuthenticatedAddressManagementCreateIndexRoute
   AuthenticatedNdrCasesIndexRoute: typeof AuthenticatedNdrCasesIndexRoute
   AuthenticatedNdrReportsIndexRoute: typeof AuthenticatedNdrReportsIndexRoute
   AuthenticatedOrdersIdIndexRoute: typeof AuthenticatedOrdersIdIndexRoute
@@ -1715,6 +1777,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedWarehousesCreateIndexRoute: typeof AuthenticatedWarehousesCreateIndexRoute
   AuthenticatedAccessControlRolesCreateIndexRoute: typeof AuthenticatedAccessControlRolesCreateIndexRoute
   AuthenticatedAccessControlUsersCreateIndexRoute: typeof AuthenticatedAccessControlUsersCreateIndexRoute
+  AuthenticatedAddressManagementIdEditIndexRoute: typeof AuthenticatedAddressManagementIdEditIndexRoute
   AuthenticatedOrdersFirstMileIdIndexRoute: typeof AuthenticatedOrdersFirstMileIdIndexRoute
   AuthenticatedOrdersFirstMileCalculatePriceIndexRoute: typeof AuthenticatedOrdersFirstMileCalculatePriceIndexRoute
   AuthenticatedOrdersFirstMileCreateIndexRoute: typeof AuthenticatedOrdersFirstMileCreateIndexRoute
@@ -1752,6 +1815,10 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedWarehousesIndexRoute: AuthenticatedWarehousesIndexRoute,
   AuthenticatedAccessControlUsersIndexRoute:
     AuthenticatedAccessControlUsersIndexRoute,
+  AuthenticatedAddressManagementIdIndexRoute:
+    AuthenticatedAddressManagementIdIndexRoute,
+  AuthenticatedAddressManagementCreateIndexRoute:
+    AuthenticatedAddressManagementCreateIndexRoute,
   AuthenticatedNdrCasesIndexRoute: AuthenticatedNdrCasesIndexRoute,
   AuthenticatedNdrReportsIndexRoute: AuthenticatedNdrReportsIndexRoute,
   AuthenticatedOrdersIdIndexRoute: AuthenticatedOrdersIdIndexRoute,
@@ -1777,6 +1844,8 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
     AuthenticatedAccessControlRolesCreateIndexRoute,
   AuthenticatedAccessControlUsersCreateIndexRoute:
     AuthenticatedAccessControlUsersCreateIndexRoute,
+  AuthenticatedAddressManagementIdEditIndexRoute:
+    AuthenticatedAddressManagementIdEditIndexRoute,
   AuthenticatedOrdersFirstMileIdIndexRoute:
     AuthenticatedOrdersFirstMileIdIndexRoute,
   AuthenticatedOrdersFirstMileCalculatePriceIndexRoute:

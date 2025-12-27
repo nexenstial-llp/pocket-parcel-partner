@@ -6,19 +6,13 @@ import {
   useDeleteAddress,
   useGetAllAddresses,
 } from "@/features/address-management/address-management.query";
-import AddressDetailsDrawer from "@/features/address-management/components/AddressDetailsDrawer";
-import AddressModal from "@/features/address-management/components/AddressModal";
-import EditAddressModal from "@/features/address-management/components/EditAddressModal";
 import { validatePagination } from "@/utils/validatePagination.util";
 import { DeleteOutlined, EyeFilled } from "@ant-design/icons";
 import { useQueryClient } from "@tanstack/react-query";
+import { Link } from "@tanstack/react-router";
 import { createFileRoute, useSearch } from "@tanstack/react-router";
-import { Modal } from "antd";
-import { message } from "antd";
-import { Button, Table } from "antd";
-import { useCallback } from "react";
-import { useMemo } from "react";
-import { useState } from "react";
+import { Button, Table, Modal, message } from "antd";
+import { useCallback, useMemo } from "react";
 import { MdModeEditOutline } from "react-icons/md";
 
 export const Route = createFileRoute("/_authenticated/address-management/")({
@@ -28,16 +22,12 @@ export const Route = createFileRoute("/_authenticated/address-management/")({
 });
 
 function RouteComponent() {
-  const [isModal, setIsModal] = useState({
-    type: null,
-    open: false,
-    id: null,
-  });
   const { page, limit } = useSearch({ strict: false });
   const { data, isLoading, isError, error } = useGetAllAddresses({
     page,
     limit,
   });
+
   const queryClient = useQueryClient();
   const { mutate: deleteMutate, isLoading: isDeleteLoading } = useDeleteAddress(
     {
@@ -47,14 +37,6 @@ function RouteComponent() {
       },
     }
   );
-  // Memoize callbacks
-  const handleOpenModal = useCallback((type, id) => {
-    setIsModal({ type, open: true, id });
-  }, []);
-
-  const handleCloseModal = useCallback(() => {
-    setIsModal({ type: null, open: false, id: null });
-  }, []);
 
   const handleDelete = useCallback(
     (id) => {
@@ -110,13 +92,22 @@ function RouteComponent() {
         title: "Actions",
         render: (_, record) => (
           <div className="flex gap-2">
-            <Button
-              icon={<MdModeEditOutline />}
-              onClick={() => handleOpenModal("edit", record?.id)}
-              size="small"
-              type="primary"
-              title="Edit"
-            />
+            <Link to={`${record.id}/edit`}>
+              <Button
+                icon={<MdModeEditOutline />}
+                size="small"
+                type="primary"
+                title="Edit"
+              />
+            </Link>
+            <Link to={`${record?.id}`}>
+              <Button
+                icon={<EyeFilled />}
+                size="small"
+                title="View"
+                type="primary"
+              />
+            </Link>
             <Button
               icon={<DeleteOutlined />}
               onClick={() => handleDelete(record?.id)}
@@ -125,18 +116,11 @@ function RouteComponent() {
               danger
               title="Delete"
             />
-            <Button
-              icon={<EyeFilled />}
-              onClick={() => handleOpenModal("view", record?.id)}
-              size="small"
-              title="View"
-              type="primary"
-            />
           </div>
         ),
       },
     ],
-    [handleDelete, handleOpenModal, limit, page]
+    [limit, page, handleDelete]
   );
 
   if (isError) {
@@ -153,28 +137,13 @@ function RouteComponent() {
         loading={isLoading}
         title="Address Management"
         extra={
-          <Button type="primary" onClick={() => handleOpenModal("add", null)}>
-            Add Address
-          </Button>
+          <Link to="create">
+            <Button type="primary">Add Address</Button>
+          </Link>
         }
       >
-        {isModal?.open && isModal?.type === "view" && (
-          <AddressDetailsDrawer
-            open={isModal?.open && isModal?.type === "view"}
-            onClose={handleCloseModal}
-            id={isModal?.id}
-          />
-        )}
-        {isModal?.open && isModal?.type === "add" && (
-          <AddressModal
-            open={isModal?.open && isModal?.type === "add"}
-            onClose={handleCloseModal}
-          />
-        )}
-        {isModal?.open && isModal?.type === "edit" && (
-          <EditAddressModal modalData={isModal} onClose={handleCloseModal} />
-        )}
         <Table
+          sticky
           bordered
           size="small"
           dataSource={data?.data}
@@ -185,7 +154,7 @@ function RouteComponent() {
           rowKey={"id"}
         />
 
-        <UrlPagination total={data?.data?.pagination?.total} />
+        <UrlPagination total={data?.pagination?.total} />
       </ResponsiveCard>
     </PageLayout>
   );
