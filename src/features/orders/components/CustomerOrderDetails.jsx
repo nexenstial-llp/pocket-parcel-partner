@@ -7,7 +7,6 @@ import {
   PhoneOutlined,
   InboxOutlined,
   DollarOutlined,
-  ExclamationCircleOutlined,
   CreditCardOutlined,
   ShopOutlined,
   ClockCircleOutlined,
@@ -24,7 +23,6 @@ import EditAddressModal from "./EditAddressModal";
 
 import OrderStatusSteps from "./OrderStatusSteps";
 import { Empty } from "antd";
-import { Alert } from "antd";
 
 const { Title } = Typography;
 
@@ -37,7 +35,7 @@ export default function CustomerOrderDetails({ order }) {
   const drop = order?.drop_address;
   const originalPickup = order?.customer_original_pickup_address;
   const statusTimeline = order?.status_timeline || [];
-  const isPendingPayment = order?.payment_status === "PENDING";
+  // const isPendingPayment = order?.payment_status === "PENDING";
 
   /* ---------------------------------- */
   /* Reusable UI blocks                 */
@@ -176,7 +174,7 @@ export default function CustomerOrderDetails({ order }) {
         addressData={order}
         type={isModalVisible.type}
       />
-      {isPendingPayment && (
+      {/* {isPendingPayment && (
         <Alert
           message="Payment Required"
           description={
@@ -196,7 +194,7 @@ export default function CustomerOrderDetails({ order }) {
           icon={<ExclamationCircleOutlined />}
           className="mb-4"
         />
-      )}
+      )} */}
 
       {/* ================= TOP SECTION: HEADER & SUMMARY ================= */}
       <Card

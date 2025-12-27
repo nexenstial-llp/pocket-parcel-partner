@@ -8,34 +8,26 @@ import {
   downloadWaybill,
   generateShippingLabel,
 } from "@/features/orders/orders.service";
-import { createPaymentOrderSchema } from "@/features/payment/payment.schema";
-import {
-  createPaymentSession,
-  verifyPayment,
-} from "@/features/payment/payment.service";
 import { usePdfHandler } from "@/hooks/usePdfHandler";
 
 import { DownloadOutlined } from "@ant-design/icons";
-import { load } from "@cashfreepayments/cashfree-js";
 import { useQueryClient } from "@tanstack/react-query";
 import { createFileRoute, useParams } from "@tanstack/react-router";
 import { Button, message } from "antd";
-import { useEffect } from "react";
 import { useState } from "react";
 import { GiCancel } from "react-icons/gi";
 import { IoIosCheckmarkCircleOutline } from "react-icons/io";
-import { RiBillLine } from "react-icons/ri";
 
 export const Route = createFileRoute("/_authenticated/orders/$id/")({
   component: RouteComponent,
 });
-const cashFreePaymentMode =
-  import.meta.env.VITE_APP_ENV === "production" ? "production" : "sandbox";
+// const cashFreePaymentMode =
+//   import.meta.env.VITE_APP_ENV === "production" ? "production" : "sandbox";
 function RouteComponent() {
   const { id } = useParams({ strict: false });
   const [open, setOpen] = useState(false);
-  const [cashfree, setCashfree] = useState(null);
-  const [isPaymentProcessing, setIsPaymentProcessing] = useState(false);
+  // const [cashfree, setCashfree] = useState(null);
+  // const [isPaymentProcessing, setIsPaymentProcessing] = useState(false);
   const queryClient = useQueryClient();
   const { data, isLoading, isError, error } = useGetOrderById(id);
   const { mutate: packOrder, isPending: isPacking } = usePackOrder({
@@ -54,98 +46,98 @@ function RouteComponent() {
   });
 
   // Initialize Cashfree SDK
-  useEffect(() => {
-    const initializeSDK = async () => {
-      try {
-        const cashfreeInstance = await load({ mode: cashFreePaymentMode });
-        setCashfree(cashfreeInstance);
-      } catch (error) {
-        console.error("Failed to load Cashfree SDK:", error);
-      }
-    };
-    initializeSDK();
-  }, []);
+  // useEffect(() => {
+  //   const initializeSDK = async () => {
+  //     try {
+  //       const cashfreeInstance = await load({ mode: cashFreePaymentMode });
+  //       setCashfree(cashfreeInstance);
+  //     } catch (error) {
+  //       console.error("Failed to load Cashfree SDK:", error);
+  //     }
+  //   };
+  //   initializeSDK();
+  // }, []);
 
-  const handlePayNow = async () => {
-    if (!cashfree) {
-      message.error("Payment system is loading. Please try again.");
-      return;
-    }
+  // const handlePayNow = async () => {
+  //   if (!cashfree) {
+  //     message.error("Payment system is loading. Please try again.");
+  //     return;
+  //   }
 
-    try {
-      setIsPaymentProcessing(true);
-      const order = data?.order;
+  //   try {
+  //     setIsPaymentProcessing(true);
+  //     const order = data?.order;
 
-      // Prepare payment payload
-      const payload = {
-        order_id: order?.id,
-        order_amount: Number(order?.total_amount),
-        customer_details: {
-          customer_id: order?.pickup_address?.pickup_phone,
-          customer_phone: order?.pickup_address?.pickup_phone,
-          customer_name: order?.pickup_address?.pickup_name,
-          customer_email:
-            order?.pickup_address?.pickup_email || "customer@pocketparcel.com",
-        },
-      };
+  //     // Prepare payment payload
+  //     const payload = {
+  //       order_id: order?.id,
+  //       order_amount: Number(order?.total_amount),
+  //       customer_details: {
+  //         customer_id: order?.pickup_address?.pickup_phone,
+  //         customer_phone: order?.pickup_address?.pickup_phone,
+  //         customer_name: order?.pickup_address?.pickup_name,
+  //         customer_email:
+  //           order?.pickup_address?.pickup_email || "customer@pocketparcel.com",
+  //       },
+  //     };
 
-      const validatedData = createPaymentOrderSchema.parse(payload);
+  //     const validatedData = createPaymentOrderSchema.parse(payload);
 
-      // Create payment session
-      const sessionData = await createPaymentSession(validatedData);
+  //     // Create payment session
+  //     const sessionData = await createPaymentSession(validatedData);
 
-      if (!sessionData?.payment_order?.payment_session_id) {
-        throw new Error("Failed to generate payment session ID");
-      }
+  //     if (!sessionData?.payment_order?.payment_session_id) {
+  //       throw new Error("Failed to generate payment session ID");
+  //     }
 
-      if (!sessionData?.payment_order?.cf_order_id) {
-        throw new Error("Failed to generate Cashfree Order ID");
-      }
+  //     if (!sessionData?.payment_order?.cf_order_id) {
+  //       throw new Error("Failed to generate Cashfree Order ID");
+  //     }
 
-      // Trigger Cashfree checkout
-      const checkoutOptions = {
-        paymentSessionId: sessionData?.payment_order?.payment_session_id,
-        redirectTarget: "_modal",
-      };
+  //     // Trigger Cashfree checkout
+  //     const checkoutOptions = {
+  //       paymentSessionId: sessionData?.payment_order?.payment_session_id,
+  //       redirectTarget: "_modal",
+  //     };
 
-      cashfree.checkout(checkoutOptions).then(async (result) => {
-        if (result.error) {
-          message.error("Payment failed or cancelled. Please retry.");
-          setIsPaymentProcessing(false);
-        }
+  //     cashfree.checkout(checkoutOptions).then(async (result) => {
+  //       if (result.error) {
+  //         message.error("Payment failed or cancelled. Please retry.");
+  //         setIsPaymentProcessing(false);
+  //       }
 
-        if (result.redirect) {
-          console.log("Payment Redirecting...");
-        }
+  //       if (result.redirect) {
+  //         console.log("Payment Redirecting...");
+  //       }
 
-        if (result.paymentDetails) {
-          try {
-            await verifyPayment(sessionData?.payment_order?.cf_order_id);
-            message.success("Payment completed successfully!");
+  //       if (result.paymentDetails) {
+  //         try {
+  //           await verifyPayment(sessionData?.payment_order?.cf_order_id);
+  //           message.success("Payment completed successfully!");
 
-            // Refresh order data
-            await queryClient.invalidateQueries({
-              queryKey: ["order", id],
-            });
-            await queryClient.invalidateQueries({
-              queryKey: ["orders"],
-            });
-          } catch (err) {
-            message.error(
-              err.message ||
-                "Payment successful but verification failed. Contact support."
-            );
-          } finally {
-            setIsPaymentProcessing(false);
-          }
-        }
-      });
-    } catch (error) {
-      console.error("Payment error:", error);
-      message.error(error.message || "Failed to initiate payment");
-      setIsPaymentProcessing(false);
-    }
-  };
+  //           // Refresh order data
+  //           await queryClient.invalidateQueries({
+  //             queryKey: ["order", id],
+  //           });
+  //           await queryClient.invalidateQueries({
+  //             queryKey: ["orders"],
+  //           });
+  //         } catch (err) {
+  //           message.error(
+  //             err.message ||
+  //               "Payment successful but verification failed. Contact support."
+  //           );
+  //         } finally {
+  //           setIsPaymentProcessing(false);
+  //         }
+  //       }
+  //     });
+  //   } catch (error) {
+  //     console.error("Payment error:", error);
+  //     message.error(error.message || "Failed to initiate payment");
+  //     setIsPaymentProcessing(false);
+  //   }
+  // };
   const { processPdf } = usePdfHandler();
 
   const [isWaybillLoading, setIsWaybillLoading] = useState(false);
@@ -185,7 +177,7 @@ function RouteComponent() {
     }
   };
 
-  const isPendingPayment = data?.order?.payment_status === "PENDING";
+  // const isPendingPayment = data?.order?.payment_status === "PENDING";
 
   if (isError) {
     return <ErrorFallback error={error} />;
@@ -211,7 +203,7 @@ function RouteComponent() {
         title="Order Details"
         extra={
           <div className="flex gap-2">
-            {isPendingPayment && (
+            {/* {isPendingPayment && (
               <Button
                 icon={<RiBillLine />}
                 type="primary"
@@ -221,7 +213,7 @@ function RouteComponent() {
               >
                 Pay Now (₹{data?.order?.total_amount})
               </Button>
-            )}
+            )} */}
             {(data?.order?.lifecycle_status === "RECEIVED" ||
               data?.order?.lifecycle_status === "IN_TRANSIT") && (
               <Button
