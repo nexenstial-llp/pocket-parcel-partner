@@ -176,7 +176,7 @@ export const downloadWaybill = async (id) => {
 // Generate Shipping label
 export const generateShippingLabel = async ({ id, format = "pdf" }) => {
   const response = await axiosInstance.get(
-    `/v1/hq/orders/${id}/shipping-label`,
+    `/v1/transit-warehouse/orders/${id}/shipping-label`,
     {
       params: {
         format,

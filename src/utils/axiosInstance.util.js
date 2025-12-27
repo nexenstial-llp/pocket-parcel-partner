@@ -24,7 +24,7 @@ const refreshAccessToken = async () => {
     };
 
     const response = await axios.post(
-      `${BASE_URL}/hq/auth/refresh-token`,
+      `${BASE_URL}/transit-warehouse/auth/refresh-token`,
       request_body
     );
 
@@ -138,7 +138,7 @@ axiosInstance.interceptors.response.use(
       originalRequest.skipAuth ||
       originalRequest.url?.includes("/auth/email/login") ||
       originalRequest.url?.includes("/auth/register") ||
-      originalRequest.url?.includes("/auth/hq/refresh-token");
+      originalRequest.url?.includes("/auth/transit-warehouse/refresh-token");
 
     // Handle token refresh
     if (
