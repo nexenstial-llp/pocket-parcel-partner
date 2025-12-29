@@ -1,4 +1,5 @@
 import PageLayout from "@/components/layout/PageLayout";
+import AWSImage from "@/components/ui/AWSImage";
 import ResponsiveCard from "@/components/ui/cards/ResponsiveCard";
 import ErrorFallback from "@/components/ui/ErrorFallback";
 import ResponsiveTable from "@/components/ui/tables/ResponsiveTable";
@@ -61,14 +62,24 @@ function RouteComponent() {
       key: "order_type",
     },
     {
-      title: "Total Amount",
+      title: "Total (₹)",
       dataIndex: "total_amount",
       key: "total_amount",
     },
     {
-      title: "Payment Mode",
-      dataIndex: "payment_mode",
-      key: "payment_mode",
+      title: "Carrier Partner",
+      dataIndex: "courier_partner",
+      key: "courier_partner",
+      render: (partner) => {
+        return partner ? (
+          <div className="flex gap-2 items-center">
+            <AWSImage mode="avatar" size={30} s3Key={partner?.logo} />
+            <span>{partner?.name}</span>
+          </div>
+        ) : (
+          "N/A"
+        );
+      },
     },
     {
       title: "Order Status",
@@ -76,7 +87,9 @@ function RouteComponent() {
       key: "order_status",
       render: (text) => {
         return (
-          <Tag color={getStatusColor(text)}>{removeUnderscores(text)}</Tag>
+          <Tag className="text-[10px]!" color={getStatusColor(text)}>
+            {removeUnderscores(text)}
+          </Tag>
         );
       },
       fixed: "right",
@@ -87,18 +100,22 @@ function RouteComponent() {
       key: "payment_status",
       render: (text) => {
         return (
-          <Tag color={getStatusColor(text)}>{removeUnderscores(text)}</Tag>
+          <Tag className="text-[10px]!" color={getStatusColor(text)}>
+            {removeUnderscores(text)}
+          </Tag>
         );
       },
       fixed: "right",
     },
     // {
-    //   title: "Life Cycle Status",
+    //   title: "Lifecycle Status",
     //   dataIndex: "lifecycle_status",
     //   key: "lifecycle_status",
     //   render: (text) => {
     //     return (
-    //       <Tag color={getStatusColor(text)}>{removeUnderscores(text)}</Tag>
+    //       <Tag className="text-[10px]!" color={getStatusColor(text)}>
+    //         {removeUnderscores(text)}
+    //       </Tag>
     //     );
     //   },
     //   fixed: "right",
