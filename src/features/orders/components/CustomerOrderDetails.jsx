@@ -23,6 +23,8 @@ import EditAddressModal from "./EditAddressModal";
 
 import OrderStatusSteps from "./OrderStatusSteps";
 import { Empty } from "antd";
+import AWSImage from "@/components/ui/AWSImage";
+import { Link } from "@tanstack/react-router";
 
 const { Title } = Typography;
 
@@ -150,8 +152,10 @@ export default function CustomerOrderDetails({ order }) {
                     {data.pickup_address || data.drop_address}
                   </div>
                   <div className="text-xs text-gray-500">
-                    {data.city}, {data.state}{" "}
-                    {data.pincode && ` - ${data.pincode}`}
+                    {data.pickup_city || data.drop_city},{" "}
+                    {data.pickup_state || data.drop_state}{" "}
+                    {data.drop_pincode && ` - ${data.drop_pincode}`}
+                    {data.pickup_pincode && ` - ${data.pickup_pincode}`}
                   </div>
                 </div>
               }
@@ -216,32 +220,34 @@ export default function CustomerOrderDetails({ order }) {
                 <div>
                   <div className="flex items-baseline gap-3 flex-wrap">
                     <Title
+                      copyable
                       level={4}
                       className="mb-0! text-gray-900! font-bold!"
                     >
                       {order?.order_number}
-                    </Title>
+                    </Title>{" "}
+                    <Link
+                      to={`/orders/track-order`}
+                      search={{
+                        order_number: order?.order_number,
+                      }}
+                      className="text-xs"
+                    >
+                      Track Order
+                    </Link>
                     <Tag className="m-0 bg-gray-100 border-gray-200 text-gray-500 font-mono text-xs px-2 rounded">
                       Ref: {order?.reference_number}
                     </Tag>
                   </div>
 
-                  <div className="flex flex-wrap gap-4 mt-3">
+                  <div className="flex flex-wrap gap-2 divide-x mt-3">
                     <StatusBadge status={order?.order_status} label="Order" />
-                    <Divider
-                      size="small"
-                      type="vertical"
-                      className="h-5! bg-gray-300"
-                    />
+
                     <StatusBadge
                       status={order?.payment_status}
                       label="Payment"
                     />
-                    <Divider
-                      size="small"
-                      type="vertical"
-                      className="h-5! bg-gray-300"
-                    />
+
                     <StatusBadge
                       status={order?.lifecycle_status}
                       label="Lifecycle"
@@ -257,16 +263,18 @@ export default function CustomerOrderDetails({ order }) {
                 <div className="text-xs text-gray-500 uppercase tracking-wider mb-1">
                   Total Amount
                 </div>
-                <div className="text-2xl font-bold text-gray-900 mb-2">
+                <div className="text-2xl font-bold text-green-500 mb-2">
                   ₹{Number(order?.total_amount).toLocaleString("en-IN")}
                 </div>
 
                 <div className="flex items-center gap-3 text-xs text-gray-600">
                   <span className="flex items-center gap-1.5 bg-white px-2 py-1 rounded border border-gray-200">
-                    <CreditCardOutlined /> {order?.payment_mode}
+                    <CreditCardOutlined className="text-orange-600!" />{" "}
+                    {order?.payment_mode}
                   </span>
                   <span className="flex items-center gap-1.5 bg-white px-2 py-1 rounded border border-gray-200">
-                    <DollarOutlined /> {order?.payment_gateway}
+                    <DollarOutlined className="text-orange-600!" />{" "}
+                    {order?.payment_gateway}
                   </span>
                 </div>
               </div>
@@ -275,16 +283,22 @@ export default function CustomerOrderDetails({ order }) {
         </div>
 
         {/* Courier Info Footer (if available) */}
-        {(order?.cp_id || order?.courier_name || order?.cp_name) && (
-          <div className="bg-gray-50 px-6 py-3 border-t border-gray-200 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm">
+        {(order?.cp_id ||
+          order?.courier_name ||
+          order?.cp_name ||
+          order?.waybill_number ||
+          order?.clickpost_response) && (
+          <div className="bg-gray-50 px-3 py-2 border-t border-gray-200 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm">
             <span className="text-gray-500 font-medium text-xs uppercase tracking-wide">
               Carrier Partner:
             </span>
 
             <div className="flex items-center gap-2">
-              {order?.courier_logo ? (
-                <img
-                  src={order?.courier_logo}
+              {order?.courier_partner?.logo ? (
+                <AWSImage
+                  mode="avatar"
+                  size={50}
+                  s3Key={order?.courier_partner?.logo}
                   alt="Courier"
                   className="h-5 object-contain"
                 />
@@ -292,7 +306,7 @@ export default function CustomerOrderDetails({ order }) {
                 <ShopOutlined className="text-gray-400" />
               )}
               <span className="font-semibold text-gray-700">
-                {order?.courier_name ||
+                {order?.courier_partner?.name ||
                   order?.cp_name ||
                   order?.account_code ||
                   "Unknown Carrier"}
@@ -305,6 +319,30 @@ export default function CustomerOrderDetails({ order }) {
                 <span className="font-mono text-gray-700">
                   {order?.account_code}
                 </span>
+              </span>
+            )}
+            {order?.waybill_number && (
+              <span className="text-gray-500 text-xs!">
+                Waybill Number:{" "}
+                <Typography.Text
+                  copyable
+                  className="font-mono text-gray-700! text-lg!"
+                >
+                  {order?.waybill_number}
+                </Typography.Text>
+              </span>
+            )}
+            {(order?.label_url || order?.clickpost_response?.result) && (
+              <span className="text-gray-500 text-xs!">
+                Download Waybill :{" "}
+                <a
+                  target="_blank"
+                  href={
+                    order?.label_url || order?.clickpost_response?.result?.label
+                  }
+                >
+                  Download
+                </a>
               </span>
             )}
           </div>
@@ -382,7 +420,9 @@ export default function CustomerOrderDetails({ order }) {
                               <div>
                                 <div
                                   className={`text-sm ${
-                                    isLatest
+                                    status.to_status === "CANCELLED"
+                                      ? "font-bold text-red-600"
+                                      : isLatest
                                       ? "font-bold text-gray-800"
                                       : "font-medium text-gray-600"
                                   }`}
@@ -434,10 +474,12 @@ export default function CustomerOrderDetails({ order }) {
                   {
                     label: "Weight",
                     value: `${(order?.weight / 1000).toFixed(2)} kg`,
+                    full: true,
                   },
                   {
                     label: "Volumetric",
                     value: `${order?.volumetric_weight} kg`,
+                    full: true,
                   },
                   {
                     label: "Chargeable",
