@@ -21,6 +21,7 @@ import {
 import moment from "moment-timezone";
 import { Package } from "lucide-react";
 import ResponsiveCard from "@/components/ui/cards/ResponsiveCard";
+import { removeUnderscores } from "@/utils/typography.util";
 
 const { Text, Title } = Typography;
 
@@ -250,7 +251,7 @@ const TrackOrderPage = ({ data }) => {
                           <div className="mt-1 flex items-center gap-1">
                             <EnvironmentOutlined className="text-gray-400 text-xs" />
                             <Text type="secondary" className="text-xs">
-                              {scan.location}
+                              {removeUnderscores(scan.location)}
                             </Text>
                           </div>
                         )}
@@ -323,7 +324,7 @@ const TrackOrderPage = ({ data }) => {
                 <div className="flex justify-between items-center text-sm">
                   <span className="text-gray-500">Latest Location</span>
                   <span className="font-medium text-right">
-                    {latestStatus?.location || "-"}
+                    {removeUnderscores(latestStatus?.location) || "-"}
                   </span>
                 </div>
               </div>
