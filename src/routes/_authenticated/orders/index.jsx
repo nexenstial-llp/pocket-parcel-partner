@@ -139,9 +139,9 @@ function RouteComponent() {
   };
 
   // General Search Handler
-  const onSearch = (value) => {
+  const onSearch = (field, value) => {
     navigate({
-      search: (prev) => ({ ...prev, search: value || undefined, page: 1 }),
+      search: (prev) => ({ ...prev, [field]: value || undefined, page: 1 }),
     });
   };
 
@@ -331,9 +331,16 @@ function RouteComponent() {
         size="small"
         extra={
           <div className="flex gap-2">
+            {/* <Input.Search
+              placeholder="Search Carrier Partner..."
+              onSearch={(value) => onSearch("courier_partner", value)}
+              defaultValue={search}
+              allowClear
+              style={{ width: 250 }}
+            /> */}
             <Input.Search
               placeholder="Search orders..."
-              onSearch={onSearch}
+              onSearch={(value) => onSearch("search", value)}
               defaultValue={search}
               allowClear
               style={{ width: 250 }}
