@@ -323,7 +323,7 @@ export default function CustomerOrderDetails({ order }) {
             )}
             {order?.waybill_number && (
               <span className="text-gray-500 text-xs!">
-                Waybill Number:{" "}
+                AWB No:{" "}
                 <Typography.Text
                   copyable
                   className="font-mono text-gray-700! text-lg!"
@@ -334,7 +334,7 @@ export default function CustomerOrderDetails({ order }) {
             )}
             {(order?.label_url || order?.clickpost_response?.result) && (
               <span className="text-gray-500 text-xs!">
-                Download Waybill :{" "}
+                Download AWB :{" "}
                 <a
                   target="_blank"
                   href={

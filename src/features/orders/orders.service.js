@@ -94,11 +94,24 @@ export const calculatePrice = async (data) => {
 };
 
 // Get Orders
-export const getOrders = async ({ page = 1, limit = 10 }) => {
+export const getOrders = async (searchParams) => {
   const response = await axiosInstance.get("/v1/transit-warehouse/orders", {
     params: {
-      page,
-      limit,
+      page: searchParams.page || 1,
+      limit: searchParams.limit || 20,
+      search: searchParams.search,
+      status: searchParams.status,
+      payment_status: searchParams.payment_status,
+      order_type: searchParams.order_type,
+      sort_by: searchParams.sort_by,
+      sort_order: searchParams.sort_order,
+      lifecycle_status: searchParams.lifecycle_status,
+      direction: searchParams.direction,
+      courier_partner: searchParams.courier_partner,
+      order_number: searchParams.order_number,
+      reference_number: searchParams.reference_number,
+      customer_phone: searchParams.customer_phone,
+      customer_email: searchParams.customer_email,
     },
   });
   return response?.data?.data ?? null;
