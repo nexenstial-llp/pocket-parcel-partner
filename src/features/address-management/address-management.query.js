@@ -27,11 +27,17 @@ export const useGetAllAddresses = ({ page, limit, search }) => {
 };
 
 // Get all customer address
-export const useGetAllCustomerAddress = ({ page, limit, phone }) => {
+export const useGetAllCustomerAddress = ({
+  page,
+  limit,
+  phone,
+  ...options
+}) => {
   return useQuery({
     queryKey: ["addresses", { page, limit, phone }],
     queryFn: () => getCustomerAddress({ page, limit, phone }),
     retry: 0,
+    ...options,
   });
 };
 

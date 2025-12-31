@@ -9,7 +9,11 @@ import { downloadWaybill } from "@/features/orders/orders.service";
 import { usePdfHandler } from "@/hooks/usePdfHandler";
 import { getSerialNumber } from "@/utils/serialNumber.util";
 import { getStatusColor, removeUnderscores } from "@/utils/typography.util";
-import { DownloadOutlined, SearchOutlined } from "@ant-design/icons";
+import {
+  DownloadOutlined,
+  SearchOutlined,
+  SyncOutlined,
+} from "@ant-design/icons";
 import {
   createFileRoute,
   Link,
@@ -25,7 +29,7 @@ export const Route = createFileRoute("/_authenticated/orders/")({
   component: RouteComponent,
   validateSearch: (search) => ({
     page: Number(search?.page) || 1,
-    limit: Number(search?.limit) || 10,
+    limit: Number(search?.limit) || 20,
 
     search: search?.search?.trim() || undefined,
     order_number: search?.order_number || undefined,
@@ -105,7 +109,10 @@ function RouteComponent() {
   } = searchParams;
 
   // Pass all params to the query hook
-  const { data, isLoading, isError, error } = useGetOrders(searchParams);
+  const { data, isLoading, isError, error, refetch } = useGetOrders(
+    searchParams,
+    3 * 10000
+  );
 
   const { processPdf, isProcessing } = usePdfHandler();
   const [loadingKey, setLoadingKey] = useState(null);
@@ -348,6 +355,12 @@ function RouteComponent() {
             <Link to="/orders/create">
               <Button type="primary">Create</Button>
             </Link>
+            <Button
+              icon={<SyncOutlined />}
+              title="Refresh"
+              type="primary"
+              onClick={refetch}
+            />
           </div>
         }
         title="Orders"

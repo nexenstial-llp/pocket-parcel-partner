@@ -9,9 +9,10 @@ import { removeUnderscores } from "./typography.util";
 export const applyZodErrorsToForm = (form, zodError) => {
   if (!zodError?.issues) return;
   const fields = zodError.issues.map((issue) => ({
-    name: issue.path[0],
+    name: issue?.path?.join(","),
     errors: [issue.message],
   }));
+
   fields.map((field) => {
     toast.error(`${removeUnderscores(field.name)}: \n ${field.errors[0]}`);
   });

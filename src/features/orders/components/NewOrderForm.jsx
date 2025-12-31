@@ -28,14 +28,13 @@ import {
   ShopOutlined,
   HomeOutlined,
   CheckCircleFilled,
-  FlagOutlined,
-  UserOutlined,
-  EditOutlined,
-  PlusOutlined,
   InfoCircleOutlined,
+  SearchOutlined,
 } from "@ant-design/icons";
 import WebcamCapture from "@/components/ui/WebcamCapture";
-import AddressSelectorModal from "./AddressSelectorModal";
+import AddressSelectionModal from "./AddressSelectionModal";
+import { getCustomerAddress } from "@/features/address-management/address-management.service";
+import { useQueryClient } from "@tanstack/react-query";
 import ResponsiveButton from "@/components/ui/ResponsiveButton";
 import BackButton from "@/components/ui/BackButton";
 import {
@@ -64,13 +63,14 @@ import { useCreatePaymentSession } from "@/features/payment/payment.query";
 
 import { createPaymentOrderSchema } from "@/features/payment/payment.schema";
 import { useRef } from "react";
-import { Alert } from "antd";
 import { Warehouse } from "lucide-react";
 import {
   useFetchWarehouse,
   useFetchWarehouseLocations,
 } from "@/features/warehouses/warehouses.query";
 import ResponsiveCard from "@/components/ui/cards/ResponsiveCard";
+import AddressFormItems from "./AddressFormItems";
+import { APIProvider } from "@vis.gl/react-google-maps";
 
 const deliveryTypeOptions = [
   { label: "Forward", value: "FORWARD" },
@@ -78,11 +78,13 @@ const deliveryTypeOptions = [
 ];
 const cashFreePaymentMode =
   import.meta.env.VITE_APP_ENV === "production" ? "production" : "sandbox";
+const API_KEY = import.meta.env.VITE_APP_GOOGLE_API_KEY;
 const NewOrderForm = () => {
   const { params, setParams } = useUrlParams();
   const { pickup_type = "warehouse" } = params;
   const [current, setCurrent] = useState(0);
   const [form] = Form.useForm();
+  const queryClient = useQueryClient();
   const [cashfree, setCashfree] = useState(null);
   const [warehouse, setWarehouse] = useState(null);
   const [warehouseLocation, setWarehouseLocation] = useState(null);
@@ -107,11 +109,14 @@ const NewOrderForm = () => {
     ? { sub_category_id }
     : { category_id };
 
-  // State for Address Selection
-  const [pickupAddress, setPickupAddress] = useState(null);
-  const [dropAddress, setDropAddress] = useState(null);
   const [isPickupModalOpen, setIsPickupModalOpen] = useState(false);
   const [isDropModalOpen, setIsDropModalOpen] = useState(false);
+
+  // Search Results
+  const [pickupSearchResults, setPickupSearchResults] = useState([]);
+  const [dropSearchResults, setDropSearchResults] = useState([]);
+  const [pickupSearchLoading, setPickupSearchLoading] = useState(false);
+  const [dropSearchLoading, setDropSearchLoading] = useState(false);
 
   // Order Data
   const [totalData, setTotalData] = useState({});
@@ -239,6 +244,65 @@ const NewOrderForm = () => {
     }
   }, [pickup_type, warehouse, warehouseLocation, warehouseLocationsData, form]);
 
+  // Search Handlers
+  const handlePickupSearch = async (value) => {
+    if (!value || value.length < 10)
+      return message.error("Please enter a valid phone number");
+    setPickupSearchLoading(true);
+    try {
+      const response = await queryClient.fetchQuery({
+        queryKey: ["addresses", { phone: "91" + value }],
+        queryFn: () =>
+          getCustomerAddress({ phone: "91" + value, page: 1, limit: 100 }),
+        staleTime: 5000,
+      });
+
+      const addresses = response?.data?.addresses || response?.data || [];
+      if (addresses.length > 0) {
+        setPickupSearchResults(addresses);
+        setIsPickupModalOpen(true);
+      } else {
+        message.info(
+          "No saved addresses found. Please enter details manually."
+        );
+      }
+    } catch (error) {
+      console.error(error);
+      message.error("Failed to fetch addresses");
+    } finally {
+      setPickupSearchLoading(false);
+    }
+  };
+
+  const handleDropSearch = async (value) => {
+    if (!value || value.length < 10)
+      return message.error("Please enter a valid phone number");
+    setDropSearchLoading(true);
+    try {
+      const response = await queryClient.fetchQuery({
+        queryKey: ["addresses", { phone: "91" + value }],
+        queryFn: () =>
+          getCustomerAddress({ phone: "91" + value, page: 1, limit: 100 }),
+        staleTime: 5000,
+      });
+
+      const addresses = response?.data?.addresses || response?.data || [];
+      if (addresses.length > 0) {
+        setDropSearchResults(addresses);
+        setIsDropModalOpen(true);
+      } else {
+        message.info(
+          "No saved addresses found. Please enter details manually."
+        );
+      }
+    } catch (error) {
+      console.error(error);
+      message.error("Failed to fetch addresses");
+    } finally {
+      setDropSearchLoading(false);
+    }
+  };
+
   const handleOrderTypeChange = (value) => {
     setParams({ pickup_type: value });
     setCurrent(0);
@@ -289,43 +353,43 @@ const NewOrderForm = () => {
 
   // Handle Address Selection
   const handleSelectPickup = (address) => {
-    setPickupAddress(address);
     setIsPickupModalOpen(false);
-    form.setFieldsValue({ pickup_address: address });
+    form.setFieldsValue({ pickup_info: address });
   };
 
   const handleSelectDrop = (address) => {
-    setDropAddress(address);
     setIsDropModalOpen(false);
-    form.setFieldsValue({ drop_address: address });
+    form.setFieldsValue({ drop_info: address });
   };
-  console.log("totalData", totalData);
-  console.log("current", current);
 
   const next = async () => {
     try {
       if (current === 0) {
-        if (!pickupAddress || !dropAddress) {
-          message.error("Please select both Pickup and Delivery addresses.");
+        const values = await form.validateFields();
+        const pickup = values.pickup_info;
+        const drop = values.drop_info;
+
+        if (!pickup || !drop) {
+          message.error("Please fill in both Pickup and Delivery addresses.");
           return;
         }
-        if (!pickupAddress?.latitude || !pickupAddress?.longitude) {
+        if (!pickup?.latitude || !pickup?.longitude) {
           message.error(
-            "Pickup Address does not have valid coordinates, please select valid address or edit the existing pickup address."
+            "Pickup Address does not have valid coordinates, please enter valid landmark."
           );
           return;
         }
-        if (!dropAddress?.latitude || !dropAddress?.longitude) {
+        if (!drop?.latitude || !drop?.longitude) {
           message.error(
-            "Delivery Address does not have valid coordinates, please select valid address or edit the existing drop address."
+            "Delivery Address does not have valid coordinates, please enter valid landmark."
           );
           return;
         }
         // Validate Serviceability
         const payload = [
           {
-            pickup_pincode: pickupAddress?.pincode,
-            drop_pincode: dropAddress?.pincode,
+            pickup_pincode: pickup?.pincode,
+            drop_pincode: drop?.pincode,
           },
         ];
         if (pickup_type === "warehouse" && !warehouseLocation) {
@@ -337,24 +401,36 @@ const NewOrderForm = () => {
         setTotalData((prev) => ({
           ...prev,
           pickup_info: {
-            pickup_pincode: pickupAddress?.pincode,
-            pickup_lat: pickupAddress?.latitude,
-            pickup_long: pickupAddress?.longitude,
-            pickup_name: pickupAddress?.full_name,
-            pickup_phone: pickupAddress?.phone_number,
-            pickup_address: addressToString(pickupAddress),
-            pickup_city: pickupAddress?.city,
-            pickup_state: pickupAddress?.state,
+            pickup_name: pickup?.full_name,
+            pickup_phone: pickup?.phone_number,
+            email: pickup?.email,
+            pickup_address: addressToString(pickup),
+            pickup_house_number: pickup?.house_number,
+            pickup_city: pickup?.city,
+            pickup_state: pickup?.state,
+            pickup_pincode: pickup?.pincode,
+            pickup_country: pickup?.country,
+            pickup_lat: pickup?.latitude,
+            pickup_long: pickup?.longitude,
+            pickup_landmark: pickup?.landmark,
+            pickup_district: pickup?.district,
+            pickup_address_type: pickup?.address_type,
           },
           drop_info: {
-            drop_pincode: dropAddress?.pincode,
-            drop_latitude: dropAddress?.latitude,
-            drop_longitude: dropAddress?.longitude,
-            drop_name: dropAddress?.full_name,
-            drop_phone: dropAddress?.phone_number,
-            drop_address: addressToString(dropAddress),
-            drop_city: dropAddress?.city,
-            drop_state: dropAddress?.state,
+            drop_pincode: drop?.pincode,
+            drop_latitude: drop?.latitude,
+            drop_longitude: drop?.longitude,
+            drop_name: drop?.full_name,
+            drop_phone: drop?.phone_number,
+            drop_address: addressToString(drop),
+            drop_city: drop?.city,
+            drop_state: drop?.state,
+            drop_country: drop?.country,
+            drop_lat: drop?.latitude,
+            drop_long: drop?.longitude,
+            drop_landmark: drop?.landmark,
+            drop_district: drop?.district,
+            drop_address_type: drop?.address_type,
           },
         }));
 
@@ -379,7 +455,6 @@ const NewOrderForm = () => {
               ? Number(values?.shipment_details?.weight) * 1000
               : Number(values?.shipment_details?.weight),
         };
-        console.log("values", values);
 
         // const shipmentDetails = {
         //   ...values.shipment_details,
@@ -455,9 +530,7 @@ const NewOrderForm = () => {
       if (error.name === "ZodError") {
         applyZodErrorsToForm(form, error);
       } else if (error.errorFields?.length > 0) {
-        toast.error(
-          error?.errorFields?.map((field) => `${field?.errors?.[0]} \n`)
-        );
+        toast.error(error.errorFields?.[0]?.errors?.[0]);
       } else {
         toast.error(error?.message || "Please enter all the fields");
       }
@@ -595,243 +668,137 @@ const NewOrderForm = () => {
               )}
             </Card>
           )}
-
-          {/* Address Cards Section */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Pickup Address Card */}
-            <Card
-              className={`shadow-md hover:shadow-lg transition-all duration-300 ${
-                pickupAddress
-                  ? "border-blue-200 border-2"
-                  : "border-gray-200 border-2 border-dashed hover:border-blue-300"
-              }`}
-              title={
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-blue-50">
-                      <EnvironmentOutlined className="text-blue-600 text-lg" />
-                    </div>
-                    <div>
-                      <div className="font-semibold text-gray-800">
-                        Pickup Address
+          <div>
+            <small className="text-xs text-gray-500">
+              Note: Addresses of all the customers can be searched using mobile
+              number
+            </small>
+            {/* Address Cards Section */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Pickup Address Card */}
+              <Card
+                className={`shadow-md hover:shadow-lg transition-all duration-300`}
+                title={
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 rounded-lg bg-blue-50">
+                        <EnvironmentOutlined className="text-blue-600 text-lg" />
                       </div>
-                      <div className="text-xs text-gray-500">
-                        Where we&apos;ll pick up your shipment
-                      </div>
-                    </div>
-                  </div>
-                  <Button
-                    type={pickupAddress ? "default" : "primary"}
-                    icon={pickupAddress ? <EditOutlined /> : <PlusOutlined />}
-                    onClick={() => setIsPickupModalOpen(true)}
-                    className="flex items-center gap-2"
-                  >
-                    {pickupAddress ? "Change" : "Add Address"}
-                  </Button>
-                </div>
-              }
-              bodyStyle={{ padding: pickupAddress ? "20px" : "40px 20px" }}
-            >
-              {pickupAddress ? (
-                <div className="space-y-4">
-                  <div className="flex items-start gap-3">
-                    <div className="p-2 rounded-full bg-green-50 mt-1">
-                      <UserOutlined className="text-green-600" />
-                    </div>
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2">
-                        <span className="font-semibold text-gray-900">
-                          {pickupAddress.label}
-                        </span>
-                        {pickupAddress.is_default && (
-                          <span className="px-2 py-0.5 text-xs bg-blue-100 text-blue-700 rounded-full">
-                            Default
-                          </span>
-                        )}
-                      </div>
-                      <div className="mt-1 text-gray-700">
-                        {pickupAddress.full_name} • {pickupAddress.phone_number}
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-3">
-                    <div className="p-2 rounded-full bg-gray-50 mt-1">
-                      <HomeOutlined className="text-gray-600" />
-                    </div>
-                    <div className="flex-1">
-                      <div className="text-gray-700 whitespace-pre-line">
-                        {addressToString(pickupAddress)}
-                      </div>
-                    </div>
-                  </div>
-
-                  {pickupAddress.landmark && (
-                    <div className="flex items-start gap-3">
-                      <div className="p-2 rounded-full bg-orange-50 mt-1">
-                        <FlagOutlined className="text-orange-500" />
-                      </div>
-                      <div className="flex-1">
-                        <div className="text-sm text-gray-600">Landmark</div>
-                        <div className="text-gray-700">
-                          {pickupAddress.landmark}
+                      <div>
+                        <div className="font-semibold text-gray-800">
+                          Pickup Address
+                        </div>
+                        <div className="text-xs text-gray-500">
+                          Where we&apos;ll pick up your shipment
                         </div>
                       </div>
                     </div>
-                  )}
-                </div>
-              ) : (
-                <div className="text-center">
-                  <div className="p-4 inline-flex rounded-full bg-blue-50 mb-3">
-                    <EnvironmentOutlined className="text-3xl text-blue-400" />
                   </div>
-                  <div className="text-gray-600 mb-4">
-                    No pickup address selected
-                  </div>
+                }
+                extra={
                   <Button
-                    type="dashed"
-                    size="large"
-                    icon={<EnvironmentOutlined />}
-                    onClick={() => setIsPickupModalOpen(true)}
-                    className="w-full h-12 border-2 border-dashed border-blue-200 hover:border-blue-400"
+                    type="link"
+                    onClick={() => {
+                      form.resetFields(["pickup_info"]); // Or handle specific fields
+                    }}
                   >
-                    Select Pickup Address
+                    Clear
                   </Button>
+                }
+              >
+                <div className="flex flex-col gap-4">
+                  <div className="flex flex-col gap-1 w-full">
+                    <div className="text-xs text-gray-500 mb-1">
+                      Search via Phone
+                    </div>
+                    <Input.Search
+                      placeholder="Search Phone"
+                      enterButton={
+                        <Button
+                          icon={<SearchOutlined />}
+                          loading={pickupSearchLoading}
+                          type="primary"
+                        />
+                      }
+                      onSearch={handlePickupSearch}
+                      maxLength={10}
+                      allowClear
+                    />
+                  </div>
+                  <AddressFormItems prefix="pickup_info" />
                 </div>
-              )}
-            </Card>
+              </Card>
 
-            {/* Delivery Address Card */}
-            <Card
-              className={`shadow-md hover:shadow-lg transition-all duration-300 ${
-                dropAddress
-                  ? "border-green-200 border-2"
-                  : "border-gray-200 border-2 border-dashed hover:border-green-300"
-              }`}
-              title={
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-green-50">
-                      <HomeOutlined className="text-green-600 text-lg" />
-                    </div>
-                    <div>
-                      <div className="font-semibold text-gray-800">
-                        Delivery Address
+              {/* Delivery Address Card */}
+              <Card
+                className={`shadow-md hover:shadow-lg transition-all duration-300`}
+                title={
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 rounded-lg bg-green-50">
+                        <HomeOutlined className="text-green-600 text-lg" />
                       </div>
-                      <div className="text-xs text-gray-500">
-                        Where we&apos;ll deliver your shipment
-                      </div>
-                    </div>
-                  </div>
-                  <Button
-                    type={dropAddress ? "default" : "primary"}
-                    icon={dropAddress ? <EditOutlined /> : <PlusOutlined />}
-                    onClick={() => setIsDropModalOpen(true)}
-                    className="flex items-center gap-2"
-                  >
-                    {dropAddress ? "Change" : "Add Address"}
-                  </Button>
-                </div>
-              }
-              bodyStyle={{ padding: dropAddress ? "20px" : "40px 20px" }}
-            >
-              {dropAddress ? (
-                <div className="space-y-4">
-                  <div className="flex items-start gap-3">
-                    <div className="p-2 rounded-full bg-blue-50 mt-1">
-                      <UserOutlined className="text-blue-600" />
-                    </div>
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2">
-                        <span className="font-semibold text-gray-900">
-                          {dropAddress.label}
-                        </span>
-                        {dropAddress.is_default && (
-                          <span className="px-2 py-0.5 text-xs bg-green-100 text-green-700 rounded-full">
-                            Default
-                          </span>
-                        )}
-                      </div>
-                      <div className="mt-1 text-gray-700">
-                        {dropAddress.full_name} • {dropAddress.phone_number}
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-3">
-                    <div className="p-2 rounded-full bg-gray-50 mt-1">
-                      <HomeOutlined className="text-gray-600" />
-                    </div>
-                    <div className="flex-1">
-                      <div className="text-gray-700 whitespace-pre-line">
-                        {addressToString(dropAddress)}
-                      </div>
-                    </div>
-                  </div>
-
-                  {dropAddress.landmark && (
-                    <div className="flex items-start gap-3">
-                      <div className="p-2 rounded-full bg-orange-50 mt-1">
-                        <FlagOutlined className="text-orange-500" />
-                      </div>
-                      <div className="flex-1">
-                        <div className="text-sm text-gray-600">Landmark</div>
-                        <div className="text-gray-700">
-                          {dropAddress.landmark}
+                      <div>
+                        <div className="font-semibold text-gray-800">
+                          Delivery Address
+                        </div>
+                        <div className="text-xs text-gray-500">
+                          Where we&apos;ll deliver your shipment
                         </div>
                       </div>
                     </div>
-                  )}
-                </div>
-              ) : (
-                <div className="text-center">
-                  <div className="p-4 inline-flex rounded-full bg-green-50 mb-3">
-                    <HomeOutlined className="text-3xl text-green-400" />
                   </div>
-                  <div className="text-gray-600 mb-4">
-                    No delivery address selected
-                  </div>
+                }
+                extra={
                   <Button
-                    type="dashed"
-                    size="large"
-                    icon={<HomeOutlined />}
-                    onClick={() => setIsDropModalOpen(true)}
-                    className="w-full h-12 border-2 border-dashed border-green-200 hover:border-green-400"
+                    type="link"
+                    onClick={() => {
+                      form.resetFields(["drop_info"]);
+                    }}
                   >
-                    Select Delivery Address
+                    Clear
                   </Button>
+                }
+              >
+                <div className="flex flex-col gap-4">
+                  <div className="flex flex-col gap-1 w-full">
+                    <div className="text-xs text-gray-500 mb-1">
+                      Search via Phone
+                    </div>
+                    <Input.Search
+                      placeholder="Search Phone"
+                      enterButton={
+                        <Button
+                          icon={<SearchOutlined />}
+                          loading={dropSearchLoading}
+                          type="primary"
+                        />
+                      }
+                      onSearch={handleDropSearch}
+                      maxLength={10}
+                      allowClear
+                    />
+                  </div>
+                  <AddressFormItems prefix="drop_info" />
                 </div>
-              )}
-            </Card>
+              </Card>
+            </div>
           </div>
 
-          {/* Action Buttons for Quick Navigation */}
-          {pickupAddress && dropAddress && (
-            <div className="flex justify-center mt-4">
-              <Alert
-                message="Both addresses are selected!"
-                description="You can proceed to the next step by clicking 'Next' or continue to Package Details."
-                type="success"
-                showIcon
-                className="w-full"
-              />
-            </div>
-          )}
-
           {/* Address Selection Modals */}
-          <AddressSelectorModal
+          <AddressSelectionModal
             open={isPickupModalOpen}
             onCancel={() => setIsPickupModalOpen(false)}
             onSelect={handleSelectPickup}
             title="Select Pickup Address"
-            type="pickup"
+            addresses={pickupSearchResults}
           />
-          <AddressSelectorModal
+          <AddressSelectionModal
             open={isDropModalOpen}
             onCancel={() => setIsDropModalOpen(false)}
             onSelect={handleSelectDrop}
             title="Select Delivery Address"
-            type="delivery"
+            addresses={dropSearchResults}
           />
         </div>
       ),
@@ -1056,7 +1023,7 @@ const NewOrderForm = () => {
                       ]}
                     />
                   }
-                  className="w-full shadow-none"
+                  className="w-full shadow-none max-w-[200px]"
                   placeholder="0"
                 />
               </Form.Item>
@@ -1471,8 +1438,8 @@ const NewOrderForm = () => {
         },
         drop_info: {
           ...cleanedTotalData.drop_info,
-          drop_latitude: Number(cleanedTotalData.drop_info.drop_latitude),
-          drop_longitude: Number(cleanedTotalData.drop_info.drop_longitude),
+          drop_lat: Number(cleanedTotalData.drop_info.drop_lat),
+          drop_long: Number(cleanedTotalData.drop_info.drop_long),
         },
         shipment_details: {
           ...cleanedTotalData.shipment_details,
@@ -1607,75 +1574,76 @@ const NewOrderForm = () => {
           items={steps}
           size="small"
         />
+        <APIProvider apiKey={API_KEY} libraries={["places", "geocoding"]}>
+          <Form
+            onValuesChange={(changedValues) => {
+              // Check if category_id changed
+              if (changedValues.shipment_details?.category_id) {
+                form.setFieldsValue({
+                  shipment_details: {
+                    sub_category_id: undefined,
+                    item_ids: undefined,
+                  },
+                });
+              }
 
-        <Form
-          onValuesChange={(changedValues) => {
-            // Check if category_id changed
-            if (changedValues.shipment_details?.category_id) {
-              form.setFieldsValue({
-                shipment_details: {
-                  sub_category_id: undefined,
-                  item_ids: undefined,
-                },
-              });
-            }
+              if (changedValues.shipment_details?.sub_category_id) {
+                form.setFieldsValue({
+                  shipment_details: {
+                    item_ids: undefined,
+                  },
+                });
+              }
+              if (!isDirty) {
+                setIsDirty(true);
+              }
+            }}
+            onFinish={onFinish}
+            form={form}
+            layout="vertical"
+          >
+            <div className="mb-8">{steps[current]?.content}</div>
 
-            if (changedValues.shipment_details?.sub_category_id) {
-              form.setFieldsValue({
-                shipment_details: {
-                  item_ids: undefined,
-                },
-              });
-            }
-            if (!isDirty) {
-              setIsDirty(true);
-            }
-          }}
-          onFinish={onFinish}
-          form={form}
-          layout="vertical"
-        >
-          <div className="mb-8">{steps[current]?.content}</div>
-
-          {/* Navigation Buttons */}
-          <div className="flex justify-end gap-3 -mx-6 -mb-6 sticky bottom-0 bg-white p-3 border-t border-gray-200 z-10 shadow-lg rounded-b-xl">
-            {current > 0 && (
-              <ResponsiveButton
-                onClick={prev}
-                className="border-gray-300 hover:border-gray-400"
-              >
-                Previous
-              </ResponsiveButton>
-            )}
-            {current === 0 && (
-              <BackButton navigateTo="/orders">Back</BackButton>
-            )}
-            {current < steps.length - 1 && (
-              <ResponsiveButton
-                type="primary"
-                onClick={next}
-                loading={
-                  serviceabilityPending ||
-                  calculatePricePending ||
-                  isCheckWeightRangeServiceabilityPending
-                }
-                className="bg-gray-900 hover:bg-gray-800 border-0"
-              >
-                Next
-              </ResponsiveButton>
-            )}
-            {current === steps.length - 1 && (
-              <ResponsiveButton
-                loading={isPending}
-                type="primary"
-                htmlType="submit"
-                className="bg-gray-900 hover:bg-gray-800 border-0"
-              >
-                Create Order & Pay
-              </ResponsiveButton>
-            )}
-          </div>
-        </Form>
+            {/* Navigation Buttons */}
+            <div className="flex justify-end gap-3 -mx-6 -mb-6 sticky bottom-0 bg-white p-3 border-t border-gray-200 z-10 shadow-lg rounded-b-xl">
+              {current > 0 && (
+                <ResponsiveButton
+                  onClick={prev}
+                  className="border-gray-300 hover:border-gray-400"
+                >
+                  Previous
+                </ResponsiveButton>
+              )}
+              {current === 0 && (
+                <BackButton navigateTo="/orders">Back</BackButton>
+              )}
+              {current < steps.length - 1 && (
+                <ResponsiveButton
+                  type="primary"
+                  onClick={next}
+                  loading={
+                    serviceabilityPending ||
+                    calculatePricePending ||
+                    isCheckWeightRangeServiceabilityPending
+                  }
+                  className="bg-gray-900 hover:bg-gray-800 border-0"
+                >
+                  Next
+                </ResponsiveButton>
+              )}
+              {current === steps.length - 1 && (
+                <ResponsiveButton
+                  loading={isPending}
+                  type="primary"
+                  htmlType="submit"
+                  className="bg-gray-900 hover:bg-gray-800 border-0"
+                >
+                  Create Order & Pay
+                </ResponsiveButton>
+              )}
+            </div>
+          </Form>
+        </APIProvider>
 
         {isSuccessModalOpen && (
           <PaymentSuccessModal

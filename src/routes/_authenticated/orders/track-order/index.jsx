@@ -21,7 +21,7 @@ function RouteComponent() {
     setOrderNumber(e.target.value);
   };
 
-  const { data, isLoading } = useTrackOrder({ order_number });
+  const { data, isLoading, isError, error } = useTrackOrder({ order_number });
 
   return (
     <PageLayout
@@ -56,20 +56,21 @@ function RouteComponent() {
         )}
 
         {/* Empty State */}
-        {order_number && !isLoading && !data?.data && (
+        {order_number && !isLoading && (!data?.data || isError) && (
           <ResponsiveCard>
             <Empty
               description={
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col">
                   <span className="text-lg font-semibold">
                     No tracking information found
                   </span>
-                  <span className="text-gray-500">
-                    Please check the order number and try again
+                  <span>Please check the order number and try again</span>
+                  <span className="text-red-500">
+                    {error?.response?.data?.message}
                   </span>
                 </div>
               }
-              image={Empty.PRESENTED_IMAGE_SIMPLE}
+              // image={Empty.PRESENTED_IMAGE_SIMPLE}
             />
           </ResponsiveCard>
         )}

@@ -5,6 +5,8 @@ export const trackParcel = async ({ order_number }) => {
     params: {
       order_number,
     },
+    suppressErrorToast: true,
   });
+
   return response.data;
 };

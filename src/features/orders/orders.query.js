@@ -124,10 +124,11 @@ export const useCalculatePriceOfOrder = ({ onError, onSuccess, ...rest }) => {
 };
 
 // Get Orders
-export const useGetOrders = (searchParams) => {
+export const useGetOrders = (searchParams, refetchInterval) => {
   return useQuery({
     queryKey: ["orders", searchParams],
     queryFn: () => getOrders(searchParams),
+    refetchInterval,
   });
 };
 

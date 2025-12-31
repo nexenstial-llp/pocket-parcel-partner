@@ -1,34 +1,116 @@
 /* eslint-disable react/prop-types */
 import { useState } from "react";
-import { Card, Tag, Row, Col, Typography, Divider, Timeline } from "antd";
+import { Card, Tag, Row, Col, Typography, Button } from "antd";
 import {
   EnvironmentOutlined,
   UserOutlined,
-  PhoneOutlined,
   InboxOutlined,
   DollarOutlined,
   CreditCardOutlined,
   ShopOutlined,
   ClockCircleOutlined,
   PushpinOutlined,
+  ExclamationCircleOutlined,
 } from "@ant-design/icons";
 
-import moment from "moment-timezone";
-import {
-  getStatusColor,
-  getStatusColorForTimeline,
-  removeUnderscores,
-} from "@/utils/typography.util";
+import { getStatusColor, removeUnderscores } from "@/utils/typography.util";
 import EditAddressModal from "./EditAddressModal";
-
-import OrderStatusSteps from "./OrderStatusSteps";
 import { Empty } from "antd";
 import AWSImage from "@/components/ui/AWSImage";
 import { Link } from "@tanstack/react-router";
+import { AiOutlineTruck } from "react-icons/ai";
+import { FaRoute } from "react-icons/fa";
+import { IoMdDownload } from "react-icons/io";
+import { useTrackOrder } from "@/features/track-order/track-order.query";
+import TrackOrderTimeline from "@/features/track-order/components/TrackOrderTimeline";
+import { Space } from "antd";
+import moment from "moment-timezone";
+import {
+  CarOutlined,
+  CheckCircleOutlined,
+  CloseCircleOutlined,
+  CustomerServiceOutlined,
+  DropboxOutlined,
+  FileTextOutlined,
+  HomeOutlined,
+  QuestionCircleOutlined,
+  RocketOutlined,
+  RollbackOutlined,
+  SafetyCertificateOutlined,
+  SwapOutlined,
+  WarningOutlined,
+} from "@ant-design/icons";
+import AddressBlock from "./AddressBlock";
 
 const { Title } = Typography;
 
 const initialState = { open: false, type: null };
+const getClickpostStatusConfig = (statusCode) => {
+  switch (statusCode) {
+    // Happy Path
+    case 1:
+    case 28:
+      return { color: "blue", icon: <FileTextOutlined /> };
+    case 2:
+    case 25:
+      return { color: "cyan", icon: <ClockCircleOutlined /> };
+    case 4:
+      return { color: "cyan", icon: <DropboxOutlined /> };
+    case 5:
+    case 1005:
+    case 1006:
+      return { color: "geekblue", icon: <CarOutlined /> };
+    case 1004:
+      return { color: "geekblue", icon: <EnvironmentOutlined /> };
+    case 6:
+      return { color: "purple", icon: <RocketOutlined /> };
+    case 8:
+      return { color: "green", icon: <CheckCircleOutlined /> };
+
+    // Issues
+    case 3:
+      return { color: "orange", icon: <ExclamationCircleOutlined /> };
+    case 9:
+    case 7:
+    case 10:
+      return { color: "red", icon: <CloseCircleOutlined /> };
+
+    // RTO
+    case 11:
+    case 12:
+    case 21:
+      return { color: "volcano", icon: <RollbackOutlined /> };
+    case 13:
+      return { color: "volcano", icon: <RocketOutlined /> };
+    case 14:
+      return { color: "volcano", icon: <HomeOutlined /> };
+    case 15:
+      return { color: "red", icon: <WarningOutlined /> };
+
+    // Delays/Exceptions
+    case 16:
+    case 17:
+      return { color: "red", icon: <SafetyCertificateOutlined /> };
+    case 18:
+    case 27:
+    case 20:
+    case 23:
+      return { color: "gold", icon: <ClockCircleOutlined /> };
+    case 19:
+    case 26:
+      return { color: "magenta", icon: <CustomerServiceOutlined /> };
+
+    // Exchange
+    case 30:
+    case 31:
+    case 32:
+      return { color: "green", icon: <SwapOutlined /> };
+
+    default:
+      return { color: "default", icon: <QuestionCircleOutlined /> };
+  }
+};
+const { Text } = Typography;
 
 export default function CustomerOrderDetails({ order }) {
   const [isModalVisible, setIsModalVisible] = useState(initialState);
@@ -36,7 +118,21 @@ export default function CustomerOrderDetails({ order }) {
   const pickup = order?.pickup_address;
   const drop = order?.drop_address;
   const originalPickup = order?.customer_original_pickup_address;
-  const statusTimeline = order?.status_timeline || [];
+  // const statusTimeline = order?.status_timeline || [];
+
+  const { data, isLoading, isError, error } = useTrackOrder({
+    order_number: order?.order_number,
+  });
+  const orderDetails = data?.data?.order_details;
+  const trackingData =
+    data?.data?.tracking_data?.result?.[orderDetails?.waybill_number];
+  const latestStatus = trackingData?.latest_status;
+  const scans = trackingData?.scans || [];
+  const additional = trackingData?.additional;
+
+  const statusConfig = getClickpostStatusConfig(
+    latestStatus?.clickpost_status_code
+  );
   // const isPendingPayment = order?.payment_status === "PENDING";
 
   /* ---------------------------------- */
@@ -56,115 +152,6 @@ export default function CustomerOrderDetails({ order }) {
       </Tag>
     </div>
   );
-
-  const InfoRow = ({ icon, label, value }) => (
-    <div className="flex items-start gap-3 py-1.5">
-      <div className="mt-0.5 text-gray-400 text-sm shrink-0">{icon}</div>
-      <div className="min-w-0 flex-1">
-        <div className="text-[10px] uppercase tracking-wide text-gray-400 mb-0.5">
-          {label}
-        </div>
-        <div className="text-sm text-gray-700 leading-snug wrap-break-word">
-          {value || <span className="text-gray-300 italic">N/A</span>}
-        </div>
-      </div>
-    </div>
-  );
-
-  const AddressBlock = ({ title, data, icon, typeLabel }) => {
-    if (!data)
-      return (
-        <Card
-          size="small"
-          className="h-full bg-gray-50 border-dashed border-gray-200 shadow-none flex items-center justify-center"
-        >
-          <Empty
-            description={
-              <span className="text-xs text-gray-400">No {title}</span>
-            }
-            image={Empty.PRESENTED_IMAGE_SIMPLE}
-          />
-        </Card>
-      );
-
-    return (
-      <Card
-        size="small"
-        className="h-full border border-gray-100 shadow-sm hover:shadow-md transition-shadow duration-200"
-        styles={{
-          header: {
-            borderBottom: "1px solid #f0f0f0",
-            padding: "12px 16px",
-            minHeight: "auto",
-          },
-          body: {
-            padding: "16px",
-          },
-        }}
-        title={
-          <div className="flex items-center gap-2">
-            {icon}
-            <span className="text-sm font-semibold text-gray-800">{title}</span>
-            {typeLabel && (
-              <span
-                className={`ml-auto text-[10px] font-medium bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full uppercase tracking-wide ${
-                  typeLabel === "Source"
-                    ? "bg-green-500 text-white"
-                    : typeLabel === "Destination"
-                    ? "bg-orange-500 text-white"
-                    : ""
-                }`}
-              >
-                {typeLabel}
-              </span>
-            )}
-          </div>
-        }
-      >
-        <div className="space-y-1">
-          {(data.pickup_name || data.drop_name) && (
-            <InfoRow
-              icon={<UserOutlined />}
-              label="Name"
-              value={
-                <span className="font-medium text-gray-900">
-                  {data.pickup_name || data.drop_name}
-                </span>
-              }
-            />
-          )}
-
-          {(data.pickup_phone || data.drop_phone) && (
-            <InfoRow
-              icon={<PhoneOutlined />}
-              label="Phone"
-              value={data.pickup_phone || data.drop_phone}
-            />
-          )}
-
-          <div className="border-t border-gray-200">
-            <InfoRow
-              icon={<EnvironmentOutlined />}
-              label="Address"
-              value={
-                <div>
-                  <div className="mb-0.5">
-                    {data.pickup_address || data.drop_address}
-                  </div>
-                  <div className="text-xs text-gray-500">
-                    {data.pickup_city || data.drop_city},{" "}
-                    {data.pickup_state || data.drop_state}{" "}
-                    {data.drop_pincode && ` - ${data.drop_pincode}`}
-                    {data.pickup_pincode && ` - ${data.pickup_pincode}`}
-                  </div>
-                </div>
-              }
-            />
-          </div>
-        </div>
-      </Card>
-    );
-  };
 
   /* ---------------------------------- */
   /* Component Render                   */
@@ -202,78 +189,126 @@ export default function CustomerOrderDetails({ order }) {
 
       {/* ================= TOP SECTION: HEADER & SUMMARY ================= */}
       <Card
-        styles={{
-          body: {
-            padding: 0,
-          },
-        }}
-        className="border-gray-200 shadow-sm rounded-lg overflow-hidden"
+        styles={{ body: { padding: 0 } }}
+        className="border border-gray-200 rounded-xl shadow-sm overflow-hidden bg-white"
       >
-        <div className="p-5 md:p-6 bg-white">
-          <Row gutter={[24, 24]} align="middle">
-            {/* Order ID & Basic Info */}
-            <Col xs={24} md={14}>
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 border border-blue-100">
-                  <InboxOutlined className="text-xl" />
+        {/* ================= TOP: ORDER & LOGISTICS ================= */}
+        <div className="p-5 md:p-6">
+          <Row gutter={[24, 20]} align="middle">
+            {/* LEFT: ORDER + LOGISTICS */}
+            <Col xs={24} md={15}>
+              <div className="flex gap-4">
+                {/* Icon */}
+                <div className="w-12 h-12 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center shrink-0">
+                  <InboxOutlined className="text-xl text-blue-600" />
                 </div>
-                <div>
-                  <div className="flex items-baseline gap-3 flex-wrap">
+
+                <div className="flex-1 min-w-0">
+                  {/* Order Number */}
+                  <div className="flex items-center gap-3 flex-wrap">
                     <Title
                       copyable
                       level={4}
-                      className="mb-0! text-gray-900! font-bold!"
+                      className="mb-0! text-gray-900! font-semibold!"
                     >
                       {order?.order_number}
-                    </Title>{" "}
-                    <Link
-                      to={`/orders/track-order`}
-                      search={{
-                        order_number: order?.order_number,
-                      }}
-                      className="text-xs"
-                    >
-                      Track Order
-                    </Link>
-                    <Tag className="m-0 bg-gray-100 border-gray-200 text-gray-500 font-mono text-xs px-2 rounded">
+                    </Title>
+
+                    <Tag className="bg-gray-100 border-gray-200 text-gray-500 font-mono text-xs px-2 rounded">
                       Ref: {order?.reference_number}
                     </Tag>
+                    {/* AWB */}
+                    {order?.waybill_number && (
+                      <span className="text-xs text-gray-500">
+                        AWB:&nbsp;
+                        <Typography.Text
+                          copyable
+                          className="font-mono text-gray-800 text-lg!"
+                        >
+                          {order?.waybill_number}
+                        </Typography.Text>
+                      </span>
+                    )}
+
+                    <Link
+                      to={`/orders/track-order`}
+                      search={{ order_number: order?.order_number }}
+                      className="text-xs text-blue-600 hover:underline"
+                    >
+                      <Button type="primary" icon={<FaRoute />}>
+                        Track Order
+                      </Button>
+                    </Link>
+                    {/* Download Label */}
+                    {(order?.label_url ||
+                      order?.clickpost_response?.result?.label) && (
+                      <a
+                        href={
+                          order?.label_url ||
+                          order?.clickpost_response?.result?.label
+                        }
+                        target="_blank"
+                        className="text-xs text-blue-600 hover:underline"
+                      >
+                        <Button type="primary" icon={<IoMdDownload />}>
+                          Download AWB
+                        </Button>
+                      </a>
+                    )}
                   </div>
 
-                  <div className="flex flex-wrap gap-2 divide-x mt-3">
-                    <StatusBadge status={order?.order_status} label="Order" />
+                  {/* Logistics Row */}
+                  <div className="mt-3 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm">
+                    {/* Carrier */}
+                    <div className="flex items-center gap-2">
+                      {order?.courier_partner?.logo ? (
+                        <AWSImage
+                          mode="avatar"
+                          size={28}
+                          s3Key={order?.courier_partner?.logo}
+                          alt="Carrier"
+                        />
+                      ) : (
+                        <AiOutlineTruck size={20} className="text-gray-400" />
+                      )}
+                      <span className="font-medium text-gray-800">
+                        {order?.courier_partner?.name ||
+                          order?.cp_name ||
+                          "N/A"}
+                      </span>
+                    </div>
 
-                    <StatusBadge
-                      status={order?.payment_status}
-                      label="Payment"
-                    />
-
-                    <StatusBadge
-                      status={order?.lifecycle_status}
-                      label="Lifecycle"
-                    />
+                    {/* Account Code */}
+                    {order?.account_code && (
+                      <span className="text-xs text-gray-500">
+                        Acc:&nbsp;
+                        <span className="font-mono text-gray-700">
+                          {order?.account_code}
+                        </span>
+                      </span>
+                    )}
                   </div>
                 </div>
               </div>
             </Col>
 
-            {/* Price & Payment Details */}
-            <Col xs={24} md={10}>
-              <div className="bg-gray-50 rounded-lg p-4 border border-gray-100 flex flex-col md:items-end">
-                <div className="text-xs text-gray-500 uppercase tracking-wider mb-1">
+            {/* RIGHT: AMOUNT & PAYMENT */}
+            <Col xs={24} md={9}>
+              <div className="bg-gray-50 rounded-lg p-4 border border-gray-100 text-right">
+                <div className="text-xs uppercase tracking-wide text-gray-500">
                   Total Amount
                 </div>
-                <div className="text-2xl font-bold text-green-500 mb-2">
+                <div className="text-2xl font-bold text-green-600 mt-1">
                   ₹{Number(order?.total_amount).toLocaleString("en-IN")}
                 </div>
 
-                <div className="flex items-center gap-3 text-xs text-gray-600">
-                  <span className="flex items-center gap-1.5 bg-white px-2 py-1 rounded border border-gray-200">
-                    <CreditCardOutlined className="text-orange-600!" />{" "}
+                <div className="mt-3 flex flex-wrap justify-end gap-2 text-xs text-gray-600">
+                  <span className="flex items-center gap-1.5 bg-white px-2 py-1 rounded border">
+                    <CreditCardOutlined className="text-orange-600!" />
                     {order?.payment_mode}
                   </span>
-                  <span className="flex items-center gap-1.5 bg-white px-2 py-1 rounded border border-gray-200">
-                    <DollarOutlined className="text-orange-600!" />{" "}
+                  <span className="flex items-center gap-1.5 bg-white px-2 py-1 rounded border">
+                    <DollarOutlined className="text-orange-600!" />
                     {order?.payment_gateway}
                   </span>
                 </div>
@@ -282,98 +317,49 @@ export default function CustomerOrderDetails({ order }) {
           </Row>
         </div>
 
-        {/* Courier Info Footer (if available) */}
-        {(order?.cp_id ||
-          order?.courier_name ||
-          order?.cp_name ||
-          order?.waybill_number ||
-          order?.clickpost_response) && (
-          <div className="bg-gray-50 px-3 py-2 border-t border-gray-200 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm">
-            <span className="text-gray-500 font-medium text-xs uppercase tracking-wide">
-              Carrier Partner:
-            </span>
-
-            <div className="flex items-center gap-2">
-              {order?.courier_partner?.logo ? (
-                <AWSImage
-                  mode="avatar"
-                  size={50}
-                  s3Key={order?.courier_partner?.logo}
-                  alt="Courier"
-                  className="h-5 object-contain"
-                />
-              ) : (
-                <ShopOutlined className="text-gray-400" />
-              )}
-              <span className="font-semibold text-gray-700">
-                {order?.courier_partner?.name ||
-                  order?.cp_name ||
-                  order?.account_code ||
-                  "Unknown Carrier"}
-              </span>
-            </div>
-
-            {order?.account_code && (
-              <span className="text-gray-500 text-xs">
-                Acc:{" "}
-                <span className="font-mono text-gray-700">
-                  {order?.account_code}
-                </span>
-              </span>
-            )}
-            {order?.waybill_number && (
-              <span className="text-gray-500 text-xs!">
-                AWB No:{" "}
-                <Typography.Text
-                  copyable
-                  className="font-mono text-gray-700! text-lg!"
-                >
-                  {order?.waybill_number}
-                </Typography.Text>
-              </span>
-            )}
-            {(order?.label_url || order?.clickpost_response?.result) && (
-              <span className="text-gray-500 text-xs!">
-                Download AWB :{" "}
-                <a
-                  target="_blank"
-                  href={
-                    order?.label_url || order?.clickpost_response?.result?.label
-                  }
-                >
-                  Download
-                </a>
-              </span>
-            )}
+        {/* ================= BOTTOM: STATUS STRIP ================= */}
+        <div className="px-5 py-3 bg-gray-50 border-t border-gray-200">
+          <div className="flex flex-wrap gap-3">
+            <StatusBadge status={order?.order_status} label="Order" />
+            <StatusBadge status={order?.payment_status} label="Payment" />
+            <StatusBadge status={order?.lifecycle_status} label="Lifecycle" />
           </div>
-        )}
+        </div>
       </Card>
 
       <Row gutter={[20, 20]}>
         {/* ================= LEFT COL: TIMELINE ================= */}
         <Col xs={24} lg={16}>
           <Card
+            loading={isLoading}
             className="h-full shadow-sm border-gray-200 rounded-lg"
             title={
               <span className="text-sm font-semibold flex items-center gap-2">
                 <ClockCircleOutlined /> Order Journey
               </span>
             }
-            styles={{
-              body: {
-                padding: "0px",
-              },
-            }}
           >
-            <div className="p-6">
-              {/* Visual Stepper */}
-              <div className="px-2">
-                <OrderStatusSteps orders={order} />
+            {isError ? (
+              <div className="flex flex-col gap-4">
+                <Empty
+                  description={
+                    <div className="flex flex-col">
+                      <span className="text-lg font-semibold">
+                        No tracking information found
+                      </span>
+                      <span className="text-red-500">
+                        {error?.response?.data?.message}
+                      </span>
+                    </div>
+                  }
+                  // image={Empty.PRESENTED_IMAGE_SIMPLE}
+                />
               </div>
-
-              <Divider className="my-6 border-gray-100" />
-
-              {/* Granular Timeline */}
+            ) : (
+              <div className="flex flex-col gap-4">
+                {/* <div className="px-2">
+                    <OrderStatusSteps orders={order} />
+                  </div>
               <div className="rounded-lg p-4 border border-gray-100">
                 <div className="flex items-center justify-between mb-4">
                   <span className="text-xs font-bold text-gray-500 uppercase tracking-wide">
@@ -447,8 +433,104 @@ export default function CustomerOrderDetails({ order }) {
                     />
                   )}
                 </div>
+              </div> */}
+
+                <div
+                  className={`rounded-2xl p-4 ${
+                    latestStatus?.clickpost_status_description == "Delivered"
+                      ? "bg-green-50"
+                      : latestStatus?.clickpost_status_description ==
+                        "Cancelled"
+                      ? "bg-red-50"
+                      : "bg-yellow-50"
+                  }`}
+                >
+                  <div className="flex flex-wrap items-center justify-between gap-4">
+                    <div className="flex items-center gap-4">
+                      <div
+                        className={`flex items-center justify-center size-4 rounded-full bg-${statusConfig.color}-50 text-${statusConfig.color}-500 text-xl border border-${statusConfig.color}-200`}
+                      >
+                        {statusConfig.icon}
+                      </div>
+                      <div>
+                        <Text
+                          type="secondary"
+                          className="text-xs! uppercase font-semibold tracking-wide block"
+                        >
+                          Current Status
+                        </Text>
+                        <Title
+                          level={5}
+                          style={{
+                            margin: 0,
+                            color: `var(--ant-${statusConfig.color}-color)`,
+                          }}
+                        >
+                          {latestStatus?.clickpost_status_description || "N/A"}
+                        </Title>
+                        <Text type="secondary" className="text-xs!">
+                          {moment(latestStatus?.timestamp).format(
+                            "DD MMM YYYY, hh:mm A"
+                          )}
+                        </Text>
+                      </div>
+                    </div>
+
+                    <Space size="small" wrap className="flex-1 justify-end">
+                      <div>
+                        <Text type="secondary" className="text-xs! block">
+                          Order ID
+                        </Text>
+                        <Text strong className="font-mono text-base">
+                          {orderDetails?.order_number}
+                        </Text>
+                      </div>
+                      <div>
+                        <Text type="secondary" className="text-xs! block">
+                          Waybill
+                        </Text>
+                        <Text strong className="font-mono text-base">
+                          {orderDetails?.waybill_number}
+                        </Text>
+                      </div>
+                      <div>
+                        <Text type="secondary" className="text-xs! block">
+                          Carrier
+                        </Text>
+                        <Tag color="blue" className="m-0 font-medium">
+                          {additional?.courier_partner_name || "Unknown"}
+                        </Tag>
+                      </div>
+                    </Space>
+                  </div>
+
+                  {/* NPR / Critical Alert Banner */}
+                  {(additional?.npr ||
+                    orderDetails?.order_status === "CANCELLED") && (
+                    <div
+                      className={`mt-4 p-2 px-3 rounded-md text-sm flex items-center gap-2 ${
+                        orderDetails?.order_status === "CANCELLED"
+                          ? "bg-red-50 text-red-700 border border-red-300"
+                          : "bg-orange-50 text-blue-700 border border-blue-300"
+                      }`}
+                    >
+                      <ExclamationCircleOutlined />
+                      <span className="font-medium">
+                        {orderDetails?.order_status === "CANCELLED"
+                          ? "This order has been cancelled."
+                          : additional?.npr?.npr_description}
+                      </span>
+                    </div>
+                  )}
+                </div>
+                <div className="max-h-[300px] overflow-y-auto p-2 custom-scrollbar">
+                  <TrackOrderTimeline
+                    scans={scans}
+                    getClickpostStatusConfig={getClickpostStatusConfig}
+                  />
+                </div>
               </div>
-            </div>
+            )}
           </Card>
         </Col>
 
@@ -491,8 +573,8 @@ export default function CustomerOrderDetails({ order }) {
                     key={i}
                     className={`p-3 rounded border ${
                       item.highlight
-                        ? "bg-blue-50 border-blue-100 col-span-2"
-                        : "bg-white border-gray-100"
+                        ? "bg-blue-50 border-blue-200 col-span-2"
+                        : "bg-white border-gray-200"
                     } ${item.full ? "col-span-2" : ""}`}
                   >
                     <div
@@ -540,7 +622,7 @@ export default function CustomerOrderDetails({ order }) {
             <AddressBlock
               title="Customer (Origin)"
               typeLabel="Source"
-              icon={<UserOutlined className="text-blue-500" />}
+              icon={<UserOutlined className="text-blue-500!" />}
               data={originalPickup}
             />
           </Col>
@@ -549,7 +631,7 @@ export default function CustomerOrderDetails({ order }) {
             <AddressBlock
               title="Pickup Location"
               typeLabel="WAREHOUSE"
-              icon={<ShopOutlined className="text-orange-500" />}
+              icon={<ShopOutlined className="text-orange-500!" />}
               data={pickup}
             />
           </Col>
@@ -558,7 +640,7 @@ export default function CustomerOrderDetails({ order }) {
             <AddressBlock
               title="Delivery Location"
               typeLabel="Destination"
-              icon={<PushpinOutlined className="text-green-500" />}
+              icon={<PushpinOutlined className="text-green-500!" />}
               data={drop}
             />
           </Col>

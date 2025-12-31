@@ -232,7 +232,7 @@ export const serviceabilityCheckSchema = z
 const pickupInfoSchema = z.object({
   pickup_name: z.string().min(1).max(100),
   pickup_phone: z.string().min(10).max(15),
-  email: z.email().nullable().default("abcd@gmail.com"),
+  email: z.email().nullable(),
   pickup_address: z.string().min(1).max(500),
   pickup_house_number: z.string().max(50).optional(), // House/Building number for QWQER
   pickup_city: z.string().min(1).max(100),
@@ -245,7 +245,7 @@ const pickupInfoSchema = z.object({
   pickup_landmark: z.string().max(255).optional(),
   pickup_district: z.string().max(100).optional(),
   pickup_organisation: z.string().max(100).optional(),
-  pickup_address_type: z.enum(["RESIDENTIAL", "COMMERCIAL"]).optional(),
+  pickup_address_type: z.enum(["HOME", "WORK", "OTHERS"]).optional(),
   tin: z.string().optional(),
 });
 
@@ -257,13 +257,13 @@ const dropInfoSchema = z.object({
   drop_state: z.string().min(1).max(100),
   drop_pincode: z.string().regex(/^\d{6}$/),
   drop_country: z.string().min(1).max(100).default("India"),
-  drop_email: z.string().email().optional(),
+  drop_email: z.email().optional(),
   drop_lat: z.number().optional(),
   drop_long: z.number().optional(),
   drop_landmark: z.string().max(255).optional(),
   drop_district: z.string().max(100).optional(),
   drop_organisation: z.string().max(100).optional(),
-  drop_address_type: z.enum(["RESIDENTIAL", "COMMERCIAL"]).optional(),
+  drop_address_type: z.enum(["HOME", "WORK", "OTHERS"]).optional(),
   drop_start_time: z.string().optional(),
   drop_end_time: z.string().optional(),
   drop_vendor_code: z.string().optional(),
@@ -381,8 +381,6 @@ export const calculatePriceOfOrderSchema = z.object({
   from_latitude: z.number().min(-90).max(90),
   from_longitude: z.number().min(-180).max(180),
   courier_partner: z.string().optional(),
-  is_cod: z.boolean().default(false),
-  insurance_opted: z.boolean().default(false),
   to_pincode: z.string().regex(/^\d{6}$/),
   cp_id: z.number().optional(),
   account_code: z.string().optional(),
