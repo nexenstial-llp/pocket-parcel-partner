@@ -6,12 +6,12 @@ import POCKET_PARCEL_DESKTOP from "../../assets/Pocket_Parcel_Desktop.png";
 import POCKET_PARCEL_MOBILE from "../../assets/Pocket_Parcel_Mobile.png";
 
 //icons
-import { AiTwotoneContainer } from "react-icons/ai";
 import { HiHome } from "react-icons/hi";
 import { TbBuildingWarehouse } from "react-icons/tb";
 import { BiCabinet } from "react-icons/bi";
 import { Drawer } from "antd";
 import SidebarMenu from "./SidebarMenu";
+import { LuBox } from "react-icons/lu";
 
 const { Sider } = Layout;
 const sidebarData = [
@@ -100,7 +100,7 @@ const sidebarData = [
   // },
   {
     key: "orders",
-    icon: <AiTwotoneContainer />,
+    icon: <LuBox />,
     label: "Orders",
     children: [
       {
@@ -161,11 +161,11 @@ const sidebarData = [
     label: <Link to="/rack">Rack</Link>,
   },
   // Address Management
-  {
-    key: "address-management",
-    icon: <TbBuildingWarehouse />,
-    label: <Link to="/address-management">Address Management</Link>,
-  },
+  // {
+  //   key: "address-management",
+  //   icon: <TbBuildingWarehouse />,
+  //   label: <Link to="/address-management">Address Management</Link>,
+  // },
   // {
   //   key: "returns",
   //   icon: <PiKeyReturnFill />,

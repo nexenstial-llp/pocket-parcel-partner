@@ -418,8 +418,6 @@ const NewOrderForm = () => {
           },
           drop_info: {
             drop_pincode: drop?.pincode,
-            drop_latitude: drop?.latitude,
-            drop_longitude: drop?.longitude,
             drop_name: drop?.full_name,
             drop_phone: drop?.phone_number,
             drop_address: addressToString(drop),
