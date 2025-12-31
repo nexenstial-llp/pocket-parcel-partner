@@ -956,6 +956,7 @@ const NewOrderForm = () => {
                     <InputNumber
                       min={0}
                       step={1}
+                      max={dimensionUnit === "cm" ? 45 : 18}
                       precision={0}
                       controls={false}
                       placeholder="H"
