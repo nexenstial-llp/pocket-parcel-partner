@@ -2,9 +2,9 @@ import { useQuery } from "@tanstack/react-query";
 import { getAllOffers } from "./offers.service";
 
 // Get all offers
-export const useGetAllOffers = () => {
+export const useGetAllOffers = ({ params }) => {
   return useQuery({
-    queryKey: ["offers"],
-    queryFn: getAllOffers,
+    queryKey: ["offers", params],
+    queryFn: () => getAllOffers(params),
   });
 };

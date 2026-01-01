@@ -44,7 +44,7 @@ export default function SummaryStep({
   setOfferCode,
 }) {
   const [offerOptions, setOfferOptions] = useState([]);
-  const { data, isLoading } = useGetAllOffers();
+  const { data, isLoading } = useGetAllOffers({ is_active: "true" });
 
   useEffect(() => {
     if (data) {
