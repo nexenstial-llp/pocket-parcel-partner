@@ -53,7 +53,7 @@ export default function SummaryStep({
   }, [data]);
 
   const {
-    mutate: calculatePriceOfOrder,
+    mutateAsync: calculatePriceOfOrder,
     isPending: isCalculatePricingPending,
   } = useCalculatePriceOfOrder({
     onSuccess: (data) => {
@@ -66,7 +66,7 @@ export default function SummaryStep({
     },
   });
 
-  const recalcWithOffer = (code) => {
+  const recalcWithOffer = async (code) => {
     try {
       const payload = {
         from_latitude: Number(shipmentData?.pickup_info?.pickup_lat),
@@ -82,7 +82,13 @@ export default function SummaryStep({
         skip_first_mile_pickup: pickup_type === "warehouse" ? true : false,
       };
       const validData = calculatePriceOfOrderSchema.parse(payload);
-      calculatePriceOfOrder(validData);
+      const revisedData = await calculatePriceOfOrder(validData);
+
+      if (revisedData[0]?.offer_error) {
+        message.error(revisedData[0]?.offer_error);
+        return;
+      }
+      return true;
     } catch (error) {
       if (error.name === "ZodError") {
         applyZodErrorsToForm(form, error);
@@ -92,14 +98,20 @@ export default function SummaryStep({
     }
   };
 
-  const handleApplyOffer = (code) => {
-    setOfferCode(code);
-    recalcWithOffer(code);
+  const handleApplyOffer = async (code) => {
+    const success = await recalcWithOffer(code);
+
+    if (success) {
+      setOfferCode(code); // ✅ apply only on success
+    }
   };
 
-  const handleRemoveOffer = () => {
-    setOfferCode(null);
-    recalcWithOffer("");
+  const handleRemoveOffer = async () => {
+    const success = await recalcWithOffer("");
+
+    if (success) {
+      setOfferCode(null);
+    }
   };
 
   const activeOffer = offerOptions.find((o) => o.offer_code === offerCode);

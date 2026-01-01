@@ -6,6 +6,7 @@ export default function GoogleAddressInput({
   value,
   onChange,
   onSelectAddress,
+  ...rest
 }) {
   const inputRef = useRef(null);
 
@@ -46,6 +47,7 @@ export default function GoogleAddressInput({
       value={value}
       onChange={(e) => onChange?.(e.target.value)}
       placeholder="Search address..."
+      {...rest}
     />
   );
 }
