@@ -181,6 +181,7 @@ const AddressFormItems = ({ prefix }) => {
           name={getFieldName("save_address")}
           valuePropName="checked"
           initialValue={false}
+          className="col-span-2"
         >
           <Checkbox>Save this address</Checkbox>
         </Form.Item>
