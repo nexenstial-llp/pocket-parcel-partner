@@ -395,7 +395,6 @@ const NewOrderForm = () => {
     setIsDropModalOpen(false);
     form.setFieldsValue({ drop_info: { ...address, save_address: false } });
   };
-  console.log("totalData", totalData);
 
   const next = async () => {
     try {
