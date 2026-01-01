@@ -71,6 +71,7 @@ import {
 import ResponsiveCard from "@/components/ui/cards/ResponsiveCard";
 import AddressFormItems from "./AddressFormItems";
 import { APIProvider } from "@vis.gl/react-google-maps";
+import { useCreateAddress } from "@/features/address-management/address-management.query";
 
 const deliveryTypeOptions = [
   { label: "Forward", value: "FORWARD" },
@@ -79,6 +80,31 @@ const deliveryTypeOptions = [
 const cashFreePaymentMode =
   import.meta.env.VITE_APP_ENV === "production" ? "production" : "sandbox";
 const API_KEY = import.meta.env.VITE_APP_GOOGLE_API_KEY;
+
+const removeNullValues = (obj) => {
+  if (obj === null || typeof obj !== "object") {
+    return obj;
+  }
+
+  if (Array.isArray(obj)) {
+    return obj
+      .map(removeNullValues)
+      .filter((item) => item !== null && item !== undefined);
+  }
+
+  const newObj = {};
+  for (const key in obj) {
+    if (Object.prototype.hasOwnProperty.call(obj, key)) {
+      const value = obj[key];
+      if (value !== null && value !== undefined) {
+        const processedValue = removeNullValues(value);
+        newObj[key] = processedValue;
+      }
+    }
+  }
+  return newObj;
+};
+
 const NewOrderForm = () => {
   const { params, setParams } = useUrlParams();
   const { pickup_type = "warehouse" } = params;
@@ -162,6 +188,14 @@ const NewOrderForm = () => {
   const finalWeight = parseFloat(
     Math.max(weightInGm / 1000, volumetricWeight).toFixed(2)
   );
+
+  const { mutateAsync: createAddress } = useCreateAddress({
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: ["address"],
+      });
+    },
+  });
 
   // Auto-select first warehouse
   const { data: warehousesData } = useFetchWarehouse({ page: 1, limit: 100 });
@@ -354,12 +388,12 @@ const NewOrderForm = () => {
   // Handle Address Selection
   const handleSelectPickup = (address) => {
     setIsPickupModalOpen(false);
-    form.setFieldsValue({ pickup_info: address });
+    form.setFieldsValue({ pickup_info: { ...address, save_address: false } });
   };
 
   const handleSelectDrop = (address) => {
     setIsDropModalOpen(false);
-    form.setFieldsValue({ drop_info: address });
+    form.setFieldsValue({ drop_info: { ...address, save_address: false } });
   };
 
   const next = async () => {
@@ -404,6 +438,8 @@ const NewOrderForm = () => {
             pickup_name: pickup?.full_name,
             pickup_phone: pickup?.phone_number,
             email: pickup?.email,
+            pickup_address_line1: pickup?.address_line1,
+            pickup_address_line2: pickup?.address_line2,
             pickup_address: addressToString(pickup),
             pickup_house_number: pickup?.house_number,
             pickup_city: pickup?.city,
@@ -415,11 +451,16 @@ const NewOrderForm = () => {
             pickup_landmark: pickup?.landmark,
             pickup_district: pickup?.district,
             pickup_address_type: pickup?.address_type,
+            pickup_custom_address_type: pickup?.custom_address_type,
+            save_address: pickup?.save_address, // Persist save_address flag
+            label: pickup?.label,
           },
           drop_info: {
             drop_pincode: drop?.pincode,
             drop_name: drop?.full_name,
             drop_phone: drop?.phone_number,
+            drop_address_line1: drop?.address_line1,
+            drop_address_line2: drop?.address_line2,
             drop_address: addressToString(drop),
             drop_city: drop?.city,
             drop_state: drop?.state,
@@ -429,8 +470,13 @@ const NewOrderForm = () => {
             drop_landmark: drop?.landmark,
             drop_district: drop?.district,
             drop_address_type: drop?.address_type,
+            drop_custom_address_type: drop?.custom_address_type,
+            save_address: drop?.save_address, // Persist save_address flag
+            label: drop?.label,
           },
         }));
+
+        // Address creation logic moved to onFinish to avoid duplicate saves during navigation
 
         serviceabilityCheck(payload);
       } else if (current === 1) {
@@ -452,6 +498,7 @@ const NewOrderForm = () => {
             weightUnit === "kg"
               ? Number(values?.shipment_details?.weight) * 1000
               : Number(values?.shipment_details?.weight),
+          skip_first_mile_pickup: pickup_type === "warehouse" ? true : false,
         };
 
         // const shipmentDetails = {
@@ -560,11 +607,11 @@ const NewOrderForm = () => {
       if (updatedCourier) {
         setSummaryData([updatedCourier]);
         setOfferCode(code);
-        if (code) {
-          message.success("Offer applied successfully!");
-        } else {
-          message.success("Offer removed successfully!");
-        }
+        // if (code) {
+        //   message.success("Offer applied successfully!");
+        // } else {
+        //   message.success("Offer removed successfully!");
+        // }
       } else {
         // Fallback if for some reason the courier isn't found
         message.warning(
@@ -706,10 +753,14 @@ const NewOrderForm = () => {
               >
                 <div className="flex flex-col gap-4">
                   <div className="flex flex-col gap-1 w-full">
-                    <div className="text-xs text-gray-500 mb-1">
+                    <label
+                      htmlFor="pickup_phone_search"
+                      className="text-xs text-gray-500 mb-1"
+                    >
                       Search via Phone
-                    </div>
+                    </label>
                     <Input.Search
+                      id="pickup_phone_search"
                       placeholder="Search Phone"
                       enterButton={
                         <Button
@@ -760,10 +811,14 @@ const NewOrderForm = () => {
               >
                 <div className="flex flex-col gap-4">
                   <div className="flex flex-col gap-1 w-full">
-                    <div className="text-xs text-gray-500 mb-1">
+                    <label
+                      htmlFor="drop_phone_search"
+                      className="text-xs text-gray-500 mb-1"
+                    >
                       Search via Phone
-                    </div>
+                    </label>
                     <Input.Search
+                      id="drop_phone_search"
                       placeholder="Search Phone"
                       enterButton={
                         <Button
@@ -956,7 +1011,6 @@ const NewOrderForm = () => {
                     <InputNumber
                       min={0}
                       step={1}
-                      max={dimensionUnit === "cm" ? 45 : 18}
                       precision={0}
                       controls={false}
                       placeholder="H"
@@ -1387,6 +1441,63 @@ const NewOrderForm = () => {
           summaryData?.[0]?.price_summary?.final_total,
           customerInfo
         );
+
+        // Create Addresses if requested (Moved from step transition)
+        const pickupInfo = totalData.pickup_info;
+        const dropInfo = totalData.drop_info;
+
+        if (pickupInfo?.save_address) {
+          try {
+            const payload = {
+              full_name: pickupInfo?.pickup_name,
+              phone_number: pickupInfo?.pickup_phone,
+              email: pickupInfo?.pickup_email,
+              house_number: pickupInfo?.pickup_house_number,
+              address_line1: pickupInfo?.pickup_address_line1,
+              address_line2: pickupInfo?.pickup_address_line2,
+              landmark: pickupInfo?.pickup_landmark,
+              city: pickupInfo?.pickup_city,
+              state: pickupInfo?.pickup_state,
+              country: pickupInfo?.pickup_country,
+              pincode: pickupInfo?.pickup_pincode,
+              address_type: pickupInfo?.pickup_address_type,
+              custom_address_type: pickupInfo?.pickup_custom_address_type,
+              latitude: Number(pickupInfo.pickup_lat),
+              longitude: Number(pickupInfo.pickup_long),
+              label: pickupInfo?.label,
+            };
+            const cleanedTotalData = removeNullValues(payload);
+            await createAddress(cleanedTotalData, true);
+          } catch (error) {
+            console.error("Failed to save pickup address", error);
+          }
+        }
+        if (dropInfo?.save_address) {
+          try {
+            const payload = {
+              full_name: dropInfo?.drop_name,
+              phone_number: dropInfo?.drop_phone,
+              email: dropInfo?.drop_email,
+              house_number: dropInfo?.drop_house_number,
+              address_line1: dropInfo?.drop_address_line1,
+              address_line2: dropInfo?.drop_address_line2,
+              landmark: dropInfo?.drop_landmark,
+              city: dropInfo?.drop_city,
+              state: dropInfo?.drop_state,
+              country: dropInfo?.drop_country,
+              pincode: dropInfo?.drop_pincode,
+              address_type: dropInfo?.drop_address_type,
+              custom_address_type: dropInfo?.drop_custom_address_type,
+              latitude: Number(dropInfo.drop_lat),
+              longitude: Number(dropInfo.drop_long),
+              label: dropInfo?.label,
+            };
+            const cleanedTotalData = removeNullValues(payload);
+            await createAddress(cleanedTotalData, true);
+          } catch (error) {
+            console.error("Failed to save drop address", error);
+          }
+        }
       } catch (error) {
         console.error(error);
         message.error(
@@ -1402,30 +1513,6 @@ const NewOrderForm = () => {
 
   const onFinish = async () => {
     try {
-      const removeNullValues = (obj) => {
-        if (obj === null || typeof obj !== "object") {
-          return obj;
-        }
-
-        if (Array.isArray(obj)) {
-          return obj
-            .map(removeNullValues)
-            .filter((item) => item !== null && item !== undefined);
-        }
-
-        const newObj = {};
-        for (const key in obj) {
-          if (Object.prototype.hasOwnProperty.call(obj, key)) {
-            const value = obj[key];
-            if (value !== null && value !== undefined) {
-              const processedValue = removeNullValues(value);
-              newObj[key] = processedValue;
-            }
-          }
-        }
-        return newObj;
-      };
-
       const cleanedTotalData = removeNullValues(totalData);
 
       const payload = {

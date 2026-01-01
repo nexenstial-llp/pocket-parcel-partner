@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { Form, Input, Select } from "antd";
+import { Form, Input, Select, Checkbox } from "antd";
 import GoogleAddressPicker from "@/components/ui/GoogleAddressPicker";
 import { useEffect, useCallback } from "react";
 
@@ -177,6 +177,13 @@ const AddressFormItems = ({ prefix }) => {
         >
           <Switch />
         </Form.Item> */}
+        <Form.Item
+          name={getFieldName("save_address")}
+          valuePropName="checked"
+          initialValue={false}
+        >
+          <Checkbox>Save this address</Checkbox>
+        </Form.Item>
       </div>
 
       {/* Hidden Lat/Long fields to store values */}
