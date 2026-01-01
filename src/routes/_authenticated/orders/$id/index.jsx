@@ -32,13 +32,16 @@ function RouteComponent() {
   const { data, isLoading, isError, error } = useGetOrderById(id);
   const { mutate: packOrder, isPending: isPacking } = usePackOrder({
     onSuccess: async () => {
-      message.success("Order packed successfully");
       await queryClient.invalidateQueries({
-        queryKey: ["orders"],
+        queryKey: ["track-order"],
       });
       await queryClient.invalidateQueries({
         queryKey: ["order", id],
       });
+      await queryClient.invalidateQueries({
+        queryKey: ["orders"],
+      });
+      message.success("Order packed successfully");
     },
     onError: (error) => {
       // message.error("Failed to pack order", error);

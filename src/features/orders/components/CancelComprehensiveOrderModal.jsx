@@ -14,6 +14,9 @@ const CancelComprehensiveOrderModal = ({ open, onCancel, id }) => {
       form.resetFields();
       onCancel?.();
       await queryClient.invalidateQueries({
+        queryKey: ["track-order"],
+      });
+      await queryClient.invalidateQueries({
         queryKey: ["order"],
       });
       await queryClient.invalidateQueries({
