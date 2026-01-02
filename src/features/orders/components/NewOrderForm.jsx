@@ -1532,7 +1532,7 @@ const NewOrderForm = () => {
           length: parseInt(chargeableDimensions?.length_cm),
           breadth: parseInt(chargeableDimensions?.breadth_cm),
           height: parseInt(chargeableDimensions?.height_cm),
-          weight: chargeableWeight,
+          weight: parseInt(chargeableWeight),
           order_type: "PREPAID",
           invoice_value: summaryData?.[0]?.price_summary?.final_total,
           invoice_date: dayjs().format("DD-MM-YYYY"),

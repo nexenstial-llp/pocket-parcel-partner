@@ -21,8 +21,8 @@ export default function CourierPartnerSelector({ data, value, onChange }) {
           }`}
           onClick={() => onChange(item)}
         >
-          <div className="flex items-center gap-4">
-            <div className="size-12 shrink-0 flex items-center justify-center bg-gray-50 rounded p-1">
+          <div className="flex items-center gap-2 sm:gap-4">
+            <div className="size-12 shrink-0 flex items-center justify-center bg-gray-50 rounded p-0 sm:p-1">
               {courier_details?.logo ? (
                 <AWSImage
                   s3Key={courier_details.logo}
@@ -37,12 +37,12 @@ export default function CourierPartnerSelector({ data, value, onChange }) {
 
             <div className="flex-1 min-w-0">
               <div className="flex justify-between items-start">
-                <div>
-                  <p className="font-semibold text-gray-800 text-base truncate">
+                <div className="flex gap-2 flex-wrap items-center">
+                  <p className="font-semibold text-xs  text-gray-800 sm:text-base truncate">
                     {courier_details?.courier_name}
                   </p>
                   <p className="text-xs text-gray-500">
-                    {courier_details?.account_code}
+                    ({courier_details?.account_code})
                   </p>
                 </div>
                 <Radio
@@ -82,7 +82,7 @@ export default function CourierPartnerSelector({ data, value, onChange }) {
           <List
             rowComponent={Row}
             rowCount={preferenceArray?.length}
-            rowHeight={105}
+            rowHeight={100}
             rowProps={{
               style: {
                 padding: "8px",

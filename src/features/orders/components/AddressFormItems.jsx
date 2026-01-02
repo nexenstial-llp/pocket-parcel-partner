@@ -104,7 +104,7 @@ const AddressFormItems = ({ prefix }) => {
         />
       </Form.Item>
       {/* City, State, Pincode */}
-      <div className="grid grid-cols-1 md:grid-cols-3  gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-3  gap-x-4">
         <Form.Item
           label="Pincode"
           name={getFieldName("pincode")}
@@ -181,7 +181,7 @@ const AddressFormItems = ({ prefix }) => {
           name={getFieldName("save_address")}
           valuePropName="checked"
           initialValue={false}
-          className="col-span-2"
+          className="col-span-1 sm:col-span-2"
         >
           <Checkbox>Save this address</Checkbox>
         </Form.Item>

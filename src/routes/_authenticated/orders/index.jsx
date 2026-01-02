@@ -20,11 +20,10 @@ import {
   useNavigate,
   useSearch,
 } from "@tanstack/react-router";
-import { Space } from "antd";
-import { Tag, Button, Input } from "antd";
-import { useState } from "react";
+import { Space, Tag, Button, Input } from "antd";
+import { useEffect, useRef, useState, useCallback } from "react";
 
-// Define your route with the updated validator
+// ---------------- ROUTE CONFIGURATION ----------------
 export const Route = createFileRoute("/_authenticated/orders/")({
   component: RouteComponent,
   validateSearch: (search) => ({
@@ -51,6 +50,7 @@ export const Route = createFileRoute("/_authenticated/orders/")({
   }),
 });
 
+// ---------------- TABLE COLUMN SEARCH ----------------
 const getColumnSearchProps = (dataIndex, placeholder) => ({
   filterDropdown: ({
     setSelectedKeys,
@@ -72,7 +72,11 @@ const getColumnSearchProps = (dataIndex, placeholder) => ({
         <Button
           type="primary"
           size="small"
-          onClick={() => confirm()}
+          onClick={() => {
+            const value = selectedKeys[0];
+            setSelectedKeys(value ? [value] : []);
+            confirm();
+          }}
           icon={<SearchOutlined />}
         >
           Search
@@ -94,30 +98,107 @@ const getColumnSearchProps = (dataIndex, placeholder) => ({
   ),
 });
 
+// ---------------- MAIN COMPONENT ----------------
 function RouteComponent() {
   const searchParams = useSearch({ strict: false });
   const navigate = useNavigate();
-  const {
-    page,
-    limit,
-    search,
-    status,
-    payment_status,
-    // order_type,
-    sort_by,
-    sort_order,
-  } = searchParams;
 
-  // Pass all params to the query hook
+  const { page, limit, search, status, payment_status, sort_by, sort_order } =
+    searchParams;
+
+  // ---------------- LOCAL STATE FOR DEBOUNCE ----------------
+  const [localSearch, setLocalSearch] = useState(search || "");
+
+  // Sync local state if URL changes externally (e.g. back button)
+  useEffect(() => {
+    setLocalSearch(search || "");
+  }, [search]);
+
+  // Debounce Effect: Update URL after 500ms inactivity
+  useEffect(() => {
+    // Avoid circular updates if values match
+    if (localSearch === (search || "")) return;
+
+    const timer = setTimeout(() => {
+      navigate({
+        search: (prev) => ({
+          ...prev,
+          search: localSearch || undefined,
+          page: 1, // Reset to page 1 on search
+        }),
+      });
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [localSearch, navigate, search]);
+
+  // ---------------- QUERIES & HANDLERS ----------------
   const { data, isLoading, isError, error, refetch } = useGetOrders(
     searchParams,
-    3 * 10000
+    30 * 1000
   );
 
   const { processPdf, isProcessing } = usePdfHandler();
   const [loadingKey, setLoadingKey] = useState(null);
 
-  // Helper to update filters in URL
+  // General Search Handler (for direct updates without debounce)
+  const onSearch = useCallback(
+    (field, value) => {
+      navigate({
+        search: (prev) => ({
+          ...prev,
+          [field]: value || undefined,
+          page: 1,
+        }),
+      });
+    },
+    [navigate]
+  );
+
+  // ---------------- BARCODE SCANNER STATE ----------------
+  const searchInputRef = useRef(null);
+  const scanBufferRef = useRef("");
+  const scanTimeoutRef = useRef(null);
+
+  // ---------------- BARCODE LISTENER ----------------
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      // Ignore manual typing inside inputs
+      const tag = document.activeElement?.tagName;
+      if (tag === "INPUT" || tag === "TEXTAREA") return;
+
+      if (scanTimeoutRef.current) {
+        clearTimeout(scanTimeoutRef.current);
+      }
+
+      if (e.key === "Enter") {
+        const scannedValue = scanBufferRef.current.trim();
+
+        if (scannedValue) {
+          // Update local state immediately to reflect scan in UI
+          setLocalSearch(scannedValue);
+          // Trigger search immediately (bypass debounce)
+          onSearch("search", scannedValue);
+        }
+
+        scanBufferRef.current = "";
+        return;
+      }
+
+      if (e.key.length === 1) {
+        scanBufferRef.current += e.key;
+      }
+
+      scanTimeoutRef.current = setTimeout(() => {
+        scanBufferRef.current = "";
+      }, 200);
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [onSearch]);
+
+  // ---------------- HELPER FUNCTIONS ----------------
   const handleTableChange = (_, filters, sorter) => {
     navigate({
       search: (prev) => ({
@@ -145,13 +226,6 @@ function RouteComponent() {
     });
   };
 
-  // General Search Handler
-  const onSearch = (field, value) => {
-    navigate({
-      search: (prev) => ({ ...prev, [field]: value || undefined, page: 1 }),
-    });
-  };
-
   const handleWaybill = async (id) => {
     try {
       setLoadingKey(id);
@@ -166,6 +240,7 @@ function RouteComponent() {
     }
   };
 
+  // ---------------- TABLE COLUMNS ----------------
   const columns = [
     {
       title: "S. No",
@@ -177,42 +252,23 @@ function RouteComponent() {
       dataIndex: "order_number",
       key: "order_number",
       ...getColumnSearchProps("order_number", "Search Order No"),
-
       filteredValue: searchParams.order_number
         ? [searchParams.order_number]
         : null,
     },
-    // Phone
     {
       title: "Customer Phone",
       dataIndex: ["customer_original_pickup_address", "pickup_phone"],
       key: "customer_phone",
       render: (_, record) =>
         record?.customer_original_pickup_address?.pickup_phone ?? "—",
-
-      // ...getColumnSearchProps("customer_phone", "Search Phone"),
-
-      // filteredValue: searchParams.customer_phone
-      //   ? [searchParams.customer_phone]
-      //   : null,
     },
-    // {
-    //   title: "Order Type",
-    //   dataIndex: "order_type",
-    //   key: "order_type",
-    //   filters: [
-    //     { text: "Forward", value: "FORWARD" },
-    //     { text: "Reverse", value: "REVERSE" },
-    //   ],
-    //   filteredValue: order_type ? [order_type] : null,
-    //   filterMultiple: false,
-    // },
     {
       title: "Total (₹)",
       dataIndex: "total_amount",
       key: "total_amount",
       render: (text) => <span className="font-bold">{text}</span>,
-      sorter: true, // IMPORTANT
+      sorter: true,
       sortOrder:
         sort_by === "total_amount"
           ? sort_order === "asc"
@@ -220,7 +276,6 @@ function RouteComponent() {
             : "descend"
           : null,
     },
-
     {
       title: "Carrier Partner",
       dataIndex: "courier_partner",
@@ -258,7 +313,7 @@ function RouteComponent() {
         { text: "DAMAGED", value: "DAMAGED" },
       ],
       filteredValue: status ? [status] : null,
-      filterMultiple: false, // API seems to take single status, set true if array supported
+      filterMultiple: false,
       render: (text) => (
         <Tag className="text-[10px]!" color={getStatusColor(text)}>
           {removeUnderscores(text)}
@@ -332,23 +387,22 @@ function RouteComponent() {
     return <ErrorFallback error={error} />;
   }
 
+  // ---------------- RENDER ----------------
   return (
     <PageLayout items={[{ title: "Home", href: "/home" }, { title: "Orders" }]}>
       <ResponsiveCard
         size="small"
         extra={
           <div className="flex gap-2">
-            {/* <Input.Search
-              placeholder="Search Carrier Partner..."
-              onSearch={(value) => onSearch("courier_partner", value)}
-              defaultValue={search}
-              allowClear
-              style={{ width: 250 }}
-            /> */}
             <Input.Search
+              ref={searchInputRef}
               placeholder="Search orders..."
+              // ✅ BIND TO LOCAL STATE
+              value={localSearch}
+              // ✅ UPDATE LOCAL STATE ONLY (Debounce effect handles navigation)
+              onChange={(e) => setLocalSearch(e.target.value)}
+              // ✅ HANDLE IMMEDIATE SEARCH (Enter key or Click icon)
               onSearch={(value) => onSearch("search", value)}
-              defaultValue={search}
               allowClear
               style={{ width: 250 }}
             />
@@ -371,8 +425,8 @@ function RouteComponent() {
             loading={isLoading}
             columns={columns}
             dataSource={data?.orders}
-            pagination={false} // We use UrlPagination, so disable internal table pagination
-            onChange={handleTableChange} // Captures filter changes
+            pagination={false}
+            onChange={handleTableChange}
           />
           <UrlPagination total={data?.pagination?.totalItems} />
         </div>
