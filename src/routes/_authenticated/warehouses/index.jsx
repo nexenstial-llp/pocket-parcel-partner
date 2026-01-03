@@ -3,6 +3,7 @@ import ResponsiveCard from "@/components/ui/cards/ResponsiveCard";
 import ErrorFallback from "@/components/ui/ErrorFallback";
 import UrlPagination from "@/components/ui/UrlPagination";
 import { useFetchWarehouse } from "@/features/warehouses/warehouses.query";
+import useIsMobile from "@/hooks/useIsMobile";
 import { getSerialNumber } from "@/utils/serialNumber.util";
 import { validatePagination } from "@/utils/validatePagination.util";
 import { createFileRoute, Link } from "@tanstack/react-router";
@@ -17,6 +18,7 @@ export const Route = createFileRoute("/_authenticated/warehouses/")({
 function RouteComponent() {
   // 👇 get page & limit from URL
   const { page, limit } = Route.useSearch();
+  const isMobile = useIsMobile();
   const { data, isLoading, isError, error, refetch } = useFetchWarehouse({
     page,
     limit,
@@ -71,7 +73,7 @@ function RouteComponent() {
       title: "Status",
       dataIndex: "is_active",
       key: "is_active",
-      fixed: "right",
+      fixed: isMobile ? false : "right",
       render: (status) => (
         <Tag className="uppercase" color={status ? "green" : "red"}>
           {status ? "Active" : "Inactive"}
@@ -80,7 +82,7 @@ function RouteComponent() {
     },
     {
       title: "Action",
-      fixed: "right",
+      fixed: isMobile ? false : "right",
       render: (_, record) => (
         <div className="flex gap-2">
           {record?.is_active && (

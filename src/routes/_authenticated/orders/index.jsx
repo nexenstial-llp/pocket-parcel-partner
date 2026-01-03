@@ -6,6 +6,7 @@ import ResponsiveTable from "@/components/ui/tables/ResponsiveTable";
 import UrlPagination from "@/components/ui/UrlPagination";
 import { useGetOrders } from "@/features/orders/orders.query";
 import { downloadWaybill } from "@/features/orders/orders.service";
+import useIsMobile from "@/hooks/useIsMobile";
 import { usePdfHandler } from "@/hooks/usePdfHandler";
 import { getSerialNumber } from "@/utils/serialNumber.util";
 import { getStatusColor, removeUnderscores } from "@/utils/typography.util";
@@ -102,6 +103,7 @@ const getColumnSearchProps = (dataIndex, placeholder) => ({
 function RouteComponent() {
   const searchParams = useSearch({ strict: false });
   const navigate = useNavigate();
+  const isMobile = useIsMobile();
 
   const { page, limit, search, status, payment_status, sort_by, sort_order } =
     searchParams;
@@ -319,7 +321,7 @@ function RouteComponent() {
           {removeUnderscores(text)}
         </Tag>
       ),
-      fixed: "right",
+      fixed: isMobile ? false : "right",
     },
     {
       title: "Payment Status",
@@ -337,7 +339,7 @@ function RouteComponent() {
           {removeUnderscores(text)}
         </Tag>
       ),
-      fixed: "right",
+      fixed: isMobile ? false : "right",
     },
     {
       title: "Lifecycle",
@@ -379,7 +381,7 @@ function RouteComponent() {
           <Link to={`/orders/${record.id}`}>View</Link>
         </div>
       ),
-      fixed: "right",
+      fixed: isMobile ? false : "right",
     },
   ];
 

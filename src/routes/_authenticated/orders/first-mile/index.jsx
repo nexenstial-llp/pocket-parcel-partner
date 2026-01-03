@@ -8,6 +8,7 @@ import {
   useCreateReverseOrder,
   useGetAllQwqerOrders,
 } from "@/features/orders/orders.query";
+import useIsMobile from "@/hooks/useIsMobile";
 import { truncateText } from "@/utils/typography.util";
 import { EyeFilled } from "@ant-design/icons";
 import { useQueryClient } from "@tanstack/react-query";
@@ -50,6 +51,7 @@ function RouteComponent() {
   const [CancelOrderModalData, setCancelOrderModalData] = useState(
     initialCancelOrderState
   );
+  const isMobile = useIsMobile();
 
   const queryClient = useQueryClient();
 
@@ -144,11 +146,11 @@ function RouteComponent() {
           {status}
         </Tag>
       ),
-      fixed: "right",
+      fixed: isMobile ? false : "right",
     },
     {
       title: "Action",
-      fixed: "right",
+      fixed: isMobile ? false : "right",
       render: (_, record) => (
         <div className="flex gap-2">
           <Link to={`/orders/first-mile/${record.order_key}`}>
