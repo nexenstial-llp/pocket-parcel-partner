@@ -6,6 +6,7 @@
  * @returns {string} The truncated text.
  */
 export const truncateText = (text, maxLength) => {
+  if (!text) return text;
   if (text.length > maxLength) {
     return text.substring(0, maxLength) + "...";
   }
@@ -18,17 +19,20 @@ export const truncateText = (text, maxLength) => {
  * @returns {string} The capitalized text.
  */
 export const capitalizeFirstLetter = (text) => {
+  if (!text) return text;
   return text.charAt(0).toUpperCase() + text.slice(1);
 };
 
 // Remove hyphens from a given text
 export const removeHyphens = (text) => {
-  return text.replace(/-/g, " ");
+  if (!text) return text;
+  return text?.replace(/-/g, " ");
 };
 
 // Remove underscores from a given text
 export const removeUnderscores = (text) => {
-  return text.replace(/_/g, " ");
+  if (!text) return text;
+  return text?.replace(/_/g, " ");
 };
 
 export const getStatusColor = (status) => {

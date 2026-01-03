@@ -51,7 +51,7 @@ root.render(
             darkItemHoverColor: "#fff",
             darkItemSelectedBg: "#f4592b",
             darkItemSelectedColor: "#fff",
-            // darkSubMenuItemBg: "#2b358e",
+            darkSubMenuItemBg: "#001529",
             // darkSubMenuItemBg: "#001529",
 
             itemHeight: 30,
@@ -60,7 +60,7 @@ root.render(
             itemHoverBg: "#f4592b",
             itemSelectedBg: "#f4592b",
             itemSelectedColor: "#fff",
-            subMenuItemBg: "#001529",
+            // subMenuItemBg: "#001529",
           },
           Button: {
             fontSize: "12px",

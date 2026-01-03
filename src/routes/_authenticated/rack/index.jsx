@@ -12,6 +12,7 @@ import ResponsiveCard from "@/components/ui/cards/ResponsiveCard";
 import ErrorFallback from "@/components/ui/ErrorFallback";
 import { validatePagination } from "@/utils/validatePagination.util";
 import { useDeleteRack, useFetchRacks } from "@/features/rack/racks.query";
+import useIsMobile from "@/hooks/useIsMobile";
 
 export const Route = createFileRoute("/_authenticated/rack/")({
   component: RouteComponent,
@@ -22,7 +23,7 @@ function RouteComponent() {
   const { page, limit } = useSearch({ strict: false });
   const queryClient = useQueryClient();
   const { data, isLoading, isError, error } = useFetchRacks({ page, limit });
-
+  const isMobile = useIsMobile();
   const { mutate: deleteMutate, isPending: isDeletePending } = useDeleteRack({
     onSuccess: async () => {
       message.success("Rack deleted successfully");
@@ -76,7 +77,7 @@ function RouteComponent() {
       {
         title: "Status",
         dataIndex: "is_active",
-        fixed: "right",
+        fixed: isMobile ? false : "right",
         render: (status) => (
           <Tag color={status ? "green" : "red"}>
             {status ? "Active" : "Inactive"}
@@ -85,7 +86,7 @@ function RouteComponent() {
       },
       {
         title: "Actions",
-        fixed: "right",
+        fixed: isMobile ? false : "right",
         render: (_, record) => (
           <div className="flex gap-2">
             <Link to={`${record.id}`}>
@@ -110,7 +111,7 @@ function RouteComponent() {
         ),
       },
     ],
-    [page, limit, handleDelete]
+    [page, limit, handleDelete, isMobile]
   );
 
   if (isError) {
