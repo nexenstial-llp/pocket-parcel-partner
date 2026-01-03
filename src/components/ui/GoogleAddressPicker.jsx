@@ -8,6 +8,7 @@ import {
 } from "@vis.gl/react-google-maps";
 import { Input, Button, Tooltip, message } from "antd";
 import { CompassOutlined, EnvironmentOutlined } from "@ant-design/icons";
+import { cn } from "@/utils/classname.util";
 
 const defaultCenter = { lat: 12.8538995, lng: 77.6635309 };
 
@@ -73,6 +74,7 @@ export default function GoogleAddressPicker({
   onChange,
   onLocationSelect,
   showMap = true,
+  mapClassName,
 }) {
   const [position, setPosition] = useState(defaultCenter);
   const [inputValue, setInputValue] = useState(value || "");
@@ -221,7 +223,12 @@ export default function GoogleAddressPicker({
 
       {showMap && (
         <>
-          <div className="relative w-full h-[300px] rounded-lg overflow-hidden border border-gray-200">
+          <div
+            className={cn(
+              `relative w-full h-[300px] rounded-lg overflow-hidden border border-gray-200`,
+              mapClassName
+            )}
+          >
             <Map
               id="location-map"
               defaultCenter={defaultCenter}

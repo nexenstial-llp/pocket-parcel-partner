@@ -123,6 +123,10 @@ const sidebarData = [
         key: "/orders/track-order",
         label: <Link to="/orders/track-order">Track Order</Link>,
       },
+      {
+        key: "/orders/estimate-price",
+        label: <Link to="/orders/estimate-price">Estimate Price</Link>,
+      },
     ],
   },
   // {

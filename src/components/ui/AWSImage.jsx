@@ -137,8 +137,8 @@ const AWSImage = ({
     <Image
       src={imageUrl}
       alt={alt}
-      width={width}
-      height={height}
+      width={size || width}
+      height={size || height}
       className={cn("object-cover", className)}
       preview={preview}
       onError={() => setHasError(true)}

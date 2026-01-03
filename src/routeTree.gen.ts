@@ -50,6 +50,7 @@ import { Route as AuthenticatedRackCreateIndexRouteImport } from './routes/_auth
 import { Route as AuthenticatedRackIdIndexRouteImport } from './routes/_authenticated/rack/$id/index'
 import { Route as AuthenticatedOrdersTrackOrderIndexRouteImport } from './routes/_authenticated/orders/track-order/index'
 import { Route as AuthenticatedOrdersFirstMileIndexRouteImport } from './routes/_authenticated/orders/first-mile/index'
+import { Route as AuthenticatedOrdersEstimatePriceIndexRouteImport } from './routes/_authenticated/orders/estimate-price/index'
 import { Route as AuthenticatedOrdersCreateIndexRouteImport } from './routes/_authenticated/orders/create/index'
 import { Route as AuthenticatedOrdersIdIndexRouteImport } from './routes/_authenticated/orders/$id/index'
 import { Route as AuthenticatedNdrReportsIndexRouteImport } from './routes/_authenticated/ndr/reports/index'
@@ -319,6 +320,12 @@ const AuthenticatedOrdersFirstMileIndexRoute =
     path: '/orders/first-mile/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedOrdersEstimatePriceIndexRoute =
+  AuthenticatedOrdersEstimatePriceIndexRouteImport.update({
+    id: '/orders/estimate-price/',
+    path: '/orders/estimate-price/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedOrdersCreateIndexRoute =
   AuthenticatedOrdersCreateIndexRouteImport.update({
     id: '/orders/create/',
@@ -583,6 +590,7 @@ export interface FileRoutesByFullPath {
   '/ndr/reports': typeof AuthenticatedNdrReportsIndexRoute
   '/orders/$id': typeof AuthenticatedOrdersIdIndexRoute
   '/orders/create': typeof AuthenticatedOrdersCreateIndexRoute
+  '/orders/estimate-price': typeof AuthenticatedOrdersEstimatePriceIndexRoute
   '/orders/first-mile': typeof AuthenticatedOrdersFirstMileIndexRoute
   '/orders/track-order': typeof AuthenticatedOrdersTrackOrderIndexRoute
   '/rack/$id': typeof AuthenticatedRackIdIndexRoute
@@ -660,6 +668,7 @@ export interface FileRoutesByTo {
   '/ndr/reports': typeof AuthenticatedNdrReportsIndexRoute
   '/orders/$id': typeof AuthenticatedOrdersIdIndexRoute
   '/orders/create': typeof AuthenticatedOrdersCreateIndexRoute
+  '/orders/estimate-price': typeof AuthenticatedOrdersEstimatePriceIndexRoute
   '/orders/first-mile': typeof AuthenticatedOrdersFirstMileIndexRoute
   '/orders/track-order': typeof AuthenticatedOrdersTrackOrderIndexRoute
   '/rack/$id': typeof AuthenticatedRackIdIndexRoute
@@ -739,6 +748,7 @@ export interface FileRoutesById {
   '/_authenticated/ndr/reports/': typeof AuthenticatedNdrReportsIndexRoute
   '/_authenticated/orders/$id/': typeof AuthenticatedOrdersIdIndexRoute
   '/_authenticated/orders/create/': typeof AuthenticatedOrdersCreateIndexRoute
+  '/_authenticated/orders/estimate-price/': typeof AuthenticatedOrdersEstimatePriceIndexRoute
   '/_authenticated/orders/first-mile/': typeof AuthenticatedOrdersFirstMileIndexRoute
   '/_authenticated/orders/track-order/': typeof AuthenticatedOrdersTrackOrderIndexRoute
   '/_authenticated/rack/$id/': typeof AuthenticatedRackIdIndexRoute
@@ -818,6 +828,7 @@ export interface FileRouteTypes {
     | '/ndr/reports'
     | '/orders/$id'
     | '/orders/create'
+    | '/orders/estimate-price'
     | '/orders/first-mile'
     | '/orders/track-order'
     | '/rack/$id'
@@ -895,6 +906,7 @@ export interface FileRouteTypes {
     | '/ndr/reports'
     | '/orders/$id'
     | '/orders/create'
+    | '/orders/estimate-price'
     | '/orders/first-mile'
     | '/orders/track-order'
     | '/rack/$id'
@@ -973,6 +985,7 @@ export interface FileRouteTypes {
     | '/_authenticated/ndr/reports/'
     | '/_authenticated/orders/$id/'
     | '/_authenticated/orders/create/'
+    | '/_authenticated/orders/estimate-price/'
     | '/_authenticated/orders/first-mile/'
     | '/_authenticated/orders/track-order/'
     | '/_authenticated/rack/$id/'
@@ -1301,6 +1314,13 @@ declare module '@tanstack/react-router' {
       path: '/orders/first-mile'
       fullPath: '/orders/first-mile'
       preLoaderRoute: typeof AuthenticatedOrdersFirstMileIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/orders/estimate-price/': {
+      id: '/_authenticated/orders/estimate-price/'
+      path: '/orders/estimate-price'
+      fullPath: '/orders/estimate-price'
+      preLoaderRoute: typeof AuthenticatedOrdersEstimatePriceIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/orders/create/': {
@@ -1765,6 +1785,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedNdrReportsIndexRoute: typeof AuthenticatedNdrReportsIndexRoute
   AuthenticatedOrdersIdIndexRoute: typeof AuthenticatedOrdersIdIndexRoute
   AuthenticatedOrdersCreateIndexRoute: typeof AuthenticatedOrdersCreateIndexRoute
+  AuthenticatedOrdersEstimatePriceIndexRoute: typeof AuthenticatedOrdersEstimatePriceIndexRoute
   AuthenticatedOrdersFirstMileIndexRoute: typeof AuthenticatedOrdersFirstMileIndexRoute
   AuthenticatedOrdersTrackOrderIndexRoute: typeof AuthenticatedOrdersTrackOrderIndexRoute
   AuthenticatedRackIdIndexRoute: typeof AuthenticatedRackIdIndexRoute
@@ -1823,6 +1844,8 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedNdrReportsIndexRoute: AuthenticatedNdrReportsIndexRoute,
   AuthenticatedOrdersIdIndexRoute: AuthenticatedOrdersIdIndexRoute,
   AuthenticatedOrdersCreateIndexRoute: AuthenticatedOrdersCreateIndexRoute,
+  AuthenticatedOrdersEstimatePriceIndexRoute:
+    AuthenticatedOrdersEstimatePriceIndexRoute,
   AuthenticatedOrdersFirstMileIndexRoute:
     AuthenticatedOrdersFirstMileIndexRoute,
   AuthenticatedOrdersTrackOrderIndexRoute:
