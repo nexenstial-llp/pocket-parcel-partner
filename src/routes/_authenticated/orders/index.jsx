@@ -297,6 +297,7 @@ function RouteComponent() {
       dataIndex: "order_status",
       key: "order_status",
       filters: [
+        { text: "DRAFT", value: "DRAFT" },
         { text: "PENDING PAYMENT", value: "PENDING_PAYMENT" },
         { text: "PAYMENT FAILED", value: "PAYMENT_FAILED" },
         { text: "PROCESSING", value: "PROCESSING" },
@@ -304,7 +305,7 @@ function RouteComponent() {
         { text: "PICKUP PENDING", value: "PICKUP_PENDING" },
         { text: "PICKED UP", value: "PICKED_UP" },
         { text: "IN TRANSIT", value: "IN_TRANSIT" },
-        { text: "OUT_FOR DELIVERY", value: "OUT_FOR_DELIVERY" },
+        { text: "OUT FOR DELIVERY", value: "OUT_FOR_DELIVERY" },
         { text: "DELIVERED", value: "DELIVERED" },
         { text: "DELIVERY FAILED", value: "DELIVERY_FAILED" },
         { text: "RTO INITIATED", value: "RTO_INITIATED" },
@@ -349,8 +350,10 @@ function RouteComponent() {
         { text: "PENDING", value: "PENDING" },
         { text: "RECEIVED", value: "RECEIVED" },
         { text: "PACKED", value: "PACKED" },
+        { text: "PICKED", value: "PICKED" },
         { text: "IN TRANSIT", value: "IN_TRANSIT" },
         { text: "DELIVERED", value: "DELIVERED" },
+        { text: "CANCELLED", value: "CANCELLED" },
       ],
       filteredValue: searchParams.lifecycle_status
         ? [searchParams.lifecycle_status]
@@ -361,6 +364,7 @@ function RouteComponent() {
           {removeUnderscores(text)}
         </Tag>
       ),
+      fixed: isMobile ? false : "right",
     },
     {
       title: "Action",
